@@ -3,19 +3,24 @@ require_relative '../lib/ez7gen/profile_parser'
 require_relative '../lib/ez7gen/service/type_aware_field_generator'
 
 class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
+	#parse xml once
+	@@pp = ProfileParser.new('2.4','ADT_A01')
 
 	def setup
-		pp = ProfileParser.new('2.4','ADT_A01')
-		@tafGen = TypeAwareFieldGenerator.new(pp)
+		@tafGen = TypeAwareFieldGenerator.new(@@pp)
 	end
 
 	# def test_init
 	# 	assert(@tafGen != nil)
 	# end
+	def ceTest
+		@tafGen.CE([piece])
+	end
+
 	def test_autoGenerate
 		map = {'required'=>'B'}
 		refute (@tafGen.autoGenerate?(map)) # false
-		ass
+
 
 		map = {'required'=>'X'}
 		refute (@tafGen.autoGenerate?(map)) # false
@@ -31,7 +36,7 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 
 	end
 
-	exit 
+
 	def test_generateLengthBoundId
 		actual = @tafGen.generateLengthBoundId(10, '12345')
 		puts actual
@@ -74,6 +79,9 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 # 112 141
-	# def test_applyRules
-	# end
+	def test_applyRules
+    actual = @tafGen.getCodedMap({'codetable'=>'141','max_length' =>'2'})
+
+	end
+
 end

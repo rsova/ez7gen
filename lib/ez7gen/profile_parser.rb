@@ -54,6 +54,9 @@ class ProfileParser
     #if(tableName in ['72','88','132','264','269','471','9999']){
     #	println tableName
     #}
+
+    #empty hash if no table name
+    return [] if Utils.blank?(tableName)
     values = @xml.elements.collect("Export/Document/Category/CodeTable[@name ='#{tableName}']/Enumerate"){|x| x.attributes}
   end
 

@@ -1,16 +1,43 @@
 require 'yaml'
-file = File.open('properties.yml')
-yml = YAML::load(file)
-puts yml['user'] # juixe-username
 
-# yml = YAML.load_file 'properties.yml'
-# yml.each_pair { |key, value| puts "#{key} = #{value}" }
+line = "100,200,300"
+
+# Split on the comma char.
+values = line.split(",")
+puts values
+
+line = "[max_length:250, description:Organization Unit Type - ROL, ifrepeating:0, datatype:CE, required:O, piece:10, codetable:406]"
+values = line.gsub(/(\[|\])/,'').gsub(':',',').split(',').map{|it| it.strip()}.each_slice(2).to_a.to_h
+
+
+#values = line.gssplit(",")
+puts values
+puts '_______'
 
 
 exit
+val =[]
+val << '200'
+val<<'abc'<<'123'
+p val
+puts val.join('|')
+exit
 
+# file = File.open('properties.yml')
+# yml = YAML::load(file)
+# puts puts yml['juixe']['user'] # juixe-username
+# yml['user'] # juixe-username
+# exit
 
+yml = YAML.load_file 'properties.yml'
+puts yml['person.names.first'][0]
+puts yml['address.streetNames']
 
+#yml.each_pair { |key, value| puts "#{key} = #{value}" }
+
+#puts yml['juixe']['user'] # juixe-username
+
+#exit
 
 map = {'required'=>'X'}
 check = if(['X','W','B'].include?(map['required'])) then true end

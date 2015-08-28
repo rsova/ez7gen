@@ -3,9 +3,11 @@ require 'ruby-hl7'
 require_relative "../lib/ez7gen/service/segment_generator"
 
 class TestProfileParser < MiniTest::Unit::TestCase
+ #parse xml once
+ @@pp = ProfileParser.new('2.4','ADT_A01')
 
 def setup
-	@segmentGen = SegmentGenerator.new("2.4","ADT_A01")
+	@segmentGen = SegmentGenerator.new("2.4","ADT_A01", @@pp)
 	@msg = HL7::Message.new
 	@msg << @segmentGen.initMsh()
 end
@@ -15,7 +17,7 @@ def test_init
 	puts @msg
 end
 
-def test_addField
+def test_addField_EI
 	#ROL
  attrs = []	
  row = {'max_length'=> '60', 'symbol'=>'?', 'description'=>'Role Instance ID', 'ifrepeating'=>'0', 'datatype'=>'EI', 'required'=>'C', 'piece'=>'1'}
@@ -35,5 +37,20 @@ def test_addField
   seg = @segmentGen.generateSegment("ROL",attrs)
   puts seg.to_info
   puts seg
- end
+end
+
+def test_addField_CE
+	#PID
+ attrs = []
+ line = '[max_length:250, symbol:*, description:Race, ifrepeating:1, datatype:CE, required:O, piece:10, codetable:5]'
+  # fld = @segmentGen.addField(row)
+  # puts fld
+ row=line.gsub(/(\[|\])/,'').gsub(':',',').split(',').map{|it| it.strip()}.each_slice(2).to_a.to_h
+ attrs<<row
+ puts attrs
+ seg = @segmentGen.generateSegment("ROL",attrs)
+   puts seg.to_info
+   puts seg
+end
+
 end

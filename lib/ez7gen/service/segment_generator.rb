@@ -1,6 +1,6 @@
 require 'ruby-hl7'
 require 'date'
-require_relative '../../../lib/ez7gen/service/type_aware_field_generator'
+require_relative '../service/type_aware_field_generator'
 require_relative 'utils'
 
 class SegmentGenerator
@@ -72,6 +72,7 @@ class SegmentGenerator
   def addField(attributes)
     idx = attributes['piece']
     puts idx
+    idx.to_i
     dt = attributes['datatype']
     puts dt
     # @fieldGenerator.EI(attributes)

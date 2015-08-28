@@ -3,9 +3,36 @@ require_relative '../profile_parser'
 class TypeAwareFieldGenerator
   @@RANGE_INDICATOR = '...'
   @@random = Random.new
+
   # constructor
   def initialize(pp)
     @pp = pp
+  end
+
+  # Generate HL7 CE (coded element) data type
+  def CE(map)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map))
+    val = []
+    # CE ce = (CE) map?.fld
+    #if(map.codetable != null){
+    codes = getCodedMap(map)
+    if(Utils.blank?(codes))
+      #ce.getIdentifier().setValue(Math.abs(random.nextInt() % 200).toString())
+      val << @@random.rand(200).to_s
+    else
+    #identifier (ST) (ST)
+    #ce.getIdentifier().setValue(codes.value)
+    val<<codes['value']
+    #text (ST)
+    #ce.getText().setValue(codes.description)
+    val<<codes['description']
+    #name of coding system (IS)
+    #alternate identifier (ST) (ST)
+    #alternate text (ST)
+    #name of alternate coding system (IS)
+    end
+    return val.join('^')
   end
 
   # Generate HL7 EI - entity identifier
@@ -25,8 +52,7 @@ class TypeAwareFieldGenerator
     puts val
 
     if(map['description'].include?("SSN"))
-      val = "606121126"
-      #val = generateLengthBoundId(9)
+      val = generateLengthBoundId(9)
     else
       len = (map['max_length']!=nil)? map['max_length'].to_i : 1
       #val = generateLengthBoundId((len>5)?5:len) // numeric id up to 5 TODO: string ids?
@@ -61,7 +87,7 @@ class TypeAwareFieldGenerator
   # //	9999 – For unknown CE data elements,CE,OM1,OM1.2 Producer’s Service/Test/Observation ID
   # //	9999 – For unknown CE data elements,CE,OM1,OM1.5 Producer ID
 
-  #Value of coded table returned as as single value
+  # Value of coded table returned as as single value
   def getCodedValue(attributes)
     codes = @pp.getCodeTable(attributes['codetable'])
     puts codes
@@ -71,7 +97,7 @@ class TypeAwareFieldGenerator
     return map['value']
   end
 
-  #Values and Description from code table returned as a pair.
+  # Values and Description from code table returned as a pair.
   def getCodedMap(attributes)
     codes = @pp.getCodeTable(attributes['codetable'])
     puts codes
@@ -80,8 +106,12 @@ class TypeAwareFieldGenerator
   end
 
 
-  #Handle range values specified by '...' sequence, including empty range
+  # Handle range values specified by '...' sequence, including empty range
   def applyRules(codes, attributes)
+
+    #safety check, no codes return an empty map
+    return {} if Utils.blank?(codes)
+
     idx  = @@random.rand(codes.size)
     code = codes[idx]['value']
     description = codes[idx]['description']
@@ -120,7 +150,7 @@ class TypeAwareFieldGenerator
   end
 
 
-  #If field are X,W,B (Not Supported, Withdrawn Fields or Backward Compatible)  returns false.
+  # If field are X,W,B (Not Supported, Withdrawn Fields or Backward Compatible)  returns false.
   # Conditional (C) ?
   # For Optional field (O) makes random choice
   # R - Required returns true
@@ -132,27 +162,6 @@ class TypeAwareFieldGenerator
     # return true
   end
 
-  # Generate HL7 CE (coded element) data type
-  def ce(map)
-# 		//check if the field is optional and randomly generate it of skip
-# 		if(!isAutogenerate(map)){return}
-
-# 		CE ce = (CE) map?.fld
-# 		if(map.codetable != null){
-# 			Map codes = getCodedMap(pp, map)
-# 			//identifier (ST) (ST)
-# 			ce.getIdentifier().setValue(codes.value)
-# 			//text (ST)
-# 			ce.getText().setValue(codes.description)
-# 			// name of coding system (IS)
-# 			// alternate identifier (ST) (ST)
-# 			// alternate text (ST)
-# 			//name of alternate coding system (IS)
-# 		}else{
-# 			ce.getIdentifier().setValue(Math.abs(random.nextInt() % 200).toString())
-# 		}
-# 		println ce
-  end
 
   #Generate HL7 CP (composite price) data type.
   def cp(map)
