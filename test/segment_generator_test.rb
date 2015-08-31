@@ -12,45 +12,42 @@ def setup
 	@msg << @segmentGen.initMsh()
 end
 
+def test_addField_CE
+	#PID
+ line = '[max_length:250, description:Role Action Reason, ifrepeating:0, datatype:CE, required:R, piece:8]'
+ row=line.gsub(/(\[|\])/,'').gsub(':',',').split(',').map{|it| it.strip()}.each_slice(2).to_a.to_h
+ puts row
+ fld = @segmentGen.addField(row)
+ puts fld
+end
+
+def test_segment_PD
+ attrs = []
+ line = '[max_length:250, symbol:*, description:Race, ifrepeating:1, datatype:CE, required:R, piece:10, codetable:5]'
+ row=line.gsub(/(\[|\])/,'').gsub(':',',').split(',').map{|it| it.strip()}.each_slice(2).to_a.to_h
+ p row
+ attrs<<row
+ p attrs
+ seg = @segmentGen.generateSegment("PD",attrs)
+ puts seg.to_info
+ puts seg
+end
+exit
+
 def test_init
 	assert(@segmentGen !=nil)
 	puts @msg
 end
 
 def test_addField_EI
-	#ROL
- attrs = []	
- row = {'max_length'=> '60', 'symbol'=>'?', 'description'=>'Role Instance ID', 'ifrepeating'=>'0', 'datatype'=>'EI', 'required'=>'C', 'piece'=>'1'}
- attrs << row
-# [max_length:2, symbol:!, description:Action Code, ifrepeating:0, datatype:ID, required:R, piece:2, codetable:287]
-# [max_length:250, symbol:!, description:Role-ROL, ifrepeating:0, datatype:CE, required:R, piece:3, codetable:443]
-# [max_length:250, symbol:+, description:Role Person, ifrepeating:1, datatype:XCN, required:R, piece:4]
-# [max_length:26, description:Role Begin Date/Time, ifrepeating:0, datatype:TS, required:O, piece:5]
-# [max_length:26, description:Role End Date/Time, ifrepeating:0, datatype:TS, required:O, piece:6]
-# [max_length:250, description:Role Duration, ifrepeating:0, datatype:CE, required:O, piece:7]
-# [max_length:250, description:Role Action Reason, ifrepeating:0, datatype:CE, required:O, piece:8]
-# [max_length:250, symbol:*, description:Provider Type, ifrepeating:1, datatype:CE, required:O, piece:9]
-# [max_length:250, description:Organization Unit Type - ROL, ifrepeating:0, datatype:CE, required:O, piece:10, codetable:406]
-# [max_length:250, symbol:*, description:Office/Home Address, ifrepeating:1, datatype:XAD, required:O, piece:11]
-# [max_length:250, symbol:*, description:Phone, ifrepeating:1, datatype:XTN, required:O, piece:12]
+  attrs = []
+  row = {'max_length'=> '60', 'symbol'=>'?', 'description'=>'Role Instance ID', 'ifrepeating'=>'0', 'datatype'=>'EI', 'required'=>'C', 'piece'=>'1'}
+  attrs << row
 
   seg = @segmentGen.generateSegment("ROL",attrs)
   puts seg.to_info
   puts seg
 end
 
-def test_addField_CE
-	#PID
- attrs = []
- line = '[max_length:250, symbol:*, description:Race, ifrepeating:1, datatype:CE, required:O, piece:10, codetable:5]'
-  # fld = @segmentGen.addField(row)
-  # puts fld
- row=line.gsub(/(\[|\])/,'').gsub(':',',').split(',').map{|it| it.strip()}.each_slice(2).to_a.to_h
- attrs<<row
- puts attrs
- seg = @segmentGen.generateSegment("ROL",attrs)
-   puts seg.to_info
-   puts seg
-end
 
 end

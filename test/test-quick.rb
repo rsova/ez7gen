@@ -1,5 +1,14 @@
 require 'yaml'
 
+
+exit
+puts "Result is %.2f" % 1000
+mfi = ['Balance', 'Charges', 'Adjustments', 'Income', 'Amount', 'Money']
+puts mfi.include?('Balance')
+
+h1 = { "a" => 100, "b" => 200, 'c' => "c" }
+p h1.update({'a' => 11,'b'=>2 })
+exit
 line = "100,200,300"
 
 # Split on the comma char.
