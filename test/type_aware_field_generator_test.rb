@@ -15,6 +15,10 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		@tafGen = TypeAwareFieldGenerator.new(@@pp)
 	end
 
+	def test_init
+		 assert_equal 'Odysseus', @tafGen.yml['person.names.first'][0]
+	end
+
 	def test_CE
 		line = '[max_length:250, description:Role Action Reason, ifrepeating:0, datatype:CE, required:R, piece:8]'
 		row= lineToHash(line)
@@ -71,12 +75,12 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	def test_TS
 		line ='[max_length:26, description:Admit Date/Time, ifrepeating:0, datatype:TS, required:R, piece:44]'
 		fld_past = @tafGen.TS(lineToHash(line))
-		#assert /^[-+]?[1-9]([0-9]*)?$/.match(fld) # is a number
-		assert fld_past
+		puts fld_past
+		assert_equal 18, fld_past.size, 'datetime format YYYYMMDDHHSS.SSS, like 20150321201748.373'
 
 		line ='[max_length:26, description:Role End Date/Time, ifrepeating:0, datatype:TS, required:R, piece:44]'
 		fld_future = @tafGen.TS(lineToHash(line))
-		#assert /^[-+]?[1-9]([0-9]*)?$/.match(fld) # is a number
+		puts "past timestamp #{fld_past}, future timestamp #{fld_future}"
 		assert fld_past < fld_future
 	end
 
@@ -93,8 +97,9 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_DLN
-		# line =''
-		# fld = @tafGen.DLN(lineToHash(line))
+		line ="[max_length:25, description:Driver's License Number - Patient, ifrepeating:0, datatype:DLN, required:O, piece:20]"
+		fld = @tafGen.DLN(lineToHash(line),true)
+		assert_equal 3, fld.split('^').size
 	end
 
 	def test_DR
@@ -104,7 +109,30 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		assert fld.include?('^') #
 	end
 
-	def test_autoGenerate
+	def test_DT
+		line ='[max_length:8, symbol:*, description:Contract Effective Date, ifrepeating:1, datatype:DT, required:O, piece:25]'
+		fld = @tafGen.DT(lineToHash(line),true)
+		puts fld
+		assert_equal 8, fld.size, 'date format yyyymmdd, like 20141228'
+	end
+
+	def test_IS
+		line ='[max_length:2, description:Interest Code, ifrepeating:0, datatype:IS, required:O, piece:28, codetable:44]'
+		fld = @tafGen.IS(lineToHash(line),true)
+		assert ['C','K','S','P'].include?(fld)
+
+		line ='[max_length:2, description:Interest Code, ifrepeating:0, datatype:IS, required:O, piece:28]' #, codetable:44]'
+		fld = @tafGen.IS(lineToHash(line),true)
+		assert fld.to_i <200
+	end
+
+	def test_FC
+		line ='[max_length:50, symbol:*, description:Financial Class, ifrepeating:1, datatype:FC, required:O, piece:20, codetable:64]'
+		fld = @tafGen.FC(lineToHash(line),true)
+		puts fld
+  end
+
+		def test_autoGenerate
 		map = {'required'=>'B'}
 		refute (@tafGen.autoGenerate?(map)) # false
 

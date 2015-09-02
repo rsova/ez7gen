@@ -1,14 +1,21 @@
+require 'yaml'
 require_relative '../profile_parser'
 
 class TypeAwareFieldGenerator
+  attr_accessor :yml
+
   @@RANGE_INDICATOR = '...'
+  @@HAT = '^' # Component separator, aka hat
   @@MONEY_FORMAT_INDICATORS = ['Money', 'Balance', 'Charge', 'Adjustment', 'Income', 'Amount', 'Payment','Cost']
 
   @@random = Random.new
 
   # constructor
-  def initialize(pp)
+  def initialize(pp)#/Users/romansova/RubymineProjects/ez7gen-staged/lib/ez7gen/resources/properties.yml
     @pp = pp
+    # dirname =  File.join(File.dirname(File.expand_path(__FILE__)),'../../resources/properties.yml')
+    propertiesFile = File.expand_path('../../resources/properties.yml', __FILE__)
+    @yml = YAML.load_file propertiesFile
   end
 
   # Generate HL7 CE (coded element) data type
@@ -33,9 +40,9 @@ class TypeAwareFieldGenerator
       #alternate text (ST)
       #name of alternate coding system (IS)
     end
-    return val.join('^')
+    return val.join(@@HAT)
   end
-  
+
   #Generate HL7 CP (composite price) data type.
   def CP(map, force=false)
 		#check if the field is optional and randomly generate it of skip
@@ -43,7 +50,6 @@ class TypeAwareFieldGenerator
     val = []
 
 		#price (MO)
-		#mo(['fld'=>cp.getComponent(0), 'required'=>'R'])
     MO(map,true)
 		#price type (ID)
 		#from value (NM)
@@ -80,23 +86,24 @@ class TypeAwareFieldGenerator
 		val<<ID(map, true)
 		#effective date (TS)
 		val<<TS(map,true)
-		val.join('^')
+		val.join(@@HAT)
   end
 
   #Generate HHL7 DLN (driver's license number) data type
-  def dln(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
-
-# 		DLN dln = (DLN) map.fld
-# 		#Driver´s License Number (ST)
-# 		dln.getDriverSLicenseNumber().setValue(String.format('%07d', (Math.abs(random.nextInt()))))# 7 Numeric, as for some states in real life
-# 		#Issuing State, province, country (IS)
-# 		#is(['fld'=>dln.getIssuingStateProvinceCountry(), 'required'=>'R','codetable'=>map.codetable])
-# 		dln.getIssuingStateProvinceCountry().setValue(allStates.get(Math.abs(random.nextInt()%allStates.size())))
-
-# 		#expiration date (DT)
-# 		dt(['fld'=>dln.getExpirationDate(),'description'=>'End', 'required'=>'R'])
+  def DLN(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
+    val=[]
+		# DLN dln = (DLN) map.fld
+		#Driver´s License Number (ST)
+		val << generateLengthBoundId(7) # 7 Numeric, as for some states in real life
+		#Issuing State, province, country (IS)
+		#is(['fld'=>dln.getIssuingStateProvinceCountry(), 'required'=>'R','codetable'=>map.codetable])
+		#dln.getIssuingStateProvinceCountry().setValue(allStates.get(Math.abs(random.nextInt()%allStates.size())))
+    val << @yml['address.states'].sample # pick a state
+		#expiration date (DT)
+		val << DT(map.update({'description' => 'End'}),true)
+    val.join(@@HAT)
   end
 
   #Generates HL7 DR (date/time range) data type.
@@ -108,27 +115,19 @@ class TypeAwareFieldGenerator
 		val<<TS(map,true)
 		#range end date/time (TS)
 		val<<TS(map.update({'description'=>'End'}),true)
-    val.join('^')
+    val.join(@@HAT)
   end
 
-  # Generates an HL7 DT (date) datatype.
-  def dt(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  #Generates an HL7 DT (date) datatype.
+  def DT(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		boolean isFutureEvent = map.description?.contains('End') #so 'Role End Date/Time'
+    # #time of an event (TSComponentOne)
+    toDateTime(map).strftime('%Y%m%d') #format('YYYYMMdd.SSS')Date.iso8601
 
-# 		int seed = 52 #seed bounds duration of time to 52 weeks, a year baby...
-# 		use(TimeCategory) {
-# 			Duration duration = Math.abs(random.nextInt() % seed).toInteger().week
-# 			Date evnt = (isFutureEvent)?new Date() + duration=>new Date() - duration
-# 			#YYYY[MM[DD]]
-# 			#String v = evnt.format( 'YYYYMMDD')
-# 			String v = evnt.format( 'YYYYMMdd')
-# 			((DT)map.fld).setValue(v)
-# 		}
   end
-  
+
   # Generate HL7 EI - entity identifier
   def EI(map, force=false)
     #check if the field is optional and randomly generate it of skip
@@ -140,7 +139,7 @@ class TypeAwareFieldGenerator
     # universal ID (ST)
     # universal ID type (ID)
   end
-  
+
   # Generate HL7 ID, usually using value from code table
   def ID(map, force=false)
 		#check if the field is optional and randomly generate it of skip
@@ -150,25 +149,26 @@ class TypeAwareFieldGenerator
   end
 
   #Generates HL7 IS (namespace id) data type
-  def is(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def IS(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		String val = (map.codetable != null)? getCodedValue(pp, map)=> Math.abs(random.nextInt() % 200).toString()
-# 		((IS) map.fld).setValue(val)
+		#String val = (map.codetable != null)? getCodedValue(pp, map)=> Math.abs(random.nextInt() % 200).toString()
+    (!Utils.blank?(map['codetable']))? getCodedValue(map): @@random.rand(200).to_s
+		#((IS) map.fld).setValue(val)
   end
 
   #Generates HL7 FC (financial class) data type.
-  def fc(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def FC(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		FC fc = (FC) map.fld
-
-# 		#Financial Class (IS)
-# 		is(['fld'=>fc.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
-# 		#Effective Date (TS) (TS)
-# 		ts(['fld'=>fc.getComponent(1), 'required'=>'R'])
+    val = []
+		#Financial Class (IS)
+		val << IS(map, true)
+		#Effective Date (TS) (TS)
+		val << TS(map, true)
+    val.join(@@HAT)
   end
 
   #Generates an HL7 FN (familiy name) data type.
@@ -230,7 +230,7 @@ class TypeAwareFieldGenerator
 		val << NM(map.update({'description' =>'Money'}),true)
 		#denomination (ID)
 		val << 'USD'
-    return val.join('^')
+    return val.join(@@HAT)
   end
 
   #Generates an HL7 NM (numeric) data type. A NM contains a single String value.
@@ -347,13 +347,8 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
 
-		#for Time Stamp one way to figure out if event is in the future of in the past to look for key words in description
-    isFutureEvent = map['description'].include?('End') #so 'Role End Date/Time'
-		seed = 365 #seed bounds duration of time to a year
-    days = @@random.rand(seed)
-    evnt = (isFutureEvent) ? DateTime.now().next_day(days) : DateTime.now().prev_day(days)
     #time of an event (TSComponentOne)
-    evnt.strftime('%Y%m%d%H%M%S') #format('YYYYMMDDHHSS.SSS')Date.iso8601
+    toDateTime(map).strftime('%Y%m%d%H%M%S.%L') #format('YYYYMMDDHHSS.SSS')Date.iso8601
   end
 
   #Generate an HL7 TN (telephone number) data type. A TN contains a single String value.
@@ -613,5 +608,13 @@ class TypeAwareFieldGenerator
     if(map['required'] == 'O') then return [true, false].sample end #random boolean
     # return true
   end
-  
+
+  # @return DateTime generated with consideration of description string for dates in the future
+  def toDateTime(map)
+    #for Time Stamp one way to figure out if event is in the future of in the past to look for key words in description
+    isFutureEvent = map['description'].include?('End') #so 'Role End Date/Time'
+    seed = 365 #seed bounds duration of time to a year
+    days = @@random.rand(seed)
+    (isFutureEvent) ? DateTime.now().next_day(days) : DateTime.now().prev_day(days)
+  end
  end

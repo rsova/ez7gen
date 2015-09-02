@@ -1,5 +1,18 @@
 require 'yaml'
 
+# file = File.open('properties.yml')
+# yml = YAML::load(file)
+# puts puts yml['juixe']['user'] # juixe-username
+# yml['user'] # juixe-username
+# exit
+
+yml = YAML.load_file 'properties.yml'
+puts yml['person.names.first'][0]
+puts yml['address.streetNames']
+
+#yml.each_pair { |key, value| puts "#{key} = #{value}" }
+
+#puts yml['juixe']['user'] # juixe-username
 
 exit
 puts "Result is %.2f" % 1000
