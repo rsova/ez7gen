@@ -172,47 +172,47 @@ class TypeAwareFieldGenerator
   end
 
   #Generates an HL7 FN (familiy name) data type.
-  def fn(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def FN(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		FN fc = (FN) map.fld
 
-# 		#surname (ST)
-# 		fc.surname.setValue(lastNames.getAt(Math.abs(random.nextInt()%lastNames.size())));
-# 		#own surname prefix (ST)
-# 		#own surname (ST)
-# 		#surname prefix from partner/spouse (ST)
-# 		#surname from partner/spouse (ST)
+		#surname (ST)
+    @yml['person.names.last'].sample
+		#own surname prefix (ST)
+		#own surname (ST)
+		#surname prefix from partner/spouse (ST)
+		#surname from partner/spouse (ST)
   end
 
   #Generates HL7 HD (hierarchic designator) data type
-  def hd(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def HD(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		HD hd = (HD) map.fld
-# 		#namespace ID (IS)
-# 		is(['fld'=>hd.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
-# 		#universal ID (ST)
-# 		#universal ID type (ID)
+		#namespace ID (IS)
+    IS(map, true)
+		#universal ID (ST)
+		#universal ID type (ID)
   end
 
   #Generates HL7 JCC (job code/class) data type.
-  def jcc(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def JSS(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		JCC jcc = (JCC) map.fld
-# 		#job code (IS)
-# 		is(['fld'=>jcc.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
-# 		#job class (IS)
-# 		is(['fld'=>jcc.getComponent(1), 'required'=>'R'])
-
+		val=[]
+		#job code (IS)
+		# is(['fld'=>jcc.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
+    val << IS(map, true)
+		#job class (IS)
+    val << IS(map, true)
+    # is(['fld'=>jcc.getComponent(1), 'required'=>'R'])
+    val.join(@@HAT)
   end
 
   #Generates HL7 MSG (Message Type) data type.
-  def msg(map, force=false)
+  def MSH(map, force=false)
 # 		#message type (ID)
 # 		#trigger event (ID)
 # 		#message structure (ID)
@@ -248,52 +248,56 @@ class TypeAwareFieldGenerator
 
   #Generates an HL7 OCD (occurence) data type.
   #The code and associated date defining a significant event relating to a bill that may affect payer processing
-  def ocd(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
-
-# 		OCD ocd = (OCD) map.fld
-# 		#occurrence code (IS)
-# 		is(['fld'=>ocd.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
-# 		#occurrence date (DT)
-# 		dt(['fld'=>ocd.getComponent(1), 'required'=>'R'])
-# 		println ocd
+  def OCD(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
+    val = []
+		#occurrence code (IS)
+    val << IS(map, true)
+		# is(['fld'=>ocd.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
+		#occurrence date (DT)
+		#dt(['fld'=>ocd.getComponent(1), 'required'=>'R'])
+    val << DT(map, true)
+    val.join(@@HAT)
   end
 
   #Generate an HL7 OSP (occurence span) data type.
-  def osp(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def OSP(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
+    val = []
 
-# 		OSP ocp = (OSP) map.fld
-# 		#occurrence span code (CE)
-# 		ce(['fld'=>ocp.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
-# 		#occurrence span start date (DT)
-# 		dt(['fld'=>ocp.getComponent(1), 'required'=>'R'])
-# 		#occurrence span stop date (DT)
-# 		dt(['fld'=>ocp.getComponent(2), 'description'=>'End','required'=>'R'])
+		#occurrence span code (CE)
+    val << CE(map, true)
+		#occurrence span start date (DT)
+    val << DT(map,true)
+		#occurrence span stop date (DT)
+    val << DT(map.update({'description'=>'End'}), true)
+    val.join(@@HAT)
   end
 
   #Generate an HL7 PL (person location) data type.
-  def pl(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
-
-# 		PL pl = (PL) map.fld
-# 		#point of care (IS)
-# 		is(['fld'=>pl.getComponent(0), 'required'=>'R'])
-# 		#room (IS)
-# 		is(['fld'=>pl.getComponent(1), 'required'=>'R'])
-# 		#bed (IS)
-# 		is(['fld'=>pl.getComponent(2), 'required'=>'R'])
-# 		#facility (HD) (HD)
-# 		hd(['fld'=>pl.getComponent(3), 'required'=>'R'])
-# 		#location status (IS)
-# 		#person location type (IS)
-# 		#building (IS)
-# 		is(['fld'=>pl.getComponent(6), 'required'=>'R'])
-# 		#floor (IS)
-# 		#Location description (ST)
+  def PL(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
+    val = []
+		#point of care (IS)
+		val << IS(map, true)
+		#room (IS)
+		val << IS(map, true)
+		#bed (IS)
+		val << IS(map, true)
+		#facility (HD) (HD)
+		val << HD(map, true)
+		#location status (IS)
+    val << ''
+		#person location type (IS)
+    val << ''
+		#building (IS)
+		IS(map, true)
+		#floor (IS)
+		#Location description (ST)
+    val.join(@@HAT)
   end
 
   #Generate HL7 S PT (processing type) data type.
@@ -612,7 +616,7 @@ class TypeAwareFieldGenerator
   # @return DateTime generated with consideration of description string for dates in the future
   def toDateTime(map)
     #for Time Stamp one way to figure out if event is in the future of in the past to look for key words in description
-    isFutureEvent = map['description'].include?('End') #so 'Role End Date/Time'
+    isFutureEvent = !Utils.blank?(map['description'])&& map['description'].include?('End') #so 'Role End Date/Time'
     seed = 365 #seed bounds duration of time to a year
     days = @@random.rand(seed)
     (isFutureEvent) ? DateTime.now().next_day(days) : DateTime.now().prev_day(days)

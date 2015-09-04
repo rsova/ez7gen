@@ -132,7 +132,50 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		puts fld
   end
 
-		def test_autoGenerate
+	def test_FN
+		line ='[required:O, piece:20]'
+		fld = @tafGen.FN(lineToHash(line),true)
+		assert fld
+		puts fld
+  end
+
+	def test_HD
+		line ='[max_length:180, description:Event Facility, ifrepeating:0, datatype:HD, required:O, piece:7]'
+		fld = @tafGen.HD(lineToHash(line),true)
+		assert fld
+		puts fld
+  end
+
+	def test_JSS
+		line ='[required:O, piece:20]'
+		fld = @tafGen.JSS(lineToHash(line),true)
+		assert fld.include?('^')
+		puts fld
+	end
+
+	def test_OCD
+		line ='[required:R, piece:20]'
+		fld = @tafGen.OCD(lineToHash(line))
+		assert fld.include?('^')
+		puts fld
+  end
+
+	def test_OSP
+		line ='[required:R, piece:20]'
+		fld = @tafGen.OSP(lineToHash(line))
+		assert fld.include?('^')
+		puts fld
+  end
+
+	def test_PL
+		line ='[max_length:80, description:Assigned Patient Location, ifrepeating:0, datatype:PL, required:O, piece:3]'
+		fld = @tafGen.PL(lineToHash(line), true)
+		assert fld.include?('^')
+		assert_equal 4, fld.split('^').size
+		puts fld
+  end
+
+	def test_autoGenerate
 		map = {'required'=>'B'}
 		refute (@tafGen.autoGenerate?(map)) # false
 
@@ -153,8 +196,6 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 
 		map = {'required'=>'W'}
 		assert @tafGen.autoGenerate?(map,true) # true or false random
-
-
 	end
 
 
