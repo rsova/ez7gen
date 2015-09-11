@@ -3,10 +3,11 @@ require_relative '../profile_parser'
 
 class TypeAwareFieldGenerator
   attr_accessor :yml
-
+  @@UP_TO_3_DGTS = 1000 # up to 3 digits
   @@RANGE_INDICATOR = '...'
   @@HAT = '^' # Component separator, aka hat
   @@MONEY_FORMAT_INDICATORS = ['Money', 'Balance', 'Charge', 'Adjustment', 'Income', 'Amount', 'Payment','Cost']
+  @@INITIALS = ('A'..'Z').to_a
 
   @@random = Random.new
 
@@ -24,11 +25,10 @@ class TypeAwareFieldGenerator
     return if(!autoGenerate?(map,force))
     val = []
     # CE ce = (CE) map?.fld
-    #if(map.codetable != null){
     codes = getCodedMap(map)
     if(Utils.blank?(codes))
       #ce.getIdentifier().setValue(Math.abs(random.nextInt() % 200).toString())
-      id = @@random.rand(200)
+      id = @@random.rand(@@UP_TO_3_DGTS)
       val << id
     else
       #identifier (ST) (ST)
@@ -145,7 +145,7 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
     #value only
-		(!Utils.blank?(map['codetable']))? getCodedValue(map): @@random.rand(200).to_s
+		(!Utils.blank?(map['codetable']))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
   end
 
   #Generates HL7 IS (namespace id) data type
@@ -154,7 +154,7 @@ class TypeAwareFieldGenerator
 		return if(!autoGenerate?(map,force))
 
 		#String val = (map.codetable != null)? getCodedValue(pp, map)=> Math.abs(random.nextInt() % 200).toString()
-    (!Utils.blank?(map['codetable']))? getCodedValue(map): @@random.rand(200).to_s
+    (!Utils.blank?(map['codetable']))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
 		#((IS) map.fld).setValue(val)
   end
 
@@ -239,10 +239,10 @@ class TypeAwareFieldGenerator
 		return if(!autoGenerate?(map,force))
 
 		#money
-		if (@@MONEY_FORMAT_INDICATORS.index{|it| map['description'].include?(it)}) #check for specific numeric for money
+		if (!Utils.blank?(map['description']) && @@MONEY_FORMAT_INDICATORS.index{|it| map['description'].include?(it)}) #check for specific numeric for money
 			 '%.2f' % @@random.rand(1000) #under $1,000
 		else #quantity (NM)
-       @@random.rand(20).to_s #under 20
+       @@random.rand(@@UP_TO_3_DGTS).to_s #under 20
     end
   end
 
@@ -301,27 +301,29 @@ class TypeAwareFieldGenerator
   end
 
   #Generate HL7 S PT (processing type) data type.
-  def pt(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def PT(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		#map.maxlen
-# 		PT pt = (PT) map.fld
-# 		Map mp = map.clone()
-# 		mp.fld = pt.getComponent(0)
-# 		mp.required = 'R'
-# 		id(mp)
-# 		#processing ID (ID)
-# 		#processing mode (ID)
+		#map.maxlen
+		# PT pt = (PT) map.fld
+		# Map mp = map.clone()
+		# mp.fld = pt.getComponent(0)
+		# mp.required = 'R'
+		ID(map, true)
+		#processing ID (ID)
+		#processing mode (ID)
   end
 
   #Generate HL7 SI (sequence ID) data type. A SI contains a single String value.
-  def si(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def SI(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		SI pt = (SI) map.fld
-# 		pt.setValue(generateLengthBoundId((map.max_length)?map.max_length.toInteger()=>1))
+		#SI pt = (SI) map.fld
+		#pt.setValue(generateLengthBoundId((map.max_length)?map.max_length.toInteger():1))
+    len = (!Utils.blank?(map['max_length']))?map['max_length'].to_i : 1
+    generateLengthBoundId(len)
   end
 
   #Generate HL7 ST (string data) data type. A ST contains a single String value.
@@ -329,12 +331,13 @@ class TypeAwareFieldGenerator
     #check if the field is optional and randomly generate it of skip
     return if(!autoGenerate?(map,force))
 
+    # TODO add provider type ln 840 ROL
     if(map['description'].include?('SSN'))
       generateLengthBoundId(9)
     else
       len = (map['max_length']!=nil) ? map['max_length'].to_i : 1
       #val = generateLengthBoundId((len>5)?5=>len) # numeric id up to 5 TODO=> string ids?
-      @@random.rand(10000).to_s
+      @@random.rand(@@UP_TO_3_DGTS).to_s
     end
 
     # #			else if(map.max_length < 4 || val.contains('Id')|| val.contains('Days')|| val.contains('Code') || val.contains('Number') ){
@@ -356,158 +359,186 @@ class TypeAwareFieldGenerator
   end
 
   #Generate an HL7 TN (telephone number) data type. A TN contains a single String value.
-  def tn(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def TN(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		TN tn = (TN) map.fld
-# 		tn.setValue(phones.getAt(Math.abs(random.nextInt()%phones.size())))
+		# TN tn = (TN) map.fld
+		# tn.setValue(phones.getAt(Math.abs(random.nextInt()%phones.size())))
+    @yml['address.phones'].sample # pick a phone
   end
 
   #Generate an HL7 UVC (Value code and amount) data type.
-  def uvc(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
-
-# 		UVC uvc = ((UVC)map.fld)
-# 		#value code (IS)
-# 		is(['fld'=>uvc.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
-# 		#value amount (NM)
-# 		nm(['fld'=>uvc.getComponent(1), 'required'=>'R'])
+  def UVC(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
+    val =[]
+		# UVC uvc = ((UVC)map.fld)
+		#value code (IS)
+    val << IS(map, true)
+		# is(['fld'=>uvc.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
+		#value amount (NM)
+		# nm(['fld'=>uvc.getComponent(1), 'required'=>'R'])
+    val << NM(map,true)
+    val.join(@@HAT)
   end
 
   #Generate an HL7 VID (version identifier) data type.
-  def vid(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def VID(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		VID vid = ((VID)map.fld)
-# #		version ID (ID)
-# 		id(['fld'=>vid.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
+		# VID vid = ((VID)map.fld)
+    #version ID (ID)
+    ID(map, true)
+		#id(['fld'=>vid.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
 
-# #		internationalization code (CE)
-# #		international version ID (CE)
+#		internationalization code (CE)
+#		international version ID (CE)
 
   end
 
   #Generate HL7 XAD (extended address)
-  def xad(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def XAD(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		XAD xad = (XAD) map.fld
-# 		int idx = Math.abs(random.nextInt()%streetNames.size())
-# 		#street address (SAD) (SAD)
-# 		xad.getStreetAddress().getStreetName().setValue(streetNames.getAt(idx))
-# 		#other designation (ST)
-# 		#city (ST)
-# 		xad.getCity().setValue(cities.getAt(idx))
-# 		#state or province (ST)
-# 		xad.getStateOrProvince().setValue(states.getAt(idx))
-# 		#zip or postal code (ST)
-# 		xad.getZipOrPostalCode().setValue(zips.getAt(idx))
-# 		#country (ID)
-# 		xad.getCountry().setValue(countries.getAt(idx))
-# 		#address type (ID)
-# 		#other geographic designation (ST)
-# 		#county/parish code (IS)
-# 		#census tract (IS)
-# 		#address representation code (ID)
-# 		#address validity range (DR)
+    # match cities, states and zips
+    sample  = @yml['address.states'].sample
+    idx = @yml['address.states'].index(sample) #index of random element
+
+    val=[]
+		# XAD xad = (XAD) map.fld
+		# int idx = Math.abs(random.nextInt()%streetNames.size())
+		#street address (SAD) (SAD)
+    val << @yml['address.streetNames'].sample
+		# xad.getStreetAddress().getStreetName().setValue(streetNames.getAt(idx))
+		#other designation (ST)
+    val <<''
+		#city (ST)
+    val << @yml['address.cities'].at(idx)
+    # xad.getCity().setValue(cities.getAt(idx))
+    #state or province (ST)
+    val << @yml['address.states'].at(idx)
+    # xad.getStateOrProvince().setValue(states.getAt(idx))
+    #zip or postal code (ST)
+    val << @yml['address.zips'].at(idx)
+    # xad.getZipOrPostalCode().setValue(zips.getAt(idx))
+    #country (ID)
+    val << @yml['address.countries'].at(idx)
+    # xad.getCountry().setValue(countries.getAt(idx))
+		#address type (ID)
+		#other geographic designation (ST)
+		#county/parish code (IS)
+		#census tract (IS)
+		#address representation code (ID)
+		#address validity range (DR)
+    val.join(@@HAT)
   end
 
   # Generate HL7 XCN (extended composite ID number and name for persons)
-  def xcn(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def XCN(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		XCN xcn = (XCN) map.fld
-# 		# ID number (ST) (ST)
-# 		xcn.getIDNumber().setValue(Math.abs(random.nextInt() % 300).toString())
-# 		# family name (FN)
-# 		fn(['fld'=> xcn.getComponent(1),'required'=>'R'])
-# 		#xcn.familyName.surname.value = lastNames.getAt(Math.abs(random.nextInt()%lastNames.size()));
-# 		# given name (ST)
-# 		#xcn.givenName.value = firstNames.getAt(Math.abs(random.nextInt()%firstNames.size()));
-# 		xcn.getComponent(2).setValue(firstNames.getAt(Math.abs(random.nextInt()%firstNames.size())))
-# 		# second and further given names or initials thereof (ST)
-# 		#xcn.secondAndFurtherGivenNamesOrInitialsThereof.value ='J'
-# 		xcn.getComponent(3).setValue('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.getAt(Math.abs(random.nextInt()%26)))
-# 		# suffix (e.g., JR or III) (ST)
-# 		# prefix (e.g., DR) (ST)
-# 		# degree (e.g., MD) (IS)
-# 		# source table (IS)
-# 		# assigning authority (HD)
-# 		# name type code (ID)
-# 		# identifier check digit (ST)
-# 		# code identifying the check digit scheme employed (ID)
-# 		# identifier type code (IS) (IS)
-# 		# assigning facility (HD)
-# 		# Name Representation code (ID)
-# 		# name context (CE)
-# 		# name validity range (DR)
-# 		# name assembly order (ID)
-# 		#println xcn
+    val=[]
+		# XCN xcn = (XCN) map.fld
+		# ID number (ST) (ST)
+    val << ID(map, true)
+		# xcn.getIDNumber().setValue(Math.abs(random.nextInt() % 300).toString())
+		# family name (FN)
+    val << FN(map, true)
+		# fn(['fld'=> xcn.getComponent(1),'required'=>'R'])
+		#xcn.familyName.surname.value = lastNames.getAt(Math.abs(random.nextInt()%lastNames.size()));
+		# given name (ST)
+    val << @yml['person.names.first'].sample
+		# xcn.getComponent(2).setValue(firstNames.getAt(Math.abs(random.nextInt()%firstNames.size())))
+    #xcn.givenName.value = firstNames.getAt(Math.abs(random.nextInt()%firstNames.size()));
+    # second and further given names or initials thereof (ST)
+		#xcn.secondAndFurtherGivenNamesOrInitialsThereof.value ='J'
+		# xcn.getComponent(3).setValue('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.getAt(Math.abs(random.nextInt()%26)))
+    val << @@INITIALS.to_a.sample
+		# suffix (e.g., JR or III) (ST)
+		# prefix (e.g., DR) (ST)
+		# degree (e.g., MD) (IS)
+		# source table (IS)
+		# assigning authority (HD)
+		# name type code (ID)
+		# identifier check digit (ST)
+		# code identifying the check digit scheme employed (ID)
+		# identifier type code (IS) (IS)
+		# assigning facility (HD)
+		# Name Representation code (ID)
+		# name context (CE)
+		# name validity range (DR)
+		# name assembly order (ID)
+		#println xcn
+    val.join(@@HAT)
   end
 
   #Generate an HL7 XON (extended composite name and identification number for organizations) data type.
-  def xon(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def XON(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		XON xtn = (XON) map.fld
-
-# 		#organization name (ST)
-# 		st(['fld'=>xtn.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
-# 		#organization name type code (IS)
-# 		#ID number (NM) (NM)
-# 		nm(['fld'=>xtn.getComponent(2), 'required'=>'R'])
-# 		#check digit (NM) (ST)
-# 		#code identifying the check digit scheme employed (ID)
-# 		#assigning authority (HD)
-# 		#identifier type code (IS) (IS)
-# 		#assigning facility ID (HD)
-# 		#Name Representation code (ID)
+		# XON xtn = (XON) map.fld
+    val=[]
+		#organization name (ST)
+    val << ST(map, true)
+		# st(['fld'=>xtn.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
+		#organization name type code (IS)
+    val << ''
+		#ID number (NM) (NM)
+    val << NM(map, true)
+		#nm(['fld'=>xtn.getComponent(2), 'required'=>'R'])
+		#check digit (NM) (ST)
+		#code identifying the check digit scheme employed (ID)
+		#assigning authority (HD)
+		#identifier type code (IS) (IS)
+		#assigning facility ID (HD)
+		#Name Representation code (ID)
+    val.join(@@HAT)
   end
 
   #Generate an HL7 XPN (extended person name) data type. This type consists of the following components=>
-  def xpn(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def XPN(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		XPN xpn = (XPN)map.fld
-# 		#family name (FN)
-# 		fn(['fld'=> xpn.getComponent(0),'required'=>'R'])
-# 		#given name (ST)
-# 		#xpn.givenName.setValue(firstNames.getAt(Math.abs(random.nextInt()%firstNames.size())));
-# 		xpn.getComponent(1).setValue(firstNames.getAt(Math.abs(random.nextInt()%firstNames.size())))
-# 		#second and further given names or initials thereof (ST)
-# 		#xpn.secondAndFurtherGivenNamesOrInitialsThereof.setValue('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.getAt(Math.abs(random.nextInt()%26)))
-# 		xpn.getComponent(2).setValue('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.getAt(Math.abs(random.nextInt()%26)))
-# 		#suffix (e.g., JR or III) (ST)
-# 		#prefix (e.g., DR) (ST)
-# 		#degree (e.g., MD) (IS)
-# 		#name type code (ID)
-# 		println xpn
+    val=[]
+		#family name (FN)
+    val << FN(map, true)
+		# fn(['fld'=> xpn.getComponent(0),'required'=>'R'])
+		#given name (ST)
+    val << @yml['person.names.first'].sample
+    #xpn.givenName.setValue(firstNames.getAt(Math.abs(random.nextInt()%firstNames.size())));
+    #xpn.getComponent(1).setValue(firstNames.getAt(Math.abs(random.nextInt()%firstNames.size())))
+    #second and further given names or initials thereof (ST)
+    val << @@INITIALS.to_a.sample
+    #xpn.secondAndFurtherGivenNamesOrInitialsThereof.setValue('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.getAt(Math.abs(random.nextInt()%26)))
+		#suffix (e.g., JR or III) (ST)
+		#prefix (e.g., DR) (ST)
+		#degree (e.g., MD) (IS)
+		#name type code (ID)
+    val.join(@@HAT)
   end
 
   #Generate HL7 XTN (extended telecommunication number)
-  def xtn(map, force=false)
-# 		#check if the field is optional and randomly generate it of skip
-# 		return if(!autoGenerate?(map,force))
+  def XTN(map, force=false)
+		#check if the field is optional and randomly generate it of skip
+		return if(!autoGenerate?(map,force))
 
-# 		XTN xtn = (XTN) map.fld
-# 		#[(999)] 999-9999 [X99999][C any text] (TN)
-# 		tn(['fld'=>xtn.getComponent(0), 'required'=>'R'])
-# 		#xtn.get9999999X99999CAnyText().setValue(phones.getAt(Math.abs(random.nextInt()%phones.size())))
-# 		# telecommunication use code (ID)
-# 		# telecommunication equipment type (ID) (ID)
-# 		# Email address (ST)
-# 		# Country Code (NM)
-# 		# Area/city code (NM)
-# 		# Phone number (NM)
-# 		# Extension (NM)
-# 		# any text (ST)
+		#[(999)] 999-9999 [X99999][C any text] (TN)
+		TN(map, true)
+		#xtn.get9999999X99999CAnyText().setValue(phones.getAt(Math.abs(random.nextInt()%phones.size())))
+		# telecommunication use code (ID)
+		# telecommunication equipment type (ID) (ID)
+		# Email address (ST)
+		# Country Code (NM)
+		# Area/city code (NM)
+		# Phone number (NM)
+		# Extension (NM)
+		# any text (ST)
   end
 
   # 	private static final MONEY_FORMAT_INDICATORS = ['Balance', 'Charges', 'Adjustments','Income','Amount','Money']
@@ -557,34 +588,39 @@ class TypeAwareFieldGenerator
 
 
   # Handle range values specified by '...' sequence, including empty range
+  #TODO refactor candidate
   def applyRules(codes, attributes)
-
-    #safety check, no codes return an empty map
+    #safety check, no codes returns an empty map
     return {} if Utils.blank?(codes)
 
-    idx  = @@random.rand(codes.size)
+    #index of random element
+    idx = Utils.sampleIdx(codes.size)
     code = codes[idx]['value']
     description = codes[idx]['description']
+
     if(code.include?(@@RANGE_INDICATOR))
       ends = code.delete(' ').split('...').map{|it| it}
       if(ends.empty?) # This is indication that codetable does not have any values
         code, description = '',''
       else #Handle range values, build range and pick random value
         range = ends[0]..ends[1]
-        code = range.to_a.sample()
+        code = range.to_a.sample
       end
     elsif(code.size > (maxlen = (attributes['max_length']) ? attributes['max_length'].to_i : code.size))
       #remove all codes wich values violate
-      codes.select! {|it| it['value'].size <= maxlen }
-      if(!codes)
+      #codes.select! {|it| it['value'].size <= maxlen }
+      idx = codes.find_index{|it| it['value'].size <= maxlen}
+
+      if(!idx)
         code, description = '',''
       else
         puts codes
-        idx  = @@random.rand(codes.size)
         code = codes[idx]['value']
         description = codes[idx]['description']
       end
     end
+    # got to have code, get an id, most basic
+    code = (!Utils.blank?(code)) ? code : ID({},true)
     puts code + ', ' + description
     return {'value'=>code, 'description'=>description}
   end

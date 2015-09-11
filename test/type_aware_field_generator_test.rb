@@ -24,7 +24,7 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		row= lineToHash(line)
 		#puts row
 		fld = @tafGen.CE(row)
-		assert fld.to_i < 200
+		assert fld.to_i < 1000
 		#puts fld
 	end
 
@@ -48,7 +48,7 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		fld = @tafGen.NM(lineToHash(line))
 		puts fld
 		refute fld.include?('.00')
-		assert fld.to_i < 20
+		assert fld.to_i < 1000
   end
 
   def test_CP
@@ -123,28 +123,28 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 
 		line ='[max_length:2, description:Interest Code, ifrepeating:0, datatype:IS, required:O, piece:28]' #, codetable:44]'
 		fld = @tafGen.IS(lineToHash(line),true)
-		assert fld.to_i <200
+		assert fld.to_i <1000
 	end
 
 	def test_FC
 		line ='[max_length:50, symbol:*, description:Financial Class, ifrepeating:1, datatype:FC, required:O, piece:20, codetable:64]'
 		fld = @tafGen.FC(lineToHash(line),true)
 		puts fld
-  end
+    end
 
 	def test_FN
 		line ='[required:O, piece:20]'
 		fld = @tafGen.FN(lineToHash(line),true)
 		assert fld
 		puts fld
-  end
+    end
 
 	def test_HD
 		line ='[max_length:180, description:Event Facility, ifrepeating:0, datatype:HD, required:O, piece:7]'
 		fld = @tafGen.HD(lineToHash(line),true)
 		assert fld
 		puts fld
-  end
+    end
 
 	def test_JSS
 		line ='[required:O, piece:20]'
@@ -158,22 +158,98 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		fld = @tafGen.OCD(lineToHash(line))
 		assert fld.include?('^')
 		puts fld
-  end
+    end
 
 	def test_OSP
 		line ='[required:R, piece:20]'
 		fld = @tafGen.OSP(lineToHash(line))
 		assert fld.include?('^')
 		puts fld
-  end
+    end
 
-	def test_PL
+    def test_PL
 		line ='[max_length:80, description:Assigned Patient Location, ifrepeating:0, datatype:PL, required:O, piece:3]'
 		fld = @tafGen.PL(lineToHash(line), true)
 		assert fld.include?('^')
 		assert_equal 4, fld.split('^').size
 		puts fld
-  end
+    end
+
+    def test_PT
+        line ='[datatype:PT, required:O, piece:3]'
+        fld = @tafGen.PT(lineToHash(line), true)
+        assert fld
+        puts fld
+    end
+
+    def test_SI
+        line ='[max_length:4, symbol:!, description:Set ID - DG1, ifrepeating:0, datatype:SI, required:R, piece:1]'
+        fld = @tafGen.SI(lineToHash(line), true)
+        assert_equal 4, fld.size
+        puts fld
+    end
+
+    def test_TN
+        line ='[datatype:TN, required:R, piece:1]'
+        fld = @tafGen.TN(lineToHash(line), true)
+        puts fld
+        assert_equal 13, fld.size
+    end
+
+    def test_UVC
+        line ='[datatype:UVC, required:R, piece:1]'
+        fld = @tafGen.UVC(lineToHash(line), true)
+        puts fld
+        assert fld.include?('^')
+    end
+
+    def test_VID
+        line ='[datatype:VID, required:R, piece:1]'
+        fld = @tafGen.VID(lineToHash(line), true)
+        puts fld
+        assert fld.to_i < 1000
+    end
+
+    def test_XAD
+        line ='[max_length:250, symbol:*, description:Patient Address, ifrepeating:1, datatype:XAD, required:O, piece:11]'
+        fld = @tafGen.XAD(lineToHash(line), true)
+        puts fld
+        assert_equal 6, fld.split('^').size
+    end
+
+    def test_XCN
+        line ='[max_length:250, symbol:*, description:Operator ID, ifrepeating:1, datatype:XCN, required:O, piece:5, codetable:188]'
+        fld = @tafGen.XCN(lineToHash(line), true)
+        puts fld
+        assert_equal 4, fld.split('^').size
+
+       line = '[max_length:250, symbol:*, description:Diagnosing Clinician, ifrepeating:1, datatype:XCN, required:O, piece:16]'
+        fld = @tafGen.XCN(lineToHash(line), true)
+        puts fld
+        assert_equal 4, fld.split('^').size
+    end
+
+	def test_XON
+		line ='[max_length:250, symbol:*, description:Patient Primary Facility, ifrepeating:1, datatype:XON, required:O, piece:3]'
+		fld = @tafGen.XON(lineToHash(line), true)
+		puts fld
+		assert_equal 3, fld.split('^').size
+	end
+
+	def test_XPN
+		line ='[max_length:250, symbol:*, description:Patient Alias, ifrepeating:1, datatype:XPN, required:B, piece:9]'
+		fld = @tafGen.XPN(lineToHash(line), true)
+		puts fld
+		assert_equal 3, fld.split('^').size
+	end
+
+	def test_XTN
+		line ='[max_length:250, symbol:*, description:Phone Number - Business, ifrepeating:1, datatype:XTN, required:O, piece:14]'
+		fld = @tafGen.XTN(lineToHash(line), true)
+		puts fld
+		assert 'Starts with (...)', /(\d{3})/.match(fld)
+	#	assert fld.include?/(\d{3}\\)\d{3}-\d{4}/
+	end
 
 	def test_autoGenerate
 		map = {'required'=>'B'}
@@ -182,7 +258,7 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		map = {'required'=>'X'}
 		refute (@tafGen.autoGenerate?(map)) # false
 
-    map = {'required'=>'W'}
+        map = {'required'=>'W'}
 		refute (@tafGen.autoGenerate?(map)) # false
 
 		map = {'required'=>'R'}

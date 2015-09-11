@@ -1,7 +1,7 @@
 require 'ruby-hl7'
-require_relative 'ProfileParser'
-require_relative './service/SegmentPicker'
-require_relative './service/SegmentGenerator'
+require_relative '../ez7gen/profile_parser'
+require_relative '../ez7gen/service/segment_generator'
+require_relative '../ez7gen/service/segment_picker'
 
 class MessageFactory
 
@@ -10,7 +10,7 @@ class MessageFactory
     # 0: [[~PD1~], ~PD1~]
     # 1: [[~{~ROL~}~], ~{~ROL~}~]
     parser = ProfileParser.new(version, event)
-    segmentsMap = parser.getSegments
+    segmentsMap = parser.getSegments()
 
     #Get list of non required segments randomly selected for this build
     segmentPicker = SegmentPicker.new(segmentsMap)

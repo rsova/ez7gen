@@ -198,7 +198,7 @@ def do_something_with_ORC(msg)
 end
 
 parse_file('test.hl7')
----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
 require 'active_record'
 require 'activerecord-sqlserver-adapter'

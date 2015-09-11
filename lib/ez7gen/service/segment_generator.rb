@@ -4,8 +4,10 @@ require_relative '../service/type_aware_field_generator'
 require_relative 'utils'
 
 class SegmentGenerator
-  @@maxReps = 5
+  @@maxReps = 2
   @fieldGenerator
+  @@random = Random.new
+
   attr_accessor :version; :event;
 
   # constructor
@@ -36,8 +38,8 @@ class SegmentGenerator
     isRep = isSegmentRepeated(segment)
     segmentName = Utils.getSegmentName(segment)
 
-    #decide if segment needs to repeat and how many times
-    totalReps = (isRep)? 1+Random.rand(@@maxReps):1
+    # decide if segment needs to repeat and how many times
+    totalReps = (isRep)? @@random.rand(1.. @@maxReps) : 1 # between 1 and maxReps
 
     totalReps.times do |i|
       # seg = (isRep)?message."get$segmentName"(i) :message."get$segmentName"()
@@ -48,24 +50,26 @@ class SegmentGenerator
   end
 
   def isSegmentRepeated(segment)
-    puts 'in isSegmentReapeated'
+    # puts 'in isSegmentReapeated'
     return false
   end
 
-  # generate a segment using ensamble schema
+  # generate a segment using Ensamble schema
   def generateSegment(segmentName, attributes)
-    elements = generateSegmentElemens(segmentName, attributes)
+    elements = generateSegmentElements(segmentName, attributes)
     HL7::Message::Segment::Default.new(elements)
   end
 
   # use attributes to generate contents of a specific segment
-  def generateSegmentElemens(segmentName, attributes)
+  def generateSegmentElements(segmentName, attributes)
     total = attributes.size()
     fields =[]
+
     total.times do |i|
       fields << addField(attributes[i])
     end
-    return [segmentName]<<fields
+    # add segment name to the beginning of the array
+    fields.unshift(segmentName)
   end
 
   #adds a generated field based on data type
@@ -75,7 +79,7 @@ class SegmentGenerator
     idx.to_i
     dt = attributes['datatype']
     puts dt
-    # @fieldGenerator.EI(attributes)
-    @fieldGenerator.method(dt).call(attributes)
+   @fieldGenerator.method(dt).call(attributes)
   end
+
 end
