@@ -1,5 +1,5 @@
 class SegmentPicker
-  attr_accessor :segments
+  attr_accessor :encodedSegments
   attr_accessor :profile
 
   # private List segments
@@ -11,8 +11,8 @@ class SegmentPicker
   @@random = Random.new
 
   def initialize(segmentsMap)
-    @segments = segmentsMap['segments']
-    @profile = segmentsMap['profile']
+    @encodedSegments = segmentsMap[:segments]
+    @profile = segmentsMap[:profile].split('~')
   end
 
   # Get list of segments for test message generation.
@@ -35,32 +35,54 @@ class SegmentPicker
   # }
 
   # Groups need to be preprocessed
-  def handleGroups()
+  def handleGroups(segments)
     #TODO: optional groups are deleted, revisit this
-    @segments.delete_if{|it| isGroup?(it)}
+    segments.delete_if{|it| isGroup?(it)}
   end
 
   # pick segments randomly, according to the load factor, exclude groups
   def getSegmentsToBuild()
+      keepers = []
 
-      toBuild = []
+      # place required segments according to their order in the segment
+      reqSegments = getRequiredSegments()
+      reqSegments.each{|it| keepers[@profile.index(it)] = it}
+      #@profile.each{|it| keepers[reqSegments.index(it)] = it}
 
-
-
-      # @segments = handleGroups()
-
-      total = @segments.size
-      max_count = getLoadCandidatesCount(total)
-
-      #get random array of segments
-      @segments.sample(max_count)
+      # place optional segments according to their order in segment
+      keepers = pickOptionalSegments(keepers)
+      keepers.compact()
   end
 
+
+  def pickOptionalSegments(segmentsToBuildArray)
+
+      optSegmentIdxs = @profile.select{|it| !isRequired?(it)}
+      count = getLoadCandidatesCount(optSegmentIdxs.size())
+
+      # get indexes of optional segments
+      ids = optSegmentIdxs.sample(count)
+      p ids
+      ids.each{|it| segmentsToBuildArray[@profile.index(it)] = @encodedSegments[it.to_i]}
+      handleGroups(segmentsToBuildArray)
+  end
+
+  def getRequiredSegments()
+    x = @profile.select{|it| isRequired?(it)}
+  end
+
+  # def handleRequiredSegments(keepers)
+  #   reqSegments = getRequiredSegments()
+  # end
 
   # calculate number of segments based on load factor
   def getLoadCandidatesCount(total)
     (total*@@LOAD_FACTOR).ceil     #round it up
   end
 
-
+  # check is segment is required
+  def isRequired?(encoded)
+    # Required segments left not encoded as strings, optional and groups encoded as numbers
+    !Utils.isNumber?(encoded)
+  end
 end

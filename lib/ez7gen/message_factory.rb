@@ -17,6 +17,7 @@ class MessageFactory
     segments = segmentPicker.pickSegments()
 
     segmentGenerator = SegmentGenerator.new(version, event, parser)
+
     #init messsage with msh segment
     hl7Msg = HL7::Message.new
     hl7Msg << segmentGenerator.initMsh()
@@ -27,6 +28,7 @@ class MessageFactory
       puts attributes
       hl7Msg = segmentGenerator.generate(hl7Msg, segment, attributes)
     }
+    return hl7Msg
   end
 
 

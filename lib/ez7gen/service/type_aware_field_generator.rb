@@ -64,7 +64,7 @@ class TypeAwareFieldGenerator
 		return if(!autoGenerate?(map,force))
 
 		#ID (ST)
-		ST(map.update({ 'description'=>'Number'}),true)
+		ST(update(map, 'description','Number'),true)
 		#check digit (ST) (ST)
 		#code identifying the check digit scheme employed (ID)
 		#assigning authority (HD)
@@ -102,7 +102,7 @@ class TypeAwareFieldGenerator
 		#dln.getIssuingStateProvinceCountry().setValue(allStates.get(Math.abs(random.nextInt()%allStates.size())))
     val << @yml['address.states'].sample # pick a state
 		#expiration date (DT)
-		val << DT(map.update({'description' => 'End'}),true)
+		val << DT(update(map,'description','End'),true)
     val.join(@@HAT)
   end
 
@@ -114,7 +114,7 @@ class TypeAwareFieldGenerator
 		#range start date/time (TS)
 		val<<TS(map,true)
 		#range end date/time (TS)
-		val<<TS(map.update({'description'=>'End'}),true)
+		val<<TS(update(map,'description','End'),true)
     val.join(@@HAT)
   end
 
@@ -197,7 +197,7 @@ class TypeAwareFieldGenerator
   end
 
   #Generates HL7 JCC (job code/class) data type.
-  def JSS(map, force=false)
+  def JCC(map, force=false)
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
 
@@ -227,7 +227,7 @@ class TypeAwareFieldGenerator
 		return if(!autoGenerate?(map,force))
     val = []
 		#quantity (NM)
-		val << NM(map.update({'description' =>'Money'}),true)
+		val << NM(update(map,'description','Money'),true)
 		#denomination (ID)
 		val << 'USD'
     return val.join(@@HAT)
@@ -272,7 +272,7 @@ class TypeAwareFieldGenerator
 		#occurrence span start date (DT)
     val << DT(map,true)
 		#occurrence span stop date (DT)
-    val << DT(map.update({'description'=>'End'}), true)
+    val << DT(update(map,'description','End'), true)
     val.join(@@HAT)
   end
 
@@ -657,4 +657,11 @@ class TypeAwareFieldGenerator
     days = @@random.rand(seed)
     (isFutureEvent) ? DateTime.now().next_day(days) : DateTime.now().prev_day(days)
   end
+
+  # convention method to modify REXML::Attributes value
+  def update(map, key, value)
+    map[key]=value
+    return map
+  end
+
  end

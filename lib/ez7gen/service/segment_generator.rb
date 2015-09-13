@@ -74,12 +74,13 @@ class SegmentGenerator
 
   #adds a generated field based on data type
   def addField(attributes)
-    idx = attributes['piece']
-    puts idx
-    idx.to_i
+    # idx = attributes['piece']
+    # puts idx
+    # idx.to_i
     dt = attributes['datatype']
-    puts dt
-   @fieldGenerator.method(dt).call(attributes)
+    puts Utils.blank?(dt)?'~~~~~~~~~> data type is missing': dt
+
+    Utils.blank?(dt)?nil :@fieldGenerator.method(dt).call(attributes)
   end
 
 end

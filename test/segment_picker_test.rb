@@ -47,8 +47,8 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
   end
 
   def test_init
-    assert_equal 21, @segmentPicker.segments.size
-    assert_equal Array, @segmentPicker.segments.class
+    assert_equal 21, @segmentPicker.encodedSegments.size
+    assert_equal Array, @segmentPicker.encodedSegments.class
     assert_equal String, @segmentPicker.profile.class
   end
 
@@ -68,5 +68,24 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
    assert_equal false,  @segmentPicker.isGroup?('[~UB2~]')
   end
 
+  def test_isRequired
+
+  end
+
+  def test_qetRequiredSegments
+    assert_equal ["MSH", "EVN", "PID", "PV1"], @segmentPicker.getRequiredSegments()
+  end
+
+  # def test_handleRequiredSegments
+  #   assert_equal  12, @segmentPicker.pickOptionalSegments().size, '11 picked out of 21'
+  # end
+
+  def test_pickOptionalSegments
+    p @segmentPicker.pickOptionalSegments([])
+  end
+
+  def test_getSegmentsToBuild
+    p @segmentPicker.getSegmentsToBuild()
+  end
 
 end
