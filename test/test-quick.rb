@@ -5,15 +5,16 @@ require 'yaml'
 # yml = YAML::load(file)
 # puts puts yml['juixe']['user'] # juixe-username
 # yml['user'] # juixe-username
+puts 'base:MSH'.delete(':base')
 
-arr = [6,2, 5]
-p arr.find_index{|it| it>13}
-
-arr = ['1','a','3','4','b','5','6','c','7']
-p arr.delete_if{|it| it.is}
-
-p ['1','a','3','4','b','5','6','c','7'].index(arr)
+# arr = [6,2, 5]
+# p arr.find_index{|it| it>13}
+#
+# arr = ['1','a','3','4','b','5','6','c','7']
 # p arr.delete_if{|it| it.is}
+#
+# p ['1','a','3','4','b','5','6','c','7'].index(arr)
+# # p arr.delete_if{|it| it.is}
 
 if("Hello"=~/^[A-Z][a-z]+$/)
   puts 'ok'

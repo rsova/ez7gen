@@ -16,7 +16,13 @@ class MessageFactory
     segmentPicker = SegmentPicker.new(segmentsMap)
     segments = segmentPicker.pickSegments()
 
-    segmentGenerator = SegmentGenerator.new(version, event, parser)
+    parsers = {'primary'=> parser}
+    # if this is a custom segment, add base parser
+    if(version !='2.4')
+      parsers['base']= ProfileParser.new('2.4', event)
+    end
+
+    segmentGenerator = SegmentGenerator.new(version, event, parsers)
 
     #init messsage with msh segment
     hl7Msg = HL7::Message.new

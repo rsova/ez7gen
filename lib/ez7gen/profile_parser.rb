@@ -5,7 +5,7 @@ require_relative 'service/utils'
 class ProfileParser
   #instance attributes
   attr_accessor :version; :event; :xml
-
+  @@HL7_VERSIONS = {'2.4'=>'base24.xml', 'vaz2.4'=>'vaz2.4.xml'}
   #class attribute
   @@segment_patern = /\[([^\[\]]*)\]/
 
@@ -14,7 +14,9 @@ class ProfileParser
     @event = event;
     puts @version
     puts @event
-    profile = File.expand_path('../resources/base24.xml', __FILE__)
+    path = '../resources/'<< @@HL7_VERSIONS[@version]
+    profile = File.expand_path(path, __FILE__)
+    # profile = File.expand_path('../resources/base24.xml', __FILE__)
     @xml = Document.new(File.new(profile))
 
   end

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2014.1.3 (Build 775U)" ts="2015-04-24 16:04:43">
+<Document name="VAZ2.4.HL7">
+<Category name="VAZ2.4" description="Custom schema with VA defined Z-segments and tables" base="2.4">
+
+<MessageType name='ADT_A01' structure='ADT_A01' returntype='base:ACK' description='ADT message - Admit / visit notification'/>
+<MessageType name='ORU_Z11' structure='ORU_Z11' returntype='base:ORU_W01'/>
+
+<MessageStructure name='ADT_A01' definition='base:MSH~base:EVN~base:PID~[~base:PD1~]~[~{~base:NK1~}~]~base:PV1~[~base:PV2~]~[~{~base:DB1~}~]~[~{~base:OBX~}~]~[~{~base:AL1~}~]~[~{~base:DG1~}~]~[~base:DRG~]~[~{~base:PR1~[~{~base:ROL~}~]~}~]~[~{~base:GT1~}~]~[~{~base:IN1~[~base:IN2~]~[~base:IN3~]~}~]~[~base:ACC~]~[~base:UB1~]~[~base:UB2~]~[~ZEM~]~[~ZEN~]~[~ZMH~]' description='ADT message - Admit / visit notification'/>
+<MessageStructure name='ORU_Z11' definition='base:MSH~base:PID~ZEN~ZEM'/>
+
+<SegmentStructure name='ZEM' description='Employment info Segment'>
+    <SegmentSubStructure piece='1' description='SET-ID' datatype='base:SI' max_length='4' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='2' description='EMPLOYMENT PERSON' datatype='base:IS' max_length='1' required='O' ifrepeating='0' codetable='VA009'/>
+    <SegmentSubStructure piece='3' description='EMPLOYMENT STATUS' datatype='base:IS' max_length='2' required='O' ifrepeating='0' codetable='VA003'/>
+    <SegmentSubStructure piece='4' description='EMPLOYER NAME' datatype='base:ST' max_length='30' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='5' description='OCCUPATION' datatype='base:ST' max_length='30' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='6' description='EMPLOYER ADDRESS' datatype='base:AD' max_length='182' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='7' description='EMPLOYER PHONE' datatype='base:TN' max_length='40' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='8' description='GOVERNMENT AGENCY' datatype='base:IS' max_length='1' required='O' ifrepeating='0' codetable='VA001'/>
+    <SegmentSubStructure piece='9' description='RETIREMENT DATE' datatype='base:DT' max_length='8' required='O' ifrepeating='0'/>
+</SegmentStructure>
+<SegmentStructure name='ZEN' description='Enrollment Status'>
+    <SegmentSubStructure piece='1' description='SET ID - ZEN' datatype='base:SI' max_length='4' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='2' description='ENROLLMENT DATE' datatype='base:DT' max_length='8' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='3' description='SOURCE OF ENROLLMENT' datatype='base:ID' max_length='1' required='O' ifrepeating='0' codetable='VA024'/>
+    <SegmentSubStructure piece='4' description='ENROLLMENT STATUS' datatype='base:IS' max_length='2' required='O' ifrepeating='0' codetable='VA015'/>
+    <SegmentSubStructure piece='5' description='REASON CANCELED/DECLINED' datatype='base:IS' max_length='3' required='O' ifrepeating='0' codetable='VA016'/>
+    <SegmentSubStructure piece='6' description='CANCELED/DECLINED REMARKS' datatype='base:TX' max_length='30' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='7' description='FACILITY RECEIVED' datatype='base:IS' max_length='3' required='O' ifrepeating='0' codetable='VA115'/>
+    <SegmentSubStructure piece='8' description='PREFERRED FACILITY' datatype='base:IS' max_length='10' required='O' ifrepeating='0' codetable='VA115'/>
+    <SegmentSubStructure piece='9' description='ENROLLMENT PRIORITY' datatype='base:IS' max_length='1' required='O' ifrepeating='0' codetable='VA021'/>
+    <SegmentSubStructure piece='10' description='EFFECTIVE DATE' datatype='base:DT' max_length='8' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='11' description='ENROLLMENT APPLICATION DATE' datatype='base:DT' max_length='8' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='12' description='ENROLLMENT END DATE' datatype='base:DT' max_length='8' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='13' description='ENROLLMENT SUB-GROUP' datatype='base:IS' max_length='1' required='O' ifrepeating='0' codetable='VA044'/>
+</SegmentStructure>
+<SegmentStructure name='ZMH' description='Military History Segment'>
+    <SegmentSubStructure piece='1' description='SET ID - ZMH' datatype='base:SI' max_length='4' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='2' description='MILITARY HISTORY TYPE' datatype='base:IS' max_length='8' required='O' ifrepeating='0' codetable='VA038'/>
+    <SegmentSubStructure piece='3' description='SERVICE INDICATOR' datatype='base:CE' max_length='80' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='4' description='SERVICE ENTRY DATE AND SERVICE SEPARATION DATE' datatype='base:DR' max_length='53' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='5' description='SERVICE COMPONENT' datatype='base:IS' max_length='8' required='O' ifrepeating='0' codetable='VA026'/>
+</SegmentStructure>
+
+<CodeTable name='VA001' tabletype='1' description='VA Yes/No'>
+   <Enumerate position='1' value='0' description='NO'/>
+   <Enumerate position='2' value='1' description='YES'/>
+   <Enumerate position='3' value='U' description='UNKNOWN'/>
+</CodeTable>
+<CodeTable name='VA003' tabletype='1' description='Employment Status'>
+   <Enumerate position='1' value='1' description='EMPLOYED FULL TIME'/>
+   <Enumerate position='2' value='2' description='EMPLOYED PART TIME'/>
+   <Enumerate position='3' value='3' description='NOT EMPLOYED'/>
+   <Enumerate position='4' value='4' description='SELF EMPLOYED'/>
+   <Enumerate position='5' value='5' description='RETIRED'/>
+   <Enumerate position='6' value='6' description='ACTIVE MILITARY DUTY'/>
+   <Enumerate position='7' value='9' description='UNKNOWN'/>
+</CodeTable>
+<CodeTable name='VA009' tabletype='1' description='Relationship Number'>
+   <Enumerate position='1' value='1' description='SELF'/>
+   <Enumerate position='2' value='10' description='DAUGHTER-IN-LAW'/>
+   <Enumerate position='3' value='11' description='BROTHER'/>
+   <Enumerate position='4' value='12' description='SISTER'/>
+   <Enumerate position='5' value='13' description='STEPBROTHER'/>
+   <Enumerate position='7' value='15' description='BROTHER-IN-LAW'/>
+   <Enumerate position='8' value='16' description='DAUGHTER-IN-LAW'/>
+   <Enumerate position='9' value='17' description='FATHER'/>
+   <Enumerate position='10' value='18' description='MOTHER'/>
+   <Enumerate position='11' value='19' description='STEPFATHER'/>
+   <Enumerate position='12' value='2' description='SPOUSE'/>
+   <Enumerate position='13' value='20' description='STEPMOTHER'/>
+   <Enumerate position='14' value='21' description='FATHER-IN-LAW'/>
+   <Enumerate position='15' value='22' description='MOTHER-IN-LAW'/>
+   <Enumerate position='16' value='23' description='GRANDFATHER'/>
+   <Enumerate position='17' value='24' description='GRANDMOTHER'/>
+   <Enumerate position='18' value='25' description='GREAT-GRANDFATHER'/>
+   <Enumerate position='19' value='26' description='GREAT-GRANDMOTHER'/>
+   <Enumerate position='20' value='27' description='GRANDSON'/>
+   <Enumerate position='21' value='28' description='GRANDDAUGHTER'/>
+   <Enumerate position='22' value='29' description='GREAT-GRANDSON'/>
+   <Enumerate position='23' value='3' description='SON'/>
+   <Enumerate position='24' value='30' description='GREAT-GRANDDAUGHTER'/>
+   <Enumerate position='25' value='31' description='NEPHEW'/>
+   <Enumerate position='26' value='32' description='NIECE'/>
+   <Enumerate position='27' value='33' description='UNCLE'/>
+   <Enumerate position='28' value='34' description='AUNT'/>
+   <Enumerate position='29' value='4' description='DAUGHTER'/>
+   <Enumerate position='30' value='5' description='STEPSON'/>
+   <Enumerate position='31' value='6' description='STEPDAUGHTER'/>
+   <Enumerate position='32' value='7' description='FOSTER SON'/>
+   <Enumerate position='33' value='8' description='FOSTER DAUGHTER'/>
+   <Enumerate position='34' value='9' description='SON-IN-LAW'/>
+   <Enumerate position='35' value='99' description='OTHER'/>
+</CodeTable>
+<CodeTable name='VA015' tabletype='1' description='Enrollment Status'>
+   <Enumerate position='1' value='1' description='UNVERIFIED'/>
+   <Enumerate position='2' value='10' description='NOT ELIGIBLE'/>
+   <Enumerate position='3' value='11' description='REJECTED; FISCAL YEAR'/>
+   <Enumerate position='4' value='12' description='REJECTED; MID-CYCLE'/>
+   <Enumerate position='5' value='13' description='REJECTED; STOP NEW ENROLLMENTS'/>
+   <Enumerate position='6' value='14' description='REJECTED; INITIAL APPLICATION BY VAMC'/>
+   <Enumerate position='7' value='15' description='PENDING; NO ELIGIBILITY CODE IN VIVA'/>
+   <Enumerate position='8' value='16' description='PENDING; MEANS TEST REQUIRED'/>
+   <Enumerate position='9' value='17' description='PENDING; ELIGIBILITY STATUS IS UNVERIFIED'/>
+   <Enumerate position='10' value='18' description='PENDING; OTHER'/>
+   <Enumerate position='11' value='19' description='NOT REQUIRED (FUTURE)'/>
+   <Enumerate position='12' value='2' description='VERIFIED'/>
+   <Enumerate position='13' value='20' description='REJECTED; MEANS TEST NOT PROVIDED (FUTURE)'/>
+   <Enumerate position='14' value='21' description='REJECTED; NON VETERAN (FUTURE)'/>
+   <Enumerate position='15' value='22' description='REJECTED; BELOW ENROLLMENT GROUP THRESHOLD'/>
+   <Enumerate position='16' value='3' description='INACTIVE'/>
+   <Enumerate position='17' value='4' description='REJECTED'/>
+   <Enumerate position='18' value='5' description='SUSPENDED'/>
+   <Enumerate position='19' value='6' description='TERMINATED'/>
+   <Enumerate position='20' value='7' description='CANCELED/DECLINED'/>
+   <Enumerate position='21' value='8' description='EXPIRED'/>
+   <Enumerate position='22' value='9' description='PENDING'/>
+</CodeTable>
+<CodeTable name='VA016' tabletype='1' description='Reason Enrollment Cancelled/Declined'>
+   <Enumerate position='1' value='1' description='DISSATISFIED WITH CARE'/>
+   <Enumerate position='2' value='2' description='GEOGRAPHIC ACCESS'/>
+   <Enumerate position='3' value='3' description='OTHER INSURANCE'/>
+   <Enumerate position='4' value='4' description='OTHER'/>
+</CodeTable>
+<CodeTable name='VA021' tabletype='1' description='Enrollment Priority'>
+   <Enumerate position='1' value='1' description='Priority 1'/>
+   <Enumerate position='2' value='2' description='Priority 2'/>
+   <Enumerate position='3' value='3' description='Priority 3'/>
+   <Enumerate position='4' value='4' description='Priority 4'/>
+   <Enumerate position='5' value='5' description='Priority 5'/>
+   <Enumerate position='6' value='6' description='Priority 6'/>
+   <Enumerate position='7' value='7' description='Priority 7'/>
+   <Enumerate position='8' value='8' description='Priority 8'/>
+</CodeTable>
+<CodeTable name='VA024' tabletype='1' description='Source of Enrollment'>
+   <Enumerate position='1' value='1' description='VAMC'/>
+   <Enumerate position='2' value='2' description='HEC'/>
+   <Enumerate position='3' value='3' description='OTHER VAMC'/>
+</CodeTable>
+<CodeTable name='VA026' tabletype='1' description='Military service Component'>
+   <Enumerate position='1' value='G' description='ACTIVATED NATIONAL GUARD'/>
+   <Enumerate position='2' value='R' description='REGULAR'/>
+   <Enumerate position='3' value='V' description='ACTIVE RESERVE'/>
+</CodeTable>
+<CodeTable name='VA038' tabletype='1' description='Military History Type'>
+   <Enumerate position='1' value='COMB' description='COMBAT'/>
+   <Enumerate position='2' value='COMBAT VET ELIGIBILITY' description='CVEL'/>
+   <Enumerate position='3' value='GREN' description='GRENADA'/>
+   <Enumerate position='4' value='GULF' description='GULF WAR'/>
+   <Enumerate position='5' value='LEBA' description='LEBANON'/>
+   <Enumerate position='6' value='OPERATION ENDURING/IRAQI FREEDOM' description='OEIF'/>
+   <Enumerate position='7' value='PANA' description='PANAMA'/>
+   <Enumerate position='8' value='POW' description='PRISONER OF WAR'/>
+   <Enumerate position='9' value='PH' description='PURPLE HEART'/>
+   <Enumerate position='10' value='SL' description='SERVICE LAST EPISODE'/>
+   <Enumerate position='11' value='SNL' description='SERVICE SECOND EPISODE'/>
+   <Enumerate position='12' value='SNNL' description='SERVICE THIRD EPISODE'/>
+   <Enumerate position='13' value='SOMA' description='SOMALIA'/>
+   <Enumerate position='14' value='VIET' description='VIETNAM'/>
+   <Enumerate position='15' value='YUGO' description='YUGOSLAVIA'/>
+</CodeTable>
+<CodeTable name='VA044' tabletype='1' description='Enrollment Priority Sub-Group'>
+   <Enumerate position='1' value='1' description='A'/>
+   <Enumerate position='2' value='2' description='B'/>
+   <Enumerate position='3' value='3' description='C'/>
+   <Enumerate position='4' value='4' description='D'/>
+   <Enumerate position='5' value='5' description='E'/>
+   <Enumerate position='6' value='6' description='F'/>
+   <Enumerate position='7' value='7' description='G'/>
+</CodeTable>
+<CodeTable name='VA115' tabletype='1' description='Servicing Facility'>
+   <Enumerate position='1' value='512 9AC' description='Perry Point (Nursing Home)'/>
+</CodeTable>
+
+</Category>
+</Document></Export>

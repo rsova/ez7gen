@@ -5,16 +5,24 @@ require_relative 'utils'
 
 class SegmentGenerator
   @@maxReps = 2
-  @fieldGenerator
   @@random = Random.new
+  @@BASE_INDICATOR = 'base:'
+  @@BASE = 'base'
+  @@PRIMARY = 'primary'
 
+  # TODO: do I need accessors for version and event? refactor.
   attr_accessor :version; :event;
+  #@fieldGenerator
+  @@baseParser
 
   # constructor
   def initialize(version, event, pp)
     @version = version
     @event = event
-    @fieldGenerator = TypeAwareFieldGenerator.new(pp)
+
+    @fieldGenerators = {}
+    pp.each{|profileName, profiler| @fieldGenerators[profileName] = TypeAwareFieldGenerator.new(profiler)}
+   # @fieldGenerators = TypeAwareFieldGenerator.new(pp)
   end
 
   # initialize msh segment
@@ -64,23 +72,28 @@ class SegmentGenerator
   def generateSegmentElements(segmentName, attributes)
     total = attributes.size()
     fields =[]
-
+    #
+    generatorName =  (segmentName.include?(@@BASE_INDICATOR))?@@BASE:@@PRIMARY
+    fieldGenerator=@fieldGenerators[generatorName]
+    segmentName.delete!(@@BASE_INDICATOR)
+    #
     total.times do |i|
-      fields << addField(attributes[i])
+      fields << addField(attributes[i], fieldGenerator)
     end
     # add segment name to the beginning of the array
     fields.unshift(segmentName)
   end
 
   #adds a generated field based on data type
-  def addField(attributes)
+  def addField(attributes, fieldGenerator)
     # idx = attributes['piece']
     # puts idx
     # idx.to_i
-    dt = attributes['datatype']
+    dt = attributes['datatype'].delete(@@BASE_INDICATOR)
     puts Utils.blank?(dt)?'~~~~~~~~~> data type is missing': dt
 
-    Utils.blank?(dt)?nil :@fieldGenerator.method(dt).call(attributes)
+    #Utils.blank?(dt)?nil :@fieldGenerator.method(dt).call(attributes)
+    Utils.blank?(dt)?nil :fieldGenerator.method(dt).call(attributes)
   end
 
 end

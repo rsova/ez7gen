@@ -10,4 +10,12 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     # # assert(hl7 != nil)
     # refute_nil(hl7)
   end
+
+  def test_msh_vaz_24
+    factory = MessageFactory.new
+    hl7 = factory.generate("vaz2.4", "ADT_A01")
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
 end

@@ -8,6 +8,7 @@ class TypeAwareFieldGenerator
   @@HAT = '^' # Component separator, aka hat
   @@MONEY_FORMAT_INDICATORS = ['Money', 'Balance', 'Charge', 'Adjustment', 'Income', 'Amount', 'Payment','Cost']
   @@INITIALS = ('A'..'Z').to_a
+  @@GENERAL_TEXT = 'Notes ...'
 
   @@random = Random.new
 
@@ -19,6 +20,19 @@ class TypeAwareFieldGenerator
     @yml = YAML.load_file propertiesFile
   end
 
+  #Generate HL7 AD (address) data type.
+  def AD(map, force=false)
+
+    # street address (ST) (ST)
+    # other designation (ST)
+    # city (ST)
+    # state or province (ST)
+    # zip or postal code (ST)
+    # country (ID)
+    # address type (ID)
+    # other geographic designation (ST)
+
+  end
   # Generate HL7 CE (coded element) data type
   def CE(map, force=false)
     #check if the field is optional and randomly generate it of skip
@@ -367,6 +381,14 @@ class TypeAwareFieldGenerator
 		# tn.setValue(phones.getAt(Math.abs(random.nextInt()%phones.size())))
     @yml['address.phones'].sample # pick a phone
   end
+
+  #Generate HL7 TX (text data) data type. A TX contains a single String value.
+  def TX(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+    @@GENERAL_TEXT
+  end
+
 
   #Generate an HL7 UVC (Value code and amount) data type.
   def UVC(map, force=false)

@@ -54,6 +54,16 @@ class TestProfileParser < MiniTest::Unit::TestCase
    	 results =  @parser.getSegments
 	 assert_equal(21, results[:@encodedSegments].size())
 	 assert_equal('[~PD1~]', results[:@encodedSegments][0])
-   end
+	 end
+
+   def test_getSegments
+		 @parser = ProfileParser.new('vaz2.4', 'ADT_A01')
+		 results =  @parser.getSegments
+		 puts results
+		 # assert_equal(21, results[:@encodedSegments].size())
+		 # assert_equal('[~PD1~]', results[:@encodedSegments][0])
+	 end
+
+
 
 end
