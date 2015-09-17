@@ -1,3 +1,5 @@
+require_relative 'utils'
+
 class SegmentPicker
   attr_accessor :encodedSegments
   attr_accessor :profile
@@ -7,6 +9,9 @@ class SegmentPicker
 
   # load 50 percent of optional segments
   @@LOAD_FACTOR = 0.5
+   @@MSH_SEGMENTS = ['MSH', "#{Utils.BASE_INDICATOR}MSH"]
+  #@@MSH_SEGMENTS = ['MSH', "base:MSH"]
+
   # static final Random random = new Random()
   @@random = Random.new
 
@@ -19,7 +24,7 @@ class SegmentPicker
   # MSH is populated with quick generation, skip it here.
   def pickSegments()
     segmentCandidates = getSegmentsToBuild()
-    return segmentCandidates - ['MSH']
+    return segmentCandidates - @@MSH_SEGMENTS
     #return [ 'EVN', 'PID', 'PV1', '[~PD1~]', '[~{~AL1~}~]', '[~{~DG1~}~]']
   end
 
@@ -62,13 +67,22 @@ class SegmentPicker
 
       # get indexes of optional segments
       ids = optSegmentIdxs.sample(count)
-      p ids
+      # p ids
       ids.each{|it| segmentsToBuildArray[@profile.index(it)] = @encodedSegments[it.to_i]}
       handleGroups(segmentsToBuildArray)
   end
 
+  # get segments that will always be build, include z segments
   def getRequiredSegments()
-    x = @profile.select{|it| isRequired?(it)}
+    # promote z segments to required
+    zs = @encodedSegments.select{|it| isZ?(it)}
+    zs.each{ |it| @profile[ @encodedSegments.index(it)] = it}
+
+    # adjust optional segments
+    @encodedSegments = @encodedSegments - zs
+
+    # pick from required and z segments
+    @profile.select{|it| isRequired?(it)}
   end
 
   # def handleRequiredSegments(keepers)
@@ -84,5 +98,10 @@ class SegmentPicker
   def isRequired?(encoded)
     # Required segments left not encoded as strings, optional and groups encoded as numbers
     !Utils.isNumber?(encoded)
+  end
+
+  # check if it's a z segment
+  def isZ?(seg)
+    Utils.isZ?(seg)
   end
 end

@@ -1,10 +1,15 @@
 require "minitest/autorun"
 require_relative "../lib/ez7gen/service/utils"
 
-class TestProfileParser < MiniTest::Unit::TestCase
+class TestUtils < MiniTest::Unit::TestCase
 	@@random = Random.new
 
+	# TESTS #
+	def setup
+	end
+
 	def test_getSegmentName
+			p Utils.class_variables
    		assert_equal('PV1', Utils.getSegmentName('PV1'))
    		assert_equal('PD1', Utils.getSegmentName('[~PD1~]'))
    		assert_equal('AL1', Utils.getSegmentName('[~{~AL1~}~]'))
@@ -27,11 +32,13 @@ class TestProfileParser < MiniTest::Unit::TestCase
 		picked.each{|it| kpr[arr.index(it)]= it}
 		p kpr
 		p kpr.compact
+	end
 
-
-
-
-
+	def test_isZ
+		assert Utils.isZ?('[~ZMH~]')
+		assert Utils.isZ?('[~{~ZMH~}~]')
+		assert !Utils.isZ?('[~{~AL1~}~]')
+		assert !Utils.isZ?('[~{~AZL1~}~]')
 	end
 
 end

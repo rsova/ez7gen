@@ -34,7 +34,7 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     elements << "[~UB1~]"
     elements << "[~UB2~]"
     elements << "[~PDA~]"
-    @segmentMap = {'segments'=>elements, 'profile' => profile}
+    @segmentMap = {:segments => elements, :profile => profile}
     @segmentPicker = SegmentPicker.new(@segmentMap)
 
   end
@@ -49,7 +49,7 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
   def test_init
     assert_equal 21, @segmentPicker.encodedSegments.size
     assert_equal Array, @segmentPicker.encodedSegments.class
-    assert_equal String, @segmentPicker.profile.class
+    assert_equal Array, @segmentPicker.profile.class
   end
 
   def test_getSegmentCandidates
@@ -58,14 +58,14 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
   end
 
   def test_getSegmentCandidatesCount
-     assert_equal 11, @segmentPicker.getLoadCandidatesCount(21)
-     assert_equal 2, @segmentPicker.getLoadCandidatesCount(3)
-     assert_equal 5, @segmentPicker.getLoadCandidatesCount(10)
+    assert_equal 11, @segmentPicker.getLoadCandidatesCount(21)
+    assert_equal 2, @segmentPicker.getLoadCandidatesCount(3)
+    assert_equal 5, @segmentPicker.getLoadCandidatesCount(10)
   end
 
   def test_isGroup
-   assert_equal true,  @segmentPicker.isGroup?('[~{~PR1~10~}~]')
-   assert_equal false,  @segmentPicker.isGroup?('[~UB2~]')
+    assert_equal true, @segmentPicker.isGroup?('[~{~PR1~10~}~]')
+    assert_equal false, @segmentPicker.isGroup?('[~UB2~]')
   end
 
   def test_isRequired
@@ -86,6 +86,56 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
 
   def test_getSegmentsToBuild
     p @segmentPicker.getSegmentsToBuild()
+  end
+
+  def test_getRequiredSegments_withZ
+    #profilebase:MSH~base:EVN~base:PID~0~1~base:PV1~2~3~4~5~6~7~9~10~13~14~15~16~17~18~19
+    # [0] = "[~base:PD1~]"
+    # [1] = "[~{~base:NK1~}~]"
+    # [2] = "[~base:PV2~]"
+    # [3] = "[~{~base:DB1~}~]"
+    # [4] = "[~{~base:OBX~}~]"
+    # [5] = "[~{~base:AL1~}~]"
+    # [6] = "[~{~base:DG1~}~]"
+    # [7] = "[~base:DRG~]"
+    # [8] = "[~{~base:ROL~}~]"
+    # [9] = "[~{~base:PR1~8~}~]"
+    # [10] = "[~{~base:GT1~}~]"
+    # [11] = "[~base:IN2~]"
+    # [12] = "[~base:IN3~]"
+    # [13] = "[~{~base:IN1~11~12~}~]"
+    # [14] = "[~base:ACC~]"
+    # [15] = "[~base:UB1~]"
+    # [16] = "[~base:UB2~]"
+    # [17] = "[~ZEM~]"
+    # [18] = "[~ZEN~]"
+    # [19] = "[~ZMH~]"
+    profile = 'base:MSH~base:EVN~base:PID~0~1~base:PV1~2~3~4~5~6~7~9~10~13~14~15~16~17~18~19'
+    elements = []
+    elements << "[~base:PD1~]"
+    elements << "[~{~base:NK1~}~]"
+    elements << "[~base:PV2~]"
+    elements << "[~{~base:DB1~}~]"
+    elements << "[~{~base:OBX~}~]"
+    elements << "[~{~base:AL1~}~]"
+    elements << "[~{~base:DG1~}~]"
+    elements << "[~base:DRG~]"
+    elements << "[~{~base:ROL~}~]"
+    elements << "[~{~base:PR1~8~}~]"
+    elements << "[~{~base:GT1~}~]"
+    elements << "[~base:IN2~]"
+    elements << "[~base:IN3~]"
+    elements << "[~{~base:IN1~11~12~}~]"
+    elements << "[~base:ACC~]"
+    elements << "[~base:UB1~]"
+    elements << "[~base:UB2~]"
+    elements << "[~ZEM~]"  #17
+    elements << "[~ZEN~]"  #18
+    elements << "[~ZMH~]"  #19
+    @segmentMap = {:segments => elements, :profile => profile}
+    @segmentPicker = SegmentPicker.new(@segmentMap)
+    assert_equal ["base:MSH", "base:EVN", "base:PID", "base:PV1", "[~ZEM~]", "[~ZEN~]", "[~ZMH~]"], @segmentPicker.getRequiredSegments()
+
   end
 
 end

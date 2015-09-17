@@ -1,7 +1,6 @@
 require 'rexml/document'
-# include REXML
+include REXML
 require_relative 'service/utils'
-require 'ox'
 
 class ProfileParser
   #instance attributes
@@ -18,7 +17,7 @@ class ProfileParser
     path = '../resources/'<< @@HL7_VERSIONS[@version]
     profile = File.expand_path(path, __FILE__)
     # profile = File.expand_path('../resources/base24.xml', __FILE__)
-    @xml = Ox.parse(IO.read(profile))# load_file
+    @xml = Document.new(File.new(profile))
   end
 
   def getSegments
@@ -29,9 +28,9 @@ class ProfileParser
 
   # find message structure by event type
   def getMessageStructure
-    msg_type =  @xml.Export.Document.Category.locate('MessageType').select{|it| it.attributes[:name] == @event }.first.attributes[:structure]
-    p msg_type
-    @xml.Export.Document.Category.locate('MessageStructure').select{|it| it.attributes[:name] == msg_type }.first.attributes[:definition]
+    msg_type = @xml.elements["Export/Document/Category/MessageType[@name ='#{@event}']"].attributes["structure"]
+    #p msg_type
+    structure = @xml.elements["Export/Document/Category/MessageStructure[@name ='#{msg_type}']"].attributes["definition"]
   end
 
   # find all optional, repeating segemnts and segment groups
@@ -60,16 +59,13 @@ class ProfileParser
 
     #empty hash if no table name
     return [] if Utils.blank?(tableName)
-    # values = @xml.elements.collect("Export/Document/Category/CodeTable[@name ='#{tableName}']/Enumerate"){|x| x.attributes}
-    n = @xml.Export.Document.Category.locate('CodeTable').select{|it| it.attributes[:name] == tableName }.first.locate('Enumerate').map{|it| it.attributes}
-
+    values = @xml.elements.collect("Export/Document/Category/CodeTable[@name ='#{tableName}']/Enumerate"){|x| x.attributes}
   end
 
   def getSegmentStructure(segment)
     segmentName = Utils.getSegmentName(segment)
     # node = export.Document.Category.SegmentStructure.find{ it.@name == segmentName}
-    # values = @xml.elements.collect("Export/Document/Category/SegmentStructure[@name ='#{segmentName}']/SegmentSubStructure"){|x| x.attributes}
-    @xml.Export.Document.Category.locate('SegmentStructure').select{|it| it.attributes[:name] == segmentName }.first.SegmentSubStructure.attributes
+    values = @xml.elements.collect("Export/Document/Category/SegmentStructure[@name ='#{segmentName}']/SegmentSubStructure"){|x| x.attributes}
     #values.each {|it| puts it}
   end
 

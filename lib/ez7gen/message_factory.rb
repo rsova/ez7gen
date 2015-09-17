@@ -1,7 +1,8 @@
 require 'ruby-hl7'
-require_relative '../ez7gen/profile_parser'
+require_relative '../ez7gen/profile_parser_rexml'
 require_relative '../ez7gen/service/segment_generator'
 require_relative '../ez7gen/service/segment_picker'
+require_relative '../ez7gen/service/utils'
 
 class MessageFactory
 
@@ -15,11 +16,10 @@ class MessageFactory
     #Get list of non required segments randomly selected for this build
     segmentPicker = SegmentPicker.new(segmentsMap)
     segments = segmentPicker.pickSegments()
-
-    parsers = {'primary'=> parser}
+    parsers = { Utils.PRIMARY => parser }
     # if this is a custom segment, add base parser
     if(version !='2.4')
-      parsers['base']= ProfileParser.new('2.4', event)
+      parsers[Utils.BASE]= ProfileParser.new('2.4', event)
     end
 
     segmentGenerator = SegmentGenerator.new(version, event, parsers)
@@ -29,9 +29,9 @@ class MessageFactory
     hl7Msg << segmentGenerator.initMsh()
 
     segments.each(){ |segment|
-      puts segment
-      attributes = parser.getSegmentStructure(segment)
-      puts attributes
+      #puts segment
+      attributes = parsers[Utils.getTypeByName(segment)].getSegmentStructure(Utils.noBaseName(segment))
+      #puts attributes
       hl7Msg = segmentGenerator.generate(hl7Msg, segment, attributes)
     }
     return hl7Msg

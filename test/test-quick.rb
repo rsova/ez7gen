@@ -1,12 +1,13 @@
 require 'yaml'
 
-
 # file = File.open('properties.yml')
 # yml = YAML::load(file)
 # puts puts yml['juixe']['user'] # juixe-username
 # yml['user'] # juixe-username
 puts 'base:MSH'.delete(':base')
-
+if('[~{~ZMH~}~]'=~/\~Z/)
+  puts 'ok!'
+end
 # arr = [6,2, 5]
 # p arr.find_index{|it| it>13}
 #

@@ -301,6 +301,14 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		puts actual
 	end
 
+	def test_getCodedValues_range3
+		# {"position"=>position='3', "value"=>value='2 ...', "description"=>description='For ranked secondary diagnoses'}
+		actual = @tafGen.getCodedValue({'codetable'=>'1','max_length' =>'2'})
+		puts actual
+
+
+	end
+
 	def test_getCodedMap_lenViolation
 		actual = @tafGen.getCodedMap({'codetable'=>'162','max_length' =>'1'})
 		puts actual

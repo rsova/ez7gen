@@ -93,7 +93,7 @@
 </DataType>
 
 <CodeTable name='396' tabletype='1' description='Coding System'>
-   <Enumerate position='1' value='99zzz or L' description='Local general code (where z is an alphanumeric character)'/>
+  <Enumerate position='1' value='99zzz or L' description='Local general code (where z is an alphanumeric character)'/>
    <Enumerate position='2' value='ACR' description='American College of Radiology finding codes'/>
    <Enumerate position='3' value='ART' description='WHO Adverse Reaction Terms'/>
    <Enumerate position='4' value='AS4' description='ASTM E1238/ E1467 Universal'/>
@@ -173,7 +173,7 @@
    <Enumerate position='78' value='WC' description='WHO ATC'/>
    <Enumerate position='79' value='HL70005' description='test system'/>
 </CodeTable>
-<CodeTable name='VA001' tabletype='1' description='VA Yes/No'>
+<CodeTable name='VA00100' tabletype='1' description='VA Yes/No'>
    <Enumerate position='1' value='0' description='NO'/>
    <Enumerate position='2' value='1' description='YES'/>
    <Enumerate position='3' value='U' description='UNKNOWN'/>

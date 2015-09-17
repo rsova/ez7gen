@@ -1,5 +1,5 @@
 require 'yaml'
-require_relative '../profile_parser'
+require_relative '../profile_parser_rexml'
 
 class TypeAwareFieldGenerator
   attr_accessor :yml
@@ -22,16 +22,24 @@ class TypeAwareFieldGenerator
 
   #Generate HL7 AD (address) data type.
   def AD(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
 
-    # street address (ST) (ST)
+    # TODO: same as XAD, verify.
+    XAD(map, force)
+    #street address (ST) (ST)
+      # address
     # other designation (ST)
     # city (ST)
+      # city
     # state or province (ST)
+      # state
     # zip or postal code (ST)
+      #zip
     # country (ID)
+      # country
     # address type (ID)
-    # other geographic designation (ST)
-
+    # ot5 her geographic designation (ST)
   end
   # Generate HL7 CE (coded element) data type
   def CE(map, force=false)
@@ -592,7 +600,7 @@ class TypeAwareFieldGenerator
   # Value of coded table returned as as single value
   def getCodedValue(attributes)
     codes = @pp.getCodeTable(attributes['codetable'])
-    puts codes
+    # puts codes
     #Apply rules to find a value and description
     map = applyRules(codes, attributes)
     #Return value only
@@ -602,7 +610,7 @@ class TypeAwareFieldGenerator
   # Values and Description from code table returned as a pair.
   def getCodedMap(attributes)
     codes = @pp.getCodeTable(attributes['codetable'])
-    puts codes
+    # puts codes
     #Apply rules to find a value and description
     #Returns map with code and description
     applyRules(codes, attributes)
@@ -625,6 +633,7 @@ class TypeAwareFieldGenerator
       if(ends.empty?) # This is indication that codetable does not have any values
         code, description = '',''
       else #Handle range values, build range and pick random value
+        #TODO: need to handle '2 ...' also
         range = ends[0]..ends[1]
         code = range.to_a.sample
       end
@@ -636,14 +645,14 @@ class TypeAwareFieldGenerator
       if(!idx)
         code, description = '',''
       else
-        puts codes
+        # puts codes
         code = codes[idx]['value']
         description = codes[idx]['description']
       end
     end
     # got to have code, get an id, most basic
     code = (!Utils.blank?(code)) ? code : ID({},true)
-    puts code + ', ' + description
+    # puts code + ', ' + description
     return {'value'=>code, 'description'=>description}
   end
 
@@ -668,7 +677,6 @@ class TypeAwareFieldGenerator
     if(['X','W','B'].include?(map['required']))then return false end
     if(map['required'] =='R') then return true end
     if(map['required'] == 'O') then return [true, false].sample end #random boolean
-    # return true
   end
 
   # @return DateTime generated with consideration of description string for dates in the future
