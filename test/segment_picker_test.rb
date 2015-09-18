@@ -1,6 +1,6 @@
 require "minitest/autorun"
 require_relative '../lib/ez7gen/service/segment_picker'
-require_relative '../lib/ez7gen/profile_parser'
+# require_relative '../lib/ez7gen/profile_parser'
 
 
 class SegmentPickerTest < MiniTest::Unit::TestCase
@@ -68,9 +68,9 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     assert_equal false, @segmentPicker.isGroup?('[~UB2~]')
   end
 
-  def test_isRequired
-
-  end
+  # def test_isRequired
+  #
+  # end
 
   def test_qetRequiredSegments
     assert_equal ["MSH", "EVN", "PID", "PV1"], @segmentPicker.getRequiredSegments()

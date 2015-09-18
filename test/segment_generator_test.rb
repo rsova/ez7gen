@@ -165,7 +165,8 @@ class TestProfileParser < MiniTest::Unit::TestCase
 
  #helper method
    def lineToHash(line)
-     return line.gsub(/(\[|\])/,'').gsub(':',',').split(',').map{|it| it.strip()}.each_slice(2).to_a.to_h
+     hash =  line.gsub(/(\[|\])/,'').gsub(':',',').split(',').map{|it| it.strip()}.each_slice(2).to_a.to_h
+     return Hash[hash.map{|(k,v)| [k.to_sym,v]}]
    end
 
   # TESTS #

@@ -24,7 +24,7 @@ class SegmentPicker
   # MSH is populated with quick generation, skip it here.
   def pickSegments()
     segmentCandidates = getSegmentsToBuild()
-    return segmentCandidates - @@MSH_SEGMENTS
+     return segmentCandidates - @@MSH_SEGMENTS
     #return [ 'EVN', 'PID', 'PV1', '[~PD1~]', '[~{~AL1~}~]', '[~{~DG1~}~]']
   end
 

@@ -69,7 +69,7 @@ class ProfileParser
     segmentName = Utils.getSegmentName(segment)
     # node = export.Document.Category.SegmentStructure.find{ it.@name == segmentName}
     # values = @xml.elements.collect("Export/Document/Category/SegmentStructure[@name ='#{segmentName}']/SegmentSubStructure"){|x| x.attributes}
-    @xml.Export.Document.Category.locate('SegmentStructure').select{|it| it.attributes[:name] == segmentName }.first.SegmentSubStructure.attributes
+    @xml.Export.Document.Category.locate('SegmentStructure').select{|it| it.attributes[:name] == segmentName }.first.locate('SegmentSubStructure').map{|it| it.attributes}
     #values.each {|it| puts it}
   end
 

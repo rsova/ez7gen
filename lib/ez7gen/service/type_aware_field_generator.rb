@@ -1,5 +1,5 @@
 require 'yaml'
-require_relative '../profile_parser_rexml'
+require_relative '../profile_parser'
 
 class TypeAwareFieldGenerator
   attr_accessor :yml
@@ -54,9 +54,9 @@ class TypeAwareFieldGenerator
       val << id
     else
       #identifier (ST) (ST)
-      val<<codes['value']
+      val<<codes[:value]
       #text (ST)
-      val<<codes['description']
+      val<<codes[:description]
       #name of coding system (IS)
       #alternate identifier (ST) (ST)
       #alternate text (ST)
@@ -86,7 +86,7 @@ class TypeAwareFieldGenerator
 		return if(!autoGenerate?(map,force))
 
 		#ID (ST)
-		ST(update(map, 'description','Number'),true)
+		ST(update(map, :description,'Number'),true)
 		#check digit (ST) (ST)
 		#code identifying the check digit scheme employed (ID)
 		#assigning authority (HD)
@@ -124,7 +124,7 @@ class TypeAwareFieldGenerator
 		#dln.getIssuingStateProvinceCountry().setValue(allStates.get(Math.abs(random.nextInt()%allStates.size())))
     val << @yml['address.states'].sample # pick a state
 		#expiration date (DT)
-		val << DT(update(map,'description','End'),true)
+		val << DT(update(map,:description,'End'),true)
     val.join(@@HAT)
   end
 
@@ -136,7 +136,7 @@ class TypeAwareFieldGenerator
 		#range start date/time (TS)
 		val<<TS(map,true)
 		#range end date/time (TS)
-		val<<TS(update(map,'description','End'),true)
+		val<<TS(update(map,:description,'End'),true)
     val.join(@@HAT)
   end
 
@@ -167,7 +167,7 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
     #value only
-		(!Utils.blank?(map['codetable']))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
+		(!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
   end
 
   #Generates HL7 IS (namespace id) data type
@@ -176,7 +176,7 @@ class TypeAwareFieldGenerator
 		return if(!autoGenerate?(map,force))
 
 		#String val = (map.codetable != null)? getCodedValue(pp, map)=> Math.abs(random.nextInt() % 200).toString()
-    (!Utils.blank?(map['codetable']))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
+    (!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
 		#((IS) map.fld).setValue(val)
   end
 
@@ -249,7 +249,7 @@ class TypeAwareFieldGenerator
 		return if(!autoGenerate?(map,force))
     val = []
 		#quantity (NM)
-		val << NM(update(map,'description','Money'),true)
+		val << NM(update(map,:description,'Money'),true)
 		#denomination (ID)
 		val << 'USD'
     return val.join(@@HAT)
@@ -261,7 +261,7 @@ class TypeAwareFieldGenerator
 		return if(!autoGenerate?(map,force))
 
 		#money
-		if (!Utils.blank?(map['description']) && @@MONEY_FORMAT_INDICATORS.index{|it| map['description'].include?(it)}) #check for specific numeric for money
+		if (!Utils.blank?(map[:description]) && @@MONEY_FORMAT_INDICATORS.index{|it| map[:description].include?(it)}) #check for specific numeric for money
 			 '%.2f' % @@random.rand(1000) #under $1,000
 		else #quantity (NM)
        @@random.rand(@@UP_TO_3_DGTS).to_s #under 20
@@ -294,7 +294,7 @@ class TypeAwareFieldGenerator
 		#occurrence span start date (DT)
     val << DT(map,true)
 		#occurrence span stop date (DT)
-    val << DT(update(map,'description','End'), true)
+    val << DT(update(map,:description,'End'), true)
     val.join(@@HAT)
   end
 
@@ -344,7 +344,7 @@ class TypeAwareFieldGenerator
 
 		#SI pt = (SI) map.fld
 		#pt.setValue(generateLengthBoundId((map.max_length)?map.max_length.toInteger():1))
-    len = (!Utils.blank?(map['max_length']))?map['max_length'].to_i : 1
+    len = (!Utils.blank?(map[:max_length]))?map[:max_length].to_i : 1
     generateLengthBoundId(len)
   end
 
@@ -354,10 +354,10 @@ class TypeAwareFieldGenerator
     return if(!autoGenerate?(map,force))
 
     # TODO add provider type ln 840 ROL
-    if(map['description'].include?('SSN'))
+    if(map[:description].include?('SSN'))
       generateLengthBoundId(9)
     else
-      len = (map['max_length']!=nil) ? map['max_length'].to_i : 1
+      len = (map[:max_length]!=nil) ? map[:max_length].to_i : 1
       #val = generateLengthBoundId((len>5)?5=>len) # numeric id up to 5 TODO=> string ids?
       @@random.rand(@@UP_TO_3_DGTS).to_s
     end
@@ -599,17 +599,17 @@ class TypeAwareFieldGenerator
 
   # Value of coded table returned as as single value
   def getCodedValue(attributes)
-    codes = @pp.getCodeTable(attributes['codetable'])
+    codes = @pp.getCodeTable(attributes[:codetable])
     # puts codes
     #Apply rules to find a value and description
     map = applyRules(codes, attributes)
     #Return value only
-    return map['value']
+    return map[:value]
   end
 
   # Values and Description from code table returned as a pair.
   def getCodedMap(attributes)
-    codes = @pp.getCodeTable(attributes['codetable'])
+    codes = @pp.getCodeTable(attributes[:codetable])
     # puts codes
     #Apply rules to find a value and description
     #Returns map with code and description
@@ -625,8 +625,8 @@ class TypeAwareFieldGenerator
 
     #index of random element
     idx = Utils.sampleIdx(codes.size)
-    code = codes[idx]['value']
-    description = codes[idx]['description']
+    code = codes[idx][:value]
+    description = codes[idx][:description]
 
     if(code.include?(@@RANGE_INDICATOR))
       ends = code.delete(' ').split('...').map{|it| it}
@@ -637,23 +637,23 @@ class TypeAwareFieldGenerator
         range = ends[0]..ends[1]
         code = range.to_a.sample
       end
-    elsif(code.size > (maxlen = (attributes['max_length']) ? attributes['max_length'].to_i : code.size))
+    elsif(code.size > (maxlen = (attributes[:max_length]) ? attributes[:max_length].to_i : code.size))
       #remove all codes wich values violate
-      #codes.select! {|it| it['value'].size <= maxlen }
-      idx = codes.find_index{|it| it['value'].size <= maxlen}
+      #codes.select! {|it| it[:value].size <= maxlen }
+      idx = codes.find_index{|it| it[:value].size <= maxlen}
 
       if(!idx)
         code, description = '',''
       else
         # puts codes
-        code = codes[idx]['value']
-        description = codes[idx]['description']
+        code = codes[idx][:value]
+        description = codes[idx][:description]
       end
     end
     # got to have code, get an id, most basic
     code = (!Utils.blank?(code)) ? code : ID({},true)
     # puts code + ', ' + description
-    return {'value'=>code, 'description'=>description}
+    return {:value => code, :description => description}
   end
 
   # Returns randomly generated Id of required length, of single digit id
@@ -673,16 +673,17 @@ class TypeAwareFieldGenerator
   # R - Required returns true
   # def isAutogenerate(map, force=false)
   def autoGenerate?(map, force=false)
+    # return true
     if(force)then return true end
-    if(['X','W','B'].include?(map['required']))then return false end
-    if(map['required'] =='R') then return true end
-    if(map['required'] == 'O') then return [true, false].sample end #random boolean
+    if(['X','W','B'].include?(map[:required]))then return false end
+    if(map[:required] =='R') then return true end
+    if(map[:required] == 'O') then return [true, false].sample end #random boolean
   end
 
   # @return DateTime generated with consideration of description string for dates in the future
   def toDateTime(map)
     #for Time Stamp one way to figure out if event is in the future of in the past to look for key words in description
-    isFutureEvent = !Utils.blank?(map['description'])&& map['description'].include?('End') #so 'Role End Date/Time'
+    isFutureEvent = !Utils.blank?(map[:description])&& map[:description].include?('End') #so 'Role End Date/Time'
     seed = 365 #seed bounds duration of time to a year
     days = @@random.rand(seed)
     (isFutureEvent) ? DateTime.now().next_day(days) : DateTime.now().prev_day(days)
@@ -690,7 +691,7 @@ class TypeAwareFieldGenerator
 
   # convention method to modify REXML::Attributes value
   def update(map, key, value)
-    map[key]=value
+    map[key.to_sym]=value
     return map
   end
 

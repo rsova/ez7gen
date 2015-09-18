@@ -1,5 +1,5 @@
 require 'ruby-hl7'
-require_relative '../ez7gen/profile_parser_rexml'
+require_relative '../ez7gen/profile_parser'
 require_relative '../ez7gen/service/segment_generator'
 require_relative '../ez7gen/service/segment_picker'
 require_relative '../ez7gen/service/utils'

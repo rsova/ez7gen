@@ -100,10 +100,13 @@ class SegmentGenerator
   #adds a generated field based on data type
   def addField(attributes, fieldGenerator)
 
-    dt = Utils.noBaseName(attributes['datatype'])
+    dt = Utils.noBaseName(attributes[:datatype])
     # puts Utils.blank?(dt)?'~~~~~~~~~> data type is missing': dt
-
+    if(['CK'].include?(dt))
+      return nil
+    else
     Utils.blank?(dt)?nil :fieldGenerator.method(dt).call(attributes)
+    end
   end
 
 end

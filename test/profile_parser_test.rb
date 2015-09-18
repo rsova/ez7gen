@@ -23,7 +23,8 @@ class TestProfileParser < MiniTest::Unit::TestCase
 	def test_getSegmentStructure
 		al1 =  @parser.getSegmentStructure('[~{~AL1~}~]')
 		puts al1
-		assert_equal('Set ID - AL1', al1['description'.to_sym])
+		assert_equal 6, al1.size
+		assert_equal('Set ID - AL1', al1.first['description'.to_sym])
 	end
 
    def test_processSegments
