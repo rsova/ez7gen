@@ -36,7 +36,7 @@ class TestProfileParser < MiniTest::Unit::TestCase
    end
 
    def test_codeTable
-   		attributes = @parser.getCodeTable("62")
+   		attributes = @parser.getCodeTable("356")
    		p attributes[0].class
 			p attributes.size
    		#p attributes

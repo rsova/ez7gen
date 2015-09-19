@@ -26,14 +26,28 @@ class SegmentGenerator
   def initMsh
     # create a MSH segment
     msh = HL7::Message::Segment::MSH.new
-    msh.recv_app = "ez7gen"
-    msh.recv_facility = "marm"
-    msh.processing_id = rand(10000).to_s
-    msh.sending_facility = 'facility 2'
-    msh.sending_app = 'integration app2'
-    msh.time =  DateTime.now
-    # add the MSH segment to the message
-    #msg << msh
+    msh.enc_chars ='^~\&'
+    msh.sending_app = 'Sending App'
+    msh.sending_facility = 'Sending Facility'
+    msh.recv_app = "HL7 Generator"
+    msh.recv_facility = "MARM"
+    msh.processing_id = 'P'#@fieldGenerators['primary'].ID({},true)
+    msh.version_id = '2.4'
+    msh.security = @fieldGenerators['primary'].ID({})
+    msh.message_type = @event.sub('_','^')<<'^'<<@event
+    msh.time =  DateTime.now.strftime('%Y%m%d%H%M%S.%L')
+    msh.message_control_id = @fieldGenerators['primary'].ID({},true)
+    msh.seq = @fieldGenerators['primary'].ID({:required=>'O'})
+    msh.continue_ptr = @fieldGenerators['primary'].ID({:required=>'O'})
+    msh.accept_ack_type = @fieldGenerators['primary'].ID({:required=>'O', :codetable=>'155'})
+    msh.country_code = @fieldGenerators['primary'].ID({:required=>'0', :codetable=>'399'})
+    msh.charset = @fieldGenerators['primary'].ID({:required=>'0', :codetable=>'211'})
+    #Table 296 Primary Language has no suggested values.  The field will be populated with values from the Primary Language table in the properties file. Example value: EN^English
+    msh.principal_language_of_message ='EN^English'
+    msh.alternate_character_set_handling_scheme = @fieldGenerators['primary'].ID({:required=>'O', :codetable=>'356'})
+    # 21	Conformance Statement ID
+    msh.e20 =  @fieldGenerators['primary'].ID({:required=>'O'})
+
     return msh
   end
 

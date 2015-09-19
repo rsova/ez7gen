@@ -216,6 +216,71 @@ class TestProfileParser < MiniTest::Unit::TestCase
  #    puts seg
  #  end
 
+ def test_MSH
+   # weight( -1 ) # the msh should always start a message
+   # add_field :enc_chars
+   # add_field :sending_app
+   # add_field :sending_facility
+   # add_field :recv_app
+   # add_field :recv_facility
+   # add_field :time do |value|
+   #   convert_to_ts(value)
+   # end
+   # add_field :security
+   # add_field :message_type
+   # add_field :message_control_id
+   # add_field :processing_id
+   # add_field :version_id
+   # add_field :seq
+   # add_field :continue_ptr
+   # add_field :accept_ack_type
+   # add_field :app_ack_type
+   # add_field :country_code
+   # add_field :charset
+   # add_field :principal_language_of_message
+   # add_field :alternate_character_set_handling_scheme
+   # add_field :message_profile_identifier
+   # add_field :sending_responsible_org
+   # add_field :receiving_responsible_org
+   # add_field :sending_network_address
+   # add_field :receiving_network_address
+   msg = HL7::Message.new
+   msg << @segmentGen.initMsh
+   puts msg
+   p msg
+   assert_equal 'MSH', msg[0].e0
+   #  1	Field Separator	2.4:ST	1	R	0		Always populated	|
+   #  assert_equal '|', msg[0].e1
+   #  2	Encoding Characters	2.4:ST	4	R	0		Always populated	^~\&
+   assert_equal '^~\&', msg[0].e1
+   #  3	Sending Application	2.4:HD	180	O	0	2.4:361	Always populated	<namespace ID (IS)>                                                                 Table 361 has no suggested values.                           The field will be populated with value 'Sending App'
+   assert_equal 'Sending App',msg[0].e2
+   #  4	Sending Facility	2.4:HD	180	O	0	2.4:362	Always populated	<namespace ID (IS)>                                                                Table 362 has no suggested values.                              The field will be populated with value 'Sending Facility'
+   assert_equal 'Sending Facility',msg[0].e3
+   #  5	Receiving Application	2.4:HD	180	O	0	2.4:361	Always populated	<namespace ID (IS)>                                                                  Table 361 has no suggested values.                        The field will be populated with value 'MARM'
+   assert_equal 'HL7 Generator',msg[0].e4
+   #  6	Receiving Facility	2.4:HD	180	O	0	2.4:362	Always populated	<namespace ID (IS)>                                                               Table 362 has no suggested values.                                  The field will be populated with value 'HL7 Generator'
+   assert_equal 'MARM',msg[0].e5
+   #  7	Date/Time Of Message	2.4:TS	26	R	0		Always populated	Any randomly generated date/time within one year into the past. Example value: 20150824160140.761
+   assert msg[0].e6.include?('.')
+   #  8	Security	2.4:ST	40	O	0		Randomly Populated	Any randomly generated positive integer with up to 3 digits.                                                            Example value: 123
+   #  9	Message Type	2.4:MSG	15	R	0	2.4:76	Always populated	Message Type from table 76, Trigger Event from table 3 and Message Structure for table 354.                                 Example value: ADT^A01^ADT_A01
+   # 10	Message Control ID	2.4:ST	20	R	0		Always populated	Any randomly generated positive integer with up to 3 digits.                                        Example value: 331
+   # 11	Processing ID	2.4:PT	3	R	0		Always populated	<processing ID (ID)>                                              One of the values from table 103. Example value: P
+   # 12	Version ID	2.4:VID	60	R	0	2.4:104	Always populated	<version ID (ID)>                                                                                                                                         The field will be populated with value '2.4' from table 104
+   # 13	Sequence Number	2.4:NM	15	O	0		Randomly Populated	Any randomly generated positive integer with up to 3 digits.                                   Example value: 123
+   # 14	Continuation Pointer	2.4:ST	180	O	0		Randomly Populated	Any randomly generated positive integer with up to 3 digits.                                   Example value: 123
+   # 15	Accept Acknowledgment Type	2.4:ID	2	O	0	2.4:155	Randomly Populated	One of the values from table 155.                Example value: AL
+   # 16	Application Acknowledgment Type	2.4:ID	2	O	0	2.4:155	Randomly Populated	One of the values from table 155.                Example value: NE
+   # 17	Country Code	2.4:ID	3	O	0	2.4:399	Randomly Populated	One of the values from table 399.                Example value: DEU
+   # 18	Character Set	2.4:ID	16	O	1	2.4:211	Randomly Populated	One of the values from table 211.                Example value: ASCII
+   # 19	Principal Language Of Message	2.4:CE	250	O	0		Randomly Populated	<identifier (ST)>^<text (ST)>                                                          Table 296 Primary Language has no suggested values.  The field will be populated with values from the Primary Language table in the properties file.                                                                     Example value: EN^English
+   # 20	Alternate Character Set Handling Scheme	2.4:ID	20	O	0	2.4:356	Randomly Populated	One of the values from table 356.                Example value: ASCII
+   # 21	Conformance Statement ID	2.4:ID	10	O	1	2.4:449	Randomly Populated	Table 449 has no suggested values.                       Any randomly generated positive integer with up to 3 digits.                                     Example value: 123
+   # puts msg
+
+end
+
   def test_EVN
     attributes = []
     attributes << lineToHash('[max_length:3, description:Event Type Code, ifrepeating:0, datatype:ID, required:B, piece:1, codetable:3]')

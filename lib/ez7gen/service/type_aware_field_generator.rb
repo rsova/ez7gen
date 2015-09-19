@@ -8,7 +8,7 @@ class TypeAwareFieldGenerator
   @@HAT = '^' # Component separator, aka hat
   @@MONEY_FORMAT_INDICATORS = ['Money', 'Balance', 'Charge', 'Adjustment', 'Income', 'Amount', 'Payment','Cost']
   @@INITIALS = ('A'..'Z').to_a
-  @@GENERAL_TEXT = 'Notes ...'
+  @@GENERAL_TEXT = 'Notes'
 
   @@random = Random.new
 
@@ -482,11 +482,7 @@ class TypeAwareFieldGenerator
 		#xcn.familyName.surname.value = lastNames.getAt(Math.abs(random.nextInt()%lastNames.size()));
 		# given name (ST)
     val << @yml['person.names.first'].sample
-		# xcn.getComponent(2).setValue(firstNames.getAt(Math.abs(random.nextInt()%firstNames.size())))
-    #xcn.givenName.value = firstNames.getAt(Math.abs(random.nextInt()%firstNames.size()));
     # second and further given names or initials thereof (ST)
-		#xcn.secondAndFurtherGivenNamesOrInitialsThereof.value ='J'
-		# xcn.getComponent(3).setValue('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.getAt(Math.abs(random.nextInt()%26)))
     val << @@INITIALS.to_a.sample
 		# suffix (e.g., JR or III) (ST)
 		# prefix (e.g., DR) (ST)
@@ -628,33 +624,49 @@ class TypeAwareFieldGenerator
     code = codes[idx][:value]
     description = codes[idx][:description]
 
-    if(code.include?(@@RANGE_INDICATOR))
-      ends = code.delete(' ').split('...').map{|it| it}
-      if(ends.empty?) # This is indication that codetable does not have any values
-        code, description = '',''
-      else #Handle range values, build range and pick random value
-        #TODO: need to handle '2 ...' also
-        range = ends[0]..ends[1]
-        code = range.to_a.sample
-      end
-    elsif(code.size > (maxlen = (attributes[:max_length]) ? attributes[:max_length].to_i : code.size))
-      #remove all codes wich values violate
-      #codes.select! {|it| it[:value].size <= maxlen }
-      idx = codes.find_index{|it| it[:value].size <= maxlen}
-
-      if(!idx)
-        code, description = '',''
-      else
-        # puts codes
-        code = codes[idx][:value]
-        description = codes[idx][:description]
-      end
+    if (code.include?(@@RANGE_INDICATOR))
+      code = handleRanges(code)
     end
+
+    if (code.size > (maxlen = (attributes[:max_length]) ? attributes[:max_length].to_i : code.size))
+    #remove all codes wich values violate
+    #codes.select! {|it| it[:value].size <= maxlen }
+      code, description = handleLength(codes, maxlen)
+    end
+
     # got to have code, get an id, most basic
-    code = (!Utils.blank?(code)) ? code : ID({},true)
+    code = (!Utils.blank?(code)) ? code : ID({})
+    # return code, description
+
     # puts code + ', ' + description
     return {:value => code, :description => description}
   end
+
+  def handleLength(codes, maxlen)
+    idx = codes.find_index { |it| it[:value].size <= maxlen }
+
+    if (!idx)
+      code, description = '', ''
+    else
+      # puts codes
+      code = codes[idx][:value]
+      description = codes[idx][:description]
+    end
+    return code, description
+  end
+
+  def handleRanges(code)
+    # if (code.include?(@@RANGE_INDICATOR))
+      ends = code.delete(' ').split('...').map { |it| it }
+      if (ends.empty?) # This is indication that codetable does not have any values
+        code = ''
+      else #Handle range values, build range and pick random value
+        #TODO: need to handle '2 ...' also
+        range = ends.first..ends.last
+        code = range.to_a.sample
+      end
+      return code
+    end
 
   # Returns randomly generated Id of required length, of single digit id
   def generateLengthBoundId(maxlen, str=@@random.rand(100000000).to_s)
