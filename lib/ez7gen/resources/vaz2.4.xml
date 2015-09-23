@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
 <Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2014.1.3 (Build 775U)" ts="2015-09-16 16:23:53">
 <Document name="VAZ2.4.HL7">
 <Category name="VAZ2.4" description="2.4 schema with VA defined tables and Z segments" base="2.4">

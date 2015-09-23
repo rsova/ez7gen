@@ -17,6 +17,7 @@ class MessageFactory
     segmentPicker = SegmentPicker.new(segmentsMap)
     segments = segmentPicker.pickSegments()
     parsers = { Utils.PRIMARY => parser }
+
     # if this is a custom segment, add base parser
     if(version !='2.4')
       parsers[Utils.BASE]= ProfileParser.new('2.4', event)

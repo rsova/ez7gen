@@ -26,22 +26,29 @@ class TypeAwareFieldGenerator
     #check if the field is optional and randomly generate it of skip
     return if(!autoGenerate?(map,force))
 
-    # TODO: same as XAD, verify.
-    XAD(map, force)
+    # match cities, states and zips
+    sample  = @yml['address.states'].sample
+    idx = @yml['address.states'].index(sample) #index of random element
+
+    val=[]
     #street address (ST) (ST)
-      # address
-    # other designation (ST)
-    # city (ST)
-      # city
-    # state or province (ST)
-      # state
-    # zip or postal code (ST)
-      #zip
-    # country (ID)
-      # country
+    val << @yml['address.streetNames'].sample
+    #other designation (ST)
+    val <<''
+    #city (ST)
+    val << @yml['address.cities'].at(idx)
+    #state or province (ST)
+    val << @yml['address.states'].at(idx)
+    #zip or postal code (ST)
+    val << @yml['address.zips'].at(idx)
+    #country (ID)
+    val << @yml['address.countries'].at(idx)
     # address type (ID)
     # ot5 her geographic designation (ST)
+
+    val.join(@@HAT)
   end
+
   # Generate HL7 CE (coded element) data type
   def CE(map, force=false)
     #check if the field is optional and randomly generate it of skip
@@ -50,16 +57,15 @@ class TypeAwareFieldGenerator
     # CE ce = (CE) map?.fld
     codes = getCodedMap(map)
     if(Utils.blank?(codes))
-
       case map[:description]
         when 'Allergen Code/Mnemonic/Description'
           pair = yml['codes.allergens'].to_a.sample(1).to_h.first # randomly pick a pair
           val<<pair.first
           val<<pair.last
         else
-          # id = @@random.rand(@@UP_TO_3_DGTS)
-          # val << id
-          val << ''
+          # TODO: only for elements that don't have look up table set the id randomly
+          # if codetable is empty
+          val << ((Utils.blank?(map[:codetable])) ? ID({},true) : '')
       end
     else
       #identifier (ST) (ST)
@@ -451,37 +457,20 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
 
-    # match cities, states and zips
-    sample  = @yml['address.states'].sample
-    idx = @yml['address.states'].index(sample) #index of random element
-
-    val=[]
-		# XAD xad = (XAD) map.fld
-		# int idx = Math.abs(random.nextInt()%streetNames.size())
+    # same as address AD
+    AD(map,true)
 		#street address (SAD) (SAD)
-    val << @yml['address.streetNames'].sample
-		# xad.getStreetAddress().getStreetName().setValue(streetNames.getAt(idx))
 		#other designation (ST)
-    val <<''
 		#city (ST)
-    val << @yml['address.cities'].at(idx)
-    # xad.getCity().setValue(cities.getAt(idx))
     #state or province (ST)
-    val << @yml['address.states'].at(idx)
-    # xad.getStateOrProvince().setValue(states.getAt(idx))
     #zip or postal code (ST)
-    val << @yml['address.zips'].at(idx)
-    # xad.getZipOrPostalCode().setValue(zips.getAt(idx))
     #country (ID)
-    val << @yml['address.countries'].at(idx)
-    # xad.getCountry().setValue(countries.getAt(idx))
 		#address type (ID)
 		#other geographic designation (ST)
 		#county/parish code (IS)
 		#census tract (IS)
 		#address representation code (ID)
 		#address validity range (DR)
-    val.join(@@HAT)
   end
 
   # Generate HL7 XCN (extended composite ID number and name for persons)
