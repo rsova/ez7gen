@@ -1,9 +1,32 @@
 require 'yaml'
 
-# file = File.open('properties.yml')
-# yml = YAML::load(file)
-# puts puts yml['juixe']['user'] # juixe-username
+puts '%.2f' % 515.0
+file = File.open('../lib/ez7gen/resources/properties.yml')
+yml = YAML::load(file)
+puts yml['person.names.last'][0] # juixe-username
 # yml['user'] # juixe-username
+puts yml['bar']
+
+puts yml['bar'].to_a.sample(1).to_h
+
+pair = yml['codes.allergens'].to_a.sample(1).to_h
+p pair.first
+
+# @@MONEY_FORMAT_INDICATORS = ['Money', 'Balance', 'Charge', 'Adjustment', 'Income', 'Amount', 'Payment','Cost']
+reg = /\bMoney\b|\bBalance\b|\bCharge|\bAdjustment\b|\bIncome\b|\bAmount\b|\bPayment\b|\bCost\b/
+
+str = 'Total Charges'
+# exp = /\bMoney\b|\bBalance\b/
+case str
+  # when /\bMoney\b|\bBalance\b|\bCharge\b|\bAdjustment\b|\bIncome\b|\bAmount\b|\bPayment\b|\bCost\b/
+  when reg
+    puts 'when'
+  else
+    puts 'else'
+end
+
+
+
 puts 'base:MSH'.delete(':base')
 if('[~{~ZMH~}~]'=~/\~Z/)
   puts 'ok!'

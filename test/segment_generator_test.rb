@@ -290,7 +290,7 @@ end
     attributes << lineToHash('[max_length:250, symbol:*, description:Operator ID, ifrepeating:1, datatype:XCN, required:O, piece:5, codetable:188]')
     attributes << lineToHash('[max_length:26, description:Event Occurred, ifrepeating:0, datatype:TS, required:O, piece:6]')
     attributes << lineToHash('[max_length:180, description:Event Facility, ifrepeating:0, datatype:HD, required:O, piece:7]')
-    puts Benchmark.measure(){
+     puts Benchmark.measure(){
       puts @segmentGen.generateSegment('EVN', attributes)
          }
   end

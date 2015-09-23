@@ -40,6 +40,7 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_NM
+
 		line =	'[max_length:12, description:Total Charges, ifrepeating:0, datatype:NM, required:R, piece:47]'
 		fld = @fldGenerator.NM(lineToHash(line))
 		puts fld
@@ -49,8 +50,7 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		line =	'[max_length:2, description:Birth Order, ifrepeating:0, datatype:NM, required:R, piece:25]'
 		fld = @fldGenerator.NM(lineToHash(line))
 		puts fld
-		refute fld.include?('.00')
-		assert fld.to_i < 1000
+		assert fld.to_i < 10
   end
 
   def test_CP
@@ -58,6 +58,12 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
     fld = @fldGenerator.CP(lineToHash(line))
     puts fld
     assert fld.include?('.00^USD')
+
+		line = '[piece:27, description:Guarantor Household Annual Income, datatype:CP, max_length:10, required:O, ifrepeating:0]'
+		fld = @fldGenerator.CP(lineToHash(line),true)
+		puts fld
+		assert fld.include?('.00^USD')
+
 	end
 
   def test_CX

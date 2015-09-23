@@ -13,12 +13,12 @@ class ProfileParser
   def initialize(version, event)
     @version = version;
     @event = event;
-    puts @version
-    puts @event
     path = '../resources/'<< @@HL7_VERSIONS[@version]
     profile = File.expand_path(path, __FILE__)
-    # profile = File.expand_path('../resources/base24.xml', __FILE__)
-    @xml = Ox.parse(IO.read(profile))# load_file
+    @xml = Ox.parse(IO.read(profile))
+
+    added = File.expand_path('../resources/added.xml', __FILE__)
+    @added = Ox.parse(IO.read(added))
   end
 
   def getSegments
@@ -60,9 +60,19 @@ class ProfileParser
 
     #empty hash if no table name
     return [] if Utils.blank?(tableName)
-    # values = @xml.elements.collect("Export/Document/Category/CodeTable[@name ='#{tableName}']/Enumerate"){|x| x.attributes}
-    n = @xml.Export.Document.Category.locate('CodeTable').select{|it| it.attributes[:name] == tableName }.first.locate('Enumerate').map{|it| it.attributes}
 
+    attributes = lookupCodeTable(tableName, @xml)
+
+    # if(attributes.size == 1  && attributes[0][:value] =='...')
+    #   attributes = lookupCodeTable(tableName, @added)
+    # end
+
+    return attributes
+  end
+
+  def lookupCodeTable(tableName, path)
+    tbl = path.Export.Document.Category.locate('CodeTable').select { |it| it.attributes[:name] == tableName }
+    (!Utils.blank?(tbl)) ? tbl.first.locate('Enumerate').map { |it| it.attributes } : [{:position => '1', :value => '...', :description => 'No suggested values defined'}]
   end
 
   def getSegmentStructure(segment)

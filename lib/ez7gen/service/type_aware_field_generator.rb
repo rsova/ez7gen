@@ -6,7 +6,8 @@ class TypeAwareFieldGenerator
   @@UP_TO_3_DGTS = 1000 # up to 3 digits
   @@RANGE_INDICATOR = '...'
   @@HAT = '^' # Component separator, aka hat
-  @@MONEY_FORMAT_INDICATORS = ['Money', 'Balance', 'Charge', 'Adjustment', 'Income', 'Amount', 'Payment','Cost']
+  # @@MONEY_FORMAT_INDICATORS = ['Money', 'Balance', 'Charge', 'Adjustment', 'Income', 'Amount', 'Payment','Cost']
+  @@MONEY_FORMAT_REGEX = /\bMoney\b|\bBalance\b|\bCharge|\bAdjustment\b|\bIncome\b|\bAmount\b|\bPayment\b|\bCost\b/
   @@INITIALS = ('A'..'Z').to_a
   @@GENERAL_TEXT = 'Notes'
 
@@ -49,9 +50,17 @@ class TypeAwareFieldGenerator
     # CE ce = (CE) map?.fld
     codes = getCodedMap(map)
     if(Utils.blank?(codes))
-      #ce.getIdentifier().setValue(Math.abs(random.nextInt() % 200).toString())
-      id = @@random.rand(@@UP_TO_3_DGTS)
-      val << id
+
+      case map[:description]
+        when 'Allergen Code/Mnemonic/Description'
+          pair = yml['codes.allergens'].to_a.sample(1).to_h.first # randomly pick a pair
+          val<<pair.first
+          val<<pair.last
+        else
+          # id = @@random.rand(@@UP_TO_3_DGTS)
+          # val << id
+          val << ''
+      end
     else
       #identifier (ST) (ST)
       val<<codes[:value]
@@ -248,8 +257,9 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
     val = []
-		#quantity (NM)
-		val << NM(update(map,:description,'Money'),true)
+		#quantity (NM)Guarantor Household Annual Income
+		# val << NM(update(map,:description,'Money'),true)
+		val << NM(map,true)
 		#denomination (ID)
 		val << 'USD'
     return val.join(@@HAT)
@@ -259,13 +269,24 @@ class TypeAwareFieldGenerator
   def NM(map, force=false)
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
-
-		#money
-		if (!Utils.blank?(map[:description]) && @@MONEY_FORMAT_INDICATORS.index{|it| map[:description].include?(it)}) #check for specific numeric for money
-			 '%.2f' % @@random.rand(1000) #under $1,000
-		else #quantity (NM)
-       @@random.rand(@@UP_TO_3_DGTS).to_s #under 20
-    end
+    # TODO uncomment
+    # case map[:description]
+      # when'Guarantor Household Size','Birth Order'
+      #   generateLengthBoundId(1)
+      # when 'Guarantor Household Annual Income'
+      #   '%.2f' % generateLengthBoundId(5)
+      # else
+        val = ID({},true) # general rule for a number
+        if (map[:datatype] == 'CP' || map[:datatype] == 'MO') # money
+          val = '%.2f' % val
+        end
+    # end
+    # #money
+    # if (!Utils.blank?(map[:description]) && @@MONEY_FORMAT_INDICATORS.index{|it| map[:description].include?(it)}) #check for specific numeric for money
+			#  '%.2f' % @@random.rand(@@UP_TO_3_DGTS) #under $1,000
+    # else #quantity (NM)
+    #    @@random.rand(@@UP_TO_3_DGTS).to_s #under 20
+    # end
   end
 
   #Generates an HL7 OCD (occurence) data type.
@@ -354,20 +375,17 @@ class TypeAwareFieldGenerator
     return if(!autoGenerate?(map,force))
 
     # TODO add provider type ln 840 ROL
-    if(map[:description].include?('SSN'))
-      generateLengthBoundId(9)
+    case map[:description]
+      # TODO uncomment
+      # when 'Guarantor SSN','Insured’s Social Security Number','Medicare health ins Card Number','Military ID Number', 'Contact Person Social Security Number'
+      #   generateLengthBoundId(9)
+      when 'Allergy Reaction Code'
+        yml['allergens.yn'].sample()
     else
       len = (map[:max_length]!=nil) ? map[:max_length].to_i : 1
       #val = generateLengthBoundId((len>5)?5=>len) # numeric id up to 5 TODO=> string ids?
       @@random.rand(@@UP_TO_3_DGTS).to_s
     end
-
-    # #			else if(map.max_length < 4 || val.contains('Id')|| val.contains('Days')|| val.contains('Code') || val.contains('Number') ){
-    # #				val = (Math.abs(random.nextInt()%100))# up to 3 spaces
-    # #			}else{#use description
-    # #				#if description does not fit use number
-    # #				val = (val.length() > map.max_length.toInteger())?(Math.abs(random.nextInt()%100))=>val
-    # 			}
 
   end
 
@@ -635,7 +653,9 @@ class TypeAwareFieldGenerator
     end
 
     # got to have code, get an id, most basic
-    code = (!Utils.blank?(code)) ? code : ID({})
+    if(Utils.blank?(code))
+      code, description = ID({},true), ''
+    end
     # return code, description
 
     # puts code + ', ' + description
@@ -676,6 +696,13 @@ class TypeAwareFieldGenerator
       idx = str.size
     end
     return str[0..idx-1]
+  end
+
+  # Returns randomly generated Id of required length, of single digit id
+  def generateLengthBoundId1(map, str=@@random.rand(100000000).to_s)
+    (!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
+
+    map[:maxlen]
   end
 
 

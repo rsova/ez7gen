@@ -41,4 +41,14 @@ class TestUtils < MiniTest::Unit::TestCase
 		assert !Utils.isZ?('[~{~AZL1~}~]')
 	end
 
+	def test_blank
+		assert Utils.blank?(nil)
+		assert Utils.blank?('')
+		assert Utils.blank?([])
+		assert Utils.blank?({})
+		str = ' '
+		assert Utils.blank?(str)
+		assert_equal 1, str.size # str has not change
+	end
+
 end

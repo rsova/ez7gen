@@ -7,7 +7,9 @@ class TestProfileParser < MiniTest::Unit::TestCase
 	def setup
 		@parser = ProfileParser.new('2.4', 'ADT_A01')
 	end
-
+	def teardown
+		@parser = nil
+	end
 	def test_init
 		assert(@parser !=nil)
 		# assert(hl7 != nil)
@@ -46,6 +48,20 @@ class TestProfileParser < MiniTest::Unit::TestCase
 			assert_equal('1', attributes[0][:position])
 			assert_equal('02', attributes[1][:value])
 			assert_equal('Census management', attributes[2][:description])
+	 end
+
+	def test_codeTable_Added
+		attributes = @parser.getCodeTable('296')
+		p attributes[0].class
+		p attributes.size
+		# assert (attributes[0][:position] =='1' && attributes[0][:value] =='EN')
+	end
+
+   def test_codeTable_NoVals
+   		attributes = @parser.getCodeTable("-296")
+   		p attributes[0].class
+			p attributes.size
+			assert (attributes[0][:position] =='1' && attributes[0][:value] =='...')
 	 end
 
 	def test_codeTable_blank

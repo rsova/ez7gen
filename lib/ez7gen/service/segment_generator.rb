@@ -62,36 +62,30 @@ class SegmentGenerator
 
     totalReps.times do |i|
       # seg = (isRep)?message."get$segmentName"(i) :message."get$segmentName"()
-      message << generateSegment(segmentName, attributes)
+      message << generateSegment(segmentName, attributes, (totalReps>1)?i+1:nil)
     end
 
     return message
   end
 
-  #generate test message using
-  def generateSegmentFields( segment, attributes)
-
-    isRep = isSegmentRepeated(segment)
-    segmentName = Utils.getSegmentName(segment)
-
-    # decide if segment needs to repeat and how many times
-    totalReps = (isRep)? @@random.rand(1.. @@maxReps) : 1 # between 1 and maxReps
-
-    # totalReps.times do |i|
-      # seg = (isRep)?message."get$segmentName"(i) :message."get$segmentName"()
-      generateSegment(segmentName, attributes)
-    # end
-
-  end
+  # #generate test message using
+  # def generateSegmentFields( segment, attributes)
+  #   segmentName = Utils.getSegmentName(segment)
+  #   generateSegment(segmentName, attributes)
+  # end
 
   def isSegmentRepeated(segment)
-    # puts 'in isSegmentReapeated'
-    return false
+    segment.include?("~{")
   end
 
   # generate a segment using Ensamble schema
-  def generateSegment(segmentName, attributes)
+  def generateSegment(segmentName, attributes, idx=nil)
     elements = generateSegmentElements(segmentName, attributes)
+
+    # overrite ids for sequential repeating segments use ids
+    elements[1] = (idx)? idx.to_s : elements[1]
+
+    #generate segment using elements
     HL7::Message::Segment::Default.new(elements)
   end
 

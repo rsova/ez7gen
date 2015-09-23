@@ -28,7 +28,7 @@ class Utils
   end
 
   def self.blank?(obj)
-    return obj.nil? || obj.empty?
+    return obj.nil? || obj.empty? #|| obj.strip.empty?
   end
 
   # safely pick an index with collection

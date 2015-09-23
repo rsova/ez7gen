@@ -1,0 +1,25 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<Export>
+<Document name="Values for coded tables with missing values ">
+    <Category name="2.4">
+      <CodeTable name='296' tabletype='1' description='Language added'>
+        <Enumerate position='1' value='EN' description='English'/>
+        <Enumerate position='2' value='FR' description='Frech'/>
+        <Enumerate position='3' value='ES' description='Spanish'/>
+        <Enumerate position='4' value='DE' description='German'/>
+        <Enumerate position='5' value='IT' description='Italian'/>
+      </CodeTable>
+    </Category>
+      <!--<CodeTable name='131' tabletype='1' description='Language added'>-->
+        <!--<Enumerate position='1' value='E' description='Employer'/>-->
+        <!--<Enumerate position='2' value='C' description='Emergency Contact'/>-->
+        <!--<Enumerate position='3' value='F' description='Federal Agency'/>-->
+        <!--<Enumerate position='4' value='I' description='Insurance Company'/>-->
+        <!--<Enumerate position='5' value='N' description='Next-of-Kin'/>-->
+        <!--<Enumerate position='6' value='S' description='State Agency'/>-->
+        <!--<Enumerate position='7' value='O' description='Other'/>-->
+        <!--<Enumerate position='8' value='U' description='Unknown'/>-->
+      <!--</CodeTable>-->
+    <!--</Category>-->
+  </Document>
+</Export>

@@ -1,0 +1,246 @@
+Table 18
+Patient Type
+Code
+Description
+00
+Surgical
+10
+Medical
+60
+Home Nursing Service
+85
+Psychiatric Contract
+86
+Psychiatric
+95
+Neurological Contract
+96
+Neurological
+ 
+ 
+Table 51
+Diagnosis Code
+Code
+Description
+E23.0
+Panhypopituitarism
+E23.6
+Other disorders of pituitary gland
+E23.2
+Diabetes insipidus
+E23.3
+Hypothalamic dysfunction, not elsewhere classified
+E23.1
+Drug-induced hypopituitarism
+E32.8
+Other diseases of thymus
+E23.7
+Disorder of pituitary gland, unspecified
+E32.1
+Abscess of thymus
+E32.9
+Disease of thymus, unspecified
+ 
+ 
+Table 87
+Pre-admit test indicator
+Code
+Description
+Y
+Yes
+N
+No
+ 
+ 
+Table 88
+Procedure Code
+Code
+Description
+00W000Z
+Revision of Drainage Device in Brain, Open Approach
+02110Z3
+Bypass Coronary Artery, Two Sites from Coronary Artery, Open Approach
+05500ZZ
+Destruction of Azygos Vein, Open Approach
+4A0004Z
+Measurement of Central Nervous Electrical Activity, Open Approach
+4A0204Z
+Measurement of Cardiac Electrical Activity, Open Approach
+4A060BZ
+Measurement of Lymphatic Pressure, Open Approach
+5A02110
+Assistance with Cardiac Output using Balloon Pump, Intermittent
+6A150ZZ
+Decompression, Circulatory, Single
+6A750Z4
+Ultrasound Therapy of Head and Neck Vessels, Single
+6A800ZZ
+Ultraviolet Light Therapy of Skin, Single
+ 
+ 
+Table 99
+VIP indicator
+Code
+Description
+Y
+VIP
+N
+Non VIP
+ 
+ 
+Table 115
+Servicing facility
+Code
+Description
+327
+LOUISVILLE-RO
+358
+MANILA-RO
+402
+TOGUS VAMROC
+405
+WHITE RIVER JCT VAMROC
+436
+MONTANA HCS
+437
+FARGO VAMROC
+438
+SIOUX FALLS VAMROC
+452
+WICHITA-RO
+ 
+ 
+Table 129
+Accommodation code
+Code
+Description
+1
+ALLERGY
+10
+NEUROLOGY
+2
+CARDIOLOGY
+20
+REHABILITATION MEDICINE
+24
+MEDICAL OBSERVATION
+25
+PSYCH RESID REHAB TRMT PROG
+40
+INTERMEDIATE MEDICINE
+50
+GENERAL SURGERY
+ 
+ 
+Table 152
+Second opinion documentation received
+Code
+Description
+Y
+Documentation received
+N
+Documentation not received
+ 
+ 
+Table 172
+Veteran military status
+Code
+Description
+Y
+Veteran
+N
+Non Veteran
+ 
+ 
+Table 212
+Nationality
+Code
+Description
+DEU
+Germany
+ESP
+Spain
+FRA
+France
+GBR
+United Kingdom
+ITA
+Italy
+USA
+United States
+ 
+ 
+Table 295
+Handicap
+Code
+Description
+Y
+Yes
+N
+No
+ 
+ 
+Table 296
+Primary Language
+Code
+Description
+EN  
+English
+FR
+French
+ES
+Spanish
+DE
+German
+IT
+Italian
+ 
+ 
+Table 327
+Job code/class
+Code
+Description
+13-2011
+Accountant
+15-1132
+Application Developer
+23-1011
+Attorney
+29-1020
+Dentist
+29-1170
+Nurse Practitioner
+29-2041
+Paramedic
+29-1050
+Pharmacist
+29-1060
+Physician
+ 
+ 
+Table 340
+Procedure Code modifier
+Code
+Description
+57
+Decision for surgery
+23
+Unusual Anesthesia
+50
+Bilateral Procedure
+33
+Preventive Service
+51
+Multiple Procedures
+52
+Reduced Services
+ 
+ 
+Table 342
+Military recipient
+Code
+Description
+Y
+Dependent
+N
+Non Dependent
