@@ -63,9 +63,9 @@ class ProfileParser
 
     attributes = lookupCodeTable(tableName, @xml)
 
-    # if(attributes.size == 1  && attributes[0][:value] =='...')
-    #   attributes = lookupCodeTable(tableName, @added)
-    # end
+    if(attributes.size == 1  && attributes[0][:value] =='...')
+      attributes = lookupCodeTable(tableName, @added)
+    end
 
     return attributes
   end

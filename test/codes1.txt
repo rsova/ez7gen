@@ -1,0 +1,1240 @@
+Table 10
+Physician ID
+Code
+Description
+PH1
+Surgical
+PH2
+Medical
+PH3
+Home Nursing Service
+PH4
+Psychiatric Contract
+PH5
+Psychiatric
+ 
+ 
+Table 18
+Patient Type
+Code
+Description
+00
+Surgical
+10
+Medical
+60
+Home Nursing Service
+85
+Psychiatric Contract
+86
+Psychiatric
+95
+Neurological Contract
+96
+Neurological
+ 
+ 
+Table 19
+Anesthesia code
+Code
+Description
+1
+Anesthesia 1
+2
+Anesthesia 2
+3
+Anesthesia 3
+4
+Anesthesia 4
+5
+Anesthesia 5
+ 
+ 
+Table 21
+Bad debt agency code
+Code
+Description
+1
+Bad debt agency 1
+2
+Bad debt agency 2
+3
+Bad debt agency 3
+4
+Bad debt agency 4
+5
+Bad debt agency 5
+ 
+ 
+Table 22
+Billing Status
+Code
+Description
+1
+Billing Status 1
+2
+Billing Status 2
+3
+Billing Status 3
+4
+Billing Status 4
+5
+Billing Status 5
+ 
+ 
+Table 24
+Fee Schedule
+Code
+Description
+A
+Fee schedule A
+B
+Fee schedule B
+C
+Fee schedule C
+D
+Fee schedule D
+ 
+ 
+Table 32
+Charge/price indicator
+Code
+Description
+11
+Charge 1
+21
+Charge 2
+31
+Charge 3
+41
+Charge 4
+51
+Charge 5
+ 
+ 
+Table 42
+Company plan code
+Code
+Description
+12
+Plan 1
+22
+Plan 2
+32
+Plan 3
+42
+Plan 4
+52
+Plan 5
+ 
+ 
+Table 45
+Courtesy Code
+Code
+Description
+14
+Courtesy 1
+24
+Courtesy 2
+34
+Courtesy 3
+44
+Courtesy 4
+54
+Courtesy 5
+ 
+ 
+Table 46
+Credit rating
+Code
+Description
+B
+Bad
+F
+Fair
+G
+Good
+E
+Excellent
+ 
+ 
+Table 49
+Department Code
+Code
+Description
+A
+Department A
+B
+Department B
+C
+Department C
+D
+Department D
+ 
+ 
+Table 50
+Accident Code
+Code
+Description
+V89.2XXA
+Person injured in unspecified motor-vehicle accident, traffic, initial encounter
+Y92.9
+Unspecified place or not applicable
+W74.XXXA
+Unspecified cause of accidental drowning and submersion, initial encounter
+W20.8XXA
+Other cause of strike by thrown, projected or falling object, initial encounter
+ 
+ 
+Table 51
+Diagnosis Code
+Code
+Description
+E23.0
+Panhypopituitarism
+E23.6
+Other disorders of pituitary gland
+E23.2
+Diabetes insipidus
+E23.3
+Hypothalamic dysfunction, not elsewhere classified
+E23.1
+Drug-induced hypopituitarism
+E32.8
+Other diseases of thymus
+E23.7
+Disorder of pituitary gland, unspecified
+E32.1
+Abscess of thymus
+E32.9
+Disease of thymus, unspecified
+ 
+ 
+Table 55
+Diagnosis Related Group
+Code
+Description
+001
+LIVER TRANSPLANT
+003
+BONE MARROW TRANSPLANT
+113
+INFECTIONS OF UPPER RESPIRATORY TRACT
+160
+MAJOR CARDIOTHORACIC REPAIR OF HEART ANOMALY
+199
+HYPERTENSION
+203
+CHEST PAIN
+247
+INTESTINAL OBSTRUCTION
+283
+OTHER DISORDERS OF THE LIVER
+346
+CONNECTIVE TISSUE DISORDERS
+381
+MAJOR SKIN DISORDERS
+424
+OTHER ENDOCRINE DISORDERS
+ 
+ 
+Table 56
+DRG grouper review code
+Code
+Description
+10
+Review 1
+20
+Review 2
+30
+Review 3
+40
+Review 4
+50
+Review 5
+ 
+ 
+Table 59
+Consent Code
+Code
+Description
+01
+Informed consent
+02
+Waiver of the consent requirement
+03
+Health care proxy
+ 
+ 
+Table 64
+Financial Class
+Code
+Description
+FC1
+Financial Class 1
+FC2
+Financial Class 2
+FC3
+Financial Class 3
+FC4
+Financial Class 4
+FC5
+Financial Class 5
+ 
+ 
+Table 68
+Guarantor Type
+Code
+Description
+G1
+Guarantor Type 1
+G2
+Guarantor Type 2
+G3
+Guarantor Type 3
+G4
+Guarantor Type 4
+G5
+Guarantor Type 5
+ 
+ 
+Table 72
+Insurance Plan ID
+Code
+Description
+1234 5678A
+Insurance Plan A
+2345 6789B
+Insurance Plan B
+3456 7890C
+Insurance Plan C
+4567 8901D
+Insurance Plan D
+ 
+ 
+Table 73
+Interest rate code
+Code
+Description
+31
+Interest rate code 1
+32
+Interest rate code 2
+33
+Interest rate code 3
+34
+Interest rate code 4
+35
+Interest rate code 5
+ 
+ 
+Table 84
+Performed by
+Code
+Description
+A
+Group A
+B
+Group B
+C
+Group C
+D
+Group D
+E
+Group E
+ 
+ 
+Table 86
+Plan ID
+Code
+Description
+234
+Plan 1
+345
+Plan 2
+456
+Plan 3
+567
+Plan 4
+678
+Plan 5
+ 
+ 
+Table 87
+Pre-admit test indicator
+Code
+Description
+Y
+Yes
+N
+No
+ 
+ 
+Table 88
+Procedure Code
+Code
+Description
+00W000Z
+Revision of Drainage Device in Brain, Open Approach
+02110Z3
+Bypass Coronary Artery, Two Sites from Coronary Artery, Open Approach
+05500ZZ
+Destruction of Azygos Vein, Open Approach
+4A0004Z
+Measurement of Central Nervous Electrical Activity, Open Approach
+4A0204Z
+Measurement of Cardiac Electrical Activity, Open Approach
+4A060BZ
+Measurement of Lymphatic Pressure, Open Approach
+5A02110
+Assistance with Cardiac Output using Balloon Pump, Intermittent
+6A150ZZ
+Decompression, Circulatory, Single
+6A750Z4
+Ultrasound Therapy of Head and Neck Vessels, Single
+6A800ZZ
+Ultraviolet Light Therapy of Skin, Single
+ 
+ 
+Table 99
+VIP indicator
+Code
+Description
+Y
+VIP
+N
+Non VIP
+ 
+ 
+Table 110
+Transfer to bad debt indicator
+Code
+Description
+Y
+Yes, transfer to bad debt
+N
+No, do not transfer to bad debt
+ 
+ 
+Table 111
+Delete account code
+Code
+Description
+1
+Code 1
+2
+Code 2
+3
+Code 3
+4
+Code 4
+5
+Code 5
+ 
+ 
+Table 114
+Diet type
+Code
+Description
+100
+Tube feeding
+110
+Clear liquid diet
+120
+Full liquid diet
+200
+Diabetic or calorie controlled diet
+300
+No Added Salt diet
+400
+High fiber diet
+ 
+
+Table 115
+Servicing facility
+Code
+Description
+27
+LOUISVILLE-RO
+58
+MANILA-RO
+12
+TOGUS VAMROC
+45
+WHITE RIVER JCT VAMROC
+36
+MONTANA HCS
+37
+FARGO VAMROC
+38
+SIOUX FALLS VAMROC
+52
+WICHITA-RO
+ 
+ 
+Table 117
+Account status
+Code
+Description
+12
+Account status 1
+23
+Account status 2
+34
+Account status 3
+45
+Account status 4
+56
+Account status 5
+ 
+ 
+Table 129
+Accommodation code
+Code
+Description
+1
+ALLERGY
+10
+NEUROLOGY
+2
+CARDIOLOGY
+20
+REHABILITATION MEDICINE
+24
+MEDICAL OBSERVATION
+25
+PSYCH RESID REHAB TRMT PROG
+40
+INTERMEDIATE MEDICINE
+50
+GENERAL SURGERY
+ 
+ 
+Table 132
+Transaction code
+Code
+Description
+1
+Payment
+2
+Credit
+3
+Adjustment
+ 
+ 
+Table 139
+Employer information data
+Code
+Description
+1
+Employer 1
+3
+Employer 2
+5
+Employer 3
+7
+Employer 4
+9
+Employer 5
+ 
+ 
+Table 143
+Non-covered insurance code
+Code
+Description
+99201
+Code 1
+99202
+Code 2
+99203
+Code 3
+99204
+Code 4
+99205
+Code 5
+ 
+ 
+Table 151
+Second opinion status
+Code
+Description
+P
+Second opinion requested by patient
+M
+Second opinion requested by doctor
+S
+Second opinion consultation scheduled
+ 
+ 
+Table 152
+Second opinion documentation received
+Code
+Description
+Y
+Documentation received
+N
+Documentation not received
+ 
+ 
+Table 171
+Citizenship
+Code
+Description
+USA
+United States
+ 
+
+Table 172
+Veteran military status
+Code
+Description
+Y
+Veteran
+N
+Non Veteran
+ 
+ 
+Table 188
+Operator ID
+Code
+Description
+OP1
+Operator A
+OP2
+Operator B
+OP3
+Operator C
+OP4
+Operator D
+OP5
+Operator E
+ 
+ 
+Table 212
+Nationality
+Code
+Description
+DEU
+Germany
+ESP
+Spain
+FRA
+France
+GBR
+United Kingdom
+ITA
+Italy
+USA
+United States
+ 
+ 
+Table 218
+Patient charge adjustment
+Code
+Description
+1
+Deductible Amount
+2
+Coinsurance Amount
+3
+Co-payment Amount
+9
+Diagnosis inconsistent with patient's age
+10
+Diagnosis inconsistent with patient's gender
+11
+Diagnosis inconsistent with procedure
+ 
+ 
+Table 219
+Recurring service
+Code
+Description
+1
+Service 1
+2
+Service 2
+3
+Service 3
+4
+Service 4
+5
+Service 5
+ 
+ 
+Table 222
+Contact reason
+Code
+Description
+10
+Contact reason 1
+20
+Contact reason 2
+30
+Contact reason 3
+40
+Contact reason 4
+50
+Contact reason 5
+ 
+ 
+Table 233
+Non-concur code/description
+Code
+Description
+725
+Not medically necessary
+726
+Experimental
+728
+Out of network
+727
+Policy cancelled for lack of payment
+721
+Health care setting
+ 
+ 
+Table 264
+Location Department
+Code
+Description
+LD1
+Location Dep 1
+LD2
+Location Dep 2
+LD3
+Location Dep 3
+LD4
+Location Dep 4
+LD5
+Location Dep 5
+ 
+ 
+Table 285
+Insurance Company ID Codes
+Code
+Description
+1111
+Insurance Company 1
+2222
+Insurance Company 2
+3333
+Insurance Company 3
+4444
+Insurance Company 4
+5555
+Insurance Company 5
+ 
+ 
+Table 295
+Handicap
+Code
+Description
+Y
+Yes
+N
+No
+ 
+ 
+Table 296
+Primary Language
+Code
+Description
+EN  
+English
+FR
+French
+ES
+Spanish
+DE
+German
+IT
+Italian
+ 
+ 
+Table 300
+Namespace ID
+Code
+Description
+101
+Namespace ID 1
+202
+Namespace ID 2
+303
+Namespace ID 3
+404
+Namespace ID 4
+505
+Namespace ID 5
+606
+Namespace ID 6
+707
+Namespace ID 7
+808
+Namespace ID 8
+909
+Namespace ID 9
+ 
+ 
+Table 302
+Point of Care
+Code
+Description
+PC1
+Point of Care 1
+PC2
+Point of Care 2
+PC3
+Point of Care 3
+PC4
+Point of Care 4
+PC5
+Point of Care 5
+ 
+ 
+Table 303
+Room
+Code
+Description
+RA
+Room A
+RB
+Room B
+RC
+Room C
+RD
+Room D
+RE
+Room E
+ 
+ 
+Table 304
+Bed
+Code
+Description
+B1
+Bed 1
+B2
+Bed 2
+B3
+Bed 3
+B4
+Bed 4
+B5
+Bed 5
+ 
+ 
+Table 307
+Building
+Code
+Description
+BLD1
+Building 1
+BLD2
+Building 2
+BLD3
+Building 3
+BLD4
+Building 4
+BLD5
+Building 5
+ 
+ 
+Table 312
+Policy Scope
+Code
+Description
+11
+Policy Scope 1
+12
+Policy Scope 2
+13
+Policy Scope 3
+14
+Policy Scope 4
+15
+Policy Scope 5
+ 
+ 
+Table 313
+Policy Source
+Code
+Description
+21
+Policy Source 1
+22
+Policy Source 2
+23
+Policy Source 3
+24
+Policy Source 4
+25
+Policy Source 5
+ 
+ 
+Table 319
+Department Cost Center
+Code
+Description
+1
+Cost Center 1
+2
+Cost Center 2
+3
+Cost Center 3
+4
+Cost Center 4
+5
+Cost Center 5
+ 
+ 
+Table 320
+Item Natural Account Code
+Code
+Description
+1010
+Account Code 1
+2020
+Account Code 2
+3030
+Account Code 3
+4040
+Account Code 4
+5050
+Account Code 5
+ 
+ 
+Table 327
+Job code/class
+Code
+Description
+13-2011
+Accountant
+15-1132
+Application Developer
+23-1011
+Attorney
+29-1020
+Dentist
+29-1170
+Nurse Practitioner
+29-2041
+Paramedic
+29-1050
+Pharmacist
+29-1060
+Physician
+ 
+ 
+Table 333
+Driver's license issuing authority
+Code
+Description
+AK
+Alaska
+CO
+Colorado
+FL
+Florida
+KS
+Kansas
+MD
+Maryland
+ 
+ 
+Table 340
+Procedure Code modifier
+Code
+Description
+57
+Decision for surgery
+23
+Unusual Anesthesia
+50
+Bilateral Procedure
+33
+Preventive Service
+51
+Multiple Procedures
+52
+Reduced Services
+ 
+ 
+Table 341
+Guarantor credit rating code
+Code
+Description
+B
+Bad
+F
+Fair
+G
+Good
+E
+Excellent
+ 
+ 
+Table 342
+Military recipient
+Code
+Description
+Y
+Dependent
+N
+Non Dependent
+
+
+Table 343
+Military handicapped program code
+Code
+Description
+7118
+Angioneurotic edema
+7005
+Arteriosclerotic heart disease
+9433
+Persistent depressive disorder
+6205
+Endolymphatic hydrops
+5003
+Hypertrophic arthritis
+
+
+Table 345
+Appeal reason
+Code
+Description
+51
+Medically necessary
+52
+Procedure is covered
+53
+Unreasonably long wait for in-network provider
+54
+In-home care
+55
+Nonpayment error
+
+
+Table 346
+Certification agency
+Code
+Description
+ADPH
+Alabama Department  of Public Health
+AZDHS
+Arizona Department of Health Services
+CDPH
+California Department of Public Health
+AHCA
+Agency for Health Care Administration
+DADS
+TX Dept of Aging & Disability Services
+
+
+Table 361
+Sending/receiving application
+Code
+Description
+101
+Application A
+202
+Application B
+303
+Application C
+404
+Application D
+ 
+ 
+Table 362
+Sending/receiving facility
+Code
+Description
+505
+Facility A
+606
+Facility B
+707
+Facility C
+808
+Facility D
+909
+Facility E
+ 
+ 
+Table 378
+Carrier Type
+Code
+Description
+R01
+One position carrier
+R02
+Two position carrier
+R03
+Three position carrier
+R04
+Four position carrier
+R05
+Five position carrier
+ 
+ 
+Table 379
+Tray Type
+Code
+Description
+T01
+One position tray
+T02
+Two position tray
+T03
+Three position tray
+T04
+Four position tray
+T05
+Five position tray
+ 
+ 
+Table 380
+Separator Type
+Code
+Description
+NO
+No Separator
+GEL
+Gel Separator
+M01
+Manufacturer Specific Separator
+ 
+ 
+Table 381
+Cap Type
+Code
+Description
+SCR
+Screw Cap
+PSH
+Push Cap
+FOIL
+Foil
+ 
+ 
+Table 382
+Drug Interference
+Code
+Description
+PHCL
+Pharmacological
+CHML
+Chemical
+ 
+ 
+Table 385
+Manufacturer Identifier
+Code
+Description
+851
+Manufacturer A
+852
+Manufacturer B
+853
+Manufacturer C
+854
+Manufacturer D
+855
+Manufacturer E
+
+
+Table 386
+Supplier Identifier
+Code
+Description
+951
+Supplier A
+952
+Supplier B
+953
+Supplier C
+954
+Supplier D
+955
+Supplier E
+
+
+Table 449
+Conformance Statements
+Code
+Description
+10
+Conformance statement 1
+20
+Conformance statement 2
+30
+Conformance statement 3
+40
+Conformance statement 4
+50
+Conformance statement 5
+
+
+Table 461
+License Number
+Code
+Description
+LN1
+License  1
+LN2
+License  2
+LN3
+License  3
+LN4
+License  4
+LN5
+License  5
+
+
+Table 462
+Location Cost Center
+Code
+Description
+LCC1
+Cost Center 1
+LCC2
+Cost Center 2
+LCC3
+Cost Center 3
+LCC4
+Cost Center 4
+LCC5
+Cost Center 5
+ 
+ 
+Table 463
+Inventory Number
+Code
+Description
+INV1
+Item 1
+INV2
+Item 2
+INV3
+Item 3
+INV4
+Item 4
+INV5
+Item 5
+
+
+Table 471
+Query Name
+Code
+Description
+A
+Query A
+B
+Query B
+C
+Query C
+D
+Query D
+E
+Query E

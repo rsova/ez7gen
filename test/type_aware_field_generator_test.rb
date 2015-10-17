@@ -57,12 +57,12 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
     line ='[max_length:12, description:???, ifrepeating:0, datatype:CP, required:R, piece:13]'
     fld = @fldGenerator.CP(lineToHash(line))
     puts fld
-    assert fld.include?('.00^USD')
+    assert fld.include?('.00&USD')
 
 		line = '[piece:27, description:Guarantor Household Annual Income, datatype:CP, max_length:10, required:O, ifrepeating:0]'
 		fld = @fldGenerator.CP(lineToHash(line),true)
 		puts fld
-		assert fld.include?('.00^USD')
+		assert fld.include?('.00&USD')
 
 	end
 
@@ -107,6 +107,7 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	def test_DLN
 		line ="[max_length:25, description:Driver's License Number - Patient, ifrepeating:0, datatype:DLN, required:O, piece:20]"
 		fld = @fldGenerator.DLN(lineToHash(line),true)
+		puts fld
 		assert_equal 3, fld.split('^').size
 	end
 
@@ -260,22 +261,22 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_autoGenerate
-		map = {'required'=>'B'}
+		map = {:required =>'B'}
 		refute (@fldGenerator.autoGenerate?(map)) # false
 
-		map = {'required'=>'X'}
+		map = {:required =>'X'}
 		refute (@fldGenerator.autoGenerate?(map)) # false
 
-        map = {'required'=>'W'}
+		map = {:required =>'W'}
 		refute (@fldGenerator.autoGenerate?(map)) # false
 
-		map = {'required'=>'R'}
+		map = {:required =>'R'}
 		assert (@fldGenerator.autoGenerate?(map)) # true
 
-		map = {'required'=>'O'}
+		map = {:required =>'O'}
 		puts @fldGenerator.autoGenerate?(map) # true or false random
 
-		map = {'required'=>'O'}
+		map = {:required =>'O'}
 		assert @fldGenerator.autoGenerate?(map,true) # true or false random
 
 		map = {'required'=>'W'}

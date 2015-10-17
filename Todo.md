@@ -14,3 +14,10 @@
 -- Angular integration
 -- Packaging
 -- Segments
+
+After vacation
+-- check all types
+-- uncomment changes per requirement
+-- start on Admissions
+-- repeating types
+-- groups

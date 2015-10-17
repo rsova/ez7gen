@@ -27,10 +27,10 @@ class SegmentGenerator
     # create a MSH segment
     msh = HL7::Message::Segment::MSH.new
     msh.enc_chars ='^~\&'
-    msh.sending_app = 'Sending App'
-    msh.sending_facility = 'Sending Facility'
-    msh.recv_app = "HL7 Generator"
-    msh.recv_facility = "MARM"
+    msh.sending_app = @fieldGenerators['primary'].HD({:codetable =>'361',:required =>'R'})
+    msh.sending_facility = @fieldGenerators['primary'].HD({:codetable => '362', :required =>'R'})
+    msh.recv_app = @fieldGenerators['primary'].HD({:codetable => '361', :required =>'R'})
+    msh.recv_facility = @fieldGenerators['primary'].HD({:codetable => '362', :required =>'R'})
     msh.processing_id = 'P'#@fieldGenerators['primary'].ID({},true)
     msh.version_id = '2.4'
     msh.security = @fieldGenerators['primary'].ID({})

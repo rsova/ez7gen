@@ -6,6 +6,7 @@ class TypeAwareFieldGenerator
   @@UP_TO_3_DGTS = 1000 # up to 3 digits
   @@RANGE_INDICATOR = '...'
   @@HAT = '^' # Component separator, aka hat
+  @@SUB ='&' # Subcomponent separator
   # @@MONEY_FORMAT_INDICATORS = ['Money', 'Balance', 'Charge', 'Adjustment', 'Income', 'Amount', 'Payment','Cost']
   @@MONEY_FORMAT_REGEX = /\bMoney\b|\bBalance\b|\bCharge|\bAdjustment\b|\bIncome\b|\bAmount\b|\bPayment\b|\bCost\b/
   @@INITIALS = ('A'..'Z').to_a
@@ -49,6 +50,52 @@ class TypeAwareFieldGenerator
     val.join(@@HAT)
   end
 
+  # Authorization information
+  # def AUI(map, force=false)
+  #check if the field is optional and randomly generate it of skip
+  #return if(!autoGenerate?(map,force))
+
+  #   # authorization number (ST)
+  #   ST(map, true)
+  #   # date (DT)
+  #   # source (ST)
+  # end
+
+  #Charge time
+  # def CCD(map, force=false)
+  #check if the field is optional and randomly generate it of skip
+  #return if(!autoGenerate?(map,force))
+
+  #   #<when to charge code (ID)>
+  #   ID(map, force=false)
+  #   # <date/time (TS)>
+  # end
+
+  #Channel calibration parameters
+  # def CCP(map, force=false)
+  #check if the field is optional and randomly generate it of skip
+  #return if(!autoGenerate?(map,force))
+
+  #   # <channel calibration sensitivity correction (NM)>
+  #   NM(map,true)
+  #   # <channel calibration baseline (NM)>
+  #   # <channel calibration time skew (NM)>
+  # end
+
+  #Channel definition
+  # def CD(map, force=false)
+  #check if the field is optional and randomly generate it of skip
+  # return if(!autoGenerate?(map,force))
+
+  #   #<channel identifier (WVI)>
+  #   WVI(map, force=true)
+  #   #<waveform source (WVS)>
+  #   # <channel sensitivity/units (SCU)>
+  #   #<channel calibration parameters (CCP)>
+  #   # <sampling frequency (NM)>
+  #   # <minimum/maximum data values (NR)>
+  # end
+
   # Generate HL7 CE (coded element) data type
   def CE(map, force=false)
     #check if the field is optional and randomly generate it of skip
@@ -80,11 +127,89 @@ class TypeAwareFieldGenerator
     return val.join(@@HAT)
   end
 
-  #Generate HL7 CP (composite price) data type.
+  # Coded element with formatted values
+  # def CF(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map, force))
+  #
+  #   # <identifier (ID)>
+  #   ID(map, true)
+  #   # <formatted text (FT)>
+  #   # <name of coding system (IS)>
+  #   # <alternate identifier (ID)>
+  #   # <alternate formatted text (FT)>
+  #   # <name of alternate coding system (IS)>
+  # end
+
+  #Composite ID with check digit
+  # def CK(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map, force))
+  #   # <ID number (NM)>
+  #   NM(map,true)
+  #   # <check digit (NM)>
+  #   # <code identifying the check digit scheme employed (ID)>
+  #   # < assigning authority (HD)>
+  # end
+
+  #Composite
+  # def CM(map, force=false)
+  #  #check if the field is optional and randomly generate it of skip
+  #  return if(!autoGenerate?(map, force))
+  #
+  #  val=[]
+  #  # <penalty type (IS)>
+  #   val=IS(map,true)
+  #  # <penalty amount (NM)>
+  #  val<<NM(map,true)
+  #  val.join(@@HAT)
+  #  end
+
+  # CN	Composite ID number and name
+  # "<ID number (ST)> ^ <family name (FN)> ^ <given name (ST)> ^ < second and further given names or initials thereof (ST)> ^ <suffix (e.g., JR or III) (ST)> ^ <prefix (e.g. DR) (ST)> ^ <degree (e.g., MD) (IS)> ^ <source table (IS)> ^ <assigning authority(HD)>
+  # Replaced by XCN data type as of v 2.3"
+
+  # CNE	Coded with no exceptions
+  def CNE(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map, force))
+
+    # <identifier (ST)> ^ <text (ST)>
+    ST(map, true)
+    # <name of coding system (IS)>
+    # <alternate identifier(ST)>
+    # <alternate text (ST)>
+    # <name of alternate coding system (IS)>
+    # <coding system version ID (ST)>
+    # alternate coding system version ID (ST)>
+    # <original text (ST)>
+  end
+
+  # Composite ID number and name (special DT for NDL)
+  # def CNN(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map, force))
+  #
+  #   val=[]
+  #   # ID number (ST) (ST)
+  #   val << ID(map, true)
+  #   # family name (FN), used for ST
+  #   val << FN(map, true)
+  #   # given name (ST)
+  #   val << @yml['person.names.first'].sample
+  #   # second and further given names or initials thereof (ST)
+  #   val << @@INITIALS.to_a.sample
+  #   # < suffix (e.g., JR or III) (ST)> ^ < prefix (e.g., DR) (ST)>
+  #   # < degree (e.g., MD) (IS)> ^ < source table (IS)>
+  #   # < assigning authority namespace ID (IS)>
+  #   # < assigning authority universal ID (ST)>
+  #   # < assigning authority universal ID type (ID)>
+  #    val.join(@@HAT)
+  # end
+
   def CP(map, force=false)
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map, force))
-    val = []
 
 		#price (MO)
     MO(map,true)
@@ -93,6 +218,41 @@ class TypeAwareFieldGenerator
 		#to value (NM)
 		#range units (CE)
 		#range type (ID)
+  end
+
+  # Composite quantity with units
+  # def CQ(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #   val =[]
+  #   # <quantity (NM)>
+  #   val<<NM(map,true)
+  #   # <units (CE)>
+  #   val<<CE(map,true)
+  #   #    val.join(@@HAT)
+  # end
+
+  #Channel sensitivity/units
+  # def CSU(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #
+  #   # < channel sensitivity (NM)>
+  #   NM(map,true)
+  #   # < unit of measure identifier (ST)>
+  #   # < unit of measure description (ST)>
+  #   # < unit of measure coding system (IS)>
+  #   # < alternate unit of measure identifier (ST)>
+  #   # < alternate unit of measure description (ST)>
+  #   # < alternate unit of measure coding system (IS)>
+  # end
+
+  #Coded with exceptions
+  def CWE(map, force=false)
+  #check if the field is optional and randomly generate it of skip
+  return if(!autoGenerate?(map,force))
+  # <identifier (ST)>
+  # <text (ST)> ^ <name of coding system (IS)> ^ <alternate identifier(ST)> ^ <alternate text (ST)> ^ <name of alternate coding system (IS)> ^ <coding system version ID (ST)> ^ alternate coding system version ID (ST)> ^ <original text (ST)>
   end
 
   #Generate HL7 CX (extended composite ID with check digit) data type.
@@ -111,13 +271,34 @@ class TypeAwareFieldGenerator
 		#expiration date (DT)
   end
 
+  # Daily deductible
+  # def DDI(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #
+  #   val=[]
+  #   # < delay days (NM)>
+  #   val=''
+  #   # < amount (NM)>
+  #   val<<NM(map,true)
+  #   # < number of days (NM)>
+  #   val.join(@@HAT)
+  # end
+
+  # Activation date
+  # def DIN(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #   # date	< date (TS)>
+  #   TS(map,true)
+  #   # <institution name (CE)>
+  # end
 
   #Generate HL7 DLD (discharge location) data type. This type consists of the following components=>
   def DLD(map, force=false)
 		#check if the field is optional and randomly generate it of skip
     return if(!autoGenerate?(map,force))
 
-		 #do both or
     val=[]
 		#discharge location (ID)
 		val<<ID(map, true)
@@ -133,15 +314,29 @@ class TypeAwareFieldGenerator
     val=[]
 		# DLN dln = (DLN) map.fld
 		#Driver´s License Number (ST)
-		val << generateLengthBoundId(7) # 7 Numeric, as for some states in real life
+		val << generateLengthBoundId(10) # 10 vs 7 Numeric, as for some states in real life
 		#Issuing State, province, country (IS)
 		#is(['fld'=>dln.getIssuingStateProvinceCountry(), 'required'=>'R','codetable'=>map.codetable])
 		#dln.getIssuingStateProvinceCountry().setValue(allStates.get(Math.abs(random.nextInt()%allStates.size())))
-    val << @yml['address.states'].sample # pick a state
+    # val << @yml['address.states'].sample # pick a state
+    # val << @yml['address.states'].sample # pick a state
+    val << IS({:codetable =>'333'},true) # pick a state
 		#expiration date (DT)
 		val << DT(update(map,:description,'End'),true)
     val.join(@@HAT)
   end
+
+
+  # Delta check
+  # def DLT(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #   # <range (NR)>
+  #   NR(map,true)
+  #   # <numeric threshold (NM)>
+  #   # <change computation (ST)>
+  #   # <length of time-days (NM)>
+  # end
 
   #Generates HL7 DR (date/time range) data type.
   def DR(map, force=false)
@@ -165,6 +360,19 @@ class TypeAwareFieldGenerator
 
   end
 
+  # Day Type and Number
+  # def DTN(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #
+  #   val=[]
+  #   # <day type (IS)>
+  #   val<<IS(map,true)
+  #   # <number of days (NM)>
+  #   val<<NM(map,true)
+  #   val.join(@@HAT)
+  # end
+
   # Generate HL7 EI - entity identifier
   def EI(map, force=false)
     #check if the field is optional and randomly generate it of skip
@@ -182,6 +390,7 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
     #value only
+    #TODO: do we need the random when val is not the table
 		(!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
   end
 
@@ -190,8 +399,9 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
 
-		#String val = (map.codetable != null)? getCodedValue(pp, map)=> Math.abs(random.nextInt() % 200).toString()
-    (!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
+    #TODO: same as ID?
+    ID(map,true)
+    #(!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
 		#((IS) map.fld).setValue(val)
   end
 
@@ -268,32 +478,49 @@ class TypeAwareFieldGenerator
 		val << NM(map,true)
 		#denomination (ID)
 		val << 'USD'
-    return val.join(@@HAT)
+    return val.join(@@SUB)
   end
 
   #Generates an HL7 NM (numeric) data type. A NM contains a single String value.
   def NM(map, force=false)
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
+    val = 0
     # TODO uncomment
-    # case map[:description]
-      # when'Guarantor Household Size','Birth Order'
-      #   generateLengthBoundId(1)
-      # when 'Guarantor Household Annual Income'
-      #   '%.2f' % generateLengthBoundId(5)
-      # else
+    case map[:description]
+      when'Guarantor Household Size','Birth Order'
+        val = generateLengthBoundId(1)
+      when 'Guarantor Household Annual Income'
+        val = '%.2f' % generateLengthBoundId(5)
+      when @@MONEY_FORMAT_REGEX
+        val = '%.2f' % ID({},true)
+      else
         val = ID({},true) # general rule for a number
         if (map[:datatype] == 'CP' || map[:datatype] == 'MO') # money
           val = '%.2f' % val
         end
-    # end
+     end
     # #money
     # if (!Utils.blank?(map[:description]) && @@MONEY_FORMAT_INDICATORS.index{|it| map[:description].include?(it)}) #check for specific numeric for money
-			#  '%.2f' % @@random.rand(@@UP_TO_3_DGTS) #under $1,000
+			# val = '%.2f' % @@random.rand(@@UP_TO_3_DGTS) #under $1,000
     # else #quantity (NM)
-    #    @@random.rand(@@UP_TO_3_DGTS).to_s #under 20
+    #   val =  @@random.rand(@@UP_TO_3_DGTS).to_s #under 20
     # end
+    return val
   end
+
+
+  #Numeric Range
+  # def NR(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #   val=[]
+  #   # Low Value (NM)
+  #   val=NM(map,true)
+  #   # High Value (NM)
+  #   val<<''
+  #   val.join(@@SUB)
+  # end
 
   #Generates an HL7 OCD (occurence) data type.
   #The code and associated date defining a significant event relating to a bill that may affect payer processing
@@ -418,9 +645,9 @@ class TypeAwareFieldGenerator
   def TX(map, force=false)
     #check if the field is optional and randomly generate it of skip
     return if(!autoGenerate?(map,force))
-    @@GENERAL_TEXT
+    # @@GENERAL_TEXT
+    ID(map,true)
   end
-
 
   #Generate an HL7 UVC (Value code and amount) data type.
   def UVC(map, force=false)
@@ -449,8 +676,17 @@ class TypeAwareFieldGenerator
 
 #		internationalization code (CE)
 #		international version ID (CE)
-
   end
+
+  #Channel identifier
+  # def WVI(map, force=true)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #
+  #   # <channel number (NM)>
+  #   NM(map, true)
+  #   # <channel name (ST)>
+  # end
 
   #Generate HL7 XAD (extended address)
   def XAD(map, force=false)
@@ -577,28 +813,6 @@ class TypeAwareFieldGenerator
   # 	private static final MONEY_FORMAT_INDICATORS = ['Balance', 'Charges', 'Adjustments','Income','Amount','Money']
   # 	private static final String RANGE_INDICATOR = '...'
 
-  # #	Code Table, Data Type, Segment, Field,
-  # #	72 – Insurance plan ID,CE,AUT,AUT.2 Authorizing Payor, Company ID
-  # #	72 – Insurance plan ID,CE,IN1,IN1.2 Insurance Plan ID
-  # #	88 – Procedure Code,CE,PR1,PR1.3 Procedure Code
-  # #	132 – Transaction code,CE,CDM,CDM.1 Primary Key Value – CDM
-  # #	132 – Transaction code,CE,FT1,FT1.7 Transaction Code
-  # #	132 – Transaction code,CE,LCC,LCC.4 Charge Code
-  # #	132 – Transaction code,CE,PRC,PRC.1 Primary Key Value – PRC
-  # #	264 – Location department,CE,LCC,LCC.2 Location Department
-  # #	264 – Location department,CE,LDP,LDP.2 Location Department
-  # #	296 – Primary Language,CE,LAN,LAN.2 Language Code
-  # #	361 – Sending/Receiving application,HD,MSH,MSH.3 Sending Application
-  # #	361 – Sending/Receiving application,HD,MSH,MSH.5 Receiving Application
-  # #	362 – Sending/Receiving facility,HD,MSH,MSH.4 Sending Facility
-  # #	362 – Sending/Receiving facility,HD,MSH,MSH.6 Receiving Facility
-  # #	471 – Query Name,CE,QID,QID.2 Message Query Name
-  # #	471 – Query Name,CE,QPD,QPD.1 Message Query Name
-  # #	9999 – For unknown CE data elements,CE,CM2,CM2.2 Scheduled Time Point
-  # #	9999 – For unknown CE data elements,CE,CM2,CM2.4 Events Scheduled This Time Point
-  # #	9999 – For unknown CE data elements,CE,MFA,MFA.5 Primary Key Value – MFA
-  # #	9999 – For unknown CE data elements,CE,OM1,OM1.2 Producer’s Service/Test/Observation ID
-  # #	9999 – For unknown CE data elements,CE,OM1,OM1.5 Producer ID
 
   # Value of coded table returned as as single value
   def getCodedValue(attributes)

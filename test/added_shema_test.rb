@@ -11,7 +11,7 @@ class Sample
   end
 end
 
-class MyTest < MiniTest::Unit::TestCase
+class AddedShemaTest < MiniTest::Unit::TestCase
 
   # Called after every test method runs. Can be used to tear
   # down fixture information.
@@ -38,7 +38,8 @@ class MyTest < MiniTest::Unit::TestCase
     # file = File.expand_path('codes.txt', __FILE__).to_s
     arr = []
 
-    File.readlines('codes.txt').map do |line|
+    # File.readlines('codes.txt').map do |line|
+    File.readlines('codes1.txt').map do |line|
       arr<<line.chomp
       # puts line
     end
@@ -70,6 +71,7 @@ class MyTest < MiniTest::Unit::TestCase
     x.each{|it|
 
     codeTbl = Ox::Element.new('CodeTable')
+
     codeTbl[:name] = it.first[0].delete('Table ')
     # drop 2 first elements: table name and fields [Code, Description]
     it.drop(2).each_with_index { |pair,i |

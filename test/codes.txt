@@ -87,7 +87,23 @@ VIP
 N
 Non VIP
  
- 
+
+Table 113
+Discharged to Location
+Code
+Description
+1
+Location 1
+2
+Location 2
+3
+Location 3
+4
+Location 4
+5
+Location 5
+
+
 Table 115
 Servicing facility
 Code

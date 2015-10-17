@@ -36,7 +36,7 @@ class SegmentPicker
 
   # protected handleSegment(int idx){
   # 	def n = segments.get(idx).getAt(0)
-  # 	//TODO: Check if this is group and undo the group
+  # 	#TODO: Check if this is group and undo the group
   # 	return n
   # }
 
