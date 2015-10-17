@@ -1,0 +1,542 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<Export>
+  <Document name="Codes for coded tables with missing entries">
+    <Category name="2.4">
+      <CodeTable name="10">
+        <Enumerate position="1" value="PH1" description="Surgical"/>
+        <Enumerate position="2" value="PH2" description="Medical"/>
+        <Enumerate position="3" value="PH3" description="Home Nursing Service"/>
+        <Enumerate position="4" value="PH4" description="Psychiatric Contract"/>
+        <Enumerate position="5" value="PH5" description="Psychiatric"/>
+      </CodeTable>
+      <CodeTable name="18">
+        <Enumerate position="1" value="00" description="Surgical"/>
+        <Enumerate position="2" value="10" description="Medical"/>
+        <Enumerate position="3" value="60" description="Home Nursing Service"/>
+        <Enumerate position="4" value="85" description="Psychiatric Contract"/>
+        <Enumerate position="5" value="86" description="Psychiatric"/>
+        <Enumerate position="6" value="95" description="Neurological Contract"/>
+        <Enumerate position="7" value="96" description="Neurological"/>
+      </CodeTable>
+      <CodeTable name="19">
+        <Enumerate position="1" value="1" description="Anesthesia 1"/>
+        <Enumerate position="2" value="2" description="Anesthesia 2"/>
+        <Enumerate position="3" value="3" description="Anesthesia 3"/>
+        <Enumerate position="4" value="4" description="Anesthesia 4"/>
+        <Enumerate position="5" value="5" description="Anesthesia 5"/>
+      </CodeTable>
+      <CodeTable name="21">
+        <Enumerate position="1" value="1" description="Bad debt agency 1"/>
+        <Enumerate position="2" value="2" description="Bad debt agency 2"/>
+        <Enumerate position="3" value="3" description="Bad debt agency 3"/>
+        <Enumerate position="4" value="4" description="Bad debt agency 4"/>
+        <Enumerate position="5" value="5" description="Bad debt agency 5"/>
+      </CodeTable>
+      <CodeTable name="22">
+        <Enumerate position="1" value="1" description="Billing Status 1"/>
+        <Enumerate position="2" value="2" description="Billing Status 2"/>
+        <Enumerate position="3" value="3" description="Billing Status 3"/>
+        <Enumerate position="4" value="4" description="Billing Status 4"/>
+        <Enumerate position="5" value="5" description="Billing Status 5"/>
+      </CodeTable>
+      <CodeTable name="24">
+        <Enumerate position="1" value="A" description="Fee schedule A"/>
+        <Enumerate position="2" value="B" description="Fee schedule B"/>
+        <Enumerate position="3" value="C" description="Fee schedule C"/>
+        <Enumerate position="4" value="D" description="Fee schedule D"/>
+      </CodeTable>
+      <CodeTable name="32">
+        <Enumerate position="1" value="11" description="Charge 1"/>
+        <Enumerate position="2" value="21" description="Charge 2"/>
+        <Enumerate position="3" value="31" description="Charge 3"/>
+        <Enumerate position="4" value="41" description="Charge 4"/>
+        <Enumerate position="5" value="51" description="Charge 5"/>
+      </CodeTable>
+      <CodeTable name="42">
+        <Enumerate position="1" value="12" description="Plan 1"/>
+        <Enumerate position="2" value="22" description="Plan 2"/>
+        <Enumerate position="3" value="32" description="Plan 3"/>
+        <Enumerate position="4" value="42" description="Plan 4"/>
+        <Enumerate position="5" value="52" description="Plan 5"/>
+      </CodeTable>
+      <CodeTable name="45">
+        <Enumerate position="1" value="14" description="Courtesy 1"/>
+        <Enumerate position="2" value="24" description="Courtesy 2"/>
+        <Enumerate position="3" value="34" description="Courtesy 3"/>
+        <Enumerate position="4" value="44" description="Courtesy 4"/>
+        <Enumerate position="5" value="54" description="Courtesy 5"/>
+      </CodeTable>
+      <CodeTable name="46">
+        <Enumerate position="1" value="B" description="Bad"/>
+        <Enumerate position="2" value="F" description="Fair"/>
+        <Enumerate position="3" value="G" description="Good"/>
+        <Enumerate position="4" value="E" description="Excellent"/>
+      </CodeTable>
+      <CodeTable name="49">
+        <Enumerate position="1" value="A" description="Department A"/>
+        <Enumerate position="2" value="B" description="Department B"/>
+        <Enumerate position="3" value="C" description="Department C"/>
+        <Enumerate position="4" value="D" description="Department D"/>
+      </CodeTable>
+      <CodeTable name="50">
+        <Enumerate position="1" value="V89.2XXA" description="Person injured in unspecified motor-vehicle accident, traffic, initial encounter"/>
+        <Enumerate position="2" value="Y92.9" description="Unspecified place or not applicable"/>
+        <Enumerate position="3" value="W74.XXXA" description="Unspecified cause of accidental drowning and submersion, initial encounter"/>
+        <Enumerate position="4" value="W20.8XXA" description="Other cause of strike by thrown, projected or falling object, initial encounter"/>
+      </CodeTable>
+      <CodeTable name="51">
+        <Enumerate position="1" value="E23.0" description="Panhypopituitarism"/>
+        <Enumerate position="2" value="E23.6" description="Other disorders of pituitary gland"/>
+        <Enumerate position="3" value="E23.2" description="Diabetes insipidus"/>
+        <Enumerate position="4" value="E23.3" description="Hypothalamic dysfunction, not elsewhere classified"/>
+        <Enumerate position="5" value="E23.1" description="Drug-induced hypopituitarism"/>
+        <Enumerate position="6" value="E32.8" description="Other diseases of thymus"/>
+        <Enumerate position="7" value="E23.7" description="Disorder of pituitary gland, unspecified"/>
+        <Enumerate position="8" value="E32.1" description="Abscess of thymus"/>
+        <Enumerate position="9" value="E32.9" description="Disease of thymus, unspecified"/>
+      </CodeTable>
+      <CodeTable name="55">
+        <Enumerate position="1" value="001" description="LIVER TRANSPLANT"/>
+        <Enumerate position="2" value="003" description="BONE MARROW TRANSPLANT"/>
+        <Enumerate position="3" value="113" description="INFECTIONS OF UPPER RESPIRATORY TRACT"/>
+        <Enumerate position="4" value="160" description="MAJOR CARDIOTHORACIC REPAIR OF HEART ANOMALY"/>
+        <Enumerate position="5" value="199" description="HYPERTENSION"/>
+        <Enumerate position="6" value="203" description="CHEST PAIN"/>
+        <Enumerate position="7" value="247" description="INTESTINAL OBSTRUCTION"/>
+        <Enumerate position="8" value="283" description="OTHER DISORDERS OF THE LIVER"/>
+        <Enumerate position="9" value="346" description="CONNECTIVE TISSUE DISORDERS"/>
+        <Enumerate position="10" value="381" description="MAJOR SKIN DISORDERS"/>
+        <Enumerate position="11" value="424" description="OTHER ENDOCRINE DISORDERS"/>
+      </CodeTable>
+      <CodeTable name="56">
+        <Enumerate position="1" value="10" description="Review 1"/>
+        <Enumerate position="2" value="20" description="Review 2"/>
+        <Enumerate position="3" value="30" description="Review 3"/>
+        <Enumerate position="4" value="40" description="Review 4"/>
+        <Enumerate position="5" value="50" description="Review 5"/>
+      </CodeTable>
+      <CodeTable name="59">
+        <Enumerate position="1" value="01" description="Informed consent"/>
+        <Enumerate position="2" value="02" description="Waiver of the consent requirement"/>
+        <Enumerate position="3" value="03" description="Health care proxy"/>
+      </CodeTable>
+      <CodeTable name="64">
+        <Enumerate position="1" value="FC1" description="Financial Class 1"/>
+        <Enumerate position="2" value="FC2" description="Financial Class 2"/>
+        <Enumerate position="3" value="FC3" description="Financial Class 3"/>
+        <Enumerate position="4" value="FC4" description="Financial Class 4"/>
+        <Enumerate position="5" value="FC5" description="Financial Class 5"/>
+      </CodeTable>
+      <CodeTable name="68">
+        <Enumerate position="1" value="G1" description="Guarantor Type 1"/>
+        <Enumerate position="2" value="G2" description="Guarantor Type 2"/>
+        <Enumerate position="3" value="G3" description="Guarantor Type 3"/>
+        <Enumerate position="4" value="G4" description="Guarantor Type 4"/>
+        <Enumerate position="5" value="G5" description="Guarantor Type 5"/>
+      </CodeTable>
+      <CodeTable name="72">
+        <Enumerate position="1" value="1234 5678A" description="Insurance Plan A"/>
+        <Enumerate position="2" value="2345 6789B" description="Insurance Plan B"/>
+        <Enumerate position="3" value="3456 7890C" description="Insurance Plan C"/>
+        <Enumerate position="4" value="4567 8901D" description="Insurance Plan D"/>
+      </CodeTable>
+      <CodeTable name="73">
+        <Enumerate position="1" value="31" description="Interest rate code 1"/>
+        <Enumerate position="2" value="32" description="Interest rate code 2"/>
+        <Enumerate position="3" value="33" description="Interest rate code 3"/>
+        <Enumerate position="4" value="34" description="Interest rate code 4"/>
+        <Enumerate position="5" value="35" description="Interest rate code 5"/>
+      </CodeTable>
+      <CodeTable name="84">
+        <Enumerate position="1" value="A" description="Group A"/>
+        <Enumerate position="2" value="B" description="Group B"/>
+        <Enumerate position="3" value="C" description="Group C"/>
+        <Enumerate position="4" value="D" description="Group D"/>
+        <Enumerate position="5" value="E" description="Group E"/>
+      </CodeTable>
+      <CodeTable name="86">
+        <Enumerate position="1" value="234" description="Plan 1"/>
+        <Enumerate position="2" value="345" description="Plan 2"/>
+        <Enumerate position="3" value="456" description="Plan 3"/>
+        <Enumerate position="4" value="567" description="Plan 4"/>
+        <Enumerate position="5" value="678" description="Plan 5"/>
+      </CodeTable>
+      <CodeTable name="87">
+        <Enumerate position="1" value="Y" description="Yes"/>
+        <Enumerate position="2" value="N" description="No"/>
+      </CodeTable>
+      <CodeTable name="88">
+        <Enumerate position="1" value="00W000Z" description="Revision of Drainage Device in Brain, Open Approach"/>
+        <Enumerate position="2" value="02110Z3" description="Bypass Coronary Artery, Two Sites from Coronary Artery, Open Approach"/>
+        <Enumerate position="3" value="05500ZZ" description="Destruction of Azygos Vein, Open Approach"/>
+        <Enumerate position="4" value="4A0004Z" description="Measurement of Central Nervous Electrical Activity, Open Approach"/>
+        <Enumerate position="5" value="4A0204Z" description="Measurement of Cardiac Electrical Activity, Open Approach"/>
+        <Enumerate position="6" value="4A060BZ" description="Measurement of Lymphatic Pressure, Open Approach"/>
+        <Enumerate position="7" value="5A02110" description="Assistance with Cardiac Output using Balloon Pump, Intermittent"/>
+        <Enumerate position="8" value="6A150ZZ" description="Decompression, Circulatory, Single"/>
+        <Enumerate position="9" value="6A750Z4" description="Ultrasound Therapy of Head and Neck Vessels, Single"/>
+        <Enumerate position="10" value="6A800ZZ" description="Ultraviolet Light Therapy of Skin, Single"/>
+      </CodeTable>
+      <CodeTable name="99">
+        <Enumerate position="1" value="Y" description="VIP"/>
+        <Enumerate position="2" value="N" description="Non VIP"/>
+      </CodeTable>
+      <CodeTable name="110">
+        <Enumerate position="1" value="Y" description="Yes, transfer to bad debt"/>
+        <Enumerate position="2" value="N" description="No, do not transfer to bad debt"/>
+      </CodeTable>
+      <CodeTable name="111">
+        <Enumerate position="1" value="1" description="Code 1"/>
+        <Enumerate position="2" value="2" description="Code 2"/>
+        <Enumerate position="3" value="3" description="Code 3"/>
+        <Enumerate position="4" value="4" description="Code 4"/>
+        <Enumerate position="5" value="5" description="Code 5"/>
+      </CodeTable>
+      <CodeTable name="114">
+        <Enumerate position="1" value="100" description="Tube feeding"/>
+        <Enumerate position="2" value="110" description="Clear liquid diet"/>
+        <Enumerate position="3" value="120" description="Full liquid diet"/>
+        <Enumerate position="4" value="200" description="Diabetic or calorie controlled diet"/>
+        <Enumerate position="5" value="300" description="No Added Salt diet"/>
+        <Enumerate position="6" value="400" description="High fiber diet"/>
+      </CodeTable>
+      <CodeTable name="115">
+        <Enumerate position="1" value="27" description="LOUISVILLE-RO"/>
+        <Enumerate position="2" value="58" description="MANILA-RO"/>
+        <Enumerate position="3" value="12" description="TOGUS VAMROC"/>
+        <Enumerate position="4" value="45" description="WHITE RIVER JCT VAMROC"/>
+        <Enumerate position="5" value="36" description="MONTANA HCS"/>
+        <Enumerate position="6" value="37" description="FARGO VAMROC"/>
+        <Enumerate position="7" value="38" description="SIOUX FALLS VAMROC"/>
+        <Enumerate position="8" value="52" description="WICHITA-RO"/>
+      </CodeTable>
+      <CodeTable name="117">
+        <Enumerate position="1" value="12" description="Account status 1"/>
+        <Enumerate position="2" value="23" description="Account status 2"/>
+        <Enumerate position="3" value="34" description="Account status 3"/>
+        <Enumerate position="4" value="45" description="Account status 4"/>
+        <Enumerate position="5" value="56" description="Account status 5"/>
+      </CodeTable>
+      <CodeTable name="129">
+        <Enumerate position="1" value="1" description="ALLERGY"/>
+        <Enumerate position="2" value="10" description="NEUROLOGY"/>
+        <Enumerate position="3" value="2" description="CARDIOLOGY"/>
+        <Enumerate position="4" value="20" description="REHABILITATION MEDICINE"/>
+        <Enumerate position="5" value="24" description="MEDICAL OBSERVATION"/>
+        <Enumerate position="6" value="25" description="PSYCH RESID REHAB TRMT PROG"/>
+        <Enumerate position="7" value="40" description="INTERMEDIATE MEDICINE"/>
+        <Enumerate position="8" value="50" description="GENERAL SURGERY"/>
+      </CodeTable>
+      <CodeTable name="132">
+        <Enumerate position="1" value="1" description="Payment"/>
+        <Enumerate position="2" value="2" description="Credit"/>
+        <Enumerate position="3" value="3" description="Adjustment"/>
+      </CodeTable>
+      <CodeTable name="139">
+        <Enumerate position="1" value="1" description="Employer 1"/>
+        <Enumerate position="2" value="3" description="Employer 2"/>
+        <Enumerate position="3" value="5" description="Employer 3"/>
+        <Enumerate position="4" value="7" description="Employer 4"/>
+        <Enumerate position="5" value="9" description="Employer 5"/>
+      </CodeTable>
+      <CodeTable name="143">
+        <Enumerate position="1" value="99201" description="Code 1"/>
+        <Enumerate position="2" value="99202" description="Code 2"/>
+        <Enumerate position="3" value="99203" description="Code 3"/>
+        <Enumerate position="4" value="99204" description="Code 4"/>
+        <Enumerate position="5" value="99205" description="Code 5"/>
+      </CodeTable>
+      <CodeTable name="151">
+        <Enumerate position="1" value="P" description="Second opinion requested by patient"/>
+        <Enumerate position="2" value="M" description="Second opinion requested by doctor"/>
+        <Enumerate position="3" value="S" description="Second opinion consultation scheduled"/>
+      </CodeTable>
+      <CodeTable name="152">
+        <Enumerate position="1" value="Y" description="Documentation received"/>
+        <Enumerate position="2" value="N" description="Documentation not received"/>
+      </CodeTable>
+      <CodeTable name="171">
+        <Enumerate position="1" value="USA" description="United States"/>
+      </CodeTable>
+      <CodeTable name="172">
+        <Enumerate position="1" value="Y" description="Veteran"/>
+        <Enumerate position="2" value="N" description="Non Veteran"/>
+      </CodeTable>
+      <CodeTable name="188">
+        <Enumerate position="1" value="OP1" description="Operator A"/>
+        <Enumerate position="2" value="OP2" description="Operator B"/>
+        <Enumerate position="3" value="OP3" description="Operator C"/>
+        <Enumerate position="4" value="OP4" description="Operator D"/>
+        <Enumerate position="5" value="OP5" description="Operator E"/>
+      </CodeTable>
+      <CodeTable name="212">
+        <Enumerate position="1" value="DEU" description="Germany"/>
+        <Enumerate position="2" value="ESP" description="Spain"/>
+        <Enumerate position="3" value="FRA" description="France"/>
+        <Enumerate position="4" value="GBR" description="United Kingdom"/>
+        <Enumerate position="5" value="ITA" description="Italy"/>
+        <Enumerate position="6" value="USA" description="United States"/>
+      </CodeTable>
+      <CodeTable name="218">
+        <Enumerate position="1" value="1" description="Deductible Amount"/>
+        <Enumerate position="2" value="2" description="Coinsurance Amount"/>
+        <Enumerate position="3" value="3" description="Co-payment Amount"/>
+        <Enumerate position="4" value="9" description="Diagnosis inconsistent with patient&apos;s age"/>
+        <Enumerate position="5" value="10" description="Diagnosis inconsistent with patient&apos;s gender"/>
+        <Enumerate position="6" value="11" description="Diagnosis inconsistent with procedure"/>
+      </CodeTable>
+      <CodeTable name="219">
+        <Enumerate position="1" value="1" description="Service 1"/>
+        <Enumerate position="2" value="2" description="Service 2"/>
+        <Enumerate position="3" value="3" description="Service 3"/>
+        <Enumerate position="4" value="4" description="Service 4"/>
+        <Enumerate position="5" value="5" description="Service 5"/>
+      </CodeTable>
+      <CodeTable name="222">
+        <Enumerate position="1" value="10" description="Contact reason 1"/>
+        <Enumerate position="2" value="20" description="Contact reason 2"/>
+        <Enumerate position="3" value="30" description="Contact reason 3"/>
+        <Enumerate position="4" value="40" description="Contact reason 4"/>
+        <Enumerate position="5" value="50" description="Contact reason 5"/>
+      </CodeTable>
+      <CodeTable name="233">
+        <Enumerate position="1" value="725" description="Not medically necessary"/>
+        <Enumerate position="2" value="726" description="Experimental"/>
+        <Enumerate position="3" value="728" description="Out of network"/>
+        <Enumerate position="4" value="727" description="Policy cancelled for lack of payment"/>
+        <Enumerate position="5" value="721" description="Health care setting"/>
+      </CodeTable>
+      <CodeTable name="264">
+        <Enumerate position="1" value="LD1" description="Location Dep 1"/>
+        <Enumerate position="2" value="LD2" description="Location Dep 2"/>
+        <Enumerate position="3" value="LD3" description="Location Dep 3"/>
+        <Enumerate position="4" value="LD4" description="Location Dep 4"/>
+        <Enumerate position="5" value="LD5" description="Location Dep 5"/>
+      </CodeTable>
+      <CodeTable name="285">
+        <Enumerate position="1" value="1111" description="Insurance Company 1"/>
+        <Enumerate position="2" value="2222" description="Insurance Company 2"/>
+        <Enumerate position="3" value="3333" description="Insurance Company 3"/>
+        <Enumerate position="4" value="4444" description="Insurance Company 4"/>
+        <Enumerate position="5" value="5555" description="Insurance Company 5"/>
+      </CodeTable>
+      <CodeTable name="295">
+        <Enumerate position="1" value="Y" description="Yes"/>
+        <Enumerate position="2" value="N" description="No"/>
+      </CodeTable>
+      <CodeTable name="296">
+        <Enumerate position="1" value="EN  " description="English"/>
+        <Enumerate position="2" value="FR" description="French"/>
+        <Enumerate position="3" value="ES" description="Spanish"/>
+        <Enumerate position="4" value="DE" description="German"/>
+        <Enumerate position="5" value="IT" description="Italian"/>
+      </CodeTable>
+      <CodeTable name="300">
+        <Enumerate position="1" value="101" description="Namespace ID 1"/>
+        <Enumerate position="2" value="202" description="Namespace ID 2"/>
+        <Enumerate position="3" value="303" description="Namespace ID 3"/>
+        <Enumerate position="4" value="404" description="Namespace ID 4"/>
+        <Enumerate position="5" value="505" description="Namespace ID 5"/>
+        <Enumerate position="6" value="606" description="Namespace ID 6"/>
+        <Enumerate position="7" value="707" description="Namespace ID 7"/>
+        <Enumerate position="8" value="808" description="Namespace ID 8"/>
+        <Enumerate position="9" value="909" description="Namespace ID 9"/>
+      </CodeTable>
+      <CodeTable name="302">
+        <Enumerate position="1" value="PC1" description="Point of Care 1"/>
+        <Enumerate position="2" value="PC2" description="Point of Care 2"/>
+        <Enumerate position="3" value="PC3" description="Point of Care 3"/>
+        <Enumerate position="4" value="PC4" description="Point of Care 4"/>
+        <Enumerate position="5" value="PC5" description="Point of Care 5"/>
+      </CodeTable>
+      <CodeTable name="303">
+        <Enumerate position="1" value="RA" description="Room A"/>
+        <Enumerate position="2" value="RB" description="Room B"/>
+        <Enumerate position="3" value="RC" description="Room C"/>
+        <Enumerate position="4" value="RD" description="Room D"/>
+        <Enumerate position="5" value="RE" description="Room E"/>
+      </CodeTable>
+      <CodeTable name="304">
+        <Enumerate position="1" value="B1" description="Bed 1"/>
+        <Enumerate position="2" value="B2" description="Bed 2"/>
+        <Enumerate position="3" value="B3" description="Bed 3"/>
+        <Enumerate position="4" value="B4" description="Bed 4"/>
+        <Enumerate position="5" value="B5" description="Bed 5"/>
+      </CodeTable>
+      <CodeTable name="307">
+        <Enumerate position="1" value="BLD1" description="Building 1"/>
+        <Enumerate position="2" value="BLD2" description="Building 2"/>
+        <Enumerate position="3" value="BLD3" description="Building 3"/>
+        <Enumerate position="4" value="BLD4" description="Building 4"/>
+        <Enumerate position="5" value="BLD5" description="Building 5"/>
+      </CodeTable>
+      <CodeTable name="312">
+        <Enumerate position="1" value="11" description="Policy Scope 1"/>
+        <Enumerate position="2" value="12" description="Policy Scope 2"/>
+        <Enumerate position="3" value="13" description="Policy Scope 3"/>
+        <Enumerate position="4" value="14" description="Policy Scope 4"/>
+        <Enumerate position="5" value="15" description="Policy Scope 5"/>
+      </CodeTable>
+      <CodeTable name="313">
+        <Enumerate position="1" value="21" description="Policy Source 1"/>
+        <Enumerate position="2" value="22" description="Policy Source 2"/>
+        <Enumerate position="3" value="23" description="Policy Source 3"/>
+        <Enumerate position="4" value="24" description="Policy Source 4"/>
+        <Enumerate position="5" value="25" description="Policy Source 5"/>
+      </CodeTable>
+      <CodeTable name="319">
+        <Enumerate position="1" value="1" description="Cost Center 1"/>
+        <Enumerate position="2" value="2" description="Cost Center 2"/>
+        <Enumerate position="3" value="3" description="Cost Center 3"/>
+        <Enumerate position="4" value="4" description="Cost Center 4"/>
+        <Enumerate position="5" value="5" description="Cost Center 5"/>
+      </CodeTable>
+      <CodeTable name="320">
+        <Enumerate position="1" value="1010" description="Account Code 1"/>
+        <Enumerate position="2" value="2020" description="Account Code 2"/>
+        <Enumerate position="3" value="3030" description="Account Code 3"/>
+        <Enumerate position="4" value="4040" description="Account Code 4"/>
+        <Enumerate position="5" value="5050" description="Account Code 5"/>
+      </CodeTable>
+      <CodeTable name="327">
+        <Enumerate position="1" value="13-2011" description="Accountant"/>
+        <Enumerate position="2" value="15-1132" description="Application Developer"/>
+        <Enumerate position="3" value="23-1011" description="Attorney"/>
+        <Enumerate position="4" value="29-1020" description="Dentist"/>
+        <Enumerate position="5" value="29-1170" description="Nurse Practitioner"/>
+        <Enumerate position="6" value="29-2041" description="Paramedic"/>
+        <Enumerate position="7" value="29-1050" description="Pharmacist"/>
+        <Enumerate position="8" value="29-1060" description="Physician"/>
+      </CodeTable>
+      <CodeTable name="333">
+        <Enumerate position="1" value="AK" description="Alaska"/>
+        <Enumerate position="2" value="CO" description="Colorado"/>
+        <Enumerate position="3" value="FL" description="Florida"/>
+        <Enumerate position="4" value="KS" description="Kansas"/>
+        <Enumerate position="5" value="MD" description="Maryland"/>
+      </CodeTable>
+      <CodeTable name="340">
+        <Enumerate position="1" value="57" description="Decision for surgery"/>
+        <Enumerate position="2" value="23" description="Unusual Anesthesia"/>
+        <Enumerate position="3" value="50" description="Bilateral Procedure"/>
+        <Enumerate position="4" value="33" description="Preventive Service"/>
+        <Enumerate position="5" value="51" description="Multiple Procedures"/>
+        <Enumerate position="6" value="52" description="Reduced Services"/>
+      </CodeTable>
+      <CodeTable name="341">
+        <Enumerate position="1" value="B" description="Bad"/>
+        <Enumerate position="2" value="F" description="Fair"/>
+        <Enumerate position="3" value="G" description="Good"/>
+        <Enumerate position="4" value="E" description="Excellent"/>
+      </CodeTable>
+      <CodeTable name="342">
+        <Enumerate position="1" value="Y" description="Dependent"/>
+        <Enumerate position="2" value="N" description="Non Dependent"/>
+      </CodeTable>
+      <CodeTable name="343">
+        <Enumerate position="1" value="7118" description="Angioneurotic edema"/>
+        <Enumerate position="2" value="7005" description="Arteriosclerotic heart disease"/>
+        <Enumerate position="3" value="9433" description="Persistent depressive disorder"/>
+        <Enumerate position="4" value="6205" description="Endolymphatic hydrops"/>
+        <Enumerate position="5" value="5003" description="Hypertrophic arthritis"/>
+      </CodeTable>
+      <CodeTable name="345">
+        <Enumerate position="1" value="51" description="Medically necessary"/>
+        <Enumerate position="2" value="52" description="Procedure is covered"/>
+        <Enumerate position="3" value="53" description="Unreasonably long wait for in-network provider"/>
+        <Enumerate position="4" value="54" description="In-home care"/>
+        <Enumerate position="5" value="55" description="Nonpayment error"/>
+      </CodeTable>
+      <CodeTable name="346">
+        <Enumerate position="1" value="ADPH" description="Alabama Department  of Public Health"/>
+        <Enumerate position="2" value="AZDHS" description="Arizona Department of Health Services"/>
+        <Enumerate position="3" value="CDPH" description="California Department of Public Health"/>
+        <Enumerate position="4" value="AHCA" description="Agency for Health Care Administration"/>
+        <Enumerate position="5" value="DADS" description="TX Dept of Aging &amp; Disability Services"/>
+      </CodeTable>
+      <CodeTable name="361">
+        <Enumerate position="1" value="101" description="Application A"/>
+        <Enumerate position="2" value="202" description="Application B"/>
+        <Enumerate position="3" value="303" description="Application C"/>
+        <Enumerate position="4" value="404" description="Application D"/>
+      </CodeTable>
+      <CodeTable name="362">
+        <Enumerate position="1" value="505" description="Facility A"/>
+        <Enumerate position="2" value="606" description="Facility B"/>
+        <Enumerate position="3" value="707" description="Facility C"/>
+        <Enumerate position="4" value="808" description="Facility D"/>
+        <Enumerate position="5" value="909" description="Facility E"/>
+      </CodeTable>
+      <CodeTable name="378">
+        <Enumerate position="1" value="R01" description="One position carrier"/>
+        <Enumerate position="2" value="R02" description="Two position carrier"/>
+        <Enumerate position="3" value="R03" description="Three position carrier"/>
+        <Enumerate position="4" value="R04" description="Four position carrier"/>
+        <Enumerate position="5" value="R05" description="Five position carrier"/>
+      </CodeTable>
+      <CodeTable name="379">
+        <Enumerate position="1" value="T01" description="One position tray"/>
+        <Enumerate position="2" value="T02" description="Two position tray"/>
+        <Enumerate position="3" value="T03" description="Three position tray"/>
+        <Enumerate position="4" value="T04" description="Four position tray"/>
+        <Enumerate position="5" value="T05" description="Five position tray"/>
+      </CodeTable>
+      <CodeTable name="380">
+        <Enumerate position="1" value="NO" description="No Separator"/>
+        <Enumerate position="2" value="GEL" description="Gel Separator"/>
+        <Enumerate position="3" value="M01" description="Manufacturer Specific Separator"/>
+      </CodeTable>
+      <CodeTable name="381">
+        <Enumerate position="1" value="SCR" description="Screw Cap"/>
+        <Enumerate position="2" value="PSH" description="Push Cap"/>
+        <Enumerate position="3" value="FOIL" description="Foil"/>
+      </CodeTable>
+      <CodeTable name="382">
+        <Enumerate position="1" value="PHCL" description="Pharmacological"/>
+        <Enumerate position="2" value="CHML" description="Chemical"/>
+      </CodeTable>
+      <CodeTable name="385">
+        <Enumerate position="1" value="851" description="Manufacturer A"/>
+        <Enumerate position="2" value="852" description="Manufacturer B"/>
+        <Enumerate position="3" value="853" description="Manufacturer C"/>
+        <Enumerate position="4" value="854" description="Manufacturer D"/>
+        <Enumerate position="5" value="855" description="Manufacturer E"/>
+      </CodeTable>
+      <CodeTable name="386">
+        <Enumerate position="1" value="951" description="Supplier A"/>
+        <Enumerate position="2" value="952" description="Supplier B"/>
+        <Enumerate position="3" value="953" description="Supplier C"/>
+        <Enumerate position="4" value="954" description="Supplier D"/>
+        <Enumerate position="5" value="955" description="Supplier E"/>
+      </CodeTable>
+      <CodeTable name="449">
+        <Enumerate position="1" value="10" description="Conformance statement 1"/>
+        <Enumerate position="2" value="20" description="Conformance statement 2"/>
+        <Enumerate position="3" value="30" description="Conformance statement 3"/>
+        <Enumerate position="4" value="40" description="Conformance statement 4"/>
+        <Enumerate position="5" value="50" description="Conformance statement 5"/>
+      </CodeTable>
+      <CodeTable name="461">
+        <Enumerate position="1" value="LN1" description="License  1"/>
+        <Enumerate position="2" value="LN2" description="License  2"/>
+        <Enumerate position="3" value="LN3" description="License  3"/>
+        <Enumerate position="4" value="LN4" description="License  4"/>
+        <Enumerate position="5" value="LN5" description="License  5"/>
+      </CodeTable>
+      <CodeTable name="462">
+        <Enumerate position="1" value="LCC1" description="Cost Center 1"/>
+        <Enumerate position="2" value="LCC2" description="Cost Center 2"/>
+        <Enumerate position="3" value="LCC3" description="Cost Center 3"/>
+        <Enumerate position="4" value="LCC4" description="Cost Center 4"/>
+        <Enumerate position="5" value="LCC5" description="Cost Center 5"/>
+      </CodeTable>
+      <CodeTable name="463">
+        <Enumerate position="1" value="INV1" description="Item 1"/>
+        <Enumerate position="2" value="INV2" description="Item 2"/>
+        <Enumerate position="3" value="INV3" description="Item 3"/>
+        <Enumerate position="4" value="INV4" description="Item 4"/>
+        <Enumerate position="5" value="INV5" description="Item 5"/>
+      </CodeTable>
+    </Category>
+  </Document>
+</Export>
