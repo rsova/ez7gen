@@ -385,25 +385,54 @@ class TypeAwareFieldGenerator
     # universal ID type (ID)
   end
 
-  # Generate HL7 ID, usually using value from code table
-  def ID(map, force=false)
-		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
-    #value only
-    #TODO: do we need the random when val is not the table
-		(!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
+  # Encapsulated data
+  def ED(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+    # <source application (HD) >
+    HD(map, true)
+    # <type of data (ID)>
+    # <data subtype (ID)>
+    # <encoding (ID)>
+    # <data (ST)>
   end
 
-  #Generates HL7 IS (namespace id) data type
-  def IS(map, force=false)
-		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+  # Entity identifier
+  # def EI(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #   # <entity identifier (ST)>
+  #   ST(map,true)
+  #   # <namespace ID (IS)>
+  #   # <universal ID (ST)>
+  #   # < universal ID type (ID)>
+  # end
 
-    #TODO: same as ID?
-    ID(map,true)
-    #(!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
-		#((IS) map.fld).setValue(val)
-  end
+  # Parent order
+  # def EIP(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #
+  #   # <parent’s placer order number (EI)>
+  #   EI(map,true)
+  #   # <parent’s filler order number (EI)>
+  # end
+
+  # Error segment
+  # def ELD(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #   val = []
+  #   # <segment ID (ST)>
+  #   val<<''
+  #   # <sequence (NM)>
+  #   val<<''
+  #   # <field position (NM)>
+  #   val<<''
+  #   # <code identifying error (CE)>
+  #   val<<CE(map,true)
+  #   val.join(@@HAT)
+  # end
 
   #Generates HL7 FC (financial class) data type.
   def FC(map, force=false)
@@ -423,7 +452,6 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
 
-
 		#surname (ST)
     @yml['person.names.last'].sample
 		#own surname prefix (ST)
@@ -431,6 +459,16 @@ class TypeAwareFieldGenerator
 		#surname prefix from partner/spouse (ST)
 		#surname from partner/spouse (ST)
   end
+
+  # Formatted text data.
+  # The FT field is of arbitrary length (up to 64k) and may contain formatting commands enclosed in escape characters.
+  # def FT(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #
+  #   ID(map, true)
+  # end
+
 
   #Generates HL7 HD (hierarchic designator) data type
   def HD(map, force=false)
@@ -442,6 +480,28 @@ class TypeAwareFieldGenerator
 		#universal ID (ST)
 		#universal ID type (ID)
   end
+
+
+  # Generate HL7 ID, usually using value from code table
+  def ID(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+    #value only
+    #TODO: do we need the random when val is not the table
+    (!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
+  end
+
+  #Generates HL7 IS (namespace id) data type
+  def IS(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+
+    #TODO: same as ID?
+    ID(map,true)
+    #(!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
+    #((IS) map.fld).setValue(val)
+  end
+
 
   #Generates HL7 JCC (job code/class) data type.
   def JCC(map, force=false)
@@ -458,14 +518,35 @@ class TypeAwareFieldGenerator
     val.join(@@HAT)
   end
 
+  # Location with address information (variant 1)
+  def xx(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+
+    # <point of care (IS)>
+    # <room (IS) >
+    # <bed (IS)>
+    # <facility (HD) >
+    # <location status (IS)
+    # <patient location type (IS)>
+    # <building (IS)>
+    # <floor (IS)>
+    # <address(AD)>
+  end
+
+  # def xx(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #
+  # end
+
   #Generates HL7 MSG (Message Type) data type.
   def MSH(map, force=false)
-# 		#message type (ID)
-# 		#trigger event (ID)
-# 		#message structure (ID)
+    #Message type set while initializing MSH segment, do nothing.
 
-# 		#Message type set while initializing MSH segment, do nothing.
-# 		return
+    #message type (ID)
+    #trigger event (ID)
+    #message structure (ID)
   end
 
   #Generates an HL7 MO (money) data type.

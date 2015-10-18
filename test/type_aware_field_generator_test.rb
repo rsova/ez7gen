@@ -73,6 +73,13 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
     puts fld
 	end
 
+  def test_ELD
+    line ='[max_length:250, symbol:+, description:Mockup, datatype:ELD, required:R, piece:3]'
+    fld = @fldGenerator.ELD(lineToHash(line))
+		# assert /^[-+]?[1-9]([0-9]*)?$/.match(fld) # is a number
+    puts fld
+	end
+
 	def test_ID
 		line ='[max_length:1, description:Separate Bill, ifrepeating:0, datatype:ID, required:R, piece:9, codetable:136]'
 		fld = @fldGenerator.ID(lineToHash(line))
