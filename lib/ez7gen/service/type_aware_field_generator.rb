@@ -519,20 +519,28 @@ class TypeAwareFieldGenerator
   end
 
   # Location with address information (variant 1)
-  def xx(map, force=false)
-    #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
-
-    # <point of care (IS)>
-    # <room (IS) >
-    # <bed (IS)>
-    # <facility (HD) >
-    # <location status (IS)
-    # <patient location type (IS)>
-    # <building (IS)>
-    # <floor (IS)>
-    # <address(AD)>
-  end
+  # def LA1(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #   val =[]
+  #   # <point of care (IS)>
+  #   val<<IS(map,true)
+  #   # <room (IS) >
+  #   val<<IS(map,true)
+  #   # <bed (IS)>
+  #   val<<IS(map, true)
+  #   # <facility (HD) >
+  #   val<<HD(map,true)
+  #   # <location status (IS)
+  #   val<<''
+  #   # <patient location type (IS)>
+  #   val<<''
+  #   # <building (IS)>
+  #   IS(map,true)
+  #   # <floor (IS)>
+  #   # <address(AD)>
+  #   val.join(@@HAT)
+  # end
 
   # def xx(map, force=false)
   #   #check if the field is optional and randomly generate it of skip
