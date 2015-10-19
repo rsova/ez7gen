@@ -30,6 +30,13 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		#puts fld
 	end
 
+	def test_CNN
+		line = '[required:R, piece:8]'
+		row= lineToHash(line)
+		fld = @fldGenerator.CNN(row)
+		puts fld
+	end
+
 	def test_segment_CE_codetable
 	 attrs = []
 	 line = '[max_length:250, symbol:*, description:Race, ifrepeating:1, datatype:CE, required:R, piece:10, codetable:5]'
@@ -169,6 +176,34 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		puts fld
 	end
 
+	def test_LA1
+		line ='[required:R, piece:1]'
+		fld = @fldGenerator.LA1(lineToHash(line))
+		assert fld.include?('^')
+		puts fld
+	end
+
+	def test_LA2
+		line ='[required:R, piece:1]'
+		fld = @fldGenerator.LA2(lineToHash(line))
+		assert fld.include?('^')
+		puts fld
+	end
+
+	def test_MOP
+		line ='[required:R, piece:1]'
+		fld = @fldGenerator.MOP(lineToHash(line))
+		assert fld.include?('^')
+		puts fld
+  end
+
+	def test_MSG
+		line ='[required:R, piece:1]'
+		fld = @fldGenerator.MSG(lineToHash(line))
+		assert fld.include?('^')
+		puts fld
+	end
+
 	def test_OCD
 		line ='[required:R, piece:20]'
 		fld = @fldGenerator.OCD(lineToHash(line))
@@ -181,14 +216,20 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		fld = @fldGenerator.OSP(lineToHash(line))
 		assert fld.include?('^')
 		puts fld
+  end
+
+	def test_PI
+		line ='[required:R, piece:20]'
+		fld = @fldGenerator.PI(lineToHash(line))
+		puts fld
 	end
 
 	def test_PL
 		line ='[max_length:80, description:Assigned Patient Location, ifrepeating:0, datatype:PL, required:O, piece:3]'
 		fld = @fldGenerator.PL(lineToHash(line), true)
 		assert fld.include?('^')
-		assert_equal 4, fld.split('^').size
-		puts fld
+    puts fld
+    assert_equal 7, fld.split('^').size
 	end
 
 	def test_PT
@@ -202,6 +243,11 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 			line ='[max_length:4, symbol:!, description:Set ID - DG1, ifrepeating:0, datatype:SI, required:R, piece:1]'
 			fld = @fldGenerator.SI(lineToHash(line), true)
 			assert_equal 4, fld.size
+			puts fld
+	end
+
+	def test_ST
+			fld = @fldGenerator.ST({}, true)
 			puts fld
 	end
 

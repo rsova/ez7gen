@@ -8,7 +8,7 @@ class TypeAwareFieldGenerator
   @@HAT = '^' # Component separator, aka hat
   @@SUB ='&' # Subcomponent separator
   # @@MONEY_FORMAT_INDICATORS = ['Money', 'Balance', 'Charge', 'Adjustment', 'Income', 'Amount', 'Payment','Cost']
-  @@MONEY_FORMAT_REGEX = /\bMoney\b|\bBalance\b|\bCharge|\bAdjustment\b|\bIncome\b|\bAmount\b|\bPayment\b|\bCost\b/
+  @@MONEY_FORMAT_REGEX = /\bMoney\b|\bBalance\b|\bCharge|\bAdjustment\b|\bIncome\b|\bAmount\b|\bPayment\b|\bCost\b|\bPercentage\b/
   @@INITIALS = ('A'..'Z').to_a
   @@GENERAL_TEXT = 'Notes'
 
@@ -186,26 +186,28 @@ class TypeAwareFieldGenerator
   end
 
   # Composite ID number and name (special DT for NDL)
-  # def CNN(map, force=false)
-  #   #check if the field is optional and randomly generate it of skip
-  #   return if(!autoGenerate?(map, force))
-  #
-  #   val=[]
-  #   # ID number (ST) (ST)
-  #   val << ID(map, true)
-  #   # family name (FN), used for ST
-  #   val << FN(map, true)
-  #   # given name (ST)
-  #   val << @yml['person.names.first'].sample
-  #   # second and further given names or initials thereof (ST)
-  #   val << @@INITIALS.to_a.sample
-  #   # < suffix (e.g., JR or III) (ST)> ^ < prefix (e.g., DR) (ST)>
-  #   # < degree (e.g., MD) (IS)> ^ < source table (IS)>
-  #   # < assigning authority namespace ID (IS)>
-  #   # < assigning authority universal ID (ST)>
-  #   # < assigning authority universal ID type (ID)>
-  #    val.join(@@HAT)
-  # end
+  def CNN(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map, force))
+
+    # ID number (ST) (ST)
+
+    # val << ID(map, true)
+    # family name (FN), used for ST
+    # val << FN(map, true)
+    # given name (ST)
+    # val << @yml['person.names.first'].sample
+    # second and further given names or initials thereof (ST)
+    # val << @@INITIALS.to_a.sample
+    # < suffix (e.g., JR or III) (ST)> ^ < prefix (e.g., DR) (ST)>
+    # < degree (e.g., MD) (IS)> ^ < source table (IS)>
+    PN(map, true)
+
+    # < assigning authority namespace ID (IS)>
+    # < assigning authority universal ID (ST)>
+    # < assigning authority universal ID type (ID)>
+    #  val.join(@@SUB)
+  end
 
   def CP(map, force=false)
 		#check if the field is optional and randomly generate it of skip
@@ -526,9 +528,9 @@ class TypeAwareFieldGenerator
   #   # <point of care (IS)>
   #   val<<IS(map,true)
   #   # <room (IS) >
-  #   val<<IS(map,true)
+  #   val<<IS({:codetable =>'303'},true)
   #   # <bed (IS)>
-  #   val<<IS(map, true)
+  #   val<<IS({:codetable =>'304'},true)
   #   # <facility (HD) >
   #   val<<HD(map,true)
   #   # <location status (IS)
@@ -536,26 +538,58 @@ class TypeAwareFieldGenerator
   #   # <patient location type (IS)>
   #   val<<''
   #   # <building (IS)>
-  #   IS(map,true)
+  #   val<<IS({:codetable =>'307'},true)
   #   # <floor (IS)>
   #   # <address(AD)>
   #   val.join(@@HAT)
   # end
 
-  # def xx(map, force=false)
+  # Location with address information (variant 2)
+  # def LA2(map, force=false)
   #   #check if the field is optional and randomly generate it of skip
   #   return if(!autoGenerate?(map,force))
   #
+  #   val =[]
+  #   # <point of care (IS)>
+  #   val<<IS(map,true)
+  #   # <room (IS)
+  #   val<<IS({:codetable =>'303'},true)
+  #   # <bed (IS)>
+  #   val<<IS({:codetable =>'304'},true)
+  #   # <facility (HD) >
+  #   val<<HD(map,true)
+  #   # <location status (IS)
+  #   val<<''
+  #   # <patient location type (IS)>
+  #   val<<''
+  #   # <building (IS)>
+  #   val<<IS({:codetable =>'307'},true)
+  #   # <floor (IS)>
+  #   # < street address (ST)>
+  #   # <other designation (ST)>
+  #   # <city (ST)>
+  #   # <state or province (ST)>
+  #   # <zip or postal code (ST)>
+  #   # <country (ID)>
+  #   # <address type (ID)>
+  #   # <other geographic designation (ST)>
+  #   val.join(@@HAT)
   # end
 
-  #Generates HL7 MSG (Message Type) data type.
-  def MSH(map, force=false)
-    #Message type set while initializing MSH segment, do nothing.
+  #MA segment
+  # def MA(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #
+  #   # <sample 1 from channel 1 (NM)>
+  #   NM(map,true)
+  #   # <sample 1 from channel 2 (NM)>
+  #   # <sample 1 from channel 3 (NM)>
+  #   # <sample 2 from channel 1 (NM)>
+  #   # <sample 2 from channel 2 (NM)>
+  #   # <sample 2 from channel 3 (NM)>
+  # end
 
-    #message type (ID)
-    #trigger event (ID)
-    #message structure (ID)
-  end
 
   #Generates an HL7 MO (money) data type.
   def MO(map, force=false)
@@ -569,6 +603,83 @@ class TypeAwareFieldGenerator
 		val << 'USD'
     return val.join(@@SUB)
   end
+
+  # Charge to practice
+  # def MOC(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #
+  #   # <dollar amount (MO)>
+  #   MO(map,true)
+  #   # <charge code (CE)>
+  # end
+
+
+  # Money or percentage
+  def MOP(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+    val=[]
+    # <money or percentage indicator (IS)>
+    val<<IS({:codetable =>'148'},true)
+    # <money or percentage quantity (NM)>
+    val<<NM({:description =>'Percentage'},true)
+    val.join(@@HAT)
+  end
+
+  # MSG segment
+  def MSG(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+    val=[]
+    # <message type (ID)>
+    val<<IS({:codetable =>'76'},true)
+    # <trigger event (ID)>
+    val<<IS({:codetable =>'3'},true)
+    # <message structure (ID)>
+    val<<IS({:codetable =>'354'},true)
+    val.join(@@HAT)
+  end
+
+  #Generates HL7 MSG (Message Type) data type.
+  def MSH(map, force=false)
+    #Message type set while initializing MSH segment, do nothing.
+
+    #message type (ID)
+    #trigger event (ID)
+    #message structure (ID)
+  end
+
+
+  # Numeric Array
+  def NA(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+    # <value1 (NM)>
+    NM(map,true)
+    # <value2 (NM)>
+    # <value3 (NM)>
+    # <value4 (NM)>
+  end
+
+  # Observing practitioner
+  # def NDL(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #   # <name (CNN)>
+  #   CNN(map,true)
+  #   # <start date/time (TS)>
+  #   # <end date/time (TS)>
+  #   # <point of care (IS)>
+  #   # <room (IS)>
+  #   # <bed (IS)>
+  #   # <facility (HD)>
+  #   # <location status (IS)>
+  #   # <person location type (IS)>
+  #   # <building (IS)>
+  #   # <floor (IS)>
+  # end
+
 
   #Generates an HL7 NM (numeric) data type. A NM contains a single String value.
   def NM(map, force=false)
@@ -641,29 +752,99 @@ class TypeAwareFieldGenerator
     val.join(@@HAT)
   end
 
+  # Pre-certification required
+  def PCF(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+
+    # <pre-certification patient type (IS)>
+    val<<IS({:codetable =>'150'},true)
+    # <pre-certification required>
+    # <pre-certification window>
+  end
+
+  # Person identifier
+  def PI(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+    # <ID number (ST)>
+    ST({},true)
+    # <type of ID number>
+    # <other qualifying info>
+  end
+
+  # Privileges
+  def PIP(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+
+    # <privilege (CE)>
+    IS({},true)
+    # <privilege class (CE)>
+    # <expiration date (DT)>
+    # <activation date (DT)>
+    # <facility (EI)>
+  end
+
+
   #Generate an HL7 PL (person location) data type.
   def PL(map, force=false)
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
     val = []
 		#point of care (IS)
-		val << IS(map, true)
+    val<<IS({:codetable =>'302'},true)
 		#room (IS)
-		val << IS(map, true)
+    val<<IS({:codetable =>'303'},true)
 		#bed (IS)
-		val << IS(map, true)
+    val<<IS({:codetable =>'304'},true)
 		#facility (HD) (HD)
-		val << HD(map, true)
+		val << HD({:codetable =>'300'}, true)
 		#location status (IS)
     val << ''
 		#person location type (IS)
     val << ''
 		#building (IS)
-		IS(map, true)
+    val<<IS({:codetable =>'307'},true)
 		#floor (IS)
 		#Location description (ST)
     val.join(@@HAT)
   end
+
+  # Practitioner ID Numbers
+  # def PLN(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  #
+  #   # <ID number (ST)>
+  #   ST({},true)
+  #   # <type of ID number (IS)>
+  #   # <state/other qualifying info (ST)>
+  #   # <expiration date (DT)>
+  # end
+
+
+  # Person name
+  def PN(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+    val=[]
+    # family name (FN)
+    val << FN(map, true)
+    # given name (ST)
+    val << @yml['person.names.first'].sample
+    # second and further given names or initials thereof (ST)
+    val << @@INITIALS.to_a.sample
+    # suffix (e.g., JR or III) (ST)
+    # prefix (e.g., DR) (ST)
+    # degree (e.g., MD) (IS)
+    val.join(@@HAT)
+  end
+
+  # def xx(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return if(!autoGenerate?(map,force))
+  # end
 
   #Generate HL7 S PT (processing type) data type.
   def PT(map, force=false)
@@ -808,17 +989,18 @@ class TypeAwareFieldGenerator
 		# ID number (ST) (ST)
     val << ID(map, true)
 		# xcn.getIDNumber().setValue(Math.abs(random.nextInt() % 300).toString())
+
+    PN(map, true)
 		# family name (FN)
-    val << FN(map, true)
-		# fn(['fld'=> xcn.getComponent(1),'required'=>'R'])
-		#xcn.familyName.surname.value = lastNames.getAt(Math.abs(random.nextInt()%lastNames.size()));
+    # val << FN(map, true)
 		# given name (ST)
-    val << @yml['person.names.first'].sample
+    # val << @yml['person.names.first'].sample
     # second and further given names or initials thereof (ST)
-    val << @@INITIALS.to_a.sample
+    # val << @@INITIALS.to_a.sample
 		# suffix (e.g., JR or III) (ST)
 		# prefix (e.g., DR) (ST)
 		# degree (e.g., MD) (IS)
+
 		# source table (IS)
 		# assigning authority (HD)
 		# name type code (ID)
@@ -830,8 +1012,7 @@ class TypeAwareFieldGenerator
 		# name context (CE)
 		# name validity range (DR)
 		# name assembly order (ID)
-		#println xcn
-    val.join(@@HAT)
+    # val.join(@@HAT)
   end
 
   #Generate an HL7 XON (extended composite name and identification number for organizations) data type.
@@ -863,22 +1044,25 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
 
-    val=[]
+    # val=[]
 		#family name (FN)
-    val << FN(map, true)
+    # val << FN(map, true)
 		# fn(['fld'=> xpn.getComponent(0),'required'=>'R'])
 		#given name (ST)
-    val << @yml['person.names.first'].sample
+    # val << @yml['person.names.first'].sample
     #xpn.givenName.setValue(firstNames.getAt(Math.abs(random.nextInt()%firstNames.size())));
     #xpn.getComponent(1).setValue(firstNames.getAt(Math.abs(random.nextInt()%firstNames.size())))
     #second and further given names or initials thereof (ST)
-    val << @@INITIALS.to_a.sample
+    # val << @@INITIALS.to_a.sample
     #xpn.secondAndFurtherGivenNamesOrInitialsThereof.setValue('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.getAt(Math.abs(random.nextInt()%26)))
 		#suffix (e.g., JR or III) (ST)
 		#prefix (e.g., DR) (ST)
 		#degree (e.g., MD) (IS)
+    PN(map,true)
+
 		#name type code (ID)
-    val.join(@@HAT)
+    # val.join(@@HAT)
+
   end
 
   #Generate HL7 XTN (extended telecommunication number)
