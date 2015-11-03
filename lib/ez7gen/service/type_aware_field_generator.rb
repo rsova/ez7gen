@@ -100,6 +100,12 @@ class TypeAwareFieldGenerator
   def CE(map, force=false)
     #check if the field is optional and randomly generate it of skip
     return if(!autoGenerate?(map,force))
+
+    #TODO: Refactor this method
+    if (map[:description] == 'Role Action Reason' || map[:description] == 'Species Code' || map[:description] == 'Breed Code' || map[:description] == 'Production Class Code')
+      return '' #Per requirement, PID.35 – PID.38
+    end
+
     val = []
     # CE ce = (CE) map?.fld
     codes = getCodedMap(map)
@@ -109,6 +115,7 @@ class TypeAwareFieldGenerator
           pair = yml['codes.allergens'].to_a.sample(1).to_h.first # randomly pick a pair
           val<<pair.first
           val<<pair.last
+
         else
           # TODO: only for elements that don't have look up table set the id randomly
           # if codetable is empty
@@ -686,7 +693,6 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return if(!autoGenerate?(map,force))
     val = 0
-    # TODO uncomment
     case map[:description]
       when'Guarantor Household Size','Birth Order'
         val = generateLengthBoundId(1)
@@ -841,6 +847,50 @@ class TypeAwareFieldGenerator
     val.join(@@HAT)
   end
 
+  # Performing person time stamp
+  # def PPN(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    # return if(!autoGenerate?(map,force))
+  # val = []
+  # <ID number (ST)>
+  # val << ST({},true)
+
+  # PN will work for the subset of fields used below
+  # val << PN({},true)
+  # <family name (FN)>
+  # <given name (ST)>
+  # <second and further given names or initials thereof (ST)>
+  # <suffix (e.g., JR or III) (ST)>
+  # <prefix (e.g., DR) (ST)>
+  # <degree (e.g., MD) (IS)>
+  # <source table (IS)>
+  # <assigning authority (HD)>
+  # <name type code(ID)>
+  # <identifier check digit (ST)>
+  # <code identifying the check digit scheme employed (ID )>
+  # <identifier type code (IS)>
+  # <assigning facility (HD)>
+  # < date/time action performed (TS)>
+  # <name representation code (ID)>
+  # <name context (CE)>
+  # <name validity range (DR)>
+  # <name assembly order (ID)>
+
+  # val.join(@@HAT)
+  # end
+
+  # Parent result link
+  def PRL(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return if(!autoGenerate?(map,force))
+
+    # <OBX-3-observation identifier of parent result (CE)>
+    CE({},true)
+    # <OBX-4-sub-ID of parent result(ST)>
+    # <part of OBX-5 observation result from parent (TX)see discussion>
+  end
+
+
   # def xx(map, force=false)
   #   #check if the field is optional and randomly generate it of skip
   #   return if(!autoGenerate?(map,force))
@@ -879,15 +929,18 @@ class TypeAwareFieldGenerator
 
     # TODO add provider type ln 840 ROL
     case map[:description]
-      # TODO uncomment
-      # when 'Guarantor SSN','Insured’s Social Security Number','Medicare health ins Card Number','Military ID Number', 'Contact Person Social Security Number'
-      #   generateLengthBoundId(9)
+      when 'Guarantor SSN','Insured’s Social Security Number','Medicare health ins Card Number','Military ID Number', 'Contact Person Social Security Number'
+        generateLengthBoundId(9)
       when 'Allergy Reaction Code'
-        yml['allergens.yn'].sample()
-    else
-      len = (map[:max_length]!=nil) ? map[:max_length].to_i : 1
-      #val = generateLengthBoundId((len>5)?5=>len) # numeric id up to 5 TODO=> string ids?
-      @@random.rand(@@UP_TO_3_DGTS).to_s
+        # yml['allergens.yn'].sample()
+        yml['codes.allergens'].keys.sample()
+      when 'Strain'
+        #PID.35 – PID.38 should be always blank, as they deal with animals, not humans.
+      else
+        (!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
+       # len = (map[:max_length]!=nil) ? map[:max_length].to_i : 1
+       #val = generateLengthBoundId((len>5)?5=>len) # numeric id up to 5 TODO=> string ids?
+       # @@random.rand(@@UP_TO_3_DGTS).to_s
     end
 
   end
@@ -1128,10 +1181,10 @@ class TypeAwareFieldGenerator
       code, description = handleLength(codes, maxlen)
     end
 
-    # got to have code, get an id, most basic
-    if(Utils.blank?(code))
-      code, description = ID({},true), ''
-    end
+    # got to have code, get an id, most basic - TODO: verify this.
+    # if(Utils.blank?(code))
+    #   code, description = ID({},true), ''
+    # end
     # return code, description
 
     # puts code + ', ' + description
@@ -1201,6 +1254,13 @@ class TypeAwareFieldGenerator
     isFutureEvent = !Utils.blank?(map[:description])&& map[:description].include?('End') #so 'Role End Date/Time'
     seed = 365 #seed bounds duration of time to a year
     days = @@random.rand(seed)
+
+    if(map[:description]=='Date/Time Of Birth')
+      isFutureEvent = false
+      years = rand(30..50)
+      days = days + 365*years # make a person 30 years old
+    end
+
     (isFutureEvent) ? DateTime.now().next_day(days) : DateTime.now().prev_day(days)
   end
 

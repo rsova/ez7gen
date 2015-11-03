@@ -24,9 +24,10 @@ class SegmentPicker
   # MSH is populated with quick generation, skip it here.
   def pickSegments()
     segmentCandidates = getSegmentsToBuild()
-    return segmentCandidates - @@MSH_SEGMENTS
+    # return segmentCandidates - @@MSH_SEGMENTS
     # "MSH~EVN~PID~[~PD1~]~[~{~ROL~}~]~[~{~NK1~}~]~PV1~[~PV2~]~[~{~ROL~}~]~[~{~DB1~}~]~[~{~OBX~}~]~[~{~AL1~}~]~[~{~DG1~}~]~[~DRG~]~[~{~PR1~[~{~ROL~}~]~}~]~[~{~GT1~}~]~[~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]~[~ACC~]~[~UB1~]~[~UB2~]~[~PDA~]"
-    # return [ 'EVN', 'PID','[~PD1~]', 'PV1','[~{~AL1~}~]', '[~{~DG1~}~]']
+    return [ 'EVN', 'PID','[~PD1~]', 'PV1','[~{~AL1~}~]', '[~{~DG1~}~]']
+    # return ['~base:EVN','base:PID','[~base:PD1~]','~base:PV1','[~{~base:AL1~}~]','[~{~base:DG1~}~]','[~ZEL~]','[~ZEM~]','[~ZEN~]','[~ZMH~]']
   end
 
   # check if encoded segment is a group

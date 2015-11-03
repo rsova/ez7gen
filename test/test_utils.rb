@@ -55,8 +55,10 @@ class TestUtils < MiniTest::Unit::TestCase
 		# 1 standard no base: - one parser only, added
 
 		# 2 no base is vaz2.4, base its going to base2.4
-
 		assert_equal 'primary', Utils.getTypeByName('ENV')
+		#primary is vaz 2.4
+		#base is 2.4
+		assert_equal 'base', Utils.getTypeByName('base:ENV')
 
 	end
 end

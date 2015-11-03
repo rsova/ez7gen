@@ -22,6 +22,25 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_CE
+    # PID.35 – PID.38 should be always blank, as they deal with animals, not humans.
+    line = '[max_length:250, symbol:?, description:Species Code, ifrepeating:0, datatype:CE, required:C, piece:35, codetable:446]'
+    row= lineToHash(line)
+    fld = @fldGenerator.CE(row)
+    puts fld
+    assert_equal(nil,fld) # conditional should skip on auto generate
+
+    line = '[[max_length:250, symbol:?, description:Breed Code, ifrepeating:0, datatype:CE, required:C, piece:36, codetable:447]'
+    row= lineToHash(line)
+    fld = @fldGenerator.CE(row)
+    puts fld
+    assert_equal(nil,fld) # conditional should skip on auto generate
+
+		line = '[max_length:250, description:Production Class Code, ifrepeating:0, datatype:CE, required:O, piece:38, codetable:429]'
+    row= lineToHash(line)
+    fld = @fldGenerator.CE(row, true)
+    puts fld
+    assert_equal('',fld) # conditional should skip on auto generate
+
 		line = '[max_length:250, description:Role Action Reason, ifrepeating:0, datatype:CE, required:R, piece:8]'
 		row= lineToHash(line)
 		#puts row
@@ -74,9 +93,13 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
   def test_CX
+    line = '[max_length:250, description:Alternate Visit ID, ifrepeating:0, datatype:CX, required:O, piece:50, codetable:203]'
+    fld = @fldGenerator.CX(lineToHash(line),true)
+    puts fld
+
     line ='[max_length:250, symbol:+, description:Patient Identifier List, ifrepeating:1, datatype:CX, required:R, piece:3]'
     fld = @fldGenerator.CX(lineToHash(line))
-		assert /^[-+]?[1-9]([0-9]*)?$/.match(fld) # is a number
+    assert /^[-+]?[1-9]([0-9]*)?$/.match(fld) # is a number
     puts fld
 	end
 
@@ -95,15 +118,20 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_TS
-		line ='[max_length:26, description:Admit Date/Time, ifrepeating:0, datatype:TS, required:R, piece:44]'
-		fld_past = @fldGenerator.TS(lineToHash(line))
-		puts fld_past
-		assert_equal 18, fld_past.size, 'datetime format YYYYMMDDHHSS.SSS, like 20150321201748.373'
+    # PID.7 Date of Birth – please make the date within 50-20 years into the past.
+    line = '[max_length:26, description:Date/Time Of Birth, ifrepeating:0, datatype:TS, required:O, piece:7]'
+    fld = @fldGenerator.TS(lineToHash(line))
+    puts fld
 
-		line ='[max_length:26, description:Role End Date/Time, ifrepeating:0, datatype:TS, required:R, piece:44]'
-		fld_future = @fldGenerator.TS(lineToHash(line))
-		puts "past timestamp #{fld_past}, future timestamp #{fld_future}"
-		assert fld_past < fld_future
+		# line ='[max_length:26, description:Admit Date/Time, ifrepeating:0, datatype:TS, required:R, piece:44]'
+		# fld_past = @fldGenerator.TS(lineToHash(line))
+		# puts fld_past
+		# assert_equal 18, fld_past.size, 'datetime format YYYYMMDDHHSS.SSS, like 20150321201748.373'
+    #
+		# line ='[max_length:26, description:Role End Date/Time, ifrepeating:0, datatype:TS, required:R, piece:44]'
+		# fld_future = @fldGenerator.TS(lineToHash(line))
+		# puts "past timestamp #{fld_past}, future timestamp #{fld_future}"
+		# assert fld_past < fld_future
 	end
 
 	def test_DLD
@@ -140,7 +168,12 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_IS
-		line ='[max_length:2, description:Interest Code, ifrepeating:0, datatype:IS, required:O, piece:28, codetable:44]'
+    # PD1.20 has a value of 27. The value is supposed to come from table 141 (this was the error picked by Ensemble):
+    line ='[max_length:2, description:Military Rank/Grade, ifrepeating:0, datatype:IS, required:O, piece:20, codetable:141]'
+    fld = @fldGenerator.IS(lineToHash(line),true)
+    puts fld
+
+    line ='[max_length:2, description:Interest Code, ifrepeating:0, datatype:IS, required:O, piece:28, codetable:44]'
 		fld = @fldGenerator.IS(lineToHash(line),true)
 		assert ['C','K','S','P'].include?(fld)
 
@@ -247,8 +280,19 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_ST
-			fld = @fldGenerator.ST({}, true)
-			puts fld
+    #PID.35 – PID.38 should be always blank, as they deal with animals, not humans.
+    line ='[max_length:80, description:Strain, ifrepeating:0, datatype:ST, required:O, piece:37]'
+    fld = @fldGenerator.ST(lineToHash(line), true)
+    puts fld
+    assert_equal(nil,fld)
+
+    fld = @fldGenerator.ST({}, true)
+    puts fld
+
+    line ='[max_length:15, symbol:*, description:Allergy Reaction Code, ifrepeating:1, datatype:ST, required:O, piece:5]'
+    fld = @fldGenerator.ST(lineToHash(line), true)
+    puts fld
+
 	end
 
 	def test_TN

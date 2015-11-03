@@ -46,7 +46,7 @@ class SegmentGenerator
     msh.principal_language_of_message ='EN^English'
     msh.alternate_character_set_handling_scheme = @fieldGenerators['primary'].ID({:required=>'O', :codetable=>'356'})
     # 21	Conformance Statement ID
-    msh.e20 =  @fieldGenerators['primary'].ID({:required=>'O'})
+    msh.e20 =  @fieldGenerators['primary'].ID({:required=>'O',:codetable=>'449'})
 
     return msh
   end
@@ -84,6 +84,11 @@ class SegmentGenerator
 
     # overrite ids for sequential repeating segments use ids
     elements[1] = (idx)? idx.to_s : elements[1]
+
+    #Set ID field in PID.1, AL1.1, DG1.1 etc. should have number 1 for the first occurrence of the segment.
+    if(!idx && ['PID','AL1','DG1'].include?(segmentName))
+      elements[1]=1
+    end
 
     #generate segment using elements
     HL7::Message::Segment::Default.new(elements)

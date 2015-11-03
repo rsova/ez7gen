@@ -20,7 +20,7 @@ class MessageFactory
 
     # if this is a custom segment, add base parser
     if(version !='2.4')
-      parsers[Utils.BASE]= ProfileParser.new('2.4', event)
+       parsers[Utils.BASE]= ProfileParser.new('2.4', event)
     end
 
     segmentGenerator = SegmentGenerator.new(version, event, parsers)
@@ -31,7 +31,9 @@ class MessageFactory
 
     segments.each(){ |segment|
       #puts segment
-      attributes = parsers[Utils.getTypeByName(segment)].getSegmentStructure(Utils.noBaseName(segment))
+      choiceParser = parsers[Utils.getTypeByName(segment)]
+      attributes = choiceParser.getSegmentStructure(Utils.noBaseName(segment))
+      # attributes = parsers[Utils.getTypeByName(segment)].getSegmentStructure(Utils.noBaseName(segment))
       #puts attributes
       hl7Msg = segmentGenerator.generate(hl7Msg, segment, attributes)
     }
