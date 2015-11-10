@@ -18,7 +18,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     # # assert(hl7 != nil)
     # refute_nil(hl7)
   end
-end
+
 # Admission Messages
 
 # 1	  ADT_A01 	ADT_A04; ADT_A08; ADT_A13 	MSH;EVN;PID;PD1;ROL;NK1;PV1;PV2;DB1;OBX;AL1;DG1;DRG;PR1;GT1;IN1;IN2;IN3;ACC;UB1;UB2;PDA
@@ -32,6 +32,13 @@ end
 # 9 	ADT_A17		                            MSH;EVN;PID;PD1;PV1;PV2;DB1;OBX
 # 10	ADT_A18		                            MSH;EVN;PID;PD1;MGR;PV1
 # 11	ADT_A20		                            MSH;EVN;NPU
+def test_ADT_20
+  factory = MessageFactory.new
+  hl7 = factory.generate("2.4", "ADT_A20")
+  puts hl7
+  # # assert(hl7 != nil)
+  # refute_nil(hl7)
+end
 # 12	ADT_A21	  ADT_A22; ADT_A23; ADT_A25:ADT_A26; ADT_A27; ADT_A29; ADT_A32; ADT_A33 	MSH;EVN;PID;PD1;PV1;PV2;DB1;OBX
 # 13	ADT_A24		                            MSH;EVN;PID;PD1;PV1;DB1
 # 14	ADT_A30	  ADT_A34; ADT_A35; ADT_A36; ADT_A46; ADT_A47; ADT_A48; ADT_A49 	MSH;EVN;PID;PD1;MRG
@@ -51,3 +58,4 @@ end
 # 30	RSP_K23		                            MSH;MSA;ERR;QAK;QPD;PID;DSC
 # 32	RSP_K24		                            MSH;MSA;ERR;QAK;QPD;PID;DSC
 
+end

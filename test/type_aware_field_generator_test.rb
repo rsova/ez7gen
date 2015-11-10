@@ -280,7 +280,14 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_ST
-    #PID.35 – PID.38 should be always blank, as they deal with animals, not humans.
+		#ZEL.29 should be 1 digit integer.
+		# line = '[piece:29, description:AGENT ORANGE EXPOSURE LOCATION,  datatype=base:ST, max_length:1, required=O , ifrepeating:0]'
+		line = '[piece:29, description:AGENT ORANGE EXPOSURE LOCATION,  datatype:base:ST, max_length:1, required=O , ifrepeating:0]'
+		fld = @fldGenerator.ST(lineToHash(line), true)
+		puts fld
+		assert_equal(1,fld.size)
+
+		#PID.35 – PID.38 should be always blank, as they deal with animals, not humans.
     line ='[max_length:80, description:Strain, ifrepeating:0, datatype:ST, required:O, piece:37]'
     fld = @fldGenerator.ST(lineToHash(line), true)
     puts fld

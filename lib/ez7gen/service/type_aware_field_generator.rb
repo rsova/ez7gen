@@ -936,6 +936,9 @@ class TypeAwareFieldGenerator
         yml['codes.allergens'].keys.sample()
       when 'Strain'
         #PID.35 – PID.38 should be always blank, as they deal with animals, not humans.
+      when 'AGENT ORANGE EXPOSURE LOCATION'
+        #ZEL.29 should be 1 digit integer.
+        generateLengthBoundId(1)
       else
         (!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
        # len = (map[:max_length]!=nil) ? map[:max_length].to_i : 1
