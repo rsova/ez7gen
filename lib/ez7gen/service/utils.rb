@@ -56,4 +56,12 @@ class Utils
     (!Utils.blank?(name))?name.delete(Utils.BASE_INDICATOR):nil
   end
 
+  # helper method to convert a string to nil if it's a number
+  def self.numToNil(string)
+    Integer(string || '')
+    return nil
+  rescue ArgumentError
+    return string
+  end
+
 end

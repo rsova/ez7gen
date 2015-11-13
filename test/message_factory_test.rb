@@ -54,7 +54,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
   end
 
 # 9 	ADT_A17		                            MSH;EVN;PID;PD1;PV1;PV2;DB1;OBX
-  def test_ADT_A17 # TODO: problem
+  def test_ADT_A17 # Fixed an issue with required repeating segments
     # <MessageStructure name='ADT_A17'  definition='MSH~EVN~PID~[~PD1~]~PV1~[~PV2~]~[~{~DB1~}~]~[~{~OBX~}~]~PID~[~PD1~]~PV1~[~PV2~]~[~{~DB1~}~]~[~{~OBX~}~]' />
     factory = MessageFactory.new
     hl7 = factory.generate("2.4", "ADT_A17")

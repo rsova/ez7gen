@@ -49,18 +49,16 @@ class SegmentPicker
 
   # pick segments randomly, according to the load factor, exclude groups
   def getSegmentsToBuild()
-      keepers = []
 
       # place required segments according to their order in the segment
-      reqSegments = getRequiredSegments()
-      reqSegments.each{|it| keepers[@profile.index(it)] = it}
-      #@profile.each{|it| keepers[reqSegments.index(it)] = it}
+      segmentsToBuild = getRequiredSegments()
 
-      # place optional segments according to their order in segment
-      keepers = pickOptionalSegments(keepers)
-      keepers.compact()
+      # place optional segments according to their order
+      pickOptionalSegments(segmentsToBuild)
+
+      # clean up nils from the array
+      segmentsToBuild.compact()
   end
-
 
   def pickOptionalSegments(segmentsToBuildArray)
 
@@ -76,18 +74,25 @@ class SegmentPicker
 
   # get segments that will always be build, include z segments
   def getRequiredSegments()
-    # promote z segments to required
+
+    # Make a copy of profile and set to nil all optional segments,
+    # which are numbers, indexes into encoded segments array
+    required = []
+    @profile.each{|it| required << Utils.numToNil(it)}
+
+    # promote z segments to required, and add them as required, keeping their index
     zs = @encodedSegments.select{|it| isZ?(it)}
-    zs.each{ |it| @profile[ @encodedSegments.index(it)] = it}
+    zs.each{ |it| required[@encodedSegments.index(it)] = it}
 
     # adjust optional segments
     @encodedSegments = @encodedSegments - zs
 
     # pick from required and z segments
-    @profile.select{|it| isRequired?(it)}
+    #@profile.select{|it| isRequired?(it)}
+    return required
   end
 
-  # def handleRequiredSegments(keepers)
+  # def handleRequiredSegments(segmentsToBuild)
   #   reqSegments = getRequiredSegments()
   # end
 

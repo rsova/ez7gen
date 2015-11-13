@@ -134,7 +134,48 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     elements << "[~ZMH~]"  #19
     @segmentMap = {:segments => elements, :profile => profile}
     @segmentPicker = SegmentPicker.new(@segmentMap)
-    assert_equal ["base:MSH", "base:EVN", "base:PID", "base:PV1", "[~ZEM~]", "[~ZEN~]", "[~ZMH~]"], @segmentPicker.getRequiredSegments()
+    required = @segmentPicker.getRequiredSegments()
+    assert_equal ["base:MSH", "base:EVN", "base:PID", nil, nil, "base:PV1", nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "[~ZEM~]", "[~ZEN~]", "[~ZMH~]", nil], required
+    assert_equal ["base:MSH", "base:EVN", "base:PID", "base:PV1", "[~ZEM~]", "[~ZEN~]", "[~ZMH~]"], required.compact()
+
+  end
+
+  def test_getSegmentsToBuild_with_repeating_required_segments
+
+    elements = []
+    elements <<  "[~PD1~]"
+    elements <<  "[~PV2~]"
+    elements <<  "[~{~DB1~}~]"
+    elements <<  "[~{~OBX~}~]"
+    elements <<  "[~PD1~]"
+    elements <<  "[~PV2~]"
+    elements <<  "[~{~DB1~}~]"
+    elements <<  "[~{~OBX~}~]"
+
+    # [0] = "MSH"
+    # [1] = "EVN"
+    # [2] = "PID"
+    # [3] = "0"
+    # [4] = "PV1"
+    # [5] = "1"
+    # [6] = "2"
+    # [7] = "3"
+    # [8] = "PID"
+    # [9] = "4"
+    # [10] = "PV1"
+    # [11] = "5"
+    # [12] = "6"
+    # [13] = "7"
+    profile = 'MSH~EVN~PID~0~PV1~1~2~3~PID~4~PV1~5~6~7'
+
+    @segmentMap = {:segments => elements, :profile => profile}
+    @segmentPicker = SegmentPicker.new(@segmentMap)
+    segments = @segmentPicker.getSegmentsToBuild()
+    #  ["MSH", "EVN", "PID", "PV1", "PID", "PV1"]
+    assert_equal 1,segments.count("MSH")
+    assert_equal 1, segments.count("EVN")
+    assert_equal 2, segments.count("PID")
+    assert_equal 2, segments.count("PV1")
 
   end
 

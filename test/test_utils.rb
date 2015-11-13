@@ -59,6 +59,11 @@ class TestUtils < MiniTest::Unit::TestCase
 		#primary is vaz 2.4
 		#base is 2.4
 		assert_equal 'base', Utils.getTypeByName('base:ENV')
+	end
+
+	def test_numToNil
+		assert_equal nil, Utils.numToNil('5')
+		assert_equal 'MSH', Utils.numToNil('MSH')
 
 	end
 end
