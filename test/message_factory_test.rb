@@ -26,13 +26,54 @@ class TestMessageFactory < MiniTest::Unit::TestCase
 # 3 	ADT_A03		                            MSH;EVN;PID;PD1;ROL;PV1;PV2;DB1;DG1;DRG;PR1;OBX;PDA
 # 4	  ADT_A05	  ADT_A14; ADT_A28; ADT_A31	  MSH;EVN;PID;PD1;ROL;NK1;PV1;PV2;DB1;OBX;AL1;DG1;DRG;PR1;GT1;IN1;IN2;IN3;ACC;UB1;UB2
 # 5	  ADT_A06	  ADT_A07	                    MSH;EVN;PID;PD1;ROL;MRG;NK1;PV1;PV2;DB1;OBX;AL1;DG1;DRG;PR1;GT1;IN1;IN2;IN3;ACC;UB1;UB2
+
 # 6	  ADT_A09	  ADT_A10; ADY_A11; ADT_A12 	MSH;EVN;PID;PD1;PV1;PV2;DB1;OBX;DG1
+  def test_ADT_A09
+    factory = MessageFactory.new
+    hl7 = factory.generate("2.4", "ADT_A09")
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
 # 7	  ADT_A15		                            MSH;EVN;PID;PD1;ROL;PV1;PV2;DB1;OBX;DG1
+  def test_ADT_A15
+    factory = MessageFactory.new
+    hl7 = factory.generate("2.4", "ADT_A15")
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
+
 # 8	  ADT_A16		                            MSH;EVN;PID;PD1;ROL;PV1;PV2;DB1;OBX;DG1;DRG
+  def test_ADT_A16
+    factory = MessageFactory.new
+    hl7 = factory.generate("2.4", "ADT_A16")
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
+
 # 9 	ADT_A17		                            MSH;EVN;PID;PD1;PV1;PV2;DB1;OBX
+  def test_ADT_A17 # TODO: problem
+    # <MessageStructure name='ADT_A17'  definition='MSH~EVN~PID~[~PD1~]~PV1~[~PV2~]~[~{~DB1~}~]~[~{~OBX~}~]~PID~[~PD1~]~PV1~[~PV2~]~[~{~DB1~}~]~[~{~OBX~}~]' />
+    factory = MessageFactory.new
+    hl7 = factory.generate("2.4", "ADT_A17")
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
+
 # 10	ADT_A18		                            MSH;EVN;PID;PD1;MGR;PV1
+  def test_ADT_A18
+    factory = MessageFactory.new
+    hl7 = factory.generate("2.4", "ADT_A18")
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
+
 # 11	ADT_A20		                            MSH;EVN;NPU
-def test_ADT_20
+def test_ADT_A20
   factory = MessageFactory.new
   hl7 = factory.generate("2.4", "ADT_A20")
   puts hl7
