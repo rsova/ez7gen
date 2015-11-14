@@ -18,6 +18,7 @@ class SegmentPicker
   def initialize(segmentsMap)
     @encodedSegments = segmentsMap[:segments]
     @profile = segmentsMap[:profile].split('~')
+    @profile.map!{|it| (Utils.isNumber?(it))?it.to_i : it}
   end
 
   # Get list of segments for test message generation.
@@ -35,14 +36,8 @@ class SegmentPicker
   	return (encoded =~ /\~\d+\~/)? true : false
   end
 
-  # protected handleSegment(int idx){
-  # 	def n = segments.get(idx).getAt(0)
-  # 	#TODO: Check if this is group and undo the group
-  # 	return n
-  # }
-
   # Groups need to be preprocessed
-  def handleGroups(segments)
+  def handleGroups(segments=@profile)
     #TODO: optional groups are deleted, revisit this
     segments.delete_if{|it| isGroup?(it)}
   end
@@ -51,45 +46,50 @@ class SegmentPicker
   def getSegmentsToBuild()
 
       # place required segments according to their order in the segment
-      segmentsToBuild = getRequiredSegments()
+      getRequiredSegments()
 
       # place optional segments according to their order
-      pickOptionalSegments(segmentsToBuild)
+      pickOptionalSegments()
 
-      # clean up nils from the array
-      segmentsToBuild.compact()
+      # clean up profile, delete unselected optional segments
+      @profile.delete_if{|it| !isRequired?(it)}
   end
 
-  def pickOptionalSegments(segmentsToBuildArray)
+  # select optional segments and add them to required in correct order
+  def pickOptionalSegments()
 
       optSegmentIdxs = @profile.select{|it| !isRequired?(it)}
+      # optSegmentIdxs = segmentsToBuildArray.each_index.select{|i| segmentsToBuildArray[i] == nil}
       count = getLoadCandidatesCount(optSegmentIdxs.size())
 
       # get indexes of optional segments
       ids = optSegmentIdxs.sample(count)
-      # p ids
-      ids.each{|it| segmentsToBuildArray[@profile.index(it)] = @encodedSegments[it.to_i]}
-      handleGroups(segmentsToBuildArray)
+
+      # add selected optional segments to required, contain order
+      ids.each{|id| @profile[@profile.index(id)]= @encodedSegments[id]}
+
+      # groups need to be expended if any selected
+      handleGroups()
   end
 
   # get segments that will always be build, include z segments
   def getRequiredSegments()
-
-    # Make a copy of profile and set to nil all optional segments,
-    # which are numbers, indexes into encoded segments array
-    required = []
-    @profile.each{|it| required << Utils.numToNil(it)}
-
+    # profile already has all required segments identified
     # promote z segments to required, and add them as required, keeping their index
     zs = @encodedSegments.select{|it| isZ?(it)}
-    zs.each{ |it| required[@encodedSegments.index(it)] = it}
 
-    # adjust optional segments
-    @encodedSegments = @encodedSegments - zs
+    #promote z to required, replace it's placeholder in profile with the value of the segment
+    # adjust optional segments, clear the value, but do not delete to preserve the indexes
+    zs.each{|it| idx = @encodedSegments.index(it); @profile[@profile.index(idx)] = it; @encodedSegments[idx] = nil}
 
-    # pick from required and z segments
-    #@profile.select{|it| isRequired?(it)}
-    return required
+    #reset encoded segments
+    @encodedSegments.delete_if{|it| it == nil}
+
+    # Make a copy of profile and set to nil all optional segments, indexes into encoded segments array
+    # required = []
+    # @profile.each{|it| required << Utils.numToNil(it)}
+    #
+    return @profile.select{|it| isRequired?(it)}
   end
 
   # def handleRequiredSegments(segmentsToBuild)

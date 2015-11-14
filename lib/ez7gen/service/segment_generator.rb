@@ -118,7 +118,8 @@ class SegmentGenerator
     if(['CK'].include?(dt))
       return nil
     else
-      Utils.blank?(dt)?nil :fieldGenerator.method(dt).call(attributes)
+      fld = Utils.blank?(dt)?nil :fieldGenerator.method(dt).call(attributes)
+
     end
   end
 

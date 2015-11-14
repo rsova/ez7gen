@@ -3,7 +3,8 @@ require_relative '../profile_parser'
 
 class TypeAwareFieldGenerator
   attr_accessor :yml
-  @@UP_TO_3_DGTS = 1000 # up to 3 digits
+  # @@UP_TO_3_DGTS = 1000 # up to 3 digits
+  @@REQ_LEN_3_DGTS = 3 #up to 3 digits
   @@RANGE_INDICATOR = '...'
   @@HAT = '^' # Component separator, aka hat
   @@SUB ='&' # Subcomponent separator
@@ -119,7 +120,7 @@ class TypeAwareFieldGenerator
         else
           # TODO: only for elements that don't have look up table set the id randomly
           # if codetable is empty
-          val << ((Utils.blank?(map[:codetable])) ? ID({},true) : '')
+          val << ((Utils.blank?(map[:codetable])) ? ID(map,true) : '')
       end
     else
       #identifier (ST) (ST)
@@ -496,8 +497,9 @@ class TypeAwareFieldGenerator
     #check if the field is optional and randomly generate it of skip
     return if(!autoGenerate?(map,force))
     #value only
-    #TODO: do we need the random when val is not the table
-    (!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
+    #Case when max_len overrides requirements
+    len = Utils.safeLen(map[:max_length],@@REQ_LEN_3_DGTS)
+    (!Utils.blank?(map[:codetable]))? getCodedValue(map): generateLengthBoundId(len)
   end
 
   #Generates HL7 IS (namespace id) data type
@@ -507,8 +509,6 @@ class TypeAwareFieldGenerator
 
     #TODO: same as ID?
     ID(map,true)
-    #(!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
-    #((IS) map.fld).setValue(val)
   end
 
 
@@ -699,9 +699,9 @@ class TypeAwareFieldGenerator
       when 'Guarantor Household Annual Income'
         val = '%.2f' % generateLengthBoundId(5)
       when @@MONEY_FORMAT_REGEX
-        val = '%.2f' % ID({},true)
+        val = '%.2f' % ID(map,true)
       else
-        val = ID({},true) # general rule for a number
+        val = ID(map,true) # general rule for a number
         if (map[:datatype] == 'CP' || map[:datatype] == 'MO') # money
           val = '%.2f' % val
         end
@@ -774,7 +774,7 @@ class TypeAwareFieldGenerator
     #check if the field is optional and randomly generate it of skip
     return if(!autoGenerate?(map,force))
     # <ID number (ST)>
-    ST({},true)
+    ST(map,true)
     # <type of ID number>
     # <other qualifying info>
   end
@@ -785,7 +785,7 @@ class TypeAwareFieldGenerator
     return if(!autoGenerate?(map,force))
 
     # <privilege (CE)>
-    IS({},true)
+    IS(map,true)
     # <privilege class (CE)>
     # <expiration date (DT)>
     # <activation date (DT)>
@@ -823,7 +823,7 @@ class TypeAwareFieldGenerator
     return if(!autoGenerate?(map,force))
 
     # <ID number (ST)>
-    ST({},true)
+    ST(map,true)
     # <type of ID number (IS)>
     # <state/other qualifying info (ST)>
     # <expiration date (DT)>
@@ -853,10 +853,10 @@ class TypeAwareFieldGenerator
     return if(!autoGenerate?(map,force))
     val = []
     # <ID number (ST)>
-    val << ST({},true)
+    val << ST(map,true)
 
     # PN will work for the subset of fields used below
-    val << PN({},true)
+    val << PN(map,true)
     # <family name (FN)>
     # <given name (ST)>
     # <second and further given names or initials thereof (ST)>
@@ -885,7 +885,7 @@ class TypeAwareFieldGenerator
     return if(!autoGenerate?(map,force))
 
     # <OBX-3-observation identifier of parent result (CE)>
-    CE({},true)
+    CE(map,true)
     # <OBX-4-sub-ID of parent result(ST)>
     # <part of OBX-5 observation result from parent (TX)see discussion>
   end
@@ -940,10 +940,9 @@ class TypeAwareFieldGenerator
         #ZEL.29 should be 1 digit integer.
         generateLengthBoundId(1)
       else
-        (!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
-       # len = (map[:max_length]!=nil) ? map[:max_length].to_i : 1
-       #val = generateLengthBoundId((len>5)?5=>len) # numeric id up to 5 TODO=> string ids?
-       # @@random.rand(@@UP_TO_3_DGTS).to_s
+        #Case when max_len overrides requirements
+        len = Utils.safeLen(map[:max_length],@@REQ_LEN_3_DGTS)
+        (!Utils.blank?(map[:codetable]))? getCodedValue(map): generateLengthBoundId(len)
     end
 
   end
@@ -1046,7 +1045,7 @@ class TypeAwareFieldGenerator
     val << ID(map, true)
 		# xcn.getIDNumber().setValue(Math.abs(random.nextInt() % 300).toString())
 
-    PN(map, true)
+    val << PN(map, true)
 		# family name (FN)
     # val << FN(map, true)
 		# given name (ST)
@@ -1068,7 +1067,7 @@ class TypeAwareFieldGenerator
 		# name context (CE)
 		# name validity range (DR)
 		# name assembly order (ID)
-    # val.join(@@HAT)
+    val.join(@@HAT)
   end
 
   #Generate an HL7 XON (extended composite name and identification number for organizations) data type.
@@ -1222,15 +1221,18 @@ class TypeAwareFieldGenerator
       str = str.ljust(maxlen,'0')
       idx = str.size
     end
-    return str[0..idx-1]
+    #safe fail
+    #this handles case when maxlen is less then 1
+    idx = [0,idx-1].max
+    return str[0..idx]
   end
 
-  # Returns randomly generated Id of required length, of single digit id
-  def generateLengthBoundId1(map, str=@@random.rand(100000000).to_s)
-    (!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
-
-    map[:maxlen]
-  end
+  # # Returns randomly generated Id of required length, of single digit id
+  # def generateLengthBoundId1(map, str=@@random.rand(100000000).to_s)
+  #   (!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
+  #
+  #   map[:maxlen]
+  # end
 
 
   # If field are X,W,B (Not Supported, Withdrawn Fields or Backward Compatible)  returns false.

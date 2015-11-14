@@ -64,6 +64,27 @@ class TestUtils < MiniTest::Unit::TestCase
 	def test_numToNil
 		assert_equal nil, Utils.numToNil('5')
 		assert_equal 'MSH', Utils.numToNil('MSH')
-
 	end
+
+	def test_safeLen
+		#max_len greater
+		reqLen = 3
+		map = {:max_length => '10'}
+		assert_equal 3, Utils.safeLen(map[:max_length], reqLen)
+
+		# no max_len
+		map = {}
+		assert_equal 3, Utils.safeLen(map[:max_length], reqLen)
+
+		#max_len lesser
+		map = {:max_length => '1'}
+		assert_equal 1, Utils.safeLen(map[:max_length], reqLen)
+
+		#max_len not number, safe fail
+		map = {:max_length => 'abc'}
+		actual = Utils.safeLen(map[:max_length], reqLen)
+		# puts actual
+		assert_equal(0, actual)
+	end
+
 end

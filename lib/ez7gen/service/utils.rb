@@ -64,4 +64,11 @@ class Utils
     return string
   end
 
+  # helper method to safely handle max length when schema len adn requirements contradict.
+  # lesser wins
+  def self.safeLen(maxLen, reqLen)
+    #handle stings and garbage
+    maxLen = (maxLen||reqLen).to_i
+    [maxLen, reqLen].min
+  end
 end

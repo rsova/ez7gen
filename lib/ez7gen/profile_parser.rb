@@ -44,9 +44,6 @@ class ProfileParser
       structure.sub!(@@segment_patern,idx.to_s)
       segments << m
       idx +=1
-      # puts structure
-      # puts m
-      #if (idx > 25) then break(); end
     end
     return {profile: structure, segments: segments}
   end

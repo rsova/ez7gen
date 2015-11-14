@@ -66,6 +66,14 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_NM
+		# Field size restriction exceeded in segment 8:
+		# PV2. Field 20, repetition 1 is larger than segment structure 2.4:
+		# PV2 permits it to be. (alert request ID=9)
+# '<SegmentSubStructure piece='20' description='Expected Number of Insurance Plans' datatype='NM' max_length='1' required='O' ifrepeating='0' />'		line ='[max_length:4, symbol:!, description:Set ID - DG1, ifrepeating:0, datatype:SI, required:R, piece:1]'
+		line = '[piece:20, description:Expected Number of Insurance Plans, datatype=:NM, max_length:1,required:O, ifrepeating:0]'
+		fld = @fldGenerator.NM(lineToHash(line), true)
+		puts fld
+		assert_equal 1, fld.size
 
 		line =	'[max_length:12, description:Total Charges, ifrepeating:0, datatype:NM, required:R, piece:47]'
 		fld = @fldGenerator.NM(lineToHash(line))
@@ -272,6 +280,7 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		puts fld
 	end
 
+
 	def test_SI
 			line ='[max_length:4, symbol:!, description:Set ID - DG1, ifrepeating:0, datatype:SI, required:R, piece:1]'
 			fld = @fldGenerator.SI(lineToHash(line), true)
@@ -396,6 +405,14 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		actual = @fldGenerator.generateLengthBoundId(9)
 		puts actual
 		assert_equal(9, actual.size)
+
+		actual = @fldGenerator.generateLengthBoundId(1, '3000')
+		puts actual
+		assert_equal(1, actual.size)
+
+		actual = @fldGenerator.generateLengthBoundId(0)
+		puts actual
+		# assert_equal(, actual.size)
 	end
 
 	def test_getCodedValue_lenViolation
