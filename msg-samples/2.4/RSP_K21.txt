@@ -1,0 +1,7 @@
+MSH|^~\&|404|707|101|909|20151114095443.380||RSP^K21^RSP_K21|523|P|2.4|705||||||EN^English||
+MSA|CA|705|171|977||205^Duplicate key identifier
+ERR|^^^955
+QAK||||210|470|
+QPD|^No suggested values defined||
+DSC||
+

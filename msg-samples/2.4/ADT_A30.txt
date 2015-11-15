@@ -1,0 +1,36 @@
+MSH|^~\&|202|909|404|707|20151114092852.024||ADT^A30^ADT_A30|570|P|2.4|||ER||||EN^English||30
+EVN||20150318092852.026|||OP2^Reilly^Victor^W|20150326092852.026|
+PID|1||357||Gates^Aidan^A|Ramirez^Noah^K||||2054-5^Black or African American|5777 Fallen Panda Expressway^^Oatmeal^TN^37166-9572^USA|||(601)110-8688|DE^German|||||5907023400^FL^20160715|143|H^Hispanic or Latino||N||USA^United States|N^Non Veteran|||Y|N|UA||||||
+PD1|D||157^^191||F|Y|||N|997|||20151030||DNR^Do not resuscitate|I||20150428|NATO||ACT
+MRG|452||224||631|541|
+
+MSH|^~\&|404|707|303|808|20151114093424.848||ADT^A30^ADT_A30|585|P|2.4||328|||||EN^English|<null>|
+EVN||20150115093424.849|20150710093424.849||||838
+PID|1||948||Carver^Connor^H|||F||2131-1^Other Race|7608 Silent Glen^^Owl^MS^38889-6760^USA||(601)110-8688|(662)120-6474|EN  ^English|M^Married|NAZ^Christian: Church of the Nazarene|204|||463|||Y||USA^United States|N^Non Veteran|||Y||AL||392||||
+PD1||A|||P|||N|N|957|F^Family only|||606^^202|DNR^Do not resuscitate|||20150404|||
+MRG|747||180|||435|Webster^Connor^L
+
+MSH|^~\&|202|707|303|505|20151114093632.983||ADT^A30^ADT_A30|763|P|2.4|||||||EN^English||
+EVN||20150317093632.984|||OP2^Oneal^Reuben^P||
+PID|1||151||Beasley^Tad^C|Blanchard^Victor^F|19840118093632.985|U|||||(731)538-7434|(731)538-7434|FR^French|I^Interlocutory|JWN^Christian: Jehovah's Witness||||308||824|N||USA^United States|N^Non Veteran||||||20150110093632.989|956||||
+PD1|S|U|961^^757||N||Y|N||499|||20150110|185^^210|||20150917||USA||
+MRG|122|||||675|
+
+MSH|^~\&|101|909|101|606|20151114093637.942||ADT^A30^ADT_A30|878|P|2.4||295|||||EN^English|ISO 2022-1994|
+EVN||20150705093637.943||01|||
+PID|1||854||Daugherty^Alden^I||19691129093637.944|O|||5777 Fallen Panda Expressway^^Owl^MS^38889-6760^USA||(731)538-7434|||||||6620489200^KS^20160411|898|U^Unknown|482|N|5|USA^United States|||20150811093637.948|Y||UA||||||
+PD1|||126^^231||P|N|||||||||DNR^Do not resuscitate|O|||AUSAF||RET
+MRG|187||932||173|781|Dunlap^Reuben^G
+
+MSH|^~\&|404|606|404|707|20151114095254.298||ADT^A30^ADT_A30|479|P|2.4|943|741|||||EN^English|<null>|
+EVN||20141228095254.299|||OP1^Holder^Omar^Q||643
+PID|1||249||Vance^Octavius^N|Rodriquez^Solomon^E|19830719095254.300|||2028-9^Asian|7608 Silent Glen^^Oatmeal^TN^37166-9572^USA|||||||||5670100000^KS^20161018|294|N^Not Hispanic or Latino|||4||Y^Veteran||20150305095254.302|N|Y||20150313095254.303|904||||
+PD1|||||F|N|N|R||830|O^Other||20150927|519^^559||O|||||RET
+MRG|273||554||||Pennington^Hilel^Q
+
+MSH|^~\&|101|707|101|808|20151114095443.778||ADT^A30^ADT_A30|697|P|2.4|||||||EN^English|ISO 2022-1994|
+EVN||20150701095443.779|20150531095443.779|01|OP4^Marquez^Ivor^H|20150718095443.781|704
+PID|1||727||Zimmerman^Ivor^A|Lane^Tobias^Q|19760202095443.781|||2076-8^Native Hawaiian or Other Pacific Islander|5777 Fallen Panda Expressway^^Oatmeal^TN^37166-9572^USA|||(470)446-7282|FR^French||NAZ^Christian: Church of the Nazarene|110||3667254000^AK^20160926|412|U^Unknown|||7||||||N|||||||
+PD1||U|509^^776|||Y|Y||Y||||20150816|733^^170|||20150105||USA||RET
+MRG|601||140||312||
+
