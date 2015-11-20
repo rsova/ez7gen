@@ -26,7 +26,7 @@ class TypeAwareFieldGenerator
   #Generate HL7 AD (address) data type.
   def AD(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # match cities, states and zips
     sample  = @yml['address.states'].sample
@@ -54,7 +54,7 @@ class TypeAwareFieldGenerator
   # Authorization information
   def AUI(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # authorization number (ST)
     ST(map, true)
@@ -65,7 +65,7 @@ class TypeAwareFieldGenerator
   #Charge time
   def CCD(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
       #<when to charge code (ID)>
       ID(map, force=false)
@@ -75,7 +75,7 @@ class TypeAwareFieldGenerator
   #Channel calibration parameters
   def CCP(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # <channel calibration sensitivity correction (NM)>
     NM(map,true)
@@ -86,7 +86,7 @@ class TypeAwareFieldGenerator
   # Channel definition
   def CD(map, force=false)
   # check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     #<channel identifier (WVI)>
     WVI(map, force=true)
@@ -100,7 +100,7 @@ class TypeAwareFieldGenerator
   # Generate HL7 CE (coded element) data type
   def CE(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     #TODO: Refactor this method
     if (map[:description] == 'Role Action Reason' || map[:description] == 'Species Code' || map[:description] == 'Breed Code' || map[:description] == 'Production Class Code')
@@ -138,7 +138,7 @@ class TypeAwareFieldGenerator
   # Coded element with formatted values
   def CF(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map, force))
+    return '' if(!autoGenerate?(map, force))
 
     # <identifier (ID)>
     ID(map, true)
@@ -152,7 +152,7 @@ class TypeAwareFieldGenerator
   #Composite ID with check digit
   def CK(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map, force))
+    return '' if(!autoGenerate?(map, force))
     # <ID number (NM)>
     NM(map,true)
     # <check digit (NM)>
@@ -163,7 +163,7 @@ class TypeAwareFieldGenerator
   #Composite
   def CM(map, force=false)
    #check if the field is optional and randomly generate it of skip
-   return if(!autoGenerate?(map, force))
+   return '' if(!autoGenerate?(map, force))
 
    val=[]
    # <penalty type (IS)>
@@ -180,7 +180,7 @@ class TypeAwareFieldGenerator
   # CNE	Coded with no exceptions
   def CNE(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map, force))
+    return '' if(!autoGenerate?(map, force))
 
     # <identifier (ST)> ^ <text (ST)>
     ST(map, true)
@@ -196,7 +196,7 @@ class TypeAwareFieldGenerator
   # Composite ID number and name (special DT for NDL)
   def CNN(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map, force))
+    return '' if(!autoGenerate?(map, force))
 
     # ID number (ST) (ST)
 
@@ -219,7 +219,7 @@ class TypeAwareFieldGenerator
 
   def CP(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map, force))
+		return '' if(!autoGenerate?(map, force))
 
 		#price (MO)
     MO(map,true)
@@ -233,7 +233,7 @@ class TypeAwareFieldGenerator
   # Composite quantity with units
   def CQ(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     val =[]
     # <quantity (NM)>
     val<<NM(map,true)
@@ -245,7 +245,7 @@ class TypeAwareFieldGenerator
   #Channel sensitivity/units
   def CSU(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # < channel sensitivity (NM)>
     NM(map,true)
@@ -260,7 +260,7 @@ class TypeAwareFieldGenerator
   #Coded with exceptions
   def CWE(map, force=false)
   #check if the field is optional and randomly generate it of skip
-  return if(!autoGenerate?(map,force))
+  return '' if(!autoGenerate?(map,force))
   # <identifier (ST)>
   # <text (ST)> ^ <name of coding system (IS)> ^ <alternate identifier(ST)> ^ <alternate text (ST)> ^ <name of alternate coding system (IS)> ^ <coding system version ID (ST)> ^ alternate coding system version ID (ST)> ^ <original text (ST)>
   end
@@ -268,7 +268,7 @@ class TypeAwareFieldGenerator
   #Generate HL7 CX (extended composite ID with check digit) data type.
   def CX(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
 		#ID (ST)
 		ST(update(map, :description,'Number'),true)
@@ -284,7 +284,7 @@ class TypeAwareFieldGenerator
   # Daily deductible
   def DDI(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     val=[]
     # < delay days (NM)>
@@ -298,7 +298,7 @@ class TypeAwareFieldGenerator
   # Activation date
   def DIN(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     # date	< date (TS)>
     TS(map,true)
     # <institution name (CE)>
@@ -307,7 +307,7 @@ class TypeAwareFieldGenerator
   #Generate HL7 DLD (discharge location) data type. This type consists of the following components=>
   def DLD(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     val=[]
 		#discharge location (ID)
@@ -320,7 +320,7 @@ class TypeAwareFieldGenerator
   #Generate HHL7 DLN (driver's license number) data type
   def DLN(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
     val=[]
 		# DLN dln = (DLN) map.fld
 		#Driver´s License Number (ST)
@@ -340,7 +340,7 @@ class TypeAwareFieldGenerator
   # Delta check
   def DLT(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     # <range (NR)>
     NR(map,true)
     # <numeric threshold (NM)>
@@ -351,7 +351,7 @@ class TypeAwareFieldGenerator
   #Generates HL7 DR (date/time range) data type.
   def DR(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
     val=[]
 		#range start date/time (TS)
 		val<<TS(map,true)
@@ -363,7 +363,7 @@ class TypeAwareFieldGenerator
   #Generates an HL7 DT (date) datatype.
   def DT(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
     # #time of an event (TSComponentOne)
     toDateTime(map).strftime('%Y%m%d') #format('YYYYMMdd.SSS')Date.iso8601
@@ -373,7 +373,7 @@ class TypeAwareFieldGenerator
   # Day Type and Number
   def DTN(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     val=[]
     # <day type (IS)>
@@ -386,7 +386,7 @@ class TypeAwareFieldGenerator
   # Generate HL7 EI - entity identifier
   def EI(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # entity identifier (ST)
     ST(map, force)
@@ -398,7 +398,7 @@ class TypeAwareFieldGenerator
   # Encapsulated data
   def ED(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     # <source application (HD) >
     HD(map, true)
     # <type of data (ID)>
@@ -410,7 +410,7 @@ class TypeAwareFieldGenerator
   # Entity identifier
   def EI(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     # <entity identifier (ST)>
     ST(map,true)
     # <namespace ID (IS)>
@@ -421,7 +421,7 @@ class TypeAwareFieldGenerator
   # Parent order
   def EIP(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # <parent’s placer order number (EI)>
     EI(map,true)
@@ -431,7 +431,7 @@ class TypeAwareFieldGenerator
   # Error segment
   def ELD(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     val = []
     # <segment ID (ST)>
     val<<''
@@ -447,7 +447,7 @@ class TypeAwareFieldGenerator
   #Generates HL7 FC (financial class) data type.
   def FC(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
     val = []
 		#Financial Class (IS)
@@ -460,7 +460,7 @@ class TypeAwareFieldGenerator
   #Generates an HL7 FN (familiy name) data type.
   def FN(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
 		#surname (ST)
     @yml['person.names.last'].sample
@@ -474,7 +474,7 @@ class TypeAwareFieldGenerator
   # The FT field is of arbitrary length (up to 64k) and may contain formatting commands enclosed in escape characters.
   def FT(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     ID(map, true)
   end
@@ -483,7 +483,7 @@ class TypeAwareFieldGenerator
   #Generates HL7 HD (hierarchic designator) data type
   def HD(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
 		#namespace ID (IS)
     IS(map, true)
@@ -495,7 +495,8 @@ class TypeAwareFieldGenerator
   # Generate HL7 ID, usually using value from code table
   def ID(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
+    
     #value only
     #Case when max_len overrides requirements
     len = Utils.safeLen(map[:max_length],@@REQ_LEN_3_DGTS)
@@ -505,7 +506,7 @@ class TypeAwareFieldGenerator
   #Generates HL7 IS (namespace id) data type
   def IS(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     #TODO: same as ID?
     ID(map,true)
@@ -515,7 +516,7 @@ class TypeAwareFieldGenerator
   #Generates HL7 JCC (job code/class) data type.
   def JCC(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
 		val=[]
 		#job code (IS)
@@ -530,7 +531,7 @@ class TypeAwareFieldGenerator
   # Location with address information (variant 1)
   def LA1(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     val =[]
     # <point of care (IS)>
     val<<IS(map,true)
@@ -554,7 +555,7 @@ class TypeAwareFieldGenerator
   # Location with address information (variant 2)
   def LA2(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     val =[]
     # <point of care (IS)>
@@ -586,7 +587,7 @@ class TypeAwareFieldGenerator
   #MA segment
   def MA(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # <sample 1 from channel 1 (NM)>
     NM(map,true)
@@ -601,31 +602,31 @@ class TypeAwareFieldGenerator
   #Generates an HL7 MO (money) data type.
   def MO(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
-    val = []
+		return '' if(!autoGenerate?(map,force))
+    # val = []
 		#quantity (NM)Guarantor Household Annual Income
 		# val << NM(update(map,:description,'Money'),true)
-		val << NM(map,true)
+		#val << NM(map,true)
+		NM(map,true)
 		#denomination (ID)
-		val << 'USD'
-    return val.join(@@SUB)
+    # val << 'USD' # Per request.
+    # return val.join(@@SUB)
   end
 
   # Charge to practice
   def MOC(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # <dollar amount (MO)>
     MO(map,true)
     # <charge code (CE)>
   end
 
-
   # Money or percentage
   def MOP(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     val=[]
     # <money or percentage indicator (IS)>
     val<<IS({:codetable =>'148'},true)
@@ -637,7 +638,7 @@ class TypeAwareFieldGenerator
   # MSG segment
   def MSG(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     val=[]
     # <message type (ID)>
     val<<IS({:codetable =>'76'},true)
@@ -661,7 +662,7 @@ class TypeAwareFieldGenerator
   # Numeric Array
   def NA(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     # <value1 (NM)>
     NM(map,true)
     # <value2 (NM)>
@@ -672,7 +673,7 @@ class TypeAwareFieldGenerator
   # Observing practitioner
   def NDL(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     # <name (CNN)>
     CNN(map,true)
     # <start date/time (TS)>
@@ -691,7 +692,7 @@ class TypeAwareFieldGenerator
   #Generates an HL7 NM (numeric) data type. A NM contains a single String value.
   def NM(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
     val = 0
     case map[:description]
       when'Guarantor Household Size','Birth Order'
@@ -719,7 +720,7 @@ class TypeAwareFieldGenerator
   #Numeric Range
   def NR(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     val=[]
     # Low Value (NM)
     val=NM(map,true)
@@ -732,7 +733,7 @@ class TypeAwareFieldGenerator
   #The code and associated date defining a significant event relating to a bill that may affect payer processing
   def OCD(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
     val = []
 		#occurrence code (IS)
     val << IS(map, true)
@@ -743,10 +744,29 @@ class TypeAwareFieldGenerator
     val.join(@@HAT)
   end
 
+  # Order sequence
+  def OSD(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+  return '' if(!autoGenerate?(map,force))
+
+    # <sequence/results flag (ID)>
+    ID(map, force)
+    # <placer order number: entity identifier (ST)>
+    # <placer order number: namespace ID (IS)>
+    # <filler order number: entity identifier (ST)>
+    # <filler order number: namespace ID (IS)>
+    # <sequence condition value (ST)>
+    # <maximum number of repeats (NM)>
+    # <placer order number: universal ID (ST)>
+    # <placer order number; universal ID type (ID)>
+    # <filler order number: universal ID (ST)>
+    # <filler order number: universal ID type (ID)>
+  end
+
   #Generate an HL7 OSP (occurence span) data type.
   def OSP(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
     val = []
 
 		#occurrence span code (CE)
@@ -761,7 +781,7 @@ class TypeAwareFieldGenerator
   # Pre-certification required
   def PCF(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # <pre-certification patient type (IS)>
     val<<IS({:codetable =>'150'},true)
@@ -772,7 +792,7 @@ class TypeAwareFieldGenerator
   # Person identifier
   def PI(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     # <ID number (ST)>
     ST(map,true)
     # <type of ID number>
@@ -782,7 +802,7 @@ class TypeAwareFieldGenerator
   # Privileges
   def PIP(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # <privilege (CE)>
     IS(map,true)
@@ -796,7 +816,7 @@ class TypeAwareFieldGenerator
   #Generate an HL7 PL (person location) data type.
   def PL(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
     val = []
 		#point of care (IS)
     val<<IS({:codetable =>'302'},true)
@@ -820,7 +840,7 @@ class TypeAwareFieldGenerator
   # Practitioner ID Numbers
   def PLN(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # <ID number (ST)>
     ST(map,true)
@@ -833,7 +853,7 @@ class TypeAwareFieldGenerator
   # Person name
   def PN(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     val=[]
     # family name (FN)
     val << FN(map, true)
@@ -850,7 +870,7 @@ class TypeAwareFieldGenerator
   # Performing person time stamp
   def PPN(map, force=false)
     # check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     val = []
     # <ID number (ST)>
     val << ST(map,true)
@@ -882,7 +902,7 @@ class TypeAwareFieldGenerator
   # Parent result link
   def PRL(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # <OBX-3-observation identifier of parent result (CE)>
     CE(map,true)
@@ -890,16 +910,10 @@ class TypeAwareFieldGenerator
     # <part of OBX-5 observation result from parent (TX)see discussion>
   end
 
-
-  # def xx(map, force=false)
-  #   #check if the field is optional and randomly generate it of skip
-  #   return if(!autoGenerate?(map,force))
-  # end
-
   #Generate HL7 S PT (processing type) data type.
   def PT(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
 		#map.maxlen
 		# PT pt = (PT) map.fld
@@ -911,10 +925,131 @@ class TypeAwareFieldGenerator
 		#processing mode (ID)
   end
 
+  # Processing type
+  def PTA(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    # <processing ID (ID)>
+    ID(map, true)
+    # <processing mode (ID)>
+    # <processing ID (ID)>
+  end
+
+  # Query input parameter list
+  def OIP(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    # <segment field name (ST) >
+    # <value1 (ST) & value2 (ST) & value3 (ST) ...>
+    #Example: |@PID.5.1^EVANS|
+    #TBD
+    ''
+  end
+
+  # QSC	Query selection criteria
+  def QSC(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    # <segment field name(ST)>
+    # <relational operator (ID)>
+    # <value (ST)> <relational conjunction (ID)>
+    # Example: |@PID.5.1^EQ^EVANS|"
+    #TBD
+    ''
+  end
+
+  # RCD	Row column definition
+  def RCD(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    # <segment field name (ST)>
+    # <HL7 data type (ID)>
+    # <maximum column width (NM)>
+    # Example: |@PID.5.1^ST^20|"
+    #TBD
+    ''
+  end
+
+  # Reference range
+  def RFR(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    # <numeric range (NR)>
+    NR(map, true)
+    # <administrative sex (IS)
+    # <age range (NR)>
+    # <gestational range (NR)>
+    # <species (TX)>
+    # <race/subspecies (ST)>
+    # <conditions (TX)>
+  end
+
+  # Repeat interval
+  def RI(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+    # <repeat pattern (IS)>
+    IS(map,true)
+    # <explicit time interval (ST)>
+  end
+
+  # Room coverage
+  def RMC(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    # <room type> (IS)
+    IS(map,true)
+    # <amount type>
+    # <coverage amount>
+  end
+
+  # Reference pointer
+  def PR(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    # <pointer (ST) >
+    ST(map,true)
+    # < application ID (HD)>
+    # <type of data (ID)>
+    # <subtype (ID)>
+  end
+
+  # Street address
+  #  Appears ONLY in the XAD data type.
+  # TODO: Future refactoring, handled in XAD.
+  # def SAD(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return '' if(!autoGenerate?(map,force))
+  #
+  #   # <street or mailing address (ST)>
+  #   # <street name (ST)>
+  #   # <dwelling number (ST)>
+  # end
+
+  # SCV	Scheduling class value pair
+  def SCV(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    val = []
+    # <parameter class (IS)>
+    val<<''
+    # <parameter value (ST)>
+    val<<ST(map,true)
+    val.join(@@HAT)
+  end
+
   #Generate HL7 SI (sequence ID) data type. A SI contains a single String value.
   def SI(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
 		#SI pt = (SI) map.fld
 		#pt.setValue(generateLengthBoundId((map.max_length)?map.max_length.toInteger():1))
@@ -922,10 +1057,61 @@ class TypeAwareFieldGenerator
     generateLengthBoundId(len)
   end
 
+  # Structured numeric
+  def SN(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return ''  if(!autoGenerate?(map,force))
+    val = []
+    # <comparator (ST)>
+    val << ''
+    # <num1 (NM)>
+    val << NM(map,true)
+    # <separator/suffix (ST)>
+    # <num2 (NM)>
+    val.join(@@HAT)
+  end
+
+  # Specialty
+  def SPD(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    # <specialty name (ST)>
+    ST(map,true)
+    # <governing board (ST)>
+    # <eligible or certified (ID)>
+    # <date of certification (DT)>
+  end
+
+  # Specimen source
+  def SPS(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+  return '' if(!autoGenerate?(map,force))
+
+    #<specimen source name or code (CE)>
+    CE(map,true)
+    # <additives (TX)>
+    # <freetext (TX)>
+    # <body site (CE)>
+    # <site modifier (CE)>
+    # <collection modifier method code (CE)>
+    # <specimen role (CE)>
+  end
+
+  #Sort order
+  def SRT(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    # <sort-by field (ST)>
+    # <sequencing (ID)>
+    ID(map,true)
+  end
+
   #Generate HL7 ST (string data) data type. A ST contains a single String value.
   def ST(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # TODO add provider type ln 840 ROL
     case map[:description]
@@ -947,29 +1133,57 @@ class TypeAwareFieldGenerator
 
   end
 
+  # An Elementary Data Type  Format: HH[MM[SS[.S[S[S[S]]]]]][+/-ZZZZ]
+  # EX: 160140.761
+  def TM(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+    toDateTime(map).strftime('%H%M%S.%L')
+  end
+
+  #Generate an HL7 TN (telephone number) data type. A TN contains a single String value.
+  def TN(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    # TN tn = (TN) map.fld
+    # tn.setValue(phones.getAt(Math.abs(random.nextInt()%phones.size())))
+    @yml['address.phones'].sample # pick a phone
+  end
+
+  # Timing quantity
+  def TQ(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    # <quantity (CQ)>
+    CQ(map,true)
+    # <interval (RI)>
+    # < duration (ST)>
+    # <start date/time (TS)>
+    # <end date/time (TS)>
+    # <priority (ST)>
+    # <condition (ST)>
+    # <text (TX)>
+    # <conjunction component (ID)>
+    # <order sequencing (OSD)>
+    # <occurrence duration (CE)>
+    # <total occurrences (NM)>
+  end
+
   #Generate HL7 TS (time stamp), within number of weeks in the future or past
   def TS(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
     #time of an event (TSComponentOne)
     toDateTime(map).strftime('%Y%m%d%H%M%S.%L') #format('YYYYMMDDHHSS.SSS')Date.iso8601
   end
 
-  #Generate an HL7 TN (telephone number) data type. A TN contains a single String value.
-  def TN(map, force=false)
-		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
-
-		# TN tn = (TN) map.fld
-		# tn.setValue(phones.getAt(Math.abs(random.nextInt()%phones.size())))
-    @yml['address.phones'].sample # pick a phone
-  end
-
   #Generate HL7 TX (text data) data type. A TX contains a single String value.
   def TX(map, force=false)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
     # @@GENERAL_TEXT
     ID(map,true)
   end
@@ -977,7 +1191,7 @@ class TypeAwareFieldGenerator
   #Generate an HL7 UVC (Value code and amount) data type.
   def UVC(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
     val =[]
 		# UVC uvc = ((UVC)map.fld)
 		#value code (IS)
@@ -989,10 +1203,25 @@ class TypeAwareFieldGenerator
     val.join(@@HAT)
   end
 
+  # Visiting hours
+  def VH(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+
+    val =[]
+    # <start day range (ID)>
+    val << ID(map,true)
+    # <end day range (ID)>
+    val << ID(map,true)
+    # <start hour range (TM)>
+    # <end hour range (TM)>
+    val.join(@@HAT)
+  end
+
   #Generate an HL7 VID (version identifier) data type.
   def VID(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
 		# VID vid = ((VID)map.fld)
     #version ID (ID)
@@ -1003,20 +1232,35 @@ class TypeAwareFieldGenerator
 #		international version ID (CE)
   end
 
+  # Value qualifier
+  def VR(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!autoGenerate?(map,force))
+    # <first data code value (ST)>
+    ST(map,true)
+    # <Last data code value (ST)>
+  end
+
   #Channel identifier
   def WVI(map, force=true)
     #check if the field is optional and randomly generate it of skip
-    return if(!autoGenerate?(map,force))
+    return '' if(!autoGenerate?(map,force))
 
     # <channel number (NM)>
     NM(map, true)
     # <channel name (ST)>
   end
 
+
+  # def WVS(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return '' if(!autoGenerate?(map,force))
+  # end
+
   #Generate HL7 XAD (extended address)
   def XAD(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
     # same as address AD
     AD(map,true)
@@ -1037,7 +1281,7 @@ class TypeAwareFieldGenerator
   # Generate HL7 XCN (extended composite ID number and name for persons)
   def XCN(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
     val=[]
 		# XCN xcn = (XCN) map.fld
@@ -1073,7 +1317,7 @@ class TypeAwareFieldGenerator
   #Generate an HL7 XON (extended composite name and identification number for organizations) data type.
   def XON(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
 		# XON xtn = (XON) map.fld
     val=[]
@@ -1097,7 +1341,7 @@ class TypeAwareFieldGenerator
   #Generate an HL7 XPN (extended person name) data type. This type consists of the following components=>
   def XPN(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
     # val=[]
 		#family name (FN)
@@ -1123,24 +1367,31 @@ class TypeAwareFieldGenerator
   #Generate HL7 XTN (extended telecommunication number)
   def XTN(map, force=false)
 		#check if the field is optional and randomly generate it of skip
-		return if(!autoGenerate?(map,force))
+		return '' if(!autoGenerate?(map,force))
 
 		#[(999)] 999-9999 [X99999][C any text] (TN)
 		TN(map, true)
-		#xtn.get9999999X99999CAnyText().setValue(phones.getAt(Math.abs(random.nextInt()%phones.size())))
-		# telecommunication use code (ID)
-		# telecommunication equipment type (ID) (ID)
-		# Email address (ST)
-		# Country Code (NM)
-		# Area/city code (NM)
-		# Phone number (NM)
-		# Extension (NM)
-		# any text (ST)
+    #xtn.get9999999X99999CAnyText().setValue(phones.getAt(Math.abs(random.nextInt()%phones.size())))
+    # telecommunication use code (ID)
+    # telecommunication equipment type (ID) (ID)
+    # Email address (ST)
+    # Country Code (NM)
+    # Area/city code (NM)
+    # Phone number (NM)
+    # Extension (NM)
+    # any text (ST)
   end
+
+  # def xx(map, force=false)
+  #   #check if the field is optional and randomly generate it of skip
+  #   return '' if(!autoGenerate?(map,force))
+  # end
+
+  # End of Data Types #
 
   # Value of coded table returned as as single value
   def getCodedValue(attributes)
-    codes = @pp.getCodeTable(attributes[:codetable])
+  codes = @pp.getCodeTable(attributes[:codetable])
     # puts codes
     #Apply rules to find a value and description
     map = applyRules(codes, attributes)
@@ -1150,7 +1401,7 @@ class TypeAwareFieldGenerator
 
   # Values and Description from code table returned as a pair.
   def getCodedMap(attributes)
-    codes = @pp.getCodeTable(attributes[:codetable])
+  codes = @pp.getCodeTable(attributes[:codetable])
     # puts codes
     #Apply rules to find a value and description
     #Returns map with code and description
@@ -1161,7 +1412,7 @@ class TypeAwareFieldGenerator
   #TODO refactor candidate
   def applyRules(codes, attributes)
     #safety check, no codes returns an empty map
-    return {} if Utils.blank?(codes)
+  return {} if Utils.blank?(codes)
 
     #index of random element
     idx = Utils.sampleIdx(codes.size)
@@ -1173,7 +1424,7 @@ class TypeAwareFieldGenerator
     end
 
     if (code.size > (maxlen = (attributes[:max_length]) ? attributes[:max_length].to_i : code.size))
-    #remove all codes wich values violate
+      #remove all codes wich values violate
     #codes.select! {|it| it[:value].size <= maxlen }
       code, description = handleLength(codes, maxlen)
     end
@@ -1189,7 +1440,7 @@ class TypeAwareFieldGenerator
   end
 
   def handleLength(codes, maxlen)
-    idx = codes.find_index { |it| it[:value].size <= maxlen }
+  idx = codes.find_index { |it| it[:value].size <= maxlen }
 
     if (!idx)
       code, description = '', ''
@@ -1203,7 +1454,7 @@ class TypeAwareFieldGenerator
 
   def handleRanges(code)
     # if (code.include?(@@RANGE_INDICATOR))
-      ends = code.delete(' ').split('...').map { |it| it }
+  ends = code.delete(' ').split('...').map { |it| it }
       if (ends.empty?) # This is indication that codetable does not have any values
         code = ''
       else #Handle range values, build range and pick random value
@@ -1212,11 +1463,11 @@ class TypeAwareFieldGenerator
         code = range.to_a.sample
       end
       return code
-    end
+  end
 
   # Returns randomly generated Id of required length, of single digit id
   def generateLengthBoundId(maxlen, str=@@random.rand(100000000).to_s)
-    idx = maxlen
+  idx = maxlen
     if(maxlen > str.size)
       str = str.ljust(maxlen,'0')
       idx = str.size
@@ -1227,13 +1478,13 @@ class TypeAwareFieldGenerator
     return str[0..idx]
   end
 
+
   # # Returns randomly generated Id of required length, of single digit id
   # def generateLengthBoundId1(map, str=@@random.rand(100000000).to_s)
   #   (!Utils.blank?(map[:codetable]))? getCodedValue(map): @@random.rand(@@UP_TO_3_DGTS).to_s
   #
   #   map[:maxlen]
   # end
-
 
   # If field are X,W,B (Not Supported, Withdrawn Fields or Backward Compatible)  returns false.
   # Conditional (C) ?
@@ -1242,10 +1493,18 @@ class TypeAwareFieldGenerator
   # def isAutogenerate(map, force=false)
   def autoGenerate?(map, force=false)
     # return true
-    if(force)then return true end
-    if(['X','W','B'].include?(map[:required]))then return false end
-    if(map[:required] =='R') then return true end
-    if(map[:required] == 'O') then return [true, false].sample end #random boolean
+    return true if(force)  #forced generation, ignore mappings
+
+    #look up in the mapping
+    case map[:required]
+      when 'X','W','B' then false;
+      when 'R' then true;
+      when 'O' then [true,false].sample();
+      else  false ;
+    end
+    # if(['X','W','B'].include?(map[:required]))then return false end
+    # if(map[:required] =='R') then return true end
+    # if(map[:required] == 'O') then return true end #random boolean
   end
 
   # @return DateTime generated with consideration of description string for dates in the future

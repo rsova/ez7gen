@@ -32,6 +32,9 @@ class MessageFactory
 
     #iterate over selected segments and build the entire message
     segments.each(){ |segment|
+      # groups of segments only repeated once for now
+      if(segment=='{'||segment=='}')then next end
+
       choiceParser = parsers[Utils.getTypeByName(segment)]
       attributes = choiceParser.getSegmentStructure(Utils.noBaseName(segment))
       segmentGenerator.generate(hl7Msg, segment, attributes)

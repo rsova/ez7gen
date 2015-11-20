@@ -6,7 +6,7 @@ require 'ox'
 class ProfileParser
   #instance attributes
   attr_accessor :version; :event; :xml
-  @@HL7_VERSIONS = {'2.4'=>'base24.xml', 'vaz2.4'=>'vaz2.4.xml'}
+  @@HL7_VERSIONS = {'2.4'=>'2.4/2.4-schema.xml', 'vaz2.4'=>'vaz2.4/vaz2.4-schema.xml'}
   #class attribute
   @@segment_patern = /\[([^\[\]]*)\]/
 
