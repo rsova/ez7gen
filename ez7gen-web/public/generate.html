@@ -1,0 +1,42 @@
+<div class="text-center">
+	<p>Demo: HL7 Message Generator Client</p>
+</div>
+
+<div class="form-group">
+
+    <div class="row">
+
+        <div class="col-xs-2">
+        <!--<h3>HL7 Version</h3>-->
+        <!--<p>Selected: {{event.selected.name}}</p>-->
+        <ui-select ng-model="version.selected" theme="selectize" ng-disabled="disabled" style="width: 120px;">
+            <ui-select-match placeholder="HL7 Version">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="version in versions | filter: $select.search">
+                <span ng-bind-html="version.name | highlight: $select.search"></span>
+                <!--<small ng-bind-html="event.code | highlight: $select.search"></small>-->
+            </ui-select-choices>
+        </ui-select>
+        </div>
+
+        <div class="col-xs-3">
+        <!--<h3>HL7 Event</h3>-->
+        <!--<p>Selected: {{event.selected.name}}</p>-->
+        <ui-select ng-model="event.selected" theme="selectize" ng-disabled="disabled" style="width: 120px;">
+            <ui-select-match placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="event in events | filter: $select.search">
+                <span ng-bind-html="event.name | highlight: $select.search"></span>
+                <!--<small ng-bind-html="event.code | highlight: $select.search"></small>-->
+            </ui-select-choices>
+        </ui-select>
+        </div>
+
+    </div>
+</div>
+
+    <h4>
+	<i>Version</i>: {{version.selected.name}} <i>Message</i> : {{event.selected.name}}
+</h4>
+
+<pre>{{payload.message}}</pre>
+<button class="btn-default" ng-click="generate()">Generate HL7</button>
+

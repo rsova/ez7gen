@@ -1,0 +1,86 @@
+		<h4><i>Version</i>: 2.4 <i>Message</i> : ADT_A01</h4>
+
+		<pre>
+MSH|^~\&|MARMSendingSystem||||20150609165456.138-1000||ADT^A01^ADT_A01|33801|P|2.4|123
+PID|||1555||Hardy^Arsenio
+PV1|1|I|200^683^1^^^^10|||||||SUR||||ADM|AO||^Ford^Uriel^J
+		</pre>
+		
+		<hr/>
+		
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<label ng-click="isCollapsed = !isCollapsed">MSH|^~\&|MARMSendingSystem||||20150609165456.138-1000||ADT^A01^ADT_A01|33801|P|2.4|123</label>
+				</h4>
+			</div>
+			<div collapse="isCollapsed" >
+				<div class="panel-body">
+				<pre>
+MSH                            Header
+MARMSendingSystem              Sending Application
+20150609165456.138-1000        Date Time of Message
+ADT^A01^ADT_A01                Message Type
+	ADT                        Message Code
+	AO1                        Trigger Event
+	ADT_A01                    Message Structure
+33801                          Message Control ID
+P                              Processing ID
+2.4                            Version ID
+123                            Sequence Number
+				</pre>
+				</div>
+			</div>
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<label ng-click="isCollapsed1 = !isCollapsed1">PID|||1555||Hardy^Arsenio</label>
+				</h4>
+			</div>
+			<div collapse="isCollapsed1" >
+				<div class="panel-body">
+				<pre>
+PID                            Patient Identification
+1555                           Patient Identifier List
+20150609165456.138-1000        Date Time of Message
+Hardy                          Family Name
+Arseno                         Given Name
+				</pre>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<label ng-click="isCollapsed2 = !isCollapsed2">PV1|1|I|200^683^1^^^^10|||||||SUR||||ADM|AO||^Ford^Uriel^J</label>
+				</h4>
+			</div>
+			<div collapse="isCollapsed2" >
+				<div class="panel-body">
+				<pre>
+PIV                            Patient Visit
+1                              Set ID - PV1
+I                              Patient Class
+200^683^1^^^^10                Assigned Patient Location
+	200                        Point of Care
+	683                        Room
+	1                          Bed
+	10                         Building
+SUR                            Hospital Service
+ADM                            Admit Source
+AO                             Ambulatory Status
+^Ford^Uriel^J                  Admitting Doctor
+	Ford                       Family Name
+	Uriel                      Given Name
+	J                          Second and Further Given Names or Initials Thereof
+
+
+
+				</pre>
+				</div>
+			</div>
+		</div>
+
+	</div>
