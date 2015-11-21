@@ -39,7 +39,7 @@ class MessageFactory
       attributes = choiceParser.getSegmentStructure(Utils.noBaseName(segment))
       segmentGenerator.generate(hl7Msg, segment, attributes)
     }
-    return hl7Msg
+    return hl7Msg.to_s.gsub("\r","\n")
   end
 
 end

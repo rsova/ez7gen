@@ -1,7 +1,0 @@
-MSH|^~\&|303|707|101|808|20151114095442.987||RSP^K23^RSP_K23|663|P|2.4|||||||EN^English|2.3|10
-MSA|CR|800|832|105||0^Message accepted
-ERR|^^^306
-QAK|||^No suggested values defined|||
-QPD|^No suggested values defined||
-DSC||
-

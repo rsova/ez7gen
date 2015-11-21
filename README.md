@@ -11,9 +11,13 @@ Add this line to your application's Gemfile:
 And then execute:
 
     $ bundle
+    
+To build a gem localy:
+
+    $ gem build ez7gen.gemspec
 
 Or install it yourself as:
-
+    
     $ gem install ez7gen
 
 ## Usage

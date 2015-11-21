@@ -1,7 +1,0 @@
-MSH|^~\&|101|707|303|808|20151114095443.354||RSP^K24^RSP_K24|296|P|2.4|726||AL||||EN^English||
-MSA|CA|818||||Success^
-ERR|^^^736
-QAK|||^No suggested values defined||817|
-QPD|^No suggested values defined||
-DSC|280|F
-
