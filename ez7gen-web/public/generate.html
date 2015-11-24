@@ -9,9 +9,9 @@
         <div class="col-xs-2">
         <!--<h3>HL7 Version</h3>-->
         <!--<p>Selected: {{event.selected.name}}</p>-->
-        <ui-select ng-model="version.selected" theme="selectize" ng-disabled="disabled" style="width: 120px;">
+        <ui-select ng-model="version.selected" theme="selectize" ng-disabled="disabled" style="width: 120px;" on-select="setEvents(version.selected)">
             <ui-select-match placeholder="HL7 Version">{{$select.selected.name}}</ui-select-match>
-            <ui-select-choices repeat="version in versions | filter: $select.search">
+            <ui-select-choices repeat="version in versions | filter: $select.search" refresh="setEvents($select.search)" refresh-delay="0">
                 <span ng-bind-html="version.name | highlight: $select.search"></span>
                 <!--<small ng-bind-html="event.code | highlight: $select.search"></small>-->
             </ui-select-choices>

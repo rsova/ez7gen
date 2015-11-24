@@ -1,13 +1,13 @@
 require 'sinatra'
 require 'json'
 require 'rest_client'
-# require_relative 'lib-backup/message_factory'
 require 'ez7gen'
 
 
-  post '/' do
-    content_type :json
-    { message: 'Hello World!' }.to_json
+  get '/' do
+    # content_type :json
+    # { message: 'Hello World!' }.to_json
+    redirect '/index.html'
   end
 
   get '/version/' do
@@ -31,7 +31,7 @@ require 'ez7gen'
       @hl7 = msg.generate(version, event)#msg.replace('\r','\n' )
     rescue
       puts 'inside rescue'
-      @hl7='Ops, somenthing went wrong..'
+      @hl7='Oops, somenthing went wrong..'
     end
     {message: @hl7}.to_json
   end

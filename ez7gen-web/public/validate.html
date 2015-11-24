@@ -1,12 +1,13 @@
 		<h4><i>Version</i>: {{version}} <i>Message</i> {{event}}</h4>
 
 		<pre>{{payload.message}}</pre>
-		<!-- <p>
-			<button type="button" class="btn btn btn-default">Validate</button>
-		</p> -->
-		<button class="btn-default" ng-click="validate()">validate HL7</button>
+		<button class="btn-default" ng-click="validate()">Validate HL7</button>
 	    <hr/>
-        <pre ng-show="visible"><h4 ng-style={"color":"green"}>
+		<p>
+			<button type="button" class="btn btn btn-default">Errors</button>
+		</p>
+
+		<pre ng-show="visible"><h4 ng-style={"color":"green"}>
 No Errors.
 Message validated by the VA Ensemble Production. 
 </h4></pre>
