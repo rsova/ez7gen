@@ -113,7 +113,7 @@ class TypeAwareFieldGenerator
     if(Utils.blank?(codes))
       case map[:description]
         when 'Allergen Code/Mnemonic/Description'
-          pair = yml['codes.allergens'].to_a.sample(1).to_h.first # randomly pick a pair
+          pair = yml['codes.allergens.icd10'].to_a.sample(1).to_h.first # randomly pick a pair
           val<<pair.first
           val<<pair.last
 
@@ -1176,8 +1176,15 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return '' if(!autoGenerate?(map,force))
 
-    #time of an event (TSComponentOne)
-    toDateTime(map).strftime('%Y%m%d%H%M%S.%L') #format('YYYYMMDDHHSS.SSS')Date.iso8601
+     #time of an event (TSComponentOne)
+    ts = toDateTime(map).strftime('%Y%m%d%H%M%S.%L') #format('YYYYMMDDHHSS.SSS')Date.iso8601
+    # TS is lenght sensetive, check max_len and trim appropriate
+    if (ts.size > (maxlen = (map[:max_length]) ? map[:max_length].to_i : ts.size))
+      # puts ts
+      # ts = ts[0,maxlen]
+      ts = ts.slice(0...maxlen)
+    end
+    return ts
   end
 
   #Generate HL7 TX (text data) data type. A TX contains a single String value.

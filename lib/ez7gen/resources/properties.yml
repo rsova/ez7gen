@@ -25,15 +25,16 @@ address.phones: [(931)872-7634,(601)110-8688,(731)538-7434,(662)120-6474,(470)44
 
 #OBX.3 Observation Identifier (both the code and the description need to be populated)
 #ICD 10 Allergen Codes
-#T78.40XA Allergy, unspecified, initial encounter,
-#T78.40XD Allergy, unspecified, subsequent encounter,
-#Z91.048 Other nonmedicinal substance allergy status,
-#Z91.09 Other allergy status, other than to drugs and biological substances,
-#Z91.013  Allergy to seafood,
-#Z91.010 Allergy to peanuts,
-#Z88.0  Allergy status to penicillin,
-#Z91.038 Other insect allergy status,
-#Z91.030 Bee Allergy status
+codes.allergens.icd10:
+ T78.40XA: Allergy unspecified initial encounter
+ T78.40XD: Allergy unspecified subsequent encounter
+ Z91.048: Other nonmedicinal substance allergy status
+ Z91.09: Other allergy status, other than to drugs and biological substances
+ Z91.013:  Allergy to seafood
+ Z91.010: Allergy to peanuts
+ Z88.0:  Allergy status to penicillin
+ Z91.038: Other insect allergy status
+ Z91.030: Bee Allergy status
 
 #AL1.3 Allergen Code/Mnemonic/ Description (both the code and the description need to be populated)
 codes.allergens:

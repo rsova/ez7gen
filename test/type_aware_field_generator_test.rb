@@ -22,18 +22,38 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_CE
+    # IAM.3 ‘Allergen Code/Mnemonic/Description’ with the ICD 10 Allergy Reaction Codes from the properties file.
+    # However, it needs to be populated with the ICD 10 Allergen Codes from the properties file (e.g. T78.40XA Allergy, unspecified, initial encounter)
+    line = '[piece:3, description:Allergen Code/Mnemonic/Description, datatype:CE, symbol:!, max_length:250, required:R, ifrepeating:0]'
+    row= lineToHash(line)
+    fld = @fldGenerator.CE(row)
+    puts fld
+    icd10s =
+    ['T78.40XA^Allergy unspecified initial encounter',
+    'T78.40XD^Allergy unspecified subsequent encounter',
+    'Z91.048^Other nonmedicinal substance allergy status',
+    'Z91.09^Other allergy status, other than to drugs and biological substances',
+    'Z91.013^Allergy to seafood',
+    'Z91.010^Allergy to peanuts',
+    'Z88.0^Allergy status to penicillin',
+    'Z91.038^Other insect allergy status',
+    'Z91.030^Bee Allergy status']
+
+    assert_includes(icd10s, fld) # conditional should skip on auto generate
+
+
     # PID.35 – PID.38 should be always blank, as they deal with animals, not humans.
     line = '[max_length:250, symbol:?, description:Species Code, ifrepeating:0, datatype:CE, required:C, piece:35, codetable:446]'
     row= lineToHash(line)
     fld = @fldGenerator.CE(row)
     puts fld
-    assert_equal(nil,fld) # conditional should skip on auto generate
+    assert_equal('',fld) # conditional should skip on auto generate
 
     line = '[[max_length:250, symbol:?, description:Breed Code, ifrepeating:0, datatype:CE, required:C, piece:36, codetable:447]'
     row= lineToHash(line)
     fld = @fldGenerator.CE(row)
     puts fld
-    assert_equal(nil,fld) # conditional should skip on auto generate
+    assert_equal('',fld) # conditional should skip on auto generate
 
 		line = '[max_length:250, description:Production Class Code, ifrepeating:0, datatype:CE, required:O, piece:38, codetable:429]'
     row= lineToHash(line)
@@ -91,12 +111,12 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
     line ='[max_length:12, description:???, ifrepeating:0, datatype:CP, required:R, piece:13]'
     fld = @fldGenerator.CP(lineToHash(line))
     puts fld
-    assert fld.include?('.00&USD')
+    assert fld.include?('.00')
 
 		line = '[piece:27, description:Guarantor Household Annual Income, datatype:CP, max_length:10, required:O, ifrepeating:0]'
 		fld = @fldGenerator.CP(lineToHash(line),true)
 		puts fld
-		assert fld.include?('.00&USD')
+		assert fld.include?('.00')
 
 	end
 
@@ -126,20 +146,29 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_TS
+
+		#The field IAM.13 ‘Reported Date/Time’ needs to be just the date  - 8 characters long
+		line = '[max_length:8, description:Reported Date/Time, ifrepeating:0, datatype:TS, required:R, piece:13]'
+    # <SegmentSubStructure piece='13' description='Reported Date/Time' datatype='TS' max_length='8' required='O' ifrepeating='0' />
+		fld = @fldGenerator.TS(lineToHash(line))
+		puts fld
+		assert_equal 8, fld.size
+
     # PID.7 Date of Birth – please make the date within 50-20 years into the past.
-    line = '[max_length:26, description:Date/Time Of Birth, ifrepeating:0, datatype:TS, required:O, piece:7]'
+    line = '[max_length:26, description:Date/Time Of Birth, ifrepeating:0, datatype:TS, required:R, piece:7]'
     fld = @fldGenerator.TS(lineToHash(line))
     puts fld
+		assert_equal 18, fld.size
 
-		# line ='[max_length:26, description:Admit Date/Time, ifrepeating:0, datatype:TS, required:R, piece:44]'
-		# fld_past = @fldGenerator.TS(lineToHash(line))
-		# puts fld_past
-		# assert_equal 18, fld_past.size, 'datetime format YYYYMMDDHHSS.SSS, like 20150321201748.373'
-    #
-		# line ='[max_length:26, description:Role End Date/Time, ifrepeating:0, datatype:TS, required:R, piece:44]'
-		# fld_future = @fldGenerator.TS(lineToHash(line))
-		# puts "past timestamp #{fld_past}, future timestamp #{fld_future}"
-		# assert fld_past < fld_future
+		line ='[max_length:26, description:Admit Date/Time, ifrepeating:0, datatype:TS, required:R, piece:44]'
+		fld_past = @fldGenerator.TS(lineToHash(line))
+		puts fld_past
+		assert_equal 18, fld_past.size, 'datetime format YYYYMMDDHHSS.SSS, like 20150321201748.373'
+
+		line ='[max_length:26, description:Role End Date/Time, ifrepeating:0, datatype:TS, required:R, piece:44]'
+		fld_future = @fldGenerator.TS(lineToHash(line))
+		puts "past timestamp #{fld_past}, future timestamp #{fld_future}"
+		assert fld_past < fld_future
 	end
 
 	def test_DLD
