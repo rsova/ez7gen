@@ -2,20 +2,22 @@ require "minitest/autorun"
 require_relative "../lib/ez7gen/message_factory"
 
 class TestMessageFactory < MiniTest::Unit::TestCase
+  # set to true to write messages to a file
+  @@PERSIST = true
 
-  # def test_msh
-  #   factory = MessageFactory.new
-  #   hl7 = factory.generate("2.4", "ADT_A01")
-  #   puts hl7
-  #   # # assert(hl7 != nil)
-  #   # refute_nil(hl7)
-  # end
+  # helper message to persist the
+  def saveMsg(event, hl7, ver)
+    if(@@PERSIST) then
+      File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    end
+  end
 
+# Admission Messages with Z segment
   def test_msh_vaz_24
     ver='vaz2.4'
     event='ADT_A01'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
 
     # # assert(hl7 != nil)
@@ -23,29 +25,79 @@ class TestMessageFactory < MiniTest::Unit::TestCase
   end
 
 # Admission Messages
-
 # 1	  ADT_A01 	ADT_A04; ADT_A08; ADT_A13 	MSH;EVN;PID;PD1;ROL;NK1;PV1;PV2;DB1;OBX;AL1;DG1;DRG;PR1;GT1;IN1;IN2;IN3;ACC;UB1;UB2;PDA
-# 2	  ADT_A02		                            MSH;EVN;PID;PD1;ROL;PV1;PV2;DB1;OBX;PDA
-# 3 	ADT_A03		                            MSH;EVN;PID;PD1;ROL;PV1;PV2;DB1;DG1;DRG;PR1;OBX;PDA
-# 4	  ADT_A05	  ADT_A14; ADT_A28; ADT_A31	  MSH;EVN;PID;PD1;ROL;NK1;PV1;PV2;DB1;OBX;AL1;DG1;DRG;PR1;GT1;IN1;IN2;IN3;ACC;UB1;UB2
-# 5	  ADT_A06	  ADT_A07	                    MSH;EVN;PID;PD1;ROL;MRG;NK1;PV1;PV2;DB1;OBX;AL1;DG1;DRG;PR1;GT1;IN1;IN2;IN3;ACC;UB1;UB2
+  def test_ADT_01
+    ver='2.4'
+    event='ADT_A01'
+    hl7 = MessageFactory.new.generate(ver, event)
+    saveMsg(event, hl7, ver)
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
+
+  # 2	  ADT_A02		                            MSH;EVN;PID;PD1;ROL;PV1;PV2;DB1;OBX;PDA
+  def test_ADT_02
+    ver='2.4'
+    event='ADT_A02'
+    hl7 = MessageFactory.new.generate(ver, event)
+    saveMsg(event, hl7, ver)
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
+
+  # 3 	ADT_A03		                            MSH;EVN;PID;PD1;ROL;PV1;PV2;DB1;DG1;DRG;PR1;OBX;PDA
+  def test_ADT_03
+    ver='2.4'
+    event='ADT_A03'
+    hl7 = MessageFactory.new.generate(ver, event)
+    saveMsg(event, hl7, ver)
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
+
+  # 4	  ADT_A05	  ADT_A14; ADT_A28; ADT_A31	  MSH;EVN;PID;PD1;ROL;NK1;PV1;PV2;DB1;OBX;AL1;DG1;DRG;PR1;GT1;IN1;IN2;IN3;ACC;UB1;UB2
+  def test_ADT_05
+    ver='2.4'
+    event='ADT_A05'
+    hl7 = MessageFactory.new.generate(ver, event)
+    saveMsg(event, hl7, ver)
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
+
+  # 5	  ADT_A06	  ADT_A07	                    MSH;EVN;PID;PD1;ROL;MRG;NK1;PV1;PV2;DB1;OBX;AL1;DG1;DRG;PR1;GT1;IN1;IN2;IN3;ACC;UB1;UB2
+  def test_ADT_06
+    ver='2.4'
+    event='ADT_A06'
+    hl7 = MessageFactory.new.generate(ver, event)
+    saveMsg(event, hl7, ver)
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
 
 # 6	  ADT_A09	  ADT_A10; ADY_A11; ADT_A12 	MSH;EVN;PID;PD1;PV1;PV2;DB1;OBX;DG1
   def test_ADT_A09
     ver='2.4'
     event='ADT_A09'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
   end
+
+
 # 7	  ADT_A15		                            MSH;EVN;PID;PD1;ROL;PV1;PV2;DB1;OBX;DG1
   def test_ADT_A15
     ver='2.4'
     event='ADT_A15'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -56,7 +108,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A16'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -68,7 +120,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A17'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -79,7 +131,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A18'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -90,7 +142,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A20'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -101,7 +153,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A21'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -191,7 +243,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A24'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -202,7 +254,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A30'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -213,7 +265,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A37'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -223,7 +275,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A38'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -236,7 +288,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     event='ADT_A39'
     # <MessageStructure name='ADT_A39' definition='MSH~EVN~{~PID~[~PD1~]~MRG~[~PV1~]~}' />
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -249,7 +301,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     event='ADT_A43'
     # <MessageStructure name='ADT_A43' definition='MSH~EVN~{~PID~[~PD1~]~MRG~}' />
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -262,7 +314,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     event='ADT_A45'
     # <MessageStructure name='ADT_A45' definition='MSH~EVN~PID~[~PD1~]~{~MRG~PV1~}' />
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -273,7 +325,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A50'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -284,7 +336,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A52'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -295,7 +347,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A54'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -306,7 +358,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A60'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -317,7 +369,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='ADT_A61'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -328,7 +380,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='QBP_Q21'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -341,7 +393,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     event='RSP_K21'
     # <MessageStructure name='RSP_K21' definition='MSH~MSA~[~ERR~]~QAK~QPD~[~PID~[~PD1~]~]~[~DSC~]' />
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -354,7 +406,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     event='RSP_K22'
     # <MessageStructure name='RSP_K22' definition='MSH~MSA~[~ERR~]~QAK~QPD~{~[~PID~[~PD1~]~[~QRI~]~]~}~[~DSC~]' />
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -365,7 +417,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='RSP_K23'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -376,7 +428,7 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     ver='2.4'
     event='RSP_K24'
     hl7 = MessageFactory.new.generate(ver, event)
-    File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
+    saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)

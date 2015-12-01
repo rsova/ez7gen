@@ -17,7 +17,7 @@ class TestRegex < MiniTest::Unit::TestCase
 		segments << m.to_s
 		idx +=1
 		puts str
-		if(idx == 100) then break(); end
+		# if(idx == 100) then (); end
 	end
 	p segments
 		# puts u 

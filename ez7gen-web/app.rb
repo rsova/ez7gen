@@ -2,7 +2,7 @@ require 'sinatra'
 require 'json'
 require 'rest_client'
 require 'ez7gen'
-
+@@URLS={'2.4'=>'localhost:8890/','vaz2.4'=>'localhost:8891/'}
 
   get '/' do
     # content_type :json
@@ -22,7 +22,6 @@ require 'ez7gen'
       # no additional configuration needed for angularjs,
       params = JSON.parse(request.env["rack.input"].read)
       puts  params
-    # puts params['action']['selected']['name']
       event =  params['event']['selected']['code']
       version =  params['version']['selected']['code']
       puts event
@@ -37,9 +36,19 @@ require 'ez7gen'
   end
 
   post '/validate/' do
-    params = JSON.parse(request.env["rack.input"].read)
-    puts params
-    res = RestClient.post 'localhost:4567/', 'Test'
-    puts res
+    begin
+      params = JSON.parse(request.env["rack.input"].read)
+      puts params
+      version =  params['version']['selected']['code']
+      puts version
+      payload = params['payload']['message']
+      puts payload
+      url = @@URLS[version]
+      resp = RestClient.post url, payload
+        { message: resp}.to_json
+    rescue
+      resp = 'Error connecting to ' + url
+    end
+    { message: resp}.to_json
   end
 

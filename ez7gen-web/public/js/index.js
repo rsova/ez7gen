@@ -25,15 +25,10 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
         ];
 
         hl7_events = {
-
-            z:[
-                {name: 'ADT_A01', code: 'ADT_A01'},
-                {name: 'ADT_A02', code: 'ADT_A02'},
-                {name: 'ADT_A03', code: 'ADT_A03'},
-                {name: 'ADT_A04', code: 'ADT_A04'}]
-        ,
-
-            admitions: [
+            zseg:[
+                {name: 'ADT_A01', code: 'ADT_A01'}
+            ],
+            adm:[
                 {name: 'ADT_A01', code: 'ADT_A01'},
                 {name: 'ADT_A02', code: 'ADT_A02'},
                 {name: 'ADT_A03', code: 'ADT_A03'},
@@ -102,9 +97,10 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
                 {name: 'RSP_K21', code: 'RSP_K21'},
                 {name: 'RSP_K22', code: 'RSP_K22'},
                 {name: 'RSP_K23', code: 'RSP_K23'},
-                {name: 'RSP_K24', code: 'RSP_K24'}]
+                {name: 'RSP_K24', code: 'RSP_K24'}
+            ]
     };
-
+        // initiate message
         return {data:{message:'Lets rumbble...'}, versions: hl7_versions, events: hl7_events};
     })
   .controller('navigation', function($scope) {
@@ -120,7 +116,7 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
       $scope.visible = false;
       $scope.toggle = function() {
         $scope.visible = !$scope.visible;
-      }
+      };
 
       $scope.validate = function() {
           $http({
@@ -129,10 +125,10 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
               method: 'post',
               url: 'http://localhost:4567/validate/',
               //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-              data: { 'version': Payload.version, 'event': Payload.event}
+              data: { 'version': Payload.version, 'event': Payload.event, 'payload': Payload.data}
           }).success(function(data) {
-                  $scope.payload = data;
-                  Payload.data = data;
+                  $scope.response = data;
+                  $scope.visible = true;
               })
       }
   })
@@ -142,23 +138,17 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
         $scope.version = {};
 
         $scope.versions = Payload.versions;
-        $scope.events = [{name: 'Please select Version first', code: ''}];
-        //if($scope.version ='2.4'){
-         //   $scope.events = Payload.events.admitions;
-        //}else{
-        //    $scope.events = Payload.events.z;
-        //}
         $scope.setEvents = function(version){
             if(version.code =='2.4'){
-                $scope.events = Payload.events.admitions;
+                $scope.events = Payload.events.adm;
             }else if(version.code =='vaz2.4'){
-                $scope.events = Payload.events.z;
+                $scope.events = Payload.events.zseg;
             }else{
-                $scope.events = [{name: 'Version Required...', code: ''}];
+                $scope.events = [{name: 'Version Required', code: ''}];
             }
+        };
 
-        }
-
+        //save state between requests
         Payload.event = $scope.event;
         Payload.version = $scope.version;
 
@@ -171,11 +161,10 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
             //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data: { 'version': Payload.version, 'event': Payload.event}
         })
-      //.success(function(data) {
       .success(function(data) {
             $scope.payload = data;
             Payload.data = data;
-        })
+        });
 
     }
    

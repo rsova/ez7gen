@@ -348,10 +348,14 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 	end
 
 	def test_UVC
-			line ='[datatype:UVC, required:R, piece:1]'
-			fld = @fldGenerator.UVC(lineToHash(line), true)
-			puts fld
-			assert fld.include?('^')
+    line = '[piece:10, :description:Value Amount & Code (46-49), :datatype:UVC, :symbol:*, :repeatcount:8, :max_length:12, :required:O, :ifrepeating:1, :codetable:153]'
+    fld = @fldGenerator.UVC(lineToHash(line), true)
+    puts fld
+
+    line ='[datatype:UVC, required:R, piece:1]'
+    fld = @fldGenerator.UVC(lineToHash(line), true)
+    puts fld
+    assert fld.include?('^')
 	end
 
 	def test_VID

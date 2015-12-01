@@ -3,12 +3,7 @@
 		<pre>{{payload.message}}</pre>
 		<button class="btn-default" ng-click="validate()">Validate HL7</button>
 	    <hr/>
-		<p>
-			<button type="button" class="btn btn btn-default">Errors</button>
-		</p>
-
-		<pre ng-show="visible"><h4 ng-style={"color":"green"}>
-No Errors.
-Message validated by the VA Ensemble Production. 
-</h4></pre>
-	
+		<!--<p>-->
+		<button type="button" ng-click="toggle()" class="btn btn btn-default">+</button>
+		<!--</p>-->
+		<pre ng-show="visible"><h4 ng-style={"color":"green"}>{{response.message}}</h4></pre>

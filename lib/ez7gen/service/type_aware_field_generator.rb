@@ -1118,7 +1118,6 @@ class TypeAwareFieldGenerator
       when 'Guarantor SSN','Insured’s Social Security Number','Medicare health ins Card Number','Military ID Number', 'Contact Person Social Security Number'
         generateLengthBoundId(9)
       when 'Allergy Reaction Code'
-        # yml['allergens.yn'].sample()
         yml['codes.allergens'].keys.sample()
       when 'Strain'
         #PID.35 – PID.38 should be always blank, as they deal with animals, not humans.
@@ -1206,7 +1205,7 @@ class TypeAwareFieldGenerator
 		# is(['fld'=>uvc.getComponent(0), 'required'=>'R', 'codetable'=>map.codetable])
 		#value amount (NM)
 		# nm(['fld'=>uvc.getComponent(1), 'required'=>'R'])
-    val << NM(map,true)
+    val << NM({},true)# description confuses NM generator
     val.join(@@HAT)
   end
 
