@@ -537,6 +537,13 @@
         <Enumerate position="4" value="INV4" description="Item 4"/>
         <Enumerate position="5" value="INV5" description="Item 5"/>
       </CodeTable>
-    </Category>
+      <CodeTable name="471">
+        <Enumerate position="1" value="A" description="Query A"/>
+        <Enumerate position="2" value="B" description="Query B"/>
+        <Enumerate position="3" value="C" description="Query C"/>
+        <Enumerate position="4" value="D" description="Query D"/>
+        <Enumerate position="5" value="E" description="Query E"/>
+      </CodeTable>
+   </Category>
   </Document>
 </Export>

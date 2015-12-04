@@ -238,7 +238,8 @@ class TypeAwareFieldGenerator
     # <quantity (NM)>
     val<<NM(map,true)
     # <units (CE)>
-    val<<CE(map,true)
+    # val<<CE(map,true) # Per request with QBP_Q21 issue
+    val<<ID(map,true)
     #    val.join(@@HAT)
   end
 
@@ -770,7 +771,8 @@ class TypeAwareFieldGenerator
     val = []
 
 		#occurrence span code (CE)
-    val << CE(map, true)
+    # val << CE(map, true) # Per request with ADT_A05 and ADT_A06 issues
+    val << ID(map, true)
 		#occurrence span start date (DT)
     val << DT(map,true)
 		#occurrence span stop date (DT)
