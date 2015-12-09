@@ -2,7 +2,7 @@ require 'yaml'
 require_relative '../profile_parser'
 
 class TypeAwareFieldGenerator
-  attr_accessor :yml
+  attr_accessor :yml,:pp
   # @@UP_TO_3_DGTS = 1000 # up to 3 digits
   @@REQ_LEN_3_DGTS = 3 #up to 3 digits
   @@RANGE_INDICATOR = '...'

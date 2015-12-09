@@ -26,6 +26,18 @@ require 'ez7gen'
       version =  params['version']['selected']['code']
       puts event
       puts version
+
+      if(version!='2.4')
+        puts "bad version"
+        raise "bad version"
+      end
+
+      if(event.start_with?('ADT_')||event.start_with?('QBP_')||event.start_with?('RSP_'))
+      else
+        puts "bad message type"
+        raise "bad message type"
+      end
+
       msg = MessageFactory.new
       @hl7 = msg.generate(version, event)#msg.replace('\r','\n' )
     rescue

@@ -32,9 +32,15 @@ class SegmentGenerator
     msh.recv_app = @fieldGenerators['primary'].HD({:codetable => '361', :required =>'R'})
     msh.recv_facility = @fieldGenerators['primary'].HD({:codetable => '362', :required =>'R'})
     msh.processing_id = 'P'#@fieldGenerators['primary'].ID({},true)
-    msh.version_id = '2.4'
+    msh.version_id = @version
     msh.security = @fieldGenerators['primary'].ID({})
-    msh.message_type = @event.sub('_','^')<<'^'<<@event
+
+    # Per Galina's requirement, fix for validation failure.
+    # MSH.9.3 needs to be populated with the correct Message Structure values for those messages
+    # that are the “copies” of the “original” messages.
+    structType = @fieldGenerators['primary'].pp.getMessageStructure(@event)
+    msh.message_type = @event.sub('_','^')<<'^'<<structType
+
     msh.time =  DateTime.now.strftime('%Y%m%d%H%M%S.%L')
     msh.message_control_id = @fieldGenerators['primary'].ID({},true)
     msh.seq = @fieldGenerators['primary'].ID({:required=>'O'})

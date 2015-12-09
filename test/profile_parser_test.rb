@@ -17,9 +17,17 @@ class TestProfileParser < MiniTest::Unit::TestCase
 	end
 
 
-	def test_getMessageStructrue
+	def test_getMessageDefinition
 		expected = "MSH~EVN~PID~[~PD1~]~[~{~ROL~}~]~[~{~NK1~}~]~PV1~[~PV2~]~[~{~ROL~}~]~[~{~DB1~}~]~[~{~OBX~}~]~[~{~AL1~}~]~[~{~DG1~}~]~[~DRG~]~[~{~PR1~[~{~ROL~}~]~}~]~[~{~GT1~}~]~[~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]~[~ACC~]~[~UB1~]~[~UB2~]~[~PDA~]"
-		assert_equal(expected, @parser.getMessageStructure())
+		assert_equal(expected, @parser.getMessageDefinition())
+	end
+
+	def test_getMessageStructure_ADT_01
+		assert_equal('ADT_A01', @parser.getMessageStructure('ADT_A01'))
+  end
+
+	def test_getMessageStructure_ADT_04
+		assert_equal('ADT_A01', @parser.getMessageStructure('ADT_A04'))
 	end
 
 	def test_getSegmentStructure
@@ -38,7 +46,7 @@ class TestProfileParser < MiniTest::Unit::TestCase
    end
 
    def test_codeTable
-   		attributes = @parser.getCodeTable("356")
+   		attributes = @parser.getCodeTable("62")
    		p attributes[0].class
 			p attributes.size
    		#p attributes

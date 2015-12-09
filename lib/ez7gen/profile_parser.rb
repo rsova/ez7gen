@@ -22,16 +22,20 @@ class ProfileParser
   end
 
   def getSegments
-    structrue = getMessageStructure()
+    structrue = getMessageDefinition()
     # puts structrue
     processSegments(structrue)
   end
 
   # find message structure by event type
-  def getMessageStructure
-    msg_type =  @xml.Export.Document.Category.locate('MessageType').select{|it| it.attributes[:name] == @event }.first.attributes[:structure]
+  def getMessageDefinition
+    msg_type = getMessageStructure(@event)
     p msg_type
     @xml.Export.Document.Category.locate('MessageStructure').select{|it| it.attributes[:name] == msg_type }.first.attributes[:definition]
+  end
+
+  def getMessageStructure(event)
+    msg_type = @xml.Export.Document.Category.locate('MessageType').select { |it| it.attributes[:name] == event }.first.attributes[:structure]
   end
 
   # find all optional, repeating segemnts and segment groups

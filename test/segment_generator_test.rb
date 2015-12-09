@@ -174,16 +174,15 @@ class TestProfileParser < MiniTest::Unit::TestCase
     puts Benchmark.measure{
     profilers = { Utils.PRIMARY => @@pp }
     @segmentGen = SegmentGenerator.new("2.4","ADT_A01", profilers)
-    @msg = HL7::Message.new
-    @msg << @segmentGen.initMsh()
-
-         }
+    # @msg = HL7::Message.new
+    # @msg << @segmentGen.initMsh()
+    }
 
   end
 
  def test_init
    assert(@segmentGen !=nil)
-   puts @msg
+   # puts @msg
  end
 
  # def test_addField_CE
@@ -215,7 +214,6 @@ class TestProfileParser < MiniTest::Unit::TestCase
  #    puts seg.to_info
  #    puts seg
  #  end
-
  def test_MSH
    # weight( -1 ) # the msh should always start a message
    # add_field :enc_chars
@@ -255,15 +253,16 @@ class TestProfileParser < MiniTest::Unit::TestCase
    #  3	Sending Application	2.4:HD	180	O	0	2.4:361	Always populated	<namespace ID (IS)>                                                                 Table 361 has no suggested values.                           The field will be populated with value 'Sending App'
    # assert_equal ['101','202','303','404'].include?(msg[0].e2)
    #  4	Sending Facility	2.4:HD	180	O	0	2.4:362	Always populated	<namespace ID (IS)>                                                                Table 362 has no suggested values.                              The field will be populated with value 'Sending Facility'
-   assert_equal 'Sending Facility',msg[0].e3
+   assert ['505','606','707','808','909'].include? msg[0].e3
    #  5	Receiving Application	2.4:HD	180	O	0	2.4:361	Always populated	<namespace ID (IS)>                                                                  Table 361 has no suggested values.                        The field will be populated with value 'MARM'
-   assert_equal 'HL7 Generator',msg[0].e4
+   assert ['101','202','303','404'].include? msg[0].e4
    #  6	Receiving Facility	2.4:HD	180	O	0	2.4:362	Always populated	<namespace ID (IS)>                                                               Table 362 has no suggested values.                                  The field will be populated with value 'HL7 Generator'
-   assert_equal 'MARM',msg[0].e5
+   assert ['505','606','707','808','909'].include? msg[0].e5
    #  7	Date/Time Of Message	2.4:TS	26	R	0		Always populated	Any randomly generated date/time within one year into the past. Example value: 20150824160140.761
    assert msg[0].e6.include?('.')
    #  8	Security	2.4:ST	40	O	0		Randomly Populated	Any randomly generated positive integer with up to 3 digits.                                                            Example value: 123
    #  9	Message Type	2.4:MSG	15	R	0	2.4:76	Always populated	Message Type from table 76, Trigger Event from table 3 and Message Structure for table 354.                                 Example value: ADT^A01^ADT_A01
+   assert_equal 'ADT^A01^ADT_A01', msg[0].e8
    # 10	Message Control ID	2.4:ST	20	R	0		Always populated	Any randomly generated positive integer with up to 3 digits.                                        Example value: 331
    # 11	Processing ID	2.4:PT	3	R	0		Always populated	<processing ID (ID)>                                              One of the values from table 103. Example value: P
    # 12	Version ID	2.4:VID	60	R	0	2.4:104	Always populated	<version ID (ID)>                                                                                                                                         The field will be populated with value '2.4' from table 104
@@ -278,7 +277,33 @@ class TestProfileParser < MiniTest::Unit::TestCase
    # 21	Conformance Statement ID	2.4:ID	10	O	1	2.4:449	Randomly Populated	Table 449 has no suggested values.                       Any randomly generated positive integer with up to 3 digits.                                     Example value: 123
    # puts msg
 
-end
+ end
+
+ def test_MSH_MsgStruct_Different_From_MsgType
+   @segmentGen = SegmentGenerator.new("2.4","ADT_A04", { Utils.PRIMARY => @@pp })
+   msg = HL7::Message.new
+   msg << @segmentGen.initMsh
+   puts msg.to_hl7
+   assert_equal 'MSH', msg[0].e0
+   #  1	Field Separator	2.4:ST	1	R	0		Always populated	|
+   #  assert_equal '|', msg[0].e1
+   #  2	Encoding Characters	2.4:ST	4	R	0		Always populated	^~\&
+   assert_equal '^~\&', msg[0].e1
+   #  3	Sending Application	2.4:HD	180	O	0	2.4:361	Always populated	<namespace ID (IS)>                                                                 Table 361 has no suggested values.                           The field will be populated with value 'Sending App'
+   # assert_equal ['101','202','303','404'].include?(msg[0].e2)
+   #  4	Sending Facility	2.4:HD	180	O	0	2.4:362	Always populated	<namespace ID (IS)>                                                                Table 362 has no suggested values.                              The field will be populated with value 'Sending Facility'
+   assert ['505','606','707','808','909'].include? msg[0].e3
+   #  5	Receiving Application	2.4:HD	180	O	0	2.4:361	Always populated	<namespace ID (IS)>                                                                  Table 361 has no suggested values.                        The field will be populated with value 'MARM'
+   assert ['101','202','303','404'].include? msg[0].e4
+   #  6	Receiving Facility	2.4:HD	180	O	0	2.4:362	Always populated	<namespace ID (IS)>                                                               Table 362 has no suggested values.                                  The field will be populated with value 'HL7 Generator'
+   assert ['505','606','707','808','909'].include? msg[0].e5
+   #  7	Date/Time Of Message	2.4:TS	26	R	0		Always populated	Any randomly generated date/time within one year into the past. Example value: 20150824160140.761
+   assert msg[0].e6.include?('.')
+
+   #  9	Message Type	2.4:MSG	15	R	0	2.4:76	Always populated	Message Type from table 76, Trigger Event from table 3 and Message Structure for table 354.                                 Example value: ADT^A01^ADT_A01
+   assert_equal 'ADT^A04^ADT_A01', msg[0].e8
+
+ end
 
   def test_EVN
     attributes = []
