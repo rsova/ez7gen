@@ -287,13 +287,10 @@ class TypeAwareFieldGenerator
     #check if the field is optional and randomly generate it of skip
     return '' if(!autoGenerate?(map,force))
 
-    val=[]
     # < delay days (NM)>
-    val=''
     # < amount (NM)>
-    val<<NM(map,true)
+    NM(map,true)
     # < number of days (NM)>
-    val.join(@@HAT)
   end
 
   # Activation date
@@ -786,7 +783,7 @@ class TypeAwareFieldGenerator
     return '' if(!autoGenerate?(map,force))
 
     # <pre-certification patient type (IS)>
-    val<<IS({:codetable =>'150'},true)
+    IS({:codetable =>'150'},true)
     # <pre-certification required>
     # <pre-certification window>
   end

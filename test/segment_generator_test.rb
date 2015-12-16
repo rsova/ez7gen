@@ -263,9 +263,10 @@ class TestProfileParser < MiniTest::Unit::TestCase
    #  8	Security	2.4:ST	40	O	0		Randomly Populated	Any randomly generated positive integer with up to 3 digits.                                                            Example value: 123
    #  9	Message Type	2.4:MSG	15	R	0	2.4:76	Always populated	Message Type from table 76, Trigger Event from table 3 and Message Structure for table 354.                                 Example value: ADT^A01^ADT_A01
    assert_equal 'ADT^A01^ADT_A01', msg[0].e8
-   # 10	Message Control ID	2.4:ST	20	R	0		Always populated	Any randomly generated positive integer with up to 3 digits.                                        Example value: 331
+   # 10	Message Control ID	2.4:ST	20	R	0		Always populated	Any randomly generated positive integer with up to 3 digits. Example value: 331
    # 11	Processing ID	2.4:PT	3	R	0		Always populated	<processing ID (ID)>                                              One of the values from table 103. Example value: P
    # 12	Version ID	2.4:VID	60	R	0	2.4:104	Always populated	<version ID (ID)>                                                                                                                                         The field will be populated with value '2.4' from table 104
+   assert_equal '2.4', msg[0].e11
    # 13	Sequence Number	2.4:NM	15	O	0		Randomly Populated	Any randomly generated positive integer with up to 3 digits.                                   Example value: 123
    # 14	Continuation Pointer	2.4:ST	180	O	0		Randomly Populated	Any randomly generated positive integer with up to 3 digits.                                   Example value: 123
    # 15	Accept Acknowledgment Type	2.4:ID	2	O	0	2.4:155	Randomly Populated	One of the values from table 155.                Example value: AL
@@ -300,9 +301,28 @@ class TestProfileParser < MiniTest::Unit::TestCase
    #  7	Date/Time Of Message	2.4:TS	26	R	0		Always populated	Any randomly generated date/time within one year into the past. Example value: 20150824160140.761
    assert msg[0].e6.include?('.')
 
+   assert msg[0].e7 # security - msh8 optional, random 3 digit
+   assert msg[0].e14  # accept_ack_type - msh16 optional, codetable 155
+   assert msg[0].e15  # app_ack_type - msh16 optional, codetable 155
+   assert msg[0].e16  # country code - msh17 optional, codetable 399
+   assert msg[0].e17  # charset - msh18 optional, codetable 211
+   # assert_equal '*', msg[0].e17  # charset - msh18 optional, codetable 211
+
    #  9	Message Type	2.4:MSG	15	R	0	2.4:76	Always populated	Message Type from table 76, Trigger Event from table 3 and Message Structure for table 354.                                 Example value: ADT^A01^ADT_A01
    assert_equal 'ADT^A04^ADT_A01', msg[0].e8
+ end
 
+ def test_MSH_Version_24_For_Custom
+   @segmentGen = SegmentGenerator.new("vaz2.4","ADT_A01", { Utils.PRIMARY => @@pp })
+   msg = HL7::Message.new
+   msg << @segmentGen.initMsh
+   puts msg.to_hl7
+   assert_equal 'MSH', msg[0].e0
+
+   #  9	Message Type	2.4:MSG	15	R	0	2.4:76	Always populated	Message Type from table 76, Trigger Event from table 3 and Message Structure for table 354.                                 Example value: ADT^A01^ADT_A01
+   assert_equal 'ADT^A01^ADT_A01', msg[0].e8
+   # 12	Version ID	2.4:VID	60	R	0	2.4:104	Always populated	<version ID (ID)>                                                                                                                                         The field will be populated with value '2.4' from table 104
+   assert_equal '2.4', msg[0].e11
  end
 
   def test_EVN

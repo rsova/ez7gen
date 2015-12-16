@@ -1,7 +1,6 @@
-require 'rexml/document'
-# include REXML
 require_relative 'service/utils'
 require 'ox'
+require 'yaml'
 
 class ProfileParser
   #instance attributes
@@ -13,11 +12,16 @@ class ProfileParser
   def initialize(version, event)
     @version = version;
     @event = event;
-    path = '../resources/'<< @@HL7_VERSIONS[@version]
-    profile = File.expand_path(path, __FILE__)
+
+    propertiesFile = File.expand_path('../resources/properties.yml', __FILE__)
+    yml = YAML.load_file propertiesFile
+    path = yml['web.install.dir'] # set when run intall gem with argument, example: gem install 'c:/ez7Gen/ez7gen-web/config/resources/'
+
+    path = path<<'config/resources/'
+    profile = File.path(path+ @@HL7_VERSIONS[@version])
     @xml = Ox.parse(IO.read(profile))
 
-    added = File.expand_path('../resources/added.xml', __FILE__)
+    added = File.path(path+'added.xml')
     @added = Ox.parse(IO.read(added))
   end
 
@@ -82,6 +86,14 @@ class ProfileParser
     # values = @xml.elements.collect("Export/Document/Category/SegmentStructure[@name ='#{segmentName}']/SegmentSubStructure"){|x| x.attributes}
     @xml.Export.Document.Category.locate('SegmentStructure').select{|it| it.attributes[:name] == segmentName }.first.locate('SegmentSubStructure').map{|it| it.attributes}
     #values.each {|it| puts it}
+  end
+
+  def lookupMessageTypes(filter=nil)
+    messageTypeColl = @xml.Export.Document.Category.locate('MessageType').map{|it| it.attributes[:structure]}
+    if(!Utils.blank?(filter))
+      messageTypeColl = messageTypeColl.grep(/#{filter}/);
+    end
+    return messageTypeColl
   end
 
 end

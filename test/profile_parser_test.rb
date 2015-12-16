@@ -94,4 +94,32 @@ class TestProfileParser < MiniTest::Unit::TestCase
 		 # assert_equal('[~PD1~]', results[:@encodedSegments][0])
 	 end
 
+	def test_lookupMessageTypes_vaz24
+		@parser = ProfileParser.new('vaz2.4', 'ADT_A01')
+		results =  @parser.lookupMessageTypes('')
+		assert_equal 2, results.size
+
+    results =  @parser.lookupMessageTypes('ADT_|QBP_|RSP_')
+    puts results
+    assert_equal 1, results.size
+
+  end
+
+	def test_lookupMessageTypes_24
+		@parser = ProfileParser.new('2.4', 'ADT_A01')
+		results =  @parser.lookupMessageTypes()
+		assert_equal 390, results.size
+    # puts results
+
+		results =  @parser.lookupMessageTypes('ADT')
+    puts results
+    assert_equal 57, results.size
+
+    # if(message.starts_with('ADT_')||message.starts_with('QBP_')||message.starts_with('RSP_'))
+    results =  @parser.lookupMessageTypes('ADT_|QBP_|RSP_')
+    puts results
+    assert_equal 102, results.size
+
+	end
+
 end

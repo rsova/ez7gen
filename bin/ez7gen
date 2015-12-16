@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'ez7gen'
+
+conf = Ez7gen::Configurator.new
+puts conf.configure()

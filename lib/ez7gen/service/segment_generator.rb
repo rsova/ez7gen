@@ -8,6 +8,8 @@ require_relative 'utils'
 class SegmentGenerator
   @@maxReps = 2
   @@random = Random.new
+  @@BASE_VER={'2.4'=>'2.4','vaz2.4'=>'2.4'}
+
 
   # TODO: do I need accessors for version and event? refactor.
   attr_accessor :version; :event;
@@ -32,8 +34,9 @@ class SegmentGenerator
     msh.recv_app = @fieldGenerators['primary'].HD({:codetable => '361', :required =>'R'})
     msh.recv_facility = @fieldGenerators['primary'].HD({:codetable => '362', :required =>'R'})
     msh.processing_id = 'P'#@fieldGenerators['primary'].ID({},true)
-    msh.version_id = @version
-    msh.security = @fieldGenerators['primary'].ID({})
+    #Per Galina, set version to 2.4 for all of vaz
+    msh.version_id = @@BASE_VER[@version]
+    msh.security = @fieldGenerators['primary'].ID({:required =>'O'})
 
     # Per Galina's requirement, fix for validation failure.
     # MSH.9.3 needs to be populated with the correct Message Structure values for those messages
@@ -45,9 +48,10 @@ class SegmentGenerator
     msh.message_control_id = @fieldGenerators['primary'].ID({},true)
     msh.seq = @fieldGenerators['primary'].ID({:required=>'O'})
     msh.continue_ptr = @fieldGenerators['primary'].ID({:required=>'O'})
-    msh.accept_ack_type = @fieldGenerators['primary'].ID({:required=>'O', :codetable=>'155'})
-    msh.country_code = @fieldGenerators['primary'].ID({:required=>'0', :codetable=>'399'})
-    msh.charset = @fieldGenerators['primary'].ID({:required=>'0', :codetable=>'211'})
+    msh.accept_ack_type = @fieldGenerators['primary'].ID({:required=>'R', :codetable=>'155'})
+    msh.app_ack_type = @fieldGenerators['primary'].ID({:required=>'R', :codetable=>'155'})
+    msh.country_code = @fieldGenerators['primary'].ID({:required=>'R', :codetable=>'399'})
+    msh.charset = @fieldGenerators['primary'].ID({:required=>'R', :codetable=>'211'})
     #Table 296 Primary Language has no suggested values.  The field will be populated with values from the Primary Language table in the properties file. Example value: EN^English
     msh.principal_language_of_message ='EN^English'
     msh.alternate_character_set_handling_scheme = @fieldGenerators['primary'].ID({:required=>'O', :codetable=>'356'})

@@ -90,6 +90,7 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
                 {name: 'ADT_A59', code: 'ADT_A59'},
                 {name: 'ADT_A60', code: 'ADT_A60'},
                 {name: 'ADT_A61', code: 'ADT_A61'},
+                {name: 'ADT_A62', code: 'ADT_A62'},
                 {name: 'QBP_Q21', code: 'QBP_Q21'},
                 {name: 'QBP_Q22', code: 'QBP_Q22'},
                 {name: 'QBP_Q23', code: 'QBP_Q23'},
