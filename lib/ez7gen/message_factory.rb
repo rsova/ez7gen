@@ -9,10 +9,10 @@ class MessageFactory
   def generate(version, event)
 
     parser = ProfileParser.new(version, event)
-    segmentsMap = parser.getSegments()
+    profile, encodedSegments = parser.getSegments()
 
     #Get list of non required segments randomly selected for this build
-    segmentPicker = SegmentPicker.new(segmentsMap)
+    segmentPicker = SegmentPicker.new(profile, encodedSegments)
     segments = segmentPicker.pickSegments()
 
     # set primary parser for base schema
@@ -33,8 +33,11 @@ class MessageFactory
     #iterate over selected segments and build the entire message
     segments.each(){ |segment|
       # groups of segments only repeated once for now
-      if(segment=='{'||segment=='}')then next end
+      if(segment=='{'||segment=='}')then
+        next
+      end
 
+      # TODO: Now need logic to deal with groups of segments - check for array to identify group
       choiceParser = parsers[Utils.getTypeByName(segment)]
       attributes = choiceParser.getSegmentStructure(Utils.noBaseName(segment))
       segmentGenerator.generate(hl7Msg, segment, attributes)

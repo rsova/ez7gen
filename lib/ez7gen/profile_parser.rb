@@ -42,19 +42,6 @@ class ProfileParser
     msg_type = @xml.Export.Document.Category.locate('MessageType').select { |it| it.attributes[:name] == event }.first.attributes[:structure]
   end
 
-  # find all optional, repeating segemnts and segment groups
-  # the required string left un-handled
-  def processSegments(structure)
-    idx = 0
-    segments =[]
-    # while(m = (structure.match(@@segment_patern).to_s))
-    while(m = structure[@@segment_patern])
-      structure.sub!(@@segment_patern,idx.to_s)
-      segments << m
-      idx +=1
-    end
-    return {profile: structure, segments: segments}
-  end
 
   #get hash of attributes for codeTable values
   def getCodeTable(tableName)
@@ -89,11 +76,65 @@ class ProfileParser
   end
 
   def lookupMessageTypes(filter=nil)
-    messageTypeColl = @xml.Export.Document.Category.locate('MessageType').map{|it| it.attributes[:structure]}
+    messageTypeColl = @xml.Export.Document.Category.locate('MessageType').map{|it| it.attributes[:name]}
     if(!Utils.blank?(filter))
       messageTypeColl = messageTypeColl.grep(/#{filter}/);
     end
     return messageTypeColl
+  end
+
+
+  # find all optional, repeating segemnts and segment groups
+  # the required string left un-handled
+  def processSegments(structure)
+    idx = 0
+    encodedSegments =[]
+    # while(m = (structure.match(@@segment_patern).to_s))
+    while(m = structure[@@segment_patern])
+      structure.sub!(@@segment_patern,idx.to_s)
+      encodedSegments << m
+      idx +=1
+    end
+
+    # pre-process structure into collection of segments
+    profile = structure.split('~').map!{|it| (Utils.isNumber?(it))?it.to_i : it}
+
+    # handle groups
+    handleGroups(profile, encodedSegments)
+  end
+
+  # check if encoded segment is a group
+  def isGroup?(encoded)
+    return (encoded =~ /\~\d+\~/)? true : false
+  end
+
+  # Groups need to be preprocessed
+  # Group string replaced with array of individual segments
+  def handleGroups(profile, encodedSegments)
+
+    #find groups and decode the group elements and put them in array
+    encodedSegments.map!{ |seg|
+      if(isGroup?(seg))
+        # break into a sequence of segments, no nils
+        tokens = seg.split(/[~\{\[\}\]]/).delete_if{|it| Utils.blank?(it)}
+        #substitute encoded group elements with values
+        # tokens.map!{|it| Utils.isNumber?(it)? encodedSegments[it.to_i]:it}
+        tokens.map!{|it| Utils.isNumber?(it)? encodedSegments[it.to_i]: it}
+      else
+        seg = seg
+      end
+    }
+
+    # clean up
+    # find indexes of segments, which were absorbed by group arrays
+    idxs = profile.select{|it| Utils.isNumber?(it)}
+    encodedIdxsToDelete = (0 .. encodedSegments.size).to_a - idxs
+
+    # remove the encoded segments that are part of a group now
+    # to make sure that indexes preserved start from the end
+    encodedIdxsToDelete.reverse.each{|idx| encodedSegments.delete_at(idx)}
+
+    return profile, encodedSegments
   end
 
 end

@@ -10,8 +10,10 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    profile = 'MSH~EVN~PID~0~1~2~PV1~3~4~5~6~7~8~9~11~12~16~17~18~19~20'
-    # Array (21 elements)
+    # profile = 'MSH~EVN~PID~0~1~2~PV1~3~4~5~6~7~8~9~11~12~16~17~18~19~20'
+    profile = ["MSH","EVN","PID",0,1,2,"PV1",3,4,5,6,7,8,9,11,12,16,17,19,20]
+
+    # # Array (21 elements)
     elements =[]
     elements << "[~PD1~]"
     elements << "[~{~ROL~}~]"
@@ -34,7 +36,7 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     elements << "[~UB1~]"
     elements << "[~UB2~]"
     elements << "[~PDA~]"
-    @segmentMap = {:segments => elements, :profile => profile}
+    segmentMap = {:segments => elements, :profile => profile}
     @segmentPicker = SegmentPicker.new(@segmentMap)
 
   end
@@ -173,5 +175,22 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     assert_equal 2, segments.count("[~ZEN~]")
     assert_equal 2, segments.count("[~ZMH~]")
 
+  end
+
+  def test_handleGroups
+    # profile = ["MSH", "EVN", "PID", "[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "PV1", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~PR1~10~}~]", "[~{~GT1~}~]", "[~{~IN1~13~14~15~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
+    profile = ["MSH","[~{~PR1~10~}~]"]
+    # [~{~PR1~[~{~ROL~}~]~}~] = {RP1 ~ ROL}
+    segments = @segmentPicker.handleGroups(profile)
+    p segments
+    # [~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]
+  end
+
+  def test_pickSegments
+    # profile = ["MSH", "EVN", "PID", "[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "PV1", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~PR1~10~}~]", "[~{~GT1~}~]", "[~{~IN1~13~14~15~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
+    profile = [ "[~{~PR1~10~}~]"]
+    # [~{~PR1~[~{~ROL~}~]~}~] = {RP1 ~ ROL}
+    segments = @segmentPicker.pickSegments
+    p segments
   end
 end

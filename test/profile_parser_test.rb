@@ -97,6 +97,7 @@ class TestProfileParser < MiniTest::Unit::TestCase
 	def test_lookupMessageTypes_vaz24
 		@parser = ProfileParser.new('vaz2.4', 'ADT_A01')
 		results =  @parser.lookupMessageTypes('')
+		puts results
 		assert_equal 2, results.size
 
     results =  @parser.lookupMessageTypes('ADT_|QBP_|RSP_')
@@ -112,13 +113,13 @@ class TestProfileParser < MiniTest::Unit::TestCase
     # puts results
 
 		results =  @parser.lookupMessageTypes('ADT')
-    puts results
+    #puts results
     assert_equal 57, results.size
 
     # if(message.starts_with('ADT_')||message.starts_with('QBP_')||message.starts_with('RSP_'))
     results =  @parser.lookupMessageTypes('ADT_|QBP_|RSP_')
     puts results
-    assert_equal 102, results.size
+    assert_equal 91, results.size
 
 	end
 

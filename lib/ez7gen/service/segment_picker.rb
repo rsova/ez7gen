@@ -8,18 +8,24 @@ class SegmentPicker
   # private String profile
 
   # load 50 percent of optional segments
-  @@LOAD_FACTOR = 0.5
+  # @@LOAD_FACTOR = 0.5
+  @@LOAD_FACTOR = 1
    @@MSH_SEGMENTS = ['MSH', "#{Utils.BASE_INDICATOR}MSH"]
   #@@MSH_SEGMENTS = ['MSH', "base:MSH"]
 
   # static final Random random = new Random()
   @@random = Random.new
 
-  def initialize(segmentsMap)
-    @encodedSegments = segmentsMap[:segments]
-    @profile = segmentsMap[:profile].split('~')
-    @profile.map!{|it| (Utils.isNumber?(it))?it.to_i : it}
+  def initialize(profile, encodedSegments)
+    @profile = profile
+    @encodedSegments = encodedSegments
   end
+
+  # def initialize(segmentsMap)
+  #   @encodedSegments = segmentsMap[:segments]
+  #   @profile = segmentsMap[:profile].split('~')
+  #   @profile.map!{|it| (Utils.isNumber?(it))?it.to_i : it}
+  # end
 
   # Get list of segments for test message generation.
   # MSH is populated with quick generation, skip it here.
@@ -31,16 +37,29 @@ class SegmentPicker
     #return ['~base:EVN','base:PID','[~base:PD1~]','~base:PV1','[~{~base:AL1~}~]','[~{~base:DG1~}~]','[~ZEL~]','[~ZEM~]','[~ZEN~]','[~ZMH~]']
   end
 
-  # check if encoded segment is a group
-  def isGroup?(encoded)
-  	return (encoded =~ /\~\d+\~/)? true : false
-  end
-
-  # Groups need to be preprocessed
-  def handleGroups(segments=@profile)
-    #TODO: optional groups are deleted, revisit this
-    segments.delete_if{|it| isGroup?(it)}
-  end
+  # # check if encoded segment is a group
+  # def isGroup?(encoded)
+  # 	return (encoded =~ /\~\d+\~/)? true : false
+  # end
+  #
+  # # Groups need to be preprocessed
+  # def handleGroups(segments=@profile)
+  #   #TODO: optional groups are deleted, revisit this
+  #   # segments.delete_if{|it| isGroup?(it)}
+  #
+  #   segments.map!{ |seg|
+  #
+  #     if(isGroup?(seg))
+  #       # break into a sequence of segments, no nils
+  #       tokens = seg.split(/[~\{\[\}\]]/).delete_if{|it| Utils.blank?(it)}
+  #       #substitute encoded group elements with values
+  #       tokens.map!{|it| Utils.isNumber?(it)? @encodedSegments[it.to_i]:it}
+  #     else
+  #       seg = seg
+  #     end
+  #   }
+  #   # return segments
+  # end
 
   # pick segments randomly, according to the load factor, exclude groups
   def getSegmentsToBuild()
@@ -69,7 +88,7 @@ class SegmentPicker
       ids.each{|id| @profile[@profile.index(id)]= @encodedSegments[id]}
 
       # groups need to be expended if any selected
-      handleGroups()
+      # handleGroups()
   end
 
   # get segments that will always be build, include z segments

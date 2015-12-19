@@ -3,7 +3,7 @@ require_relative "../lib/ez7gen/message_factory"
 
 class TestMessageFactory < MiniTest::Unit::TestCase
   # set to true to write messages to a file
-  @@PERSIST = true
+  @@PERSIST = false
 
   # helper message to persist the
   def saveMsg(event, hl7, ver)

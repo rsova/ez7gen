@@ -1,5 +1,23 @@
 require 'yaml'
 
+
+p "[~{~PR1~10~}~]".split(/[~\{\[\}\]]/)
+p "[~{~PR1~10~}~]".split(%r|{.*}|)
+# p a
+exit
+
+begin
+  a/0
+rescue => e
+  raise e
+  puts 'in rescue'
+  puts e
+ensure
+  puts 'in ensure'
+end
+
+puts 'end'
+
 puts '%.2f' % 515.0
 file = File.open('../lib/ez7gen/resources/properties.yml')
 yml = YAML::load(file)
