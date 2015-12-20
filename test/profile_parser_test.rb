@@ -43,7 +43,20 @@ class TestProfileParser < MiniTest::Unit::TestCase
    		assert_equal(2, results.size())
    		assert_equal(21, results[:segments].size())
    		assert_equal('[~PD1~]', results[:segments][0])
-   end
+	 end
+
+
+		def test_processSegments_RSP_K22_group
+			struct = 'MSH~MSA~[~ERR~]~QAK~QPD~{~[~PID~[~PD1~]~[~QRI~]~]~}~[~DSC~]'
+      profile, encodedSegments = @parser.processSegments(struct)
+      # p profile
+      # p encodedSegments
+			assert_equal(7, profile.size())
+			assert_equal(3, encodedSegments.size())
+
+			assert_equal(3, encodedSegments[1].size())
+      assert_equal('Array', encodedSegments[1].class.name)
+		end
 
    def test_codeTable
    		attributes = @parser.getCodeTable("62")

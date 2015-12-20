@@ -71,7 +71,7 @@ class SegmentPicker
       pickOptionalSegments()
 
       # clean up profile, delete unselected optional segments
-      @profile.delete_if{|it| !isRequired?(it)}
+      @profile.delete_if{|it| (!isRequired?(it))||(it==nil)}
   end
 
   # select optional segments and add them to required in correct order

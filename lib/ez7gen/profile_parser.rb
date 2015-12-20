@@ -7,7 +7,8 @@ class ProfileParser
   attr_accessor :version; :event; :xml
   @@HL7_VERSIONS = {'2.4'=>'2.4/2.4-schema.xml', 'vaz2.4'=>'vaz2.4/vaz2.4-schema.xml'}
   #class attribute
-  @@segment_patern = /\[([^\[\]]*)\]/
+  # @@segment_patern = /\[([^\[\]]*)\]/
+  @@segment_patern = /\[([^\[\]]*)\]|\{([^\[\]]*)\}/
 
   def initialize(version, event)
     @version = version;
@@ -119,7 +120,7 @@ class ProfileParser
         tokens = seg.split(/[~\{\[\}\]]/).delete_if{|it| Utils.blank?(it)}
         #substitute encoded group elements with values
         # tokens.map!{|it| Utils.isNumber?(it)? encodedSegments[it.to_i]:it}
-        tokens.map!{|it| Utils.isNumber?(it)? encodedSegments[it.to_i]: it}
+        tokens.map!{|it| Utils.isNumber?(it)? encodedSegments[it.to_i]: it}.flatten
       else
         seg = seg
       end

@@ -4,6 +4,10 @@ require 'rest_client'
 require 'ez7gen'
 # require_relative '../lib/ez7gen/message_factory' # local testing
 
+# configure do
+#   set :show_exceptions, :after_handler
+#   disable :raise_errors
+# end
 @@URLS={'2.4'=>'localhost:8890/','vaz2.4'=>'localhost:8891/'}
 
   get '/' do
@@ -18,9 +22,7 @@ require 'ez7gen'
   end
 
   post '/generate/' do
-    # hl7
     begin
-      puts 'inside begin'
       # no additional configuration needed for angularjs,
       params = JSON.parse(request.env["rack.input"].read)
       puts  params
@@ -30,16 +32,17 @@ require 'ez7gen'
       puts "event: #{event}, version: #{version}"
 
       msg = MessageFactory.new
-      @hl7 = msg.generate(version, event)#msg.replace('\r','\n' )
+      @resp = msg.generate(version, event)#msg.replace('\r','\n' )
     rescue => e
-      puts 'inside rescue'
-      puts e
-      @hl7='Oops, somenthing went wrong..'
-    #ensure
+      # puts 'inside rescue'
+      puts 'Error: processing generate/' << e.inspect
+      @resp='Oops, somenthing went wrong...'
+      #  raise e
+      # ensure
     end
+    #send response
+    {message: @resp}.to_json
 
-    # send response
-    {message: @hl7}.to_json
   end
 
   post '/validate/' do
@@ -51,15 +54,16 @@ require 'ez7gen'
       payload = params['payload']['message']
       puts payload
       url = @@URLS[version]
-      resp = RestClient.post url, payload.gsub!("\n","\r")
+      @resp = RestClient.post url, payload.gsub!("\n","\r")
         # { message: resp}.to_json
     rescue => e
+      @resp = 'Error connecting to ' + url
       puts e
-      resp = 'Error connecting to ' + url
+      # raise e
     end
 
     # send response
-    {message: resp}.to_json
+    {message: @resp}.to_json
   end
 
   # https://code.google.com/p/x2js/ as an alternative
@@ -74,3 +78,7 @@ require 'ez7gen'
   #
   # end
 
+  # error do
+  #   puts 'inside error'
+  #   # 'Sorry there was a nasty error - ' + env['sinatra.error'].message
+  # end
