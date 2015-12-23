@@ -126,15 +126,6 @@ class ProfileParser
       end
     }
 
-    # clean up
-    # find indexes of segments, which were absorbed by group arrays
-    idxs = profile.select{|it| Utils.isNumber?(it)}
-    encodedIdxsToDelete = (0 .. encodedSegments.size).to_a - idxs
-
-    # remove the encoded segments that are part of a group now
-    # to make sure that indexes preserved start from the end
-    encodedIdxsToDelete.reverse.each{|idx| encodedSegments.delete_at(idx)}
-
     return profile, encodedSegments
   end
 

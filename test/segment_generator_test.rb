@@ -3,7 +3,7 @@ require "benchmark"
 require 'ruby-hl7'
 require_relative "../lib/ez7gen/service/segment_generator"
 
-class TestProfileParser < MiniTest::Unit::TestCase
+class TestSegmentGenerator < MiniTest::Unit::TestCase
  #parse xml once
  @@pp = ProfileParser.new('2.4','ADT_A01')
 
@@ -445,4 +445,27 @@ class TestProfileParser < MiniTest::Unit::TestCase
    puts @segmentGen.generate(msg,'[~{~DG1~}~]', attributes)
 
  end
+
+  def test_RCP
+    # <SegmentStructure name='RCP' description='Response Control Parameter'>
+    rcp_attributes = "[ piece:1, description:Query Priority, datatype:ID, max_length:1, required:O, ifrepeating:0, codetable:91]
+    [ piece:2, description:Quantity Limited Request, datatype:CQ, max_length:10, required:O, ifrepeating:0, codetable:126]
+    [ piece:3, description:Response Modality, datatype:CE, max_length:250, required:O, ifrepeating:0, codetable:394]
+    [ piece:4, description:Execution and Delivery Time, datatype:TS, symbol:?, max_length:26, required:C, ifrepeating:0]
+    [ piece:5, description:Modify Indicator, datatype:ID, max_length:1, required:O, ifrepeating:0, codetable:395]
+    [ piece:6, description:Sort-by Field, datatype:SRT, symbol:*, max_length:512, required:O, ifrepeating:1]
+    [ piece:7, description:Segment group inclusion, datatype:ID, symbol:*, max_length:256, ifrepeating:1]"
+
+    msg = HL7::Message.new
+    # msg << @segmentGen.initMsh
+
+    attributes = []
+    rcp_attributes.each_line do |line|
+      # p line
+      attributes << lineToHash( line)
+      # p attributes
+    end
+    puts @segmentGen.generate(msg,'~RCP~', attributes)
+
+  end
 end

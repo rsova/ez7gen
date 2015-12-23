@@ -169,7 +169,7 @@ class TypeAwareFieldGenerator
    # <penalty type (IS)>
     val=IS(map,true)
    # <penalty amount (NM)>
-   val<<NM(map,true)
+   val<<NM({},true)
    val.join(@@HAT)
    end
 
@@ -239,7 +239,7 @@ class TypeAwareFieldGenerator
     val<<NM(map,true)
     # <units (CE)>
     # val<<CE(map,true) # Per request with QBP_Q21 issue
-    val<<ID(map,true)
+    val<<ID({},true)
     #    val.join(@@HAT)
   end
 
@@ -311,7 +311,7 @@ class TypeAwareFieldGenerator
 		#discharge location (ID)
 		val<<ID(map, true)
 		#effective date (TS)
-		val<<TS(map,true)
+		val<<TS({},true)
 		val.join(@@HAT)
   end
 
@@ -377,20 +377,8 @@ class TypeAwareFieldGenerator
     # <day type (IS)>
     val<<IS(map,true)
     # <number of days (NM)>
-    val<<NM(map,true)
+    val<<NM({},true)
     val.join(@@HAT)
-  end
-
-  # Generate HL7 EI - entity identifier
-  def EI(map, force=false)
-    #check if the field is optional and randomly generate it of skip
-    return '' if(!autoGenerate?(map,force))
-
-    # entity identifier (ST)
-    ST(map, force)
-    # namespace ID (IS)
-    # universal ID (ST)
-    # universal ID type (ID)
   end
 
   # Encapsulated data
@@ -538,7 +526,7 @@ class TypeAwareFieldGenerator
     # <bed (IS)>
     val<<IS({:codetable =>'304'},true)
     # <facility (HD) >
-    val<<HD(map,true)
+    val<<HD({},true)
     # <location status (IS)
     val<<''
     # <patient location type (IS)>
@@ -563,7 +551,7 @@ class TypeAwareFieldGenerator
     # <bed (IS)>
     val<<IS({:codetable =>'304'},true)
     # <facility (HD) >
-    val<<HD(map,true)
+    val<<HD({},true)
     # <location status (IS)
     val<<''
     # <patient location type (IS)>
@@ -771,7 +759,7 @@ class TypeAwareFieldGenerator
     # val << CE(map, true) # Per request with ADT_A05 and ADT_A06 issues
     val << ID(map, true)
 		#occurrence span start date (DT)
-    val << DT(map,true)
+    val << DT({},true)
 		#occurrence span stop date (DT)
     val << DT(update(map,:description,'End'), true)
     val.join(@@HAT)
@@ -875,7 +863,7 @@ class TypeAwareFieldGenerator
     val << ST(map,true)
 
     # PN will work for the subset of fields used below
-    val << PN(map,true)
+    val << PN({},true)
     # <family name (FN)>
     # <given name (ST)>
     # <second and further given names or initials thereof (ST)>
@@ -1217,7 +1205,7 @@ class TypeAwareFieldGenerator
     # <start day range (ID)>
     val << ID(map,true)
     # <end day range (ID)>
-    val << ID(map,true)
+    val << ID({},true)
     # <start hour range (TM)>
     # <end hour range (TM)>
     val.join(@@HAT)

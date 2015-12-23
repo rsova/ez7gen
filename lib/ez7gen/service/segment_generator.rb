@@ -61,8 +61,8 @@ class SegmentGenerator
     return msh
   end
 
-  #generate test message using
-  def generate( message,  segment,  attributes)
+  # generate test message segment metadata
+  def generate( message,  segment,  attributes, isGroup=false)
 
     isRep = isSegmentRepeated(segment)
     segmentName = Utils.getSegmentName(segment)
@@ -72,7 +72,7 @@ class SegmentGenerator
 
     totalReps.times do |i|
       # seg = (isRep)?message."get$segmentName"(i) :message."get$segmentName"()
-      message << generateSegment(segmentName, attributes, (totalReps>1)?i+1:nil)
+      message << generateSegment(segmentName, attributes, (totalReps>1)?i+1 :((isGroup)?1:nil))
     end
 
     return message
@@ -129,7 +129,6 @@ class SegmentGenerator
       return nil
     else
       fld = Utils.blank?(dt)?nil :fieldGenerator.method(dt).call(attributes)
-
     end
   end
 
