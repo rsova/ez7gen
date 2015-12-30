@@ -2,13 +2,16 @@ require 'sinatra'
 require 'json'
 require 'rest_client'
 require 'ez7gen'
-# require_relative '../lib/ez7gen/message_factory' # local testing
+require_relative '../lib/ez7gen/message_factory' # local testing
+require_relative '../lib/ez7gen/profile_parser' # local testing
 
 # configure do
 #   set :show_exceptions, :after_handler
 #   disable :raise_errors
 # end
 @@URLS={'2.4'=>'localhost:8890/','vaz2.4'=>'localhost:8891/'}
+# admisson messages match pattern
+@@ADM_FILTER = 'ADT_A|QBP_Q2|RSP_K2'
 
   get '/' do
     # content_type :json
@@ -67,16 +70,39 @@ require 'ez7gen'
   end
 
   # https://code.google.com/p/x2js/ as an alternative
-  # post '/lookup/' do
-  #     begin
-  #     params = JSON.parse(request.env["rack.input"].read)
-  #     puts params
-  #     version =  params['version']['selected']['code']
-  #     filter = params['filter']
-  #     rescue
-  #     end
-  #
-  # end
+  post '/lookup/' do
+      begin
+      params = JSON.parse(request.env["rack.input"].read)
+      puts params
+      # {"versions"=>[{"name"=>"2.4", "code"=>"2.4"}, {"name"=>"VAZ 2.4", "code"=>"vaz2.4"}]}
+      versions =  params['versions']
+      # names={'2.4'=>'adm'.to_sym,'vaz2.4'=>'zseg'.to_sym}
+      names={'2.4'=>'adm','vaz2.4'=>'zseg'}
+
+      @eventList = {}
+      versions.each{|map|
+        version = map['code']
+        parser = ProfileParser.new(version)
+        events = parser.lookupMessageTypes(@@ADM_FILTER).map!{|it| {name: it, code: it}}
+        versionName = names[version]
+        @eventList[versionName] = events
+      }
+
+      p @eventList
+      # parser = ProfileParser.new('2.4')
+      # @eventsList = parser.lookupMessageTypes(@@ADM_FILTER).map!{|it| {name: it, code: it}}
+
+      #generate map for client to populate drop down boxes
+      # puts events
+      # version =  params['version']['selected']['code']
+      # filter = params['filter']
+      rescue => e
+        puts e
+      end
+
+      @eventList.to_json
+      # {adm: @eventList[0], zseg: @eventList[1] }.to_json
+  end
 
   # error do
   #   puts 'inside error'

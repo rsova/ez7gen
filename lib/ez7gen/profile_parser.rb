@@ -10,7 +10,7 @@ class ProfileParser
   # @@segment_patern = /\[([^\[\]]*)\]/
   @@segment_patern = /\[([^\[\]]*)\]|\{([^\[\]]*)\}/
 
-  def initialize(version, event)
+  def initialize(version, event=nil)
     @version = version;
     @event = event;
 

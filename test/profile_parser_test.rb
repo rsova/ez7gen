@@ -120,19 +120,27 @@ class TestProfileParser < MiniTest::Unit::TestCase
   end
 
 	def test_lookupMessageTypes_24
-		@parser = ProfileParser.new('2.4', 'ADT_A01')
+		@parser = ProfileParser.new('2.4')
 		results =  @parser.lookupMessageTypes()
 		assert_equal 390, results.size
     # puts results
 
-		results =  @parser.lookupMessageTypes('ADT')
-    #puts results
+		results =  @parser.lookupMessageTypes('ADT_A')
+    puts results
     assert_equal 57, results.size
 
-    # if(message.starts_with('ADT_')||message.starts_with('QBP_')||message.starts_with('RSP_'))
-    results =  @parser.lookupMessageTypes('ADT_|QBP_|RSP_')
-    puts results
-    assert_equal 91, results.size
+		results =  @parser.lookupMessageTypes('QBP_Q2')
+		# puts results
+		assert_equal 5, results.size
+
+    results =  @parser.lookupMessageTypes('RSP_K2')
+    # puts results
+    assert_equal 5, results.size
+
+		# if(message.starts_with('ADT_')||message.starts_with('QBP_')||message.starts_with('RSP_'))
+    results =  @parser.lookupMessageTypes('ADT_A|QBP_Q2|RSP_K2')
+    # puts results
+    assert_equal 67, results.size
 
 	end
 
