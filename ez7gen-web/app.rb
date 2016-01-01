@@ -71,24 +71,25 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
 
   # https://code.google.com/p/x2js/ as an alternative
   post '/lookup/' do
-      begin
+    event_list = {}
+
+    begin
       params = JSON.parse(request.env["rack.input"].read)
       puts params
       # {"versions"=>[{"name"=>"2.4", "code"=>"2.4"}, {"name"=>"VAZ 2.4", "code"=>"vaz2.4"}]}
       versions =  params['versions']
       # names={'2.4'=>'adm'.to_sym,'vaz2.4'=>'zseg'.to_sym}
-      names={'2.4'=>'adm','vaz2.4'=>'zseg'}
+      names={'2.4'=>:adm,'vaz2.4'=>:zseg}
 
-      @eventList = {}
       versions.each{|map|
         version = map['code']
         parser = ProfileParser.new(version)
         events = parser.lookupMessageTypes(@@ADM_FILTER).map!{|it| {name: it, code: it}}
-        versionName = names[version]
-        @eventList[versionName] = events
+        version_name = names[version]
+        event_list[version_name] = events
       }
 
-      p @eventList
+      p event_list
       # parser = ProfileParser.new('2.4')
       # @eventsList = parser.lookupMessageTypes(@@ADM_FILTER).map!{|it| {name: it, code: it}}
 
@@ -100,8 +101,8 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
         puts e
       end
 
-      @eventList.to_json
-      # {adm: @eventList[0], zseg: @eventList[1] }.to_json
+      # event_list.to_json
+      {adm: event_list[:adm], zseg: event_list[:zseg] }.to_json
   end
 
   # error do

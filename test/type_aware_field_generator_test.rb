@@ -408,101 +408,101 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 
 	def test_autoGenerate
 		map = {:required =>'B'}
-		refute (@fldGenerator.autoGenerate?(map)) # false
+		refute (@fldGenerator.generate?(map)) # false
 
 		map = {:required =>'X'}
-		refute (@fldGenerator.autoGenerate?(map)) # false
+		refute (@fldGenerator.generate?(map)) # false
 
 		map = {:required =>'W'}
-		refute (@fldGenerator.autoGenerate?(map)) # false
+		refute (@fldGenerator.generate?(map)) # false
 
 		map = {:required =>'R'}
-		assert (@fldGenerator.autoGenerate?(map)) # true
+		assert (@fldGenerator.generate?(map)) # true
 
 		map = {:required =>'O'}
-		puts @fldGenerator.autoGenerate?(map) # true or false random
+		puts @fldGenerator.generate?(map) # true or false random
 
 		map = {:required =>'O'}
-		assert @fldGenerator.autoGenerate?(map,true) # true or false random
+		assert @fldGenerator.generate?(map, true) # true or false random
 
 		map = {'required'=>'W'}
-		assert @fldGenerator.autoGenerate?(map,true) # true or false random
+		assert @fldGenerator.generate?(map, true) # true or false random
 	end
 
 
 	def test_generateLengthBoundId
-		actual = @fldGenerator.generateLengthBoundId(10, '12345')
+		actual = @fldGenerator.generate_length_bound_id(10, '12345')
 		puts actual
 		assert_equal('1234500000', actual)
 
-		actual = @fldGenerator.generateLengthBoundId(9)
+		actual = @fldGenerator.generate_length_bound_id(9)
 		puts actual
 		assert_equal(9, actual.size)
 
-		actual = @fldGenerator.generateLengthBoundId(1, '3000')
+		actual = @fldGenerator.generate_length_bound_id(1, '3000')
 		puts actual
 		assert_equal(1, actual.size)
 
-		actual = @fldGenerator.generateLengthBoundId(0)
+		actual = @fldGenerator.generate_length_bound_id(0)
 		puts actual
 		# assert_equal(, actual.size)
 	end
 
 	def test_getCodedValue_lenViolation
-		actual = @fldGenerator.getCodedValue({'codetable'=>'162','max_length' =>'1'})
+		actual = @fldGenerator.get_coded_value({'codetable'=>'162', 'max_length' =>'1'})
 		puts actual
 	end
 
 	def test_getCodedValue_range1
-		actual = @fldGenerator.getCodedValue({'codetable'=>'112','max_length' =>'2'})
+		actual = @fldGenerator.get_coded_value({'codetable'=>'112', 'max_length' =>'2'})
 		puts actual
 	end
 
 	def test_getCodedValue_range2
-		actual = @fldGenerator.getCodedValue({'codetable'=>'141','max_length' =>'2'})
+		actual = @fldGenerator.get_coded_value({'codetable'=>'141', 'max_length' =>'2'})
 		puts actual
 	end
 
 	def test_getCodedValues_range3
 		# {"position"=>position='3', "value"=>value='2 ...', "description"=>description='For ranked secondary diagnoses'}
-		actual = @fldGenerator.getCodedValue({'codetable'=>'1','max_length' =>'2'})
+		actual = @fldGenerator.get_coded_value({'codetable'=>'1', 'max_length' =>'2'})
 		puts actual
 	end
 
 	def test_getCodedMap_lenViolation
-		actual = @fldGenerator.getCodedMap({'codetable'=>'162','max_length' =>'1'})
+		actual = @fldGenerator.get_coded_map({'codetable'=>'162', 'max_length' =>'1'})
 		puts actual
 	end
 
 	def test_getCodedValue_range1
-		actual = @fldGenerator.getCodedMap({'codetable'=>'112','max_length' =>'2'})
+		actual = @fldGenerator.get_coded_map({'codetable'=>'112', 'max_length' =>'2'})
 		puts actual
 	end
 
 	def test_getCodedValue_range2
-		actual = @fldGenerator.getCodedMap({'codetable'=>'141','max_length' =>'2'})
+		actual = @fldGenerator.get_coded_map({'codetable'=>'141', 'max_length' =>'2'})
 		puts actual
 	end
 
 	def test_handleRanges
 
 		# { :position=>'1', :value=>'...', :description=>'No suggested values defined'}
-	  code = @fldGenerator.handleRanges('...')
+	  code = @fldGenerator.handle_ranges('...')
 		assert_equal '', code
 
 		# {"position"=>'12' value='12 ... 16' description='Payer codes.' }
-		code = @fldGenerator.handleRanges('12 ... 16').to_i
+		code = @fldGenerator.handle_ranges('12 ... 16').to_i
 		# puts code
 		assert 11 < code && code < 17
 		#position='1' value='E1 ... E9' description='Enlisted'
-		code = @fldGenerator.handleRanges('E1 ... E9')
+		code = @fldGenerator.handle_ranges('E1 ... E9')
 		puts code
 		assert 'E0' < code && code <= 'E9'
 		# {"position"=>position='3', "value"=>value='2 ...', "description"=>description='For ranked secondary diagnoses'}
-		code = @fldGenerator.handleRanges('2 ...')
+		code = @fldGenerator.handle_ranges('2 ...')
 		# puts code
 		assert_equal '2',  code
-		code = @fldGenerator.handleRanges('A2 ...')
+		code = @fldGenerator.handle_ranges('A2 ...')
 		assert_equal 'A2', code
 		# puts code
 		# assert 'E0' < code && code <= 'E9'
@@ -531,7 +531,7 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		# required => O
 		# piece => 10
 		# codetable => 5
-		# 	actual = @fldGenerator.applyRules({'codetable'=>'141','max_length' =>'2'})
+		# 	actual = @fldGenerator.apply_rules({'codetable'=>'141','max_length' =>'2'})
 		# puts actual
 	end
 

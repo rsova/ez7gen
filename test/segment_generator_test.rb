@@ -175,7 +175,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
     profilers = { Utils.PRIMARY => @@pp }
     @segmentGen = SegmentGenerator.new("2.4","ADT_A01", profilers)
     # @msg = HL7::Message.new
-    # @msg << @segmentGen.initMsh()
+    # @msg << @segmentGen.init_msh()
     }
 
   end
@@ -190,7 +190,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
  #   line = '[max_length:250, description:Role Action Reason, ifrepeating:0, datatype:CE, required:R, piece:8]'
  #   row=line.gsub(/(\[|\])/,'').gsub(':',',').split(',').map{|it| it.strip()}.each_slice(2).to_a.to_h
  #   puts row
- #   fld = @segmentGen.addField(row, @pp)
+ #   fld = @segmentGen.add_field(row, @pp)
  #   puts fld
  #  end
  #
@@ -201,7 +201,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
  #   p row
  #   attrs<<row
  #   p attrs
- #   seg = @segmentGen.generateSegment("PD",attrs)
+ #   seg = @segmentGen.generate_segment("PD",attrs)
  #   puts seg.to_info
  #   puts seg
  #  end
@@ -210,7 +210,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
  #    attrs = []
  #    row = {'max_length'=> '60', 'symbol'=>'?', 'description'=>'Role Instance ID', 'ifrepeating'=>'0', 'datatype'=>'EI', 'required'=>'C', 'piece'=>'1'}
  #    attrs << row
- #    seg = @segmentGen.generateSegment("ROL",attrs)
+ #    seg = @segmentGen.generate_segment("ROL",attrs)
  #    puts seg.to_info
  #    puts seg
  #  end
@@ -243,7 +243,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
    # add_field :sending_network_address
    # add_field :receiving_network_address
    msg = HL7::Message.new
-   msg << @segmentGen.initMsh
+   msg << @segmentGen.init_msh
    puts msg.to_hl7
    assert_equal 'MSH', msg[0].e0
    #  1	Field Separator	2.4:ST	1	R	0		Always populated	|
@@ -283,7 +283,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
  def test_MSH_MsgStruct_Different_From_MsgType
    @segmentGen = SegmentGenerator.new("2.4","ADT_A04", { Utils.PRIMARY => @@pp })
    msg = HL7::Message.new
-   msg << @segmentGen.initMsh
+   msg << @segmentGen.init_msh
    puts msg.to_hl7
    assert_equal 'MSH', msg[0].e0
    #  1	Field Separator	2.4:ST	1	R	0		Always populated	|
@@ -315,7 +315,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
  def test_MSH_Version_24_For_Custom
    @segmentGen = SegmentGenerator.new("vaz2.4","ADT_A01", { Utils.PRIMARY => @@pp })
    msg = HL7::Message.new
-   msg << @segmentGen.initMsh
+   msg << @segmentGen.init_msh
    puts msg.to_hl7
    assert_equal 'MSH', msg[0].e0
 
@@ -335,7 +335,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
     attributes << lineToHash('[max_length:26, description:Event Occurred, ifrepeating:0, datatype:TS, required:O, piece:6]')
     attributes << lineToHash('[max_length:180, description:Event Facility, ifrepeating:0, datatype:HD, required:O, piece:7]')
      puts Benchmark.measure(){
-      puts @segmentGen.generateSegment('EVN', attributes)
+      puts @segmentGen.generate_segment('EVN', attributes)
          }
   end
 
@@ -345,7 +345,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
       attributes << lineToHash( line)
     end
     msg = HL7::Message.new
-    msg << @segmentGen.initMsh
+    msg << @segmentGen.init_msh
     puts @segmentGen.generate(msg,'EVN', attributes)
   end
 
@@ -356,7 +356,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
    end
 
    msg = HL7::Message.new
-   msg << @segmentGen.initMsh
+   msg << @segmentGen.init_msh
    puts @segmentGen.generate(msg,'PID', attributes)
  end
 
@@ -367,7 +367,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
    end
 
    msg = HL7::Message.new
-   msg << @segmentGen.initMsh
+   msg << @segmentGen.init_msh
    puts @segmentGen.generate(msg,'PV1', attributes)
  end
 
@@ -378,7 +378,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
    end
 
    msg = HL7::Message.new
-   msg << @segmentGen.initMsh
+   msg << @segmentGen.init_msh
    puts @segmentGen.generate(msg,'[~PD1~]', attributes)
  end
 
@@ -389,7 +389,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
    end
 
    msg = HL7::Message.new
-   msg << @segmentGen.initMsh
+   msg << @segmentGen.init_msh
    puts @segmentGen.generate(msg,'[~{~AL1~}~]', attributes)
  end
 
@@ -400,7 +400,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
    end
 
    msg = HL7::Message.new
-   msg << @segmentGen.initMsh
+   msg << @segmentGen.init_msh
    puts @segmentGen.generate(msg,'[~{~DG1~}~]', attributes)
  end
 
@@ -411,7 +411,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
    end
 
    msg = HL7::Message.new
-   msg << @segmentGen.initMsh
+   msg << @segmentGen.init_msh
    @segmentGen.generate(msg,'PID', attributes)
 
    attributes = []
@@ -457,7 +457,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
     [ piece:7, description:Segment group inclusion, datatype:ID, symbol:*, max_length:256, ifrepeating:1]"
 
     msg = HL7::Message.new
-    # msg << @segmentGen.initMsh
+    # msg << @segmentGen.init_msh
 
     attributes = []
     rcp_attributes.each_line do |line|

@@ -17,7 +17,7 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
         //$httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
     })
     //http://stackoverflow.com/questions/21919962/share-data-between-angularjs-controllers
-    .factory('Payload', function($http) {
+    .factory('dataService', function($http) {
 
         hl7_versions = [
             {name: '2.4', code: '2.4'},
@@ -27,20 +27,19 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
         //hl7_events.zseg = [{name: 'ADT_A01', code: 'ADT_A01'}];
         //hl7_events.adm = [{name: 'ADT_A02', code: 'ADT_A02'}];
 
-        lookup = function(){
-            $http({
-                //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
-                //use call async as a promise
-                method: 'post',
-                url: 'http://localhost:4567/lookup/',
-                //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: { 'versions': hl7_versions}
-            }).success(function(data) {
-                //resp = data;
-                hl7_events.adm = data.adm
-                hl7_events.zseg = data.zseg
-            })
-        };
+        //lookup = function(){
+        //    $http({
+        //        //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
+        //        //use call async as a promise
+        //        method: 'post',
+        //        url: 'http://localhost:4567/lookup/',
+        //        //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        //        data: { 'versions': hl7_versions}
+        //    }).success(function(data) {
+        //        //resp = data;
+        //        hl7_events = data.message
+        //    })
+        //};
         //    hl7_events = {
         //        zseg:[
         //            {name: 'ADT_A01', code: 'ADT_A01'}
@@ -50,14 +49,25 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
         //            {name: 'ADT_A02', code: 'ADT_A02'},
         //        ]
         //};
+        lookup = function(){
+               return $http({
+                    //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
+                    //use call async as a promise
+                    method: 'post',
+                    url: 'http://localhost:4567/lookup/',
+                    //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    data: { 'versions': hl7_versions}
+                }).then(function(response) {
+                   return response.data;
+                });
+            };
 
         // initiate message
         //return {data:{message:'Lets rumbble...'}, versions: hl7_versions, events: hl7_events};
         return {
             data:{message:'Lets rumbble...'},
             versions: hl7_versions,
-            setData: lookup(),
-            events: hl7_events
+            events: lookup()
         };
 
     })
@@ -66,10 +76,10 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
         $scope.isCollapsed1 = true;
         $scope.isCollapsed2 = true;
     })
-    .controller('validate', function($scope,$http, Payload){
-        $scope.payload = Payload.data
-        $scope.version = Payload.version.selected.name
-        $scope.event = Payload.event.selected.name
+    .controller('validate', function($scope,$http, dataService){
+        $scope.payload = dataService.data
+        $scope.version = dataService.version.selected.name
+        $scope.event = dataService.event.selected.name
 
         $scope.visible = false;
         $scope.toggle = function() {
@@ -83,32 +93,36 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
                 method: 'post',
                 url: 'http://localhost:4567/validate/',
                 //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: { 'version': Payload.version, 'event': Payload.event, 'payload': Payload.data}
+                data: { 'version': dataService.version, 'event': dataService.event, 'payload': dataService.data}
             }).success(function(data) {
                 $scope.response = data;
                 $scope.visible = true;
             })
         }
     })
-    .controller('main', function($scope, $http, Payload){
+    .controller('main', function($scope, $http, dataService){
 
         $scope.event = {};
         $scope.version = {};
+        $scope.cache = {};
 
-        $scope.versions = Payload.versions;
+        var promise = dataService.events;
+        promise.then(function(result) { $scope.cache = result; });
+
+        $scope.versions = dataService.versions;
         $scope.setEvents = function(version){
             if(version.code =='2.4'){
-                $scope.events = Payload.events.adm;
+                $scope.events = $scope.cache.adm;
             }else if(version.code =='vaz2.4'){
-                $scope.events = Payload.events.zseg;
+                $scope.events = $scope.cache.zseg;
             }else{
                 $scope.events = [{name: 'Version Required', code: ''}];
             }
         };
 
         //save state between requests
-        Payload.event = $scope.event;
-        Payload.version = $scope.version;
+        dataService.event = $scope.event;
+        dataService.version = $scope.version;
 
         $scope.generate = function() {
             $http({
@@ -117,18 +131,18 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
                 method: 'post',
                 url: 'http://localhost:4567/generate/',
                 //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: { 'version': Payload.version, 'event': Payload.event}
+                data: { 'version': dataService.version, 'event': dataService.event}
             })
                 .success(function(data) {
                     $scope.payload = data;
-                    Payload.data = data;
+                    dataService.data = data;
                 });
 
         }
 
         //fire when controller loaded
         //$scope.generate();
-        $scope.payload = Payload.data
+        $scope.payload = dataService.data
     });
    
 

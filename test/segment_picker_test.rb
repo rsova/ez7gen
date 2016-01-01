@@ -55,14 +55,14 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
   end
 
   def test_getSegmentCandidates
-    p @segmentPicker.getSegmentsToBuild()
+    p @segmentPicker.get_segments_to_build()
 
   end
 
   def test_getSegmentCandidatesCount
-    assert_equal 11, @segmentPicker.getLoadCandidatesCount(21)
-    assert_equal 2, @segmentPicker.getLoadCandidatesCount(3)
-    assert_equal 5, @segmentPicker.getLoadCandidatesCount(10)
+    assert_equal 11, @segmentPicker.get_load_candidates_count(21)
+    assert_equal 2, @segmentPicker.get_load_candidates_count(3)
+    assert_equal 5, @segmentPicker.get_load_candidates_count(10)
   end
 
   def test_isGroup
@@ -75,19 +75,19 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
   # end
 
   def test_qetRequiredSegments
-    assert_equal ["MSH", "EVN", "PID", "PV1"], @segmentPicker.getRequiredSegments()
+    assert_equal ["MSH", "EVN", "PID", "PV1"], @segmentPicker.get_required_segments()
   end
 
   # def test_handleRequiredSegments
-  #   assert_equal  12, @segmentPicker.pickOptionalSegments().size, '11 picked out of 21'
+  #   assert_equal  12, @segmentPicker.pick_optional_segments().size, '11 picked out of 21'
   # end
 
   def test_pickOptionalSegments
-    p @segmentPicker.pickOptionalSegments()
+    p @segmentPicker.pick_optional_segments()
   end
 
   def test_getSegmentsToBuild
-    p @segmentPicker.getSegmentsToBuild()
+    p @segmentPicker.get_segments_to_build()
   end
 
   def test_getRequiredSegments_withZ
@@ -115,7 +115,7 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     elements << "[~ZMH~]"  #19
     @segmentMap = {:segments => elements, :profile => profile}
     @segmentPicker = SegmentPicker.new(@segmentMap)
-    required = @segmentPicker.getRequiredSegments()
+    required = @segmentPicker.get_required_segments()
     assert_equal ["base:MSH", "base:EVN", "base:PID", "base:PV1", "[~ZEM~]", "[~ZEN~]", "[~ZMH~]"], required
 
   end
@@ -134,7 +134,7 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
 
     @segmentMap = {:segments => elements, :profile => profile}
     @segmentPicker = SegmentPicker.new(@segmentMap)
-    segments = @segmentPicker.getSegmentsToBuild()
+    segments = @segmentPicker.get_segments_to_build()
     #  ["MSH", "EVN", "PID", "PV1", "PID", "PV1"]
     assert_equal 1,segments.count("MSH")
     assert_equal 1, segments.count("EVN")
@@ -168,7 +168,7 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
 
     @segmentMap = {:segments => elements, :profile => profile}
     @segmentPicker = SegmentPicker.new(@segmentMap)
-    segments = @segmentPicker.getSegmentsToBuild()
+    segments = @segmentPicker.get_segments_to_build()
     assert_equal 1,segments.count("base:MSH")
     assert_equal 1, segments.count("base:EVN")
     assert_equal 2, segments.count("[~ZEM~]")
@@ -190,7 +190,7 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     # profile = ["MSH", "EVN", "PID", "[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "PV1", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~PR1~10~}~]", "[~{~GT1~}~]", "[~{~IN1~13~14~15~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
     profile = [ "[~{~PR1~10~}~]"]
     # [~{~PR1~[~{~ROL~}~]~}~] = {RP1 ~ ROL}
-    segments = @segmentPicker.pickSegments
+    segments = @segmentPicker.pick_segments
     p segments
   end
 end
