@@ -69,7 +69,7 @@ class ProfileParser
   end
 
   def getSegmentStructure(segment)
-    segmentName = Utils.getSegmentName(segment)
+    segmentName = Utils.get_segment_name(segment)
     # node = export.Document.Category.SegmentStructure.find{ it.@name == segmentName}
     # values = @xml.elements.collect("Export/Document/Category/SegmentStructure[@name ='#{segmentName}']/SegmentSubStructure"){|x| x.attributes}
     @xml.Export.Document.Category.locate('SegmentStructure').select{|it| it.attributes[:name] == segmentName }.first.locate('SegmentSubStructure').map{|it| it.attributes}
@@ -98,7 +98,7 @@ class ProfileParser
     end
 
     # pre-process structure into collection of segments
-    profile = structure.split('~').map!{|it| (Utils.isNumber?(it))?it.to_i : it}
+    profile = structure.split('~').map!{|it| (Utils.is_number?(it))?it.to_i : it}
 
     # handle groups
     handleGroups(profile, encodedSegments)
@@ -119,8 +119,8 @@ class ProfileParser
         # break into a sequence of segments, no nils
         tokens = seg.split(/[~\{\[\}\]]/).delete_if{|it| Utils.blank?(it)}
         #substitute encoded group elements with values
-        # tokens.map!{|it| Utils.isNumber?(it)? encodedSegments[it.to_i]:it}
-        tokens.map!{|it| Utils.isNumber?(it)? encodedSegments[it.to_i]: it}.flatten
+        # tokens.map!{|it| Utils.is_number?(it)? encodedSegments[it.to_i]:it}
+        tokens.map!{|it| Utils.is_number?(it)? encodedSegments[it.to_i]: it}.flatten
       else
         seg = seg
       end

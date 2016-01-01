@@ -25,7 +25,7 @@ class SegmentGenerator
   end
 
   # initialize msh segment
-  def initMsh
+  def init_msh
     # create a MSH segment
     msh = HL7::Message::Segment::MSH.new
     msh.enc_chars ='^~\&'
@@ -64,15 +64,15 @@ class SegmentGenerator
   # generate test message segment metadata
   def generate( message,  segment,  attributes, isGroup=false)
 
-    isRep = isSegmentRepeated(segment)
-    segmentName = Utils.getSegmentName(segment)
+    isRep = segment_repeated?(segment)
+    segmentName = Utils.get_segment_name(segment)
 
     # decide if segment needs to repeat and how many times
     totalReps = (isRep)? @@random.rand(1.. @@maxReps) : 1 # between 1 and maxReps
 
     totalReps.times do |i|
       # seg = (isRep)?message."get$segmentName"(i) :message."get$segmentName"()
-      message << generateSegment(segmentName, attributes, (totalReps>1)?i+1 :((isGroup)?1:nil))
+      message << generate_segment(segmentName, attributes, (totalReps>1)?i+1 :((isGroup)?1:nil))
     end
 
     return message
@@ -80,17 +80,17 @@ class SegmentGenerator
 
   # #generate test message using
   # def generateSegmentFields( segment, attributes)
-  #   segmentName = Utils.getSegmentName(segment)
-  #   generateSegment(segmentName, attributes)
+  #   segmentName = Utils.get_segment_name(segment)
+  #   generate_segment(segmentName, attributes)
   # end
 
-  def isSegmentRepeated(segment)
+  def segment_repeated?(segment)
     segment.include?("~{")
   end
 
   # generate a segment using Ensamble schema
-  def generateSegment(segmentName, attributes, idx=nil)
-    elements = generateSegmentElements(segmentName, attributes)
+  def generate_segment(segmentName, attributes, idx=nil)
+    elements = generate_segment_elements(segmentName, attributes)
 
     # overrite ids for sequential repeating segments use ids
     elements[1] = (idx)? idx.to_s : elements[1]
@@ -105,25 +105,25 @@ class SegmentGenerator
   end
 
   # use attributes to generate contents of a specific segment
-  def generateSegmentElements(segmentName, attributes)
+  def generate_segment_elements(segmentName, attributes)
 
     fields =[]
     total = attributes.size()
-    fieldGenerator=@fieldGenerators[Utils.getTypeByName(segmentName)]
+    fieldGenerator=@fieldGenerators[Utils.get_type_by_name(segmentName)]
 
     # generate segment attributes
     total.times do |i|
-      fields << addField(attributes[i], fieldGenerator)
+      fields << add_field(attributes[i], fieldGenerator)
     end
 
     # add segment name to the beginning of the array
-    fields.unshift(Utils.noBaseName(segmentName))
+    fields.unshift(Utils.get_name_without_base(segmentName))
   end
 
   #adds a generated field based on data type
-  def addField(attributes, fieldGenerator)
+  def add_field(attributes, fieldGenerator)
 
-    dt = Utils.noBaseName(attributes[:datatype])
+    dt = Utils.get_name_without_base(attributes[:datatype])
     # puts Utils.blank?(dt)?'~~~~~~~~~> data type is missing': dt
     if(['CK'].include?(dt))
       return nil

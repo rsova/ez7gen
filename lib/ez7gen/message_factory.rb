@@ -13,14 +13,14 @@ class MessageFactory
 
     #Get list of non required segments randomly selected for this build
     segmentPicker = SegmentPicker.new(profile, encodedSegments)
-    segments = segmentPicker.pickSegments()
+    segments = segmentPicker.pick_segments()
 
     # set primary parser for base schema
-    parsers = { Utils.PRIMARY => parser }
+    parsers = { Utils::PRIMARY => parser }
 
     # if this is a custom Z segment, add the base parser
     if(version !='2.4')
-       parsers[Utils.BASE]= ProfileParser.new('2.4', event)
+       parsers[Utils::BASE]= ProfileParser.new('2.4', event)
     end
 
     # configure a segment generator
@@ -28,7 +28,7 @@ class MessageFactory
 
     # msh segment configured by hand, due to many requirements that only apply for this segment
     hl7Msg = HL7::Message.new
-    hl7Msg << segmentGenerator.initMsh()
+    hl7Msg << segmentGenerator.init_msh()
 
     # groups are elements that come together; they are  stored as Array
     # if groups are present among the segments, identify ranges of the groups
@@ -38,8 +38,8 @@ class MessageFactory
     segments.flatten!
     #iterate over selected segments and build the entire message
     segments.each.with_index(){ |segment, idx|
-      choiceParser = parsers[Utils.getTypeByName(segment)]
-      attributes = choiceParser.getSegmentStructure(Utils.noBaseName(segment))
+      choiceParser = parsers[Utils.get_type_by_name(segment)]
+      attributes = choiceParser.getSegmentStructure(Utils.get_name_without_base(segment))
       segmentGenerator.generate(hl7Msg, segment, attributes, isGroup?(groups, idx))
     }
      hl7Msg.to_s.gsub("\r","\n")

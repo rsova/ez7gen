@@ -1,29 +1,29 @@
 class Utils
   @@random = Random.new
 
-  @@BASE_INDICATOR = 'base:'
-  @@BASE = 'base'
-  @@PRIMARY = 'primary'
+  BASE_INDICATOR = 'base:'
+  BASE = 'base'
+  PRIMARY = 'primary'
 
   # expose the class variables to the outside
   #TODO: Refactor
-  def self.BASE_INDICATOR
-    @@BASE_INDICATOR
-  end
+  # def self.BASE_INDICATOR
+  #   @@BASE_INDICATOR
+  # end
 
-  def self.BASE
-    @@BASE
-  end
+  # def self.BASE
+  #   @@BASE
+  # end
+  #
+  # def self.PRIMARY
+  #   @@PRIMARY
+  # end
+  #
+  # def self.BASE_INDICATOR
+  #   @@BASE_INDICATOR
+  # end
 
-  def self.PRIMARY
-    @@PRIMARY
-  end
-
-  def self.BASE_INDICATOR
-    @@BASE_INDICATOR
-  end
-
-  def self.getSegmentName(segment)
+  def self.get_segment_name(segment)
     return segment.gsub(/~|\[|\]|\{|\}/,"")
   end
 
@@ -32,41 +32,41 @@ class Utils
   end
 
   # safely pick an index with collection
-  def self.sampleIdx (len)
+  def self.sample_index (len)
     # ... excludes the top of the range
     @@random.rand(0...len)
   end
 
   # check if string is a number
-  def self.isNumber?(str)
+  def self.is_number?(str)
     true if Float(str) rescue false
   end
 
-  def self.isZ?(str)
+  def self.is_z?(str)
     str=~/\~Z/
   end
 
   # if name starts with base use base type otherwise primary
   # works for generators and parsers
-  def self.getTypeByName(name)
-    (name.include?(@@BASE_INDICATOR))?@@BASE:@@PRIMARY
+  def self.get_type_by_name(name)
+    (name.include?(BASE_INDICATOR))? BASE: PRIMARY
   end
 
-  def self.noBaseName(name)
-    (!Utils.blank?(name))?name.delete(Utils.BASE_INDICATOR):nil
+  def self.get_name_without_base(name)
+    (!Utils.blank?(name))?name.delete(BASE_INDICATOR):nil
   end
 
   # helper method to convert a string to nil if it's a number
-  def self.numToNil(string)
-    Integer(string || '')
-    return nil
-  rescue ArgumentError
-    return string
+  def self.num_to_nil(string)
+      Integer(string || '')
+      return nil
+    rescue ArgumentError
+      return string
   end
 
   # helper method to safely handle max length when schema len adn requirements contradict.
   # lesser wins
-  def self.safeLen(maxLen, reqLen)
+  def self.safe_len(maxLen, reqLen)
     #handle stings and garbage
     maxLen = (maxLen||reqLen).to_i
     [maxLen, reqLen].min
