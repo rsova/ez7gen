@@ -36,8 +36,8 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     elements << "[~UB1~]"
     elements << "[~UB2~]"
     elements << "[~PDA~]"
-    segmentMap = {:segments => elements, :profile => profile}
-    @segmentPicker = SegmentPicker.new(@segmentMap)
+    # segmentMap = {:segments => elements, :profile => profile}
+    @segmentPicker = SegmentPicker.new(profile, elements)
 
   end
 
@@ -65,10 +65,10 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     assert_equal 5, @segmentPicker.get_load_candidates_count(10)
   end
 
-  def test_isGroup
-    assert_equal true, @segmentPicker.in_group?('[~{~PR1~10~}~]')
-    assert_equal false, @segmentPicker.in_group?('[~UB2~]')
-  end
+  # def test_isGroup
+  #   assert_equal true, @segmentPicker.in_group?('[~{~PR1~10~}~]')
+  #   assert_equal false, @segmentPicker.in_group?('[~UB2~]')
+  # end
 
   # def test_isRequired
   #
@@ -91,7 +91,9 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
   end
 
   def test_getRequiredSegments_withZ
-    profile = 'base:MSH~base:EVN~base:PID~0~1~base:PV1~2~3~4~5~6~7~9~10~13~14~15~16~17~18~19'
+    # profile = 'base:MSH~base:EVN~base:PID~0~1~base:PV1~2~3~4~5~6~7~9~10~13~14~15~16~17~18~19'
+    profile = ["base:MSH","base:EVN","base:PID",0,1,"base:PV1",2,3,4,5,6,7,9,10,13,14,15,16,17,18,19]
+
     elements = []
     elements << "[~base:PD1~]"
     elements << "[~{~base:NK1~}~]"
@@ -113,15 +115,17 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     elements << "[~ZEM~]"  #17
     elements << "[~ZEN~]"  #18
     elements << "[~ZMH~]"  #19
-    @segmentMap = {:segments => elements, :profile => profile}
-    @segmentPicker = SegmentPicker.new(@segmentMap)
+    # @segmentMap = {:segments => elements, :profile => profile}
+    @segmentPicker = SegmentPicker.new(profile, elements)
     required = @segmentPicker.get_required_segments()
     assert_equal ["base:MSH", "base:EVN", "base:PID", "base:PV1", "[~ZEM~]", "[~ZEN~]", "[~ZMH~]"], required
 
   end
 
   def test_getSegmentsToBuild_with_repeating_required_segments
-    profile = 'MSH~EVN~PID~0~PV1~1~2~3~PID~4~PV1~5~6~7'
+    # profile = 'MSH~EVN~PID~0~PV1~1~2~3~PID~4~PV1~5~6~7'
+    profile = ["MSH","EVN","PID",0,"PV1",1,2,3,'PID',4,'PV1',5,6,7]
+
     elements = []
     elements <<  "[~PD1~]"
     elements <<  "[~PV2~]"
@@ -132,8 +136,8 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     elements <<  "[~{~DB1~}~]"
     elements <<  "[~{~OBX~}~]"
 
-    @segmentMap = {:segments => elements, :profile => profile}
-    @segmentPicker = SegmentPicker.new(@segmentMap)
+    # @segmentMap = {:segments => elements, :profile => profile}
+    @segmentPicker = SegmentPicker.new(profile, elements)
     segments = @segmentPicker.get_segments_to_build()
     #  ["MSH", "EVN", "PID", "PV1", "PID", "PV1"]
     assert_equal 1,segments.count("MSH")
@@ -143,7 +147,9 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
   end
 
   def test_getSegmentsToBuild_with_repeating_Z_segments
-    profile = 'base:MSH~base:EVN~base:PID~0~1~base:PV1~2~3~4~5~6~7~9~10~13~14~15~16~17~18~19'
+    # profile = 'base:MSH~base:EVN~base:PID~0~1~base:PV1~2~3~4~5~6~7~9~10~13~14~15~16~17~18~19'
+    profile = ["base:MSH","base:EVN","base:PID",0,1,"base:PV1",2,3,4,5,6,7,9,10,13,14,15,16,17,18,19]
+
     elements = []
     elements << "[~base:PD1~]"
     elements << "[~{~base:NK1~}~]"
@@ -166,8 +172,8 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     elements << "[~ZEN~]"  #18
     elements << "[~ZMH~]"  #19
 
-    @segmentMap = {:segments => elements, :profile => profile}
-    @segmentPicker = SegmentPicker.new(@segmentMap)
+    # @segmentMap = {:segments => elements, :profile => profile}
+    @segmentPicker = SegmentPicker.new(profile, elements)
     segments = @segmentPicker.get_segments_to_build()
     assert_equal 1,segments.count("base:MSH")
     assert_equal 1, segments.count("base:EVN")
@@ -177,14 +183,14 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
 
   end
 
-  def test_handleGroups
-    # profile = ["MSH", "EVN", "PID", "[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "PV1", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~PR1~10~}~]", "[~{~GT1~}~]", "[~{~IN1~13~14~15~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
-    profile = ["MSH","[~{~PR1~10~}~]"]
-    # [~{~PR1~[~{~ROL~}~]~}~] = {RP1 ~ ROL}
-    segments = @segmentPicker.handle_groups(profile)
-    p segments
-    # [~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]
-  end
+  # def test_handleGroups
+  #   # profile = ["MSH", "EVN", "PID", "[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "PV1", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~PR1~10~}~]", "[~{~GT1~}~]", "[~{~IN1~13~14~15~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
+  #   profile = ["MSH","[~{~PR1~10~}~]"]
+  #   # [~{~PR1~[~{~ROL~}~]~}~] = {RP1 ~ ROL}
+  #   segments = @segmentPicker.handle_groups(profile)
+  #   p segments
+  #   # [~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]
+  # end
 
   def test_pickSegments
     # profile = ["MSH", "EVN", "PID", "[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "PV1", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~PR1~10~}~]", "[~{~GT1~}~]", "[~{~IN1~13~14~15~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]

@@ -41,8 +41,13 @@ class TestProfileParser < MiniTest::Unit::TestCase
    		struct = "MSH~EVN~PID~[~PD1~]~[~{~ROL~}~]~[~{~NK1~}~]~PV1~[~PV2~]~[~{~ROL~}~]~[~{~DB1~}~]~[~{~OBX~}~]~[~{~AL1~}~]~[~{~DG1~}~]~[~DRG~]~[~{~PR1~[~{~ROL~}~]~}~]~[~{~GT1~}~]~[~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]~[~ACC~]~[~UB1~]~[~UB2~]~[~PDA~]"
    		results = @parser.process_segments(struct)
    		assert_equal(2, results.size())
-   		assert_equal(21, results[:segments].size())
-   		assert_equal('[~PD1~]', results[:segments][0])
+
+      profile_idx = 0
+      segments_idx = 1
+      #refactored, results returned as collection of arrays instead of map
+
+      assert_equal(21, results[segments_idx].size())
+   		assert_equal('[~PD1~]', results[segments_idx][0])
 	 end
 
 
@@ -52,10 +57,10 @@ class TestProfileParser < MiniTest::Unit::TestCase
       # p profile
       # p encodedSegments
 			assert_equal(7, profile.size())
-			assert_equal(3, encodedSegments.size())
+			assert_equal(6, encodedSegments.size()) # to groups
 
-			assert_equal(3, encodedSegments[1].size())
-      assert_equal('Array', encodedSegments[1].class.name)
+			assert_equal(3, encodedSegments[3].size())
+      assert_equal('Array', encodedSegments[3].class.name)
 		end
 
    def test_codeTable
@@ -93,8 +98,11 @@ class TestProfileParser < MiniTest::Unit::TestCase
 
    def test_getSegments
 			results =  @parser.get_segments
-			assert_equal(21, results[:segments].size())
-			assert_equal('[~PD1~]', results[:segments][0])
+			profile_idx = 0
+			segments_idx = 1
+			#refactored, results returned as collection of arrays instead of map
+			assert_equal(21, results[profile_idx].size())
+			assert_equal('[~PD1~]', results[segments_idx][0])
 	 end
 
    def test_getSegments_vaz

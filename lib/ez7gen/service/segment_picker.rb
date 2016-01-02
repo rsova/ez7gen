@@ -10,15 +10,15 @@ class SegmentPicker
   # private String profile
 
   # load 50 percent of optional segments
-  # @@LOAD_FACTOR = 0.5
-  @@LOAD_FACTOR = 1
+   @@LOAD_FACTOR = 0.5
+  # @@LOAD_FACTOR = 1
   @@MSH_SEGMENTS = ['MSH', "#{BASE_INDICATOR}MSH"]
   #@@MSH_SEGMENTS = ['MSH', "base:MSH"]
 
   # static final Random random = new Random()
   @@random = Random.new
 
-  def initialize(profile, encodedSegments)
+  def initialize(profile, encodedSegments, loadFactor=@@LOAD_FACTOR)
     @profile = profile
     @encodedSegments = encodedSegments
   end

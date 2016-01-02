@@ -5,24 +5,6 @@ module Utils
   BASE = 'base'
   PRIMARY = 'primary'
 
-  # expose the class variables to the outside
-  #TODO: Refactor
-  # def self.BASE_INDICATOR
-  #   @@BASE_INDICATOR
-  # end
-
-  # def self.BASE
-  #   @@BASE
-  # end
-  #
-  # def self.PRIMARY
-  #   @@PRIMARY
-  # end
-  #
-  # def self.BASE_INDICATOR
-  #   @@BASE_INDICATOR
-  # end
-
   def get_segment_name(segment)
     return segment.gsub(/~|\[|\]|\{|\}/,"")
   end
