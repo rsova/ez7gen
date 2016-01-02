@@ -84,7 +84,7 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
       versions.each{|map|
         version = map['code']
         parser = ProfileParser.new(version)
-        events = parser.lookupMessageTypes(@@ADM_FILTER).map!{|it| {name: it, code: it}}
+        events = parser.lookup_message_types(@@ADM_FILTER).map!{|it| {name: it, code: it}}
         version_name = names[version]
         event_list[version_name] = events
       }

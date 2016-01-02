@@ -1,6 +1,8 @@
 require_relative 'utils'
 
 class SegmentPicker
+  include Utils
+
   attr_accessor :encodedSegments
   attr_accessor :profile
 
@@ -10,7 +12,7 @@ class SegmentPicker
   # load 50 percent of optional segments
   # @@LOAD_FACTOR = 0.5
   @@LOAD_FACTOR = 1
-  @@MSH_SEGMENTS = ['MSH', "#{Utils::BASE_INDICATOR}MSH"]
+  @@MSH_SEGMENTS = ['MSH', "#{BASE_INDICATOR}MSH"]
   #@@MSH_SEGMENTS = ['MSH', "base:MSH"]
 
   # static final Random random = new Random()
@@ -24,7 +26,7 @@ class SegmentPicker
   # def initialize(segmentsMap)
   #   @encodedSegments = segmentsMap[:segments]
   #   @profile = segmentsMap[:profile].split('~')
-  #   @profile.map!{|it| (Utils.is_number?(it))?it.to_i : it}
+  #   @profile.map!{|it| (is_number?(it))?it.to_i : it}
   # end
 
   # Get list of segments for test message generation.
@@ -36,30 +38,6 @@ class SegmentPicker
     #return [ 'EVN', 'PID','[~PD1~]', 'PV1','[~{~AL1~}~]', '[~{~DG1~}~]']
     #return ['~base:EVN','base:PID','[~base:PD1~]','~base:PV1','[~{~base:AL1~}~]','[~{~base:DG1~}~]','[~ZEL~]','[~ZEM~]','[~ZEN~]','[~ZMH~]']
   end
-
-  # # check if encoded segment is a group
-  # def isGroup?(encoded)
-  # 	return (encoded =~ /\~\d+\~/)? true : false
-  # end
-  #
-  # # Groups need to be preprocessed
-  # def handleGroups(segments=@profile)
-  #   #TODO: optional groups are deleted, revisit this
-  #   # segments.delete_if{|it| isGroup?(it)}
-  #
-  #   segments.map!{ |seg|
-  #
-  #     if(isGroup?(seg))
-  #       # break into a sequence of segments, no nils
-  #       tokens = seg.split(/[~\{\[\}\]]/).delete_if{|it| Utils.blank?(it)}
-  #       #substitute encoded group elements with values
-  #       tokens.map!{|it| Utils.is_number?(it)? @encodedSegments[it.to_i]:it}
-  #     else
-  #       seg = seg
-  #     end
-  #   }
-  #   # return segments
-  # end
 
   # pick segments randomly, according to the load factor, exclude groups
   def get_segments_to_build()
@@ -123,11 +101,8 @@ class SegmentPicker
   # check is segment is required
   def is_required?(encoded)
     # Required segments left not encoded as strings, optional and groups encoded as numbers
-    !Utils.is_number?(encoded)
+    !is_number?(encoded)
   end
 
-  # check if it's a z segment
-  def is_z?(seg)
-    Utils.is_z?(seg)
-  end
+
 end

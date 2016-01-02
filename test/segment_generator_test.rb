@@ -172,7 +172,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
   # TESTS #
   def setup
     puts Benchmark.measure{
-    profilers = { Utils.PRIMARY => @@pp }
+    profilers = { 'primary'=> @@pp }
     @segmentGen = SegmentGenerator.new("2.4","ADT_A01", profilers)
     # @msg = HL7::Message.new
     # @msg << @segmentGen.init_msh()
@@ -281,7 +281,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
  end
 
  def test_MSH_MsgStruct_Different_From_MsgType
-   @segmentGen = SegmentGenerator.new("2.4","ADT_A04", { Utils.PRIMARY => @@pp })
+   @segmentGen = SegmentGenerator.new("2.4","ADT_A04", {'primary' => @@pp })
    msg = HL7::Message.new
    msg << @segmentGen.init_msh
    puts msg.to_hl7
@@ -313,7 +313,7 @@ class TestSegmentGenerator < MiniTest::Unit::TestCase
  end
 
  def test_MSH_Version_24_For_Custom
-   @segmentGen = SegmentGenerator.new("vaz2.4","ADT_A01", { Utils.PRIMARY => @@pp })
+   @segmentGen = SegmentGenerator.new("vaz2.4","ADT_A01", {'primary' => @@pp })
    msg = HL7::Message.new
    msg << @segmentGen.init_msh
    puts msg.to_hl7

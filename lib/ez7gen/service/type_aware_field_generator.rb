@@ -2,6 +2,8 @@ require 'yaml'
 require_relative '../profile_parser'
 
 class TypeAwareFieldGenerator
+  include Utils
+
   attr_accessor :yml,:pp
   # @@UP_TO_3_DGTS = 1000 # up to 3 digits
   @@REQ_LEN_3_DGTS = 3 #up to 3 digits
@@ -110,7 +112,7 @@ class TypeAwareFieldGenerator
     val = []
     # CE ce = (CE) map?.fld
     codes = get_coded_map(map)
-    if(Utils.blank?(codes))
+    if(blank?(codes))
       case map[:description]
         when 'Allergen Code/Mnemonic/Description'
           pair = yml['codes.allergens.icd10'].to_a.sample(1).to_h.first # randomly pick a pair
@@ -120,7 +122,7 @@ class TypeAwareFieldGenerator
         else
           # TODO: only for elements that don't have look up table set the id randomly
           # if codetable is empty
-          val << ((Utils.blank?(map[:codetable])) ? ID(map,true) : '')
+          val << ((blank?(map[:codetable])) ? ID(map, true) : '')
       end
     else
       #identifier (ST) (ST)
@@ -485,8 +487,8 @@ class TypeAwareFieldGenerator
     
     #value only
     #Case when max_len overrides requirements
-    len = Utils.safe_len(map[:max_length], @@REQ_LEN_3_DGTS)
-    (!Utils.blank?(map[:codetable]))? get_coded_value(map): generate_length_bound_id(len)
+    len = safe_len(map[:max_length], @@REQ_LEN_3_DGTS)
+    (!blank?(map[:codetable]))? get_coded_value(map): generate_length_bound_id(len)
   end
 
   #Generates HL7 IS (namespace id) data type
@@ -1040,7 +1042,7 @@ class TypeAwareFieldGenerator
 
 		#SI pt = (SI) map.fld
 		#pt.setValue(generate_length_bound_id((map.max_length)?map.max_length.toInteger():1))
-    len = (!Utils.blank?(map[:max_length]))?map[:max_length].to_i : 1
+    len = (!blank?(map[:max_length]))?map[:max_length].to_i : 1
     generate_length_bound_id(len)
   end
 
@@ -1113,8 +1115,8 @@ class TypeAwareFieldGenerator
         generate_length_bound_id(1)
       else
         #Case when max_len overrides requirements
-        len = Utils.safe_len(map[:max_length], @@REQ_LEN_3_DGTS)
-        (!Utils.blank?(map[:codetable]))? get_coded_value(map): generate_length_bound_id(len)
+        len = safe_len(map[:max_length], @@REQ_LEN_3_DGTS)
+        (!blank?(map[:codetable]))? get_coded_value(map): generate_length_bound_id(len)
     end
 
   end
@@ -1384,7 +1386,7 @@ class TypeAwareFieldGenerator
 
   # Value of coded table returned as as single value
   def get_coded_value(attributes)
-  codes = @pp.getCodeTable(attributes[:codetable])
+  codes = @pp.get_code_table(attributes[:codetable])
     # puts codes
     #Apply rules to find a value and description
     map = apply_rules(codes, attributes)
@@ -1394,7 +1396,7 @@ class TypeAwareFieldGenerator
 
   # Values and Description from code table returned as a pair.
   def get_coded_map(attributes)
-  codes = @pp.getCodeTable(attributes[:codetable])
+  codes = @pp.get_code_table(attributes[:codetable])
     # puts codes
     #Apply rules to find a value and description
     #Returns map with code and description
@@ -1405,10 +1407,10 @@ class TypeAwareFieldGenerator
   #TODO refactor candidate
   def apply_rules(codes, attributes)
     #safety check, no codes returns an empty map
-  return {} if Utils.blank?(codes)
+  return {} if blank?(codes)
 
     #index of random element
-    idx = Utils.sample_index(codes.size)
+    idx = sample_index(codes.size)
     code = codes[idx][:value]
     description = codes[idx][:description]
 
@@ -1503,7 +1505,7 @@ class TypeAwareFieldGenerator
   # @return DateTime generated with consideration of description string for dates in the future
   def to_datetime(map)
     #for Time Stamp one way to figure out if event is in the future of in the past to look for key words in description
-    isFutureEvent = !Utils.blank?(map[:description])&& map[:description].include?('End') #so 'Role End Date/Time'
+    isFutureEvent = !blank?(map[:description])&& map[:description].include?('End') #so 'Role End Date/Time'
     seed = 365 #seed bounds duration of time to a year
     days = @@random.rand(seed)
 

@@ -66,8 +66,8 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
   end
 
   def test_isGroup
-    assert_equal true, @segmentPicker.isGroup?('[~{~PR1~10~}~]')
-    assert_equal false, @segmentPicker.isGroup?('[~UB2~]')
+    assert_equal true, @segmentPicker.in_group?('[~{~PR1~10~}~]')
+    assert_equal false, @segmentPicker.in_group?('[~UB2~]')
   end
 
   # def test_isRequired
@@ -181,7 +181,7 @@ class SegmentPickerTest < MiniTest::Unit::TestCase
     # profile = ["MSH", "EVN", "PID", "[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "PV1", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~PR1~10~}~]", "[~{~GT1~}~]", "[~{~IN1~13~14~15~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
     profile = ["MSH","[~{~PR1~10~}~]"]
     # [~{~PR1~[~{~ROL~}~]~}~] = {RP1 ~ ROL}
-    segments = @segmentPicker.handleGroups(profile)
+    segments = @segmentPicker.handle_groups(profile)
     p segments
     # [~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]
   end

@@ -1,6 +1,6 @@
 require "minitest/autorun"
 require 'ox'
-require '../lib/ez7gen/service/utils'
+require '../lib/ez7gen/service/utils_class'
 class Sample
   attr_accessor :a, :b, :c
 

@@ -6,6 +6,8 @@ require_relative 'type_aware_field_generator'
 require_relative 'utils'
 
 class SegmentGenerator
+  include Utils
+
   @@maxReps = 2
   @@random = Random.new
   @@BASE_VER={'2.4'=>'2.4','vaz2.4'=>'2.4'}
@@ -41,7 +43,7 @@ class SegmentGenerator
     # Per Galina's requirement, fix for validation failure.
     # MSH.9.3 needs to be populated with the correct Message Structure values for those messages
     # that are the “copies” of the “original” messages.
-    structType = @fieldGenerators['primary'].pp.getMessageStructure(@event)
+    structType = @fieldGenerators['primary'].pp.get_message_structure(@event)
     msh.message_type = @event.sub('_','^')<<'^'<<structType
 
     msh.time =  DateTime.now.strftime('%Y%m%d%H%M%S.%L')
@@ -65,7 +67,7 @@ class SegmentGenerator
   def generate( message,  segment,  attributes, isGroup=false)
 
     isRep = segment_repeated?(segment)
-    segmentName = Utils.get_segment_name(segment)
+    segmentName = get_segment_name(segment)
 
     # decide if segment needs to repeat and how many times
     totalReps = (isRep)? @@random.rand(1.. @@maxReps) : 1 # between 1 and maxReps
@@ -109,7 +111,7 @@ class SegmentGenerator
 
     fields =[]
     total = attributes.size()
-    fieldGenerator=@fieldGenerators[Utils.get_type_by_name(segmentName)]
+    fieldGenerator=@fieldGenerators[get_type_by_name(segmentName)]
 
     # generate segment attributes
     total.times do |i|
@@ -117,18 +119,18 @@ class SegmentGenerator
     end
 
     # add segment name to the beginning of the array
-    fields.unshift(Utils.get_name_without_base(segmentName))
+    fields.unshift(get_name_without_base(segmentName))
   end
 
   #adds a generated field based on data type
   def add_field(attributes, fieldGenerator)
 
-    dt = Utils.get_name_without_base(attributes[:datatype])
+    dt = get_name_without_base(attributes[:datatype])
     # puts Utils.blank?(dt)?'~~~~~~~~~> data type is missing': dt
     if(['CK'].include?(dt))
       return nil
     else
-      fld = Utils.blank?(dt)?nil :fieldGenerator.method(dt).call(attributes)
+      fld = blank?(dt)?nil :fieldGenerator.method(dt).call(attributes)
     end
   end
 

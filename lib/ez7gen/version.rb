@@ -9,14 +9,15 @@ module Ez7gen
 
       # This works with some corks, will be needed for external location of schema files
       def configure()
-        propertiesFile = File.expand_path('../resources/properties.yml', __FILE__)
-        yml = YAML.load_file propertiesFile
+
+        properties_file = File.expand_path('../resources/properties.yml', __FILE__)
+        yml = YAML.load_file properties_file
         puts 'Before update schema location:' + ((yml['web.install.dir']) ? yml['web.install.dir'] : 'schema location not set')
 
         #This will remove all comments
         if(ARGV[0])
           yml['web.install.dir'] =  ARGV[0]
-          File.open(propertiesFile, 'w') { |f| YAML.dump(yml, f) }
+          File.open(properties_file, 'w') { |f| YAML.dump(yml, f) }
         end
 
         # This will add multiple properties
@@ -27,8 +28,8 @@ module Ez7gen
         # end
 
 
-        propertiesFile = File.expand_path('../resources/properties.yml', __FILE__)
-        yml = YAML.load_file propertiesFile
+        properties_file = File.expand_path('../resources/properties.yml', __FILE__)
+        yml = YAML.load_file properties_file
         puts 'After update schema location:' + ((yml['web.install.dir']!=nil)?yml['web.install.dir']:'schema location not set')
       end
   end
