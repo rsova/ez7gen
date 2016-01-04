@@ -1,9 +1,10 @@
-require "minitest/autorun"
+# require "minitest/autorun"
 require "benchmark"
+require 'test/unit'
 require 'ruby-hl7'
 require_relative "../lib/ez7gen/service/segment_generator"
 
-class TestSegmentGenerator < MiniTest::Unit::TestCase
+class SegmentGeneratorTest < Test::Unit::TestCase
  #parse xml once
  @@pp = ProfileParser.new('2.4','ADT_A01')
 

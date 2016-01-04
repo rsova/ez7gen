@@ -10,17 +10,19 @@ class SegmentPicker
   # private String profile
 
   # load 50 percent of optional segments
-   @@LOAD_FACTOR = 0.5
-  # @@LOAD_FACTOR = 1
+  @@LOAD_FACTOR = 0.5
   @@MSH_SEGMENTS = ['MSH', "#{BASE_INDICATOR}MSH"]
   #@@MSH_SEGMENTS = ['MSH', "base:MSH"]
 
   # static final Random random = new Random()
   @@random = Random.new
 
-  def initialize(profile, encodedSegments, loadFactor=@@LOAD_FACTOR)
+  def initialize(profile, encodedSegments, loadFactor=nil)
     @profile = profile
     @encodedSegments = encodedSegments
+
+    @loadFactor = loadFactor
+    @loadFactor||=@@LOAD_FACTOR # set to default if not specified or set to nil
   end
 
   # def initialize(segmentsMap)
@@ -62,11 +64,9 @@ class SegmentPicker
       # get indexes of optional segments
       ids = optSegmentIdxs.sample(count)
 
-      # add selected optional segments to required, contain order
+      # add selected optional segments to required, maintain order
       ids.each{|id| @profile[@profile.index(id)]= @encodedSegments[id]}
 
-      # groups need to be expended if any selected
-      # handleGroups()
   end
 
   # get segments that will always be build, include z segments
@@ -95,7 +95,7 @@ class SegmentPicker
 
   # calculate number of segments based on load factor
   def get_load_candidates_count(total)
-    (total*@@LOAD_FACTOR).ceil     #round it up
+    (total*@loadFactor).ceil     #round it up
   end
 
   # check is segment is required

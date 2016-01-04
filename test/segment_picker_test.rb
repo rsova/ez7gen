@@ -1,9 +1,10 @@
-require "minitest/autorun"
+# require "minitest/autorun"
+require 'test/unit'
 require_relative '../lib/ez7gen/service/segment_picker'
 # require_relative '../lib/ez7gen/profile_parser'
 
 
-class SegmentPickerTest < MiniTest::Unit::TestCase
+class SegmentPickerTest < Test::Unit::TestCase
   # @@pp = ProfileParser.new('2.4', 'ADT_A01')
 
 

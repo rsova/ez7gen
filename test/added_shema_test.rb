@@ -1,4 +1,4 @@
-require "minitest/autorun"
+require 'test/unit'
 require 'ox'
 
 class Sample
@@ -11,7 +11,7 @@ class Sample
   end
 end
 
-class AddedShemaTest < MiniTest::Unit::TestCase
+class AddedShemaTest < Test::Unit::TestCase
 
   # Called after every test method runs. Can be used to tear
   # down fixture information.

@@ -1,7 +1,8 @@
-require "minitest/autorun"
+# require "minitest/autorun"
+require 'test/unit'
 require_relative "../lib/ez7gen/message_factory"
 
-class TestMessageFactory < MiniTest::Unit::TestCase
+class MessageFactoryTest < Test::Unit::TestCase
   # set to true to write messages to a file
   @@PERSIST = false
 
@@ -29,7 +30,8 @@ class TestMessageFactory < MiniTest::Unit::TestCase
   def test_ADT_01
     ver='2.4'
     event='ADT_A01'
-    hl7 = MessageFactory.new.generate(ver, event)
+    loadFactor = 1
+    hl7 = MessageFactory.new.generate(ver, event,loadFactor)
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -312,8 +314,9 @@ class TestMessageFactory < MiniTest::Unit::TestCase
     #failed
     ver='2.4'
     event='ADT_A45'
+    loadFactor=1 # build all segments
     # <MessageStructure name='ADT_A45' definition='MSH~EVN~PID~[~PD1~]~{~MRG~PV1~}' />
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new.generate(ver, event, loadFactor)
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)

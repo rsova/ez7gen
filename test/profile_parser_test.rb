@@ -1,8 +1,9 @@
-require "minitest/autorun"
+# require "minitest/autorun"
+require 'test/unit'
 require "benchmark"
 require_relative '../lib/ez7gen/profile_parser'
 
-class TestProfileParser < MiniTest::Unit::TestCase
+class ProfileParserTest < Test::Unit::TestCase
 	
 	def setup
 		@parser = ProfileParser.new('2.4', 'ADT_A01')
@@ -63,7 +64,24 @@ class TestProfileParser < MiniTest::Unit::TestCase
       assert_equal('Array', encodedSegments[3].class.name)
 		end
 
-   def test_codeTable
+		def test_processSegments_not_optional_group
+      # <MessageStructure name='ADT_A45' definition='MSH~EVN~PID~[~PD1~]~{~MRG~PV1~}' />
+      struct = "MSH~[~{~ROL~}~]~[~PD1~]~{~MRG~PV1~}"
+      results = @parser.process_segments(struct)
+      p results
+      assert_equal(2, results.size())
+
+      profile_idx = 0
+      segments_idx = 1
+      #refactored, results returned as collection of arrays instead of map
+
+      assert_equal(3, results[segments_idx].size())
+      assert_equal('[~{~ROL~}~]', results[segments_idx][0])
+    end
+
+
+
+	def test_codeTable
    		attributes = @parser.get_code_table("62")
    		p attributes[0].class
 			p attributes.size
@@ -150,6 +168,24 @@ class TestProfileParser < MiniTest::Unit::TestCase
     # puts results
     assert_equal 67, results.size
 
-	end
+  end
+
+  def test_is_group_true_encoded
+   isCheck, tokens =  @parser.is_group?("{~3~}")
+   assert_true isCheck
+   assert_equal(['3'], tokens)
+  end
+
+  def test_is_group_true_all_required
+   isCheck, tokens =  @parser.is_group?("{~MRG~PV1~}")
+   assert_true isCheck
+   assert_equal(["MRG", "PV1"], tokens)
+  end
+
+  def test_is_group_false
+    isCheck, tokens =  @parser.is_group?("{~MRG~}")
+    assert_true !isCheck
+    assert_equal(['MRG'], tokens)
+  end
 
 end

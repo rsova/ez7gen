@@ -1,7 +1,8 @@
-require "minitest/autorun"
+# require "minitest/autorun"
+require 'test/unit'
 require_relative "../lib/ez7gen/service/utils"
 
-class TestUtils < MiniTest::Unit::TestCase
+class UtilsTest < Test::Unit::TestCase
 	include Utils
 	@@random = Random.new
 

@@ -1,9 +1,10 @@
-require "minitest/autorun"
+# require "minitest/autorun"
+require 'test/unit'
 require_relative '../lib/ez7gen/message_factory'
 
 # .*_.*
 #def test_$& \n msg = '$&'\n fail('Not implemented')\nend \n
-class AdtTest < MiniTest::Unit::TestCase
+class AdtTest < Test::Unit::TestCase
 
   # Called before every test method runs. Can be used
   # to set up fixture information.

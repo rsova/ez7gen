@@ -1,8 +1,9 @@
-require "minitest/autorun"
+# require "minitest/autorun"
+require 'test/unit'
 require_relative '../lib/ez7gen/profile_parser'
 require_relative '../lib/ez7gen/service/type_aware_field_generator'
 
-class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
+class TypeAwareFieldGeneratorTest < Test::Unit::TestCase
 #parse xml once
 @@pp = ProfileParser.new('2.4','ADT_A01')
 
@@ -402,7 +403,7 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		line ='[max_length:250, symbol:*, description:Phone Number - Business, ifrepeating:1, datatype:XTN, required:O, piece:14]'
 		fld = @fldGenerator.XTN(lineToHash(line), true)
 		puts fld
-		assert 'Starts with (...)', /(\d{3})/.match(fld)
+		assert  /^\(\d{3}\)/.match(fld), 'Starts with (...)'
 	#	assert fld.include?/(\d{3}\\)\d{3}-\d{4}/
 	end
 
@@ -453,15 +454,6 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 		puts actual
 	end
 
-	def test_getCodedValue_range1
-		actual = @fldGenerator.get_coded_value({'codetable'=>'112', 'max_length' =>'2'})
-		puts actual
-	end
-
-	def test_getCodedValue_range2
-		actual = @fldGenerator.get_coded_value({'codetable'=>'141', 'max_length' =>'2'})
-		puts actual
-	end
 
 	def test_getCodedValues_range3
 		# {"position"=>position='3', "value"=>value='2 ...', "description"=>description='For ranked secondary diagnoses'}
@@ -476,13 +468,16 @@ class TestTypeAwareFieldGenerator < MiniTest::Unit::TestCase
 
 	def test_getCodedValue_range1
 		actual = @fldGenerator.get_coded_map({'codetable'=>'112', 'max_length' =>'2'})
-		puts actual
+		# puts actual
+    assert_equal({}, actual)
 	end
 
 	def test_getCodedValue_range2
 		actual = @fldGenerator.get_coded_map({'codetable'=>'141', 'max_length' =>'2'})
-		puts actual
-	end
+		# puts actual
+    assert_equal({}, actual)
+
+  end
 
 	def test_handleRanges
 

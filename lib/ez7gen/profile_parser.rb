@@ -109,8 +109,15 @@ class ProfileParser
 
   # check if encoded segment is a group
   def is_group?(encoded)
-    return (encoded =~ /\~\d+\~/)? true : false
-  end
+     # group has an index of encoded optional element
+     isGroupWithEncodedElements = (encoded =~ /\~\d+\~/)? true: false
+
+     # group consists of all required elements {~MRG~PV1~}, so look ahead for that
+     subGroups = encoded.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
+     isGroupOfRequiredElements = (subGroups.size > 1)? true: false
+
+     return (isGroupWithEncodedElements || isGroupOfRequiredElements), subGroups
+    end
 
   # Groups need to be preprocessed
   # Group string replaced with array of individual segments
@@ -118,17 +125,14 @@ class ProfileParser
 
     #find groups and decode the group elements and put them in array
     encodedSegments.map!{ |seg|
-      if(is_group?(seg))
-        # break into a sequence of segments, no nils
-        tokens = seg.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
+      groupFound, tokens = is_group?(seg)
+      if(groupFound)
         #substitute encoded group elements with values
-        # tokens.map!{|it| Utils.is_number?(it)? encodedSegments[it.to_i]:it}
         tokens.map!{|it| is_number?(it)? encodedSegments[it.to_i]: it}.flatten
       else
         seg = seg
       end
     }
-
     return profile, encodedSegments
   end
 

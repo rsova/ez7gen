@@ -7,13 +7,13 @@ require_relative '../ez7gen/service/utils'
 class MessageFactory
   include Utils
 
-  def generate(version, event)
+  def generate(version, event, loadFactor=nil)
 
     parser = ProfileParser.new(version, event)
     profile, encoded_segments = parser.get_segments()
 
     #Get list of non required segments randomly selected for this build
-    segment_picker = SegmentPicker.new(profile, encoded_segments)
+    segment_picker = SegmentPicker.new(profile, encoded_segments, loadFactor)
     segments = segment_picker.pick_segments()
 
     # set primary parser for base schema
