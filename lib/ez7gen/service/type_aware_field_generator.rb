@@ -238,10 +238,9 @@ class TypeAwareFieldGenerator
     return '' if(!generate?(map, force))
     val =[]
     # <quantity (NM)>
-    val<<NM(map,true)
+    val<<NM({},true)
     # <units (CE)>
     # val<<CE(map,true) # Per request with QBP_Q21 issue
-    val<<ID({},true)
     #    val.join(@@HAT)
   end
 

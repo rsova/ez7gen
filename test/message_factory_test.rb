@@ -4,7 +4,7 @@ require_relative "../lib/ez7gen/message_factory"
 
 class MessageFactoryTest < Test::Unit::TestCase
   # set to true to write messages to a file
-  @@PERSIST = false
+  @@PERSIST = true
 
   # helper message to persist the
   def saveMsg(event, hl7, ver)
@@ -382,7 +382,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_QBP_Q21
     ver='2.4'
     event='QBP_Q21'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new.generate(ver, event, 1)
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)

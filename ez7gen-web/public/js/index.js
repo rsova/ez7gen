@@ -4,7 +4,28 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
 
         $routeProvider.when('/', {
             templateUrl : 'generate.html/',
-            controller : 'main'
+            controller : 'main',
+            resolve: {
+                'cachedItems': function (service) {
+                    return service.lookup;//.then(function(result){return result});
+                    //var deferred = $q.defer();
+                    // $http({
+                    //    //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
+                    //    method: 'get',
+                    //    url: 'http://localhost:4567/lookup/',
+                    //    //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    //}).success(function (response) {
+                    //     //return response;
+                    //     deferred.resolve(response);
+                    // });
+                    //return deferred.promise;
+                }
+                //delay: function($q, $defer) {
+                //    var delay = $q.defer();
+                //    $defer(delay.resolve, 1000);
+                //    return delay.promise;
+                //}
+            }
         }).when('/edit', {
             templateUrl : 'edit.html/',
             controller : 'navigation'
@@ -17,69 +38,42 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
         //$httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
     })
     //http://stackoverflow.com/questions/21919962/share-data-between-angularjs-controllers
-    .factory('dataService', function($http) {
+    .factory('service',[ '$http', function($http) {
 
-        hl7_versions = [
-            {name: '2.4', code: '2.4'},
-            {name: 'VAZ 2.4', code: 'vaz2.4'}
-        ];
-        hl7_events  = {};
-        //hl7_events.zseg = [{name: 'ADT_A01', code: 'ADT_A01'}];
-        //hl7_events.adm = [{name: 'ADT_A02', code: 'ADT_A02'}];
+        hl7_versions = [{name: '2.4', code: '2.4'}, {name: 'VAZ 2.4', code: 'vaz2.4'}];
 
-        //lookup = function(){
-        //    $http({
-        //        //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
-        //        //use call async as a promise
-        //        method: 'post',
-        //        url: 'http://localhost:4567/lookup/',
-        //        //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        //        data: { 'versions': hl7_versions}
-        //    }).success(function(data) {
-        //        //resp = data;
-        //        hl7_events = data.message
-        //    })
-        //};
-        //    hl7_events = {
-        //        zseg:[
-        //            {name: 'ADT_A01', code: 'ADT_A01'}
-        //        ],
-        //        adm:[
-        //            {name: 'ADT_A01', code: 'ADT_A01'},
-        //            {name: 'ADT_A02', code: 'ADT_A02'},
-        //        ]
-        //};
         lookup = function(){
-               return $http({
-                    //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
-                    //use call async as a promise
-                    method: 'post',
-                    url: 'http://localhost:4567/lookup/',
-                    //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    data: { 'versions': hl7_versions}
-                }).then(function(response) {
-                   return response.data;
-                });
+           return $http({
+                //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
+                method: 'get',
+                url: 'http://localhost:4567/lookup/',
+                //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                //data: { versions: hl7_versions}
+            }).then(function(response) {
+               //service.cachedItems = response.data
+               return response.data;
+            });
             };
 
-        // initiate message
-        //return {data:{message:'Lets rumbble...'}, versions: hl7_versions, events: hl7_events};
-        return {
-            data:{message:'Lets rumbble...'},
-            versions: hl7_versions,
-            events: lookup()
+        var serviceItems = {
+            data: {message:'Lets rumbble...'},
+            //versions: hl7_versions,
+            cachedItems: null,
+            lookup: lookup()
         };
 
-    })
-    .controller('navigation', function($scope) {
+        return serviceItems;
+
+    }])
+    .controller('navigation', ['$scope', function($scope) {
         $scope.isCollapsed = true;
         $scope.isCollapsed1 = true;
         $scope.isCollapsed2 = true;
-    })
-    .controller('validate', function($scope,$http, dataService){
-        $scope.payload = dataService.data
-        $scope.version = dataService.version.selected.name
-        $scope.event = dataService.event.selected.name
+    }])
+    .controller('validate', ['$scope', '$http', 'service', function($scope, $http, service){
+        $scope.hl7 = service.data
+        $scope.version = service.version.selected.name
+        $scope.event = service.event.selected.name
 
         $scope.visible = false;
         $scope.toggle = function() {
@@ -93,58 +87,58 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
                 method: 'post',
                 url: 'http://localhost:4567/validate/',
                 //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: { 'version': dataService.version, 'event': dataService.event, 'payload': dataService.data}
+                data: { version: service.version.selected,  hl7: service.data}
             }).success(function(data) {
                 $scope.response = data;
                 $scope.visible = true;
             })
         }
-    })
-    .controller('main', function($scope, $http, dataService){
+    }])
+    .controller('main', function($scope, $http, service, cachedItems){
 
-        $scope.event = {};
-        $scope.version = {};
-        $scope.cache = {};
+                //fire when controller loaded
+                //$scope.hl7 = service.data;
+                service.cachedItems = null || cachedItems;
+                //$scope.x = cachedItems;
+                $scope.hl7 = service.data;
+                $scope.versions = service.cachedItems.versions;
+                $scope.version = {};
+                $scope.event = {};
 
-        var promise = dataService.events;
-        promise.then(function(result) { $scope.cache = result; });
 
-        $scope.versions = dataService.versions;
-        $scope.setEvents = function(version){
-            if(version.code =='2.4'){
-                $scope.events = $scope.cache.adm;
-            }else if(version.code =='vaz2.4'){
-                $scope.events = $scope.cache.zseg;
-            }else{
-                $scope.events = [{name: 'Version Required', code: ''}];
-            }
-        };
+               $scope.setEvents = function(version){
+                    $scope.events = (version.code)?service.cachedItems.events[version.code]:[{name: 'Version Required', code: ''}];
+                };
+                //set an appropriate list of message types for a selected version
 
-        //save state between requests
-        dataService.event = $scope.event;
-        dataService.version = $scope.version;
+                //method to the server to generate hl7
+                $scope.generate = function() {
+                    service.cachedItems.current = {event: $scope.event, version: $scope.version};
+                    //service.event = $scope.event;
+                    //service.version = $scope.version;
+                    $http({
+                        //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
+                        method: 'post',
+                        url: 'http://localhost:4567/generate/',
+                        data: { 'version': $scope.version.selected, 'event': $scope.event.selected}
 
-        $scope.generate = function() {
-            $http({
-                //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
-                //use call async as a promise
-                method: 'post',
-                url: 'http://localhost:4567/generate/',
-                //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: { 'version': dataService.version, 'event': dataService.event}
-            })
-                .success(function(data) {
-                    $scope.payload = data;
-                    dataService.data = data;
-                });
+                    }).success(function(data) {
+                        $scope.hl7 = data;
+                        service.data = data;
+                    });
 
-        }
 
-        //fire when controller loaded
-        //$scope.generate();
-        $scope.payload = dataService.data
-    });
-   
+                };
+                //save state between requests
+
+                //call on load
+                //call to get events is async, and returns a promise,
+                //then() call on promise gets the result and sets service events value so it can be shared among controllers.
+                //service.lookup().then(function(result){service.cashedItems = result});
+                //$scope.versions = service.cashedItems.versions;
+
+            });
+
 
 
 

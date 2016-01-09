@@ -30,8 +30,8 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
       params = JSON.parse(request.env["rack.input"].read)
       puts  params
 
-      event =  params['event']['selected']['code']
-      version =  params['version']['selected']['code']
+      event =  params['event']['code']
+      version =  params['version']['code']
       puts "event: #{event}, version: #{version}"
 
       msg = MessageFactory.new
@@ -52,15 +52,15 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
     begin
       params = JSON.parse(request.env["rack.input"].read)
       puts params
-      version =  params['version']['selected']['code']
+      version =  params['version']['code']
       puts version
-      payload = params['payload']['message']
+      payload = params['hl7']['message']
       puts payload
-      url = @@URLS[version]
-      @resp = RestClient.post url, payload.gsub!("\n","\r")
+      @url = @@URLS[version]
+      @resp = RestClient.post @url, payload.gsub!("\n","\r")
         # { message: resp}.to_json
     rescue => e
-      @resp = 'Error connecting to ' + url
+      @resp = 'Error connecting to ' + @url
       puts e
       # raise e
     end
@@ -70,39 +70,37 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
   end
 
   # https://code.google.com/p/x2js/ as an alternative
-  post '/lookup/' do
+  get '/lookup/' do
     event_list = {}
 
     begin
-      params = JSON.parse(request.env["rack.input"].read)
-      puts params
-      # {"versions"=>[{"name"=>"2.4", "code"=>"2.4"}, {"name"=>"VAZ 2.4", "code"=>"vaz2.4"}]}
-      versions =  params['versions']
+      # params = JSON.parse(request.env["rack.input"].read)
+      # puts params
+      versions=[{"name"=>"2.4", "code"=>"2.4"}, {"name"=>"VAZ 2.4", "code"=>"vaz2.4"}]
+      # versions =  params['versions']
       # names={'2.4'=>'adm'.to_sym,'vaz2.4'=>'zseg'.to_sym}
-      names={'2.4'=>:adm,'vaz2.4'=>:zseg}
+      # names={'2.4'=>'2.4','vaz2.4'=>'vaz2.4'}
 
       versions.each{|map|
         version = map['code']
         parser = ProfileParser.new(version)
         events = parser.lookup_message_types(@@ADM_FILTER).map!{|it| {name: it, code: it}}
-        version_name = names[version]
-        event_list[version_name] = events
+        event_list[version] = events
+        # version_name = names[version]
+        # event_list[version_name] = events
       }
 
-      p event_list
-      # parser = ProfileParser.new('2.4')
-      # @eventsList = parser.lookupMessageTypes(@@ADM_FILTER).map!{|it| {name: it, code: it}}
-
-      #generate map for client to populate drop down boxes
-      # puts events
-      # version =  params['version']['selected']['code']
-      # filter = params['filter']
-      rescue => e
+      # p event_list
+      p 'in lookup'
+    rescue => e
         puts e
-      end
+    end
 
-      # event_list.to_json
-      {adm: event_list[:adm], zseg: event_list[:zseg] }.to_json
+     # event_list.to_json
+      items = { events: {'2.4' => event_list['2.4'], 'vaz2.4' => event_list['vaz2.4']}, versions: [{'name'=> '2.4', 'code'=> '2.4'}, {'name' =>'VAZ 2.4', 'code'=> 'vaz2.4'}] }
+      # {'2.4'=> event_list['2.4'], 'vaz2.4'=> event_list['vaz2.4'] }.to_json
+      # {adm: event_list[:adm], zseg: event_list[:zseg] }.to_json
+      items.to_json
   end
 
   # error do
