@@ -241,7 +241,8 @@ class TypeAwareFieldGenerator
     val<<NM({},true)
     # <units (CE)>
     # val<<CE(map,true) # Per request with QBP_Q21 issue
-    #    val.join(@@HAT)
+    val<<ID(map,true)
+    val.join(@@HAT)
   end
 
   #Channel sensitivity/units
