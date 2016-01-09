@@ -79,11 +79,18 @@ class ProfileParser
   end
 
   def lookup_message_types(filter=nil)
-    messageTypeColl = @xml.Export.Document.Category.locate('MessageType').map{|it| it.attributes[:name]}
-    if(!blank?(filter))
-      messageTypeColl = messageTypeColl.grep(/#{filter}/);
-    end
-    return messageTypeColl
+    filter ||= '.*'# match everything if no filter defined
+
+    messageTypeColl = @xml.Export.Document.Category.locate('MessageType').select{|it| it.attributes[:name] =~/#{filter}/}.map!{|it| it.attributes[:name]}
+    map = messageTypeColl.map{ |el|
+      event = (el.split('_')).last
+       {
+          name: el,
+          #chek if there is a match otherwise use the segment name
+          code: ((e = @xml.Export.Document.Category.locate('MessageEvent').select{|it| it.attributes[:name] == event}); e!=[] )? (e.first().attributes[:description]): el
+      }
+    }
+    return map
   end
 
 

@@ -30,8 +30,8 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
       params = JSON.parse(request.env["rack.input"].read)
       puts  params
 
-      event =  params['event']['code']
-      version =  params['version']['code']
+      event =  params['event']['name']
+      version =  params['version']['name']
       puts "event: #{event}, version: #{version}"
 
       msg = MessageFactory.new
@@ -84,7 +84,7 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
       versions.each{|map|
         version = map['code']
         parser = ProfileParser.new(version)
-        events = parser.lookup_message_types(@@ADM_FILTER).map!{|it| {name: it, code: it}}
+        events = parser.lookup_message_types(@@ADM_FILTER)
         event_list[version] = events
         # version_name = names[version]
         # event_list[version_name] = events

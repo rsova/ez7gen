@@ -25,7 +25,7 @@
             <ui-select-match placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>
             <ui-select-choices repeat="event in events | filter: $select.search">
                 <span ng-bind-html="event.name | highlight: $select.search"></span>
-                <!--<small ng-bind-html="event.code | highlight: $select.search"></small>-->
+                <small ng-bind-html="event.code | highlight: $select.search"></small>
             </ui-select-choices>
         </ui-select>
         </div>

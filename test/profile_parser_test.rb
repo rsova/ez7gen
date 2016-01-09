@@ -144,30 +144,46 @@ class ProfileParserTest < Test::Unit::TestCase
     assert_equal 1, results.size
 
   end
+  def test_lookupMessageTypes_24_all
+    @parser = ProfileParser.new('2.4')
+    results =  @parser.lookup_message_types()
+    assert_equal 390, results.size
 
-	def test_lookupMessageTypes_24
-		@parser = ProfileParser.new('2.4')
-		results =  @parser.lookup_message_types()
-		assert_equal 390, results.size
     # puts results
+    results =  @parser.lookup_message_types(nil)
+    assert_equal 390, results.size
+    # puts results
+  end
 
-		results =  @parser.lookup_message_types('ADT_A')
-    puts results
+	def test_lookupMessageTypes_24_ADT
+		@parser = ProfileParser.new('2.4')
+    results =  @parser.lookup_message_types('ADT_A')
+    # puts results
     assert_equal 57, results.size
 
-		results =  @parser.lookup_message_types('QBP_Q2')
-		# puts results
-		assert_equal 5, results.size
+  end
 
+	def test_lookupMessageTypes_24_QBP
+		@parser = ProfileParser.new('2.4')
+    results =  @parser.lookup_message_types('QBP_Q2')
+    # puts results
+    assert_equal 5, results.size
+  end
+
+	def test_lookupMessageTypes_24_RSP_K2
+		@parser = ProfileParser.new('2.4')
     results =  @parser.lookup_message_types('RSP_K2')
     # puts results
     assert_equal 5, results.size
+  end
 
-		# if(message.starts_with('ADT_')||message.starts_with('QBP_')||message.starts_with('RSP_'))
+	def test_lookupMessageTypes_24_RSP_Admissions
+		@parser = ProfileParser.new('2.4')
+    # if(message.starts_with('ADT_')||message.starts_with('QBP_')||message.starts_with('RSP_'))
     results =  @parser.lookup_message_types('ADT_A|QBP_Q2|RSP_K2')
-    # puts results
+    puts results[0]
     assert_equal 67, results.size
-
+    assert_equal({:name=>'ADT_A01', :code=>'ADT/ACK - Admit / visit notification'}, results[0])
   end
 
   def test_is_group_true_encoded

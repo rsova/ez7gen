@@ -1,10 +1,17 @@
 require 'yaml'
 
 
+
+h = { "apple tree" => "plant", "ficus" => "plant",
+      "shrew" => "animal", "plesiosaur" => "animal" }
+p h.keys.grep /p/
+# => ["apple tree", "plesiosaur"]
+p h.inject([]) { |res, kv| res << kv if kv[1] =~ /p/; res }
+exit
+# => [["ficus", "plant"], ["apple tree", "plant"]]
 p "[~{~PR1~10~}~]".split(/[~\{\[\}\]]/)
 p "[~{~PR1~10~}~]".split(%r|{.*}|)
 # p a
-exit
 
 begin
   a/0
