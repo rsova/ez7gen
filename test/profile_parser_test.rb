@@ -202,6 +202,18 @@ class ProfileParserTest < Test::Unit::TestCase
     isCheck, tokens =  @parser.is_group?("{~MRG~}")
     assert_true !isCheck
     assert_equal(['MRG'], tokens)
+	end
+
+  # use test configurations for lookup methods to run throug different scenarios
+  class ProfileParserStubx < ProfileParser
+    def self.get_schema_location
+      '../test/test-config/schema/'
+    end
   end
+
+	def test_lookup_versions
+		versions =  ProfileParserStubx.lookup_versions()
+    assert_equal 2, versions.size
+	end
 
 end

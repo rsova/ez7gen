@@ -35,7 +35,11 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
       puts "event: #{event}, version: #{version}"
 
       msg = MessageFactory.new
-      @resp = msg.generate(version, event)#msg.replace('\r','\n' )
+      @resp = msg.generate(version, event, nil)#msg.replace('\r','\n' )
+      x = []
+      @resp.each{|it| x << ({name: (it.instance_variable_get(:@elements)[0]), seg:  it.to_s})}
+      map = {message: @resp.to_s, segments: x }
+
     rescue => e
       # puts 'inside rescue'
       puts 'Error: processing generate/' << e.inspect
@@ -44,7 +48,7 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
       # ensure
     end
     #send response
-    {message: @resp}.to_json
+    map.to_json
 
   end
 
@@ -76,6 +80,7 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
     begin
       # params = JSON.parse(request.env["rack.input"].read)
       # puts params
+      # ProfileParser.lookup_versions
       versions=[{"name"=>"2.4", "code"=>"2.4"}, {"name"=>"VAZ 2.4", "code"=>"vaz2.4"}]
       # versions =  params['versions']
       # names={'2.4'=>'adm'.to_sym,'vaz2.4'=>'zseg'.to_sym}

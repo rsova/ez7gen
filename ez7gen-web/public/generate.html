@@ -21,7 +21,7 @@
         <div class="col-xs-3">
         <!--<h3>HL7 Event</h3>-->
         <!--<p>Selected: {{event.selected.name}}</p>-->
-        <ui-select ng-model="event.selected" theme="selectize" ng-disabled="disabled" style="width: 120px;">
+        <ui-select ng-model="event.selected" theme="selectize" ng-disabled="disabled" style="width: 100%;">
             <ui-select-match placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>
             <ui-select-choices repeat="event in events | filter: $select.search">
                 <span ng-bind-html="event.name | highlight: $select.search"></span>
@@ -38,5 +38,12 @@
 </h4>
 
 <pre>{{hl7.message}}</pre>
+
+<uib-accordion close-others="true">
+
+<uib-accordion-group heading="{{segment.name}}" ng-repeat="segment in hl7.segments">
+    <pre aria-multiline="true">{{segment.seg}}</pre>
+</uib-accordion-group>
+</uib-accordion>
 <button class="btn-default" ng-click="generate()">Generate HL7</button>
 

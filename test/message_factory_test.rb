@@ -31,9 +31,23 @@ class MessageFactoryTest < Test::Unit::TestCase
     ver='2.4'
     event='ADT_A01'
     loadFactor = 1
-    hl7 = MessageFactory.new.generate(ver, event,loadFactor)
-    saveMsg(event, hl7, ver)
-    puts hl7
+    hl7 = MessageFactory.new.generate(ver, event, loadFactor)
+    x = []
+    hl7.each{|it| x << ({name: (it.instance_variable_get(:@elements)[0]), seg:  it.to_s})}
+    map = {message: hl7.to_s, segments: x }
+    puts x
+    # puts map[:message]
+    # puts '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+    # puts map[:segments]
+    # hl7.sequence_segments()
+    # s = hl7.to_s
+    # arr = hl7.t
+    x = hl7.to_hl7
+    puts x
+    # m = hl7.to_mllp
+    #
+    # saveMsg(event, hl7, ver)
+    # puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
   end

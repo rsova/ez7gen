@@ -12,15 +12,40 @@ class ProfileParser
   # @@segment_patern = /\[([^\[\]]*)\]/
   @@segment_patern = /\[([^\[\]]*)\]|\{([^\[\]]*)\}/
 
+  def self.get_schema_location
+    properties_file = File.expand_path('../resources/properties.yml', __FILE__)
+    yml = YAML.load_file properties_file
+    path = yml['web.install.dir'] # set when run intall gem with argument, example: gem install 'c:/ez7Gen/ez7gen-web/config/resources/'
+    path = path<<'config/resources/'
+  end
+
+  def self.lookup_versions
+    path = self.get_schema_location
+    names = Dir.glob("#{path}*").select {|f| File.directory? f}
+    versions = names.map{|it| { std: it.sub(path,''), path: it}}
+    # for each version
+    # look get list of .xml files, except added,own directory for added?
+    versions.each{|version|
+
+      profiles = []
+
+      Dir.glob("#{version[:path]}/**").select {|file| !File.directory? file}.each{|path|
+        xml = Ox.parse(IO.read(path))
+        # for each schema collect metadata
+        profile = xml.Export.Document.attributes
+        profile.merge!(xml.Export.Document.Category.attributes)
+        profile[:path] = path
+        profiles << profile
+      }
+      version[:profiles] = profiles
+    }
+  end
+
   def initialize(version, event=nil)
     @version = version;
     @event = event;
 
-    properties_file = File.expand_path('../resources/properties.yml', __FILE__)
-    yml = YAML.load_file properties_file
-    path = yml['web.install.dir'] # set when run intall gem with argument, example: gem install 'c:/ez7Gen/ez7gen-web/config/resources/'
-
-    path = path<<'config/resources/'
+    path = self.class.get_schema_location
     profile = File.path(path+ @@HL7_VERSIONS[@version])
     @xml = Ox.parse(IO.read(profile))
 

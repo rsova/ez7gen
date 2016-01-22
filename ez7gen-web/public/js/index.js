@@ -1,6 +1,6 @@
 
-angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
-    .config(function($routeProvider, $httpProvider) {
+angular.module('app', ['ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select', 'ngAnimate'])
+    .config(function($routeProvider, $httpProvider, uiSelectConfig) {
 
         $routeProvider.when('/', {
             templateUrl : 'generate.html/',
@@ -36,6 +36,7 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
 
         $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
         //$httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+        uiSelectConfig.theme = ' selectize';
     })
     //http://stackoverflow.com/questions/21919962/share-data-between-angularjs-controllers
     .factory('service',[ '$http', function($http) {
@@ -69,6 +70,35 @@ angular.module('app', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select' ])
         $scope.isCollapsed = true;
         $scope.isCollapsed1 = true;
         $scope.isCollapsed2 = true;
+
+        $scope.max = 100;
+        $scope.value = null||25;
+
+        $scope.random = function() {
+            //var value = Math.floor(Math.random() * 100 + 1);
+            //var type;
+
+            if ($scope.value < 49) {
+                type = 'success';
+                $scope.value = 50;
+            } else if($scope.value < 74) {
+                type = 'info';
+                $scope.value = 75;
+            } else if($scope.value < 99) {
+                type = 'warning';
+                $scope.value = 100;
+            } else {
+                type = 'success';
+                $scope.value = 50;
+            }
+
+            //$scope.showWarning = type === 'danger' || type === 'warning';
+
+            $scope.dynamic = $scope.value;
+            $scope.type = type;
+        };
+
+        $scope.random();
     }])
     .controller('validate', ['$scope', '$http', 'service', function($scope, $http, service){
         $scope.hl7 = service.data

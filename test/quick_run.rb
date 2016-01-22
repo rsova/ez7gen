@@ -1,5 +1,24 @@
 require 'yaml'
+require "pathname"
 
+
+# path = Dir.new("/Users/romansova/RubymineProjects/ez7gen-staged/ez7gen-web/config/schema")
+# p =  Dir.glob '/Users/romansova/RubymineProjects/ez7gen-staged/ez7gen-web/config/**'
+# puts p
+# d = Dir.glob('/Users/romansova/RubymineProjects/ez7gen-staged/ez7gen-web/config/schema/**').select {|f| File.directory? f}
+# puts d
+ # path.each{|it| puts it }
+# path.glob('*').select {|f| File.directory? f}
+dir = '/Users/romansova/RubymineProjects/ez7gen-staged/ez7gen-web/config/schema/'
+# pn = Pathname.new(dir).children.select { |c| c.directory? }
+# pn = Pathname.new(dir).children.select { |c| c.directory? }
+# names = Pathname.new(dir).children.inject([]) { |files, c| (c.directory? ? (files << c) : files) }
+names = Dir.glob("#{dir}**").select {|f| File.directory? f}#.each{|it| it.sub!(dir,'')}
+# names = Dir.glob(dir<<'/**').inject([]){|files,f| (f.directory? ? (files<<f) : files)}
+puts names
+
+
+exit
 
 
 h = { "apple tree" => "plant", "ficus" => "plant",

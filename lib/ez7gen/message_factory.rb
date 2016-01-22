@@ -28,8 +28,8 @@ class MessageFactory
     segmentGenerator = SegmentGenerator.new(version, event, parsers)
 
     # msh segment configured by hand, due to many requirements that only apply for this segment
-    hl7Msg = HL7::Message.new
-    hl7Msg << segmentGenerator.init_msh()
+    @hl7Msg = HL7::Message.new
+    @hl7Msg << segmentGenerator.init_msh()
 
     # groups are elements that come together; they are  stored as Array
     # if groups are present among the segments, identify ranges of the groups
@@ -42,9 +42,16 @@ class MessageFactory
     segments.each.with_index(){ |segment, idx|
       choiceParser = parsers[get_type_by_name(segment)]
       attributes = choiceParser.get_segment_structure(get_name_without_base(segment))
-      segmentGenerator.generate(hl7Msg, segment, attributes, in_group?(groups, idx))
+      segmentGenerator.generate(@hl7Msg, segment, attributes, in_group?(groups, idx))
     }
-     hl7Msg.to_s.gsub("\r","\n")
+    return @hl7Msg
+    # (asArray)? (arr=[]; hl7Msg.each{|it| arr << it.to_s.gsub("\r","\n")}; arr): hl7Msg.to_s.gsub("\r","\n")
+  end
+
+  def self.to_arr(hl7Msg)
+    arr = []
+    hl7Msg.each{|it| arr << it.to_s.gsub("\r","\n")}
+    return arr
   end
 
   # Identify segment as a part of a group
