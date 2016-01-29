@@ -26,13 +26,13 @@ class ProfileParser
     # for each version
     # look get list of .xml files, except added,own directory for added?
     versions.each{|version|
-
       profiles = []
 
       Dir.glob("#{version[:path]}/**").select {|file| !File.directory? file}.each{|path|
         xml = Ox.parse(IO.read(path))
         # for each schema collect metadata
         profile = xml.Export.Document.attributes
+        profile[:doc] = profile.delete(:name) # resolve collision with same keys
         profile.merge!(xml.Export.Document.Category.attributes)
         profile[:path] = path
         profiles << profile
