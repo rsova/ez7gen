@@ -218,10 +218,10 @@ class ProfileParserTest < Test::Unit::TestCase
 		puts versions[0][:profiles]
 		puts '~~~~~~~~~~~~~~~~~~~~~~~~>'
     assert_equal 2, versions.size
-		versions_to_client = {'2.4'=> [{"name"=>"2.4", "code"=>"2.4"}, {"name"=>"VAZ 2.4", "code"=>"vaz2.4"}],
-													'2.5'=> [{"name"=>"2.5", "code"=>"2.5"}, {"name"=>"VAZ 2.5", "code"=>"vaz2.5"}]}
-		puts versions_to_client.size()
-		puts '~~~~~~~~~~~~~~~~~~~~~~~~>'
+		# versions_to_client = {'2.4'=> [{"name"=>"2.4", "code"=>"2.4"}, {"name"=>"VAZ 2.4", "code"=>"vaz2.4"}],
+		# 											'2.5'=> [{"name"=>"2.5", "code"=>"2.5"}, {"name"=>"VAZ 2.5", "code"=>"vaz2.5"}]}
+		# puts versions_to_client.size()
+		puts '+++++++++++++++++'
 		# a = versions.each.inject([]){|coll, it|
 		# a = versions.inject([]){|coll, it|
 		# 		it.each {|b,z| puts b.to_s + '****' << z.to_s}
@@ -230,8 +230,6 @@ class ProfileParserTest < Test::Unit::TestCase
 		versions.each{|it|
 			 key = "#{it[:std]}"
 			 attrs = []
-
-
 			  vs = it[:profiles].each{|p| attrs << {name: p[:name], code: ((p[:description])? p[:description] : p[:name])}
 			 }
 			 coll << {key => attrs}

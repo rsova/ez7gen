@@ -102,8 +102,18 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
     end
 
      # event_list.to_json
-      items = { events: {'2.4' => event_list['2.4'], 'vaz2.4' => event_list['vaz2.4']}, versions: [{'name'=> '2.4', 'code'=> '2.4'}, {'name' =>'VAZ 2.4', 'code'=> 'vaz2.4'}] }
-      # {'2.4'=> event_list['2.4'], 'vaz2.4'=> event_list['vaz2.4'] }.to_json
+     #  items = { events: {'2.4' => event_list['2.4'], 'vaz2.4' => event_list['vaz2.4']}, versions: [{'name'=> '2.4', 'code'=> '2.4'}, {'name' =>'VAZ 2.4', 'code'=> 'vaz2.4'}] }
+     # items = { events: {'2.4' => event_list['2.4'], 'vaz2.4' => event_list['vaz2.4']}, versions: [] }
+     # items = [{std:"2.4" , versions: [ {name:"2.4 Base", code:"2.4"}, {name:"2.4 VAZ2.4", code:"2.4 schema with VA defined tables and Z segments"}] , events: {'2.4' => event_list['2.4'], 'VAZ2.4' => event_list['vaz2.4']}}]
+     # items ={standards=>['2.4','2.5'], '2.4'=>{versions: [ {name:"2.4 Base", code:"2.4"}, {name:"VAZ2.4", code:"2.4 schema with VA defined tables and Z segments"}] , events: {'2.4' => event_list['2.4'], 'VAZ2.4' => event_list['vaz2.4']}, '2.5'=>{} }
+     items = {standards:[
+         {std:'2.4',
+          versions:[{'name'=> '2.4', 'code'=> '2.4', 'desc'=>'Base'},{'name' =>'VAZ 2.4', 'code'=> 'vaz2.4', 'desc'=>'2.4 schema with VA defined tables and Z segments'}],
+          events: {'2.4' => event_list['2.4'], 'vaz2.4' => event_list['vaz2.4']}
+         },
+         {std:'2.5', versions:[], events:[]}
+     ]}
+     # {'2.4'=> event_list['2.4'], 'vaz2.4'=> event_list['vaz2.4'] }.to_json
       # {adm: event_list[:adm], zseg: event_list[:zseg] }.to_json
       items.to_json
   end
