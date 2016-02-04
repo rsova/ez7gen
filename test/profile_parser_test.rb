@@ -6,17 +6,17 @@ require_relative '../lib/ez7gen/profile_parser'
 class ProfileParserTest < Test::Unit::TestCase
 	
 	def setup
-		@parser = ProfileParser.new('2.4', 'ADT_A01')
+    @parser = ProfileParser.new({version: '2.4', event: 'ADT_A01'})
 	end
 	def teardown
 		@parser = nil
-	end
+  end
+
 	def test_init
 		assert(@parser !=nil)
 		# assert(hl7 != nil)
 		# refute_nil(hl7)
 	end
-
 
 	def test_getMessageDefinition
 		expected = "MSH~EVN~PID~[~PD1~]~[~{~ROL~}~]~[~{~NK1~}~]~PV1~[~PV2~]~[~{~ROL~}~]~[~{~DB1~}~]~[~{~OBX~}~]~[~{~AL1~}~]~[~{~DG1~}~]~[~DRG~]~[~{~PR1~[~{~ROL~}~]~}~]~[~{~GT1~}~]~[~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]~[~ACC~]~[~UB1~]~[~UB2~]~[~PDA~]"
@@ -125,7 +125,7 @@ class ProfileParserTest < Test::Unit::TestCase
 
    def test_getSegments_vaz
 		 puts Benchmark.measure("segments"){
-		 @parser = ProfileParser.new('vaz2.4', 'ADT_A01')
+		 @parser = ProfileParser.new({version:'vaz2.4', event:'ADT_A01'})
 		 results =  @parser.get_segments
 		 puts results
 					}
@@ -134,7 +134,7 @@ class ProfileParserTest < Test::Unit::TestCase
 	 end
 
 	def test_lookupMessageTypes_vaz24
-		@parser = ProfileParser.new('vaz2.4', 'ADT_A01')
+		@parser = ProfileParser.new({version: 'vaz2.4', event: 'ADT_A01'})
 		results =  @parser.lookup_message_types('')
 		puts results
 		assert_equal 2, results.size
@@ -145,7 +145,7 @@ class ProfileParserTest < Test::Unit::TestCase
 
   end
   def test_lookupMessageTypes_24_all
-    @parser = ProfileParser.new('2.4')
+    @parser = ProfileParser.new({version: '2.4'})
     results =  @parser.lookup_message_types()
     assert_equal 390, results.size
 
@@ -156,7 +156,7 @@ class ProfileParserTest < Test::Unit::TestCase
   end
 
 	def test_lookupMessageTypes_24_ADT
-		@parser = ProfileParser.new('2.4')
+		@parser = ProfileParser.new({version:'2.4'})
     results =  @parser.lookup_message_types('ADT_A')
     # puts results
     assert_equal 57, results.size
@@ -164,21 +164,21 @@ class ProfileParserTest < Test::Unit::TestCase
   end
 
 	def test_lookupMessageTypes_24_QBP
-		@parser = ProfileParser.new('2.4')
+		@parser = ProfileParser.new({version:'2.4'})
     results =  @parser.lookup_message_types('QBP_Q2')
     # puts results
     assert_equal 5, results.size
   end
 
 	def test_lookupMessageTypes_24_RSP_K2
-		@parser = ProfileParser.new('2.4')
+		@parser = ProfileParser.new({version:'2.4'})
     results =  @parser.lookup_message_types('RSP_K2')
     # puts results
     assert_equal 5, results.size
   end
 
 	def test_lookupMessageTypes_24_RSP_Admissions
-		@parser = ProfileParser.new('2.4')
+		@parser = ProfileParser.new({version:'2.4'})
     # if(message.starts_with('ADT_')||message.starts_with('QBP_')||message.starts_with('RSP_'))
     results =  @parser.lookup_message_types('ADT_A|QBP_Q2|RSP_K2')
     puts results[0]
@@ -206,13 +206,36 @@ class ProfileParserTest < Test::Unit::TestCase
 
   # use test configurations for lookup methods to run throug different scenarios
   class ProfileParserStub < ProfileParser
+
+    # def initialize(args)
+    # #   args.each do |k,v|
+    # #     instance_variable_set("@#{k}", v) unless v.nil?
+			# # end
+    # #
+    #   super.initialize(args)
+    # end
+
     def self.get_schema_location
       '../test/test-config/schema/'
     end
+
+  end
+
+  def test_init_with_versions
+   vs =
+       [
+           {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4.HL7.xml"}]},
+           {:std=>"2.5", :path=>"../test/test-config/schema/2.5", :profiles=>[{:doc=>"2.5.HL7", :name=>"2.5", :std=>"1", :path=>"../test/test-config/schema/2.5/2.5.HL7.xml"}, {:doc=>"TEST2.5.HL7", :name=>"TEST2.5", :description=>"2.5 mockup schema for testing", :base=>"2.4", :path=>"../test/test-config/schema/2.5/VAZ2.5.HL7.xml"}]}
+       ]
+   pps =  ProfileParserStub.new({std: '2.4.', version: '2.4.HL7', version_store: vs})
+   results =  pps.lookup_message_types('QBP_Q2')
+   # puts results
+   assert_equal 5, results.size
+
   end
 
 	def test_lookup_versions
-		versions =  ProfileParserStub.lookup_versions()
+		versions = ProfileParserStub.lookup_versions()
     puts versions
     puts '++++++++++++++++++++++++>'
 		puts versions[0][:profiles]
@@ -227,16 +250,27 @@ class ProfileParserTest < Test::Unit::TestCase
 		# 		it.each {|b,z| puts b.to_s + '****' << z.to_s}
 		# }
 		coll=[]
-		versions.each{|it|
-			 key = "#{it[:std]}"
-			 attrs = []
-			  vs = it[:profiles].each{|p| attrs << {name: p[:name], code: ((p[:description])? p[:description] : p[:name])}
-			 }
-			 coll << {key => attrs}
-			# puts it[:profiles].size
-		}
-		puts coll.flatten
+		versions.each{ |version|
+			map={}
+      # standard
+			map[:std] = version[:std]
+      #versions
+      map[:versions] = version[:profiles].inject([]){|col,p| col << {name: p[:doc], code: p[:name], desc: (p[:std])? 'Base': p[:description]}}
+      coll << map
+      #events
+      e_map = {}
+      version[:profiles].each{|p|
 
+        parser = ProfileParserStub.new({std: version[:std], version: p[:doc], version_store: versions})
+        events = parser.lookup_message_types('ADT_A|QBP_Q2|RSP_K2')#@@ADM_FILTER
+        e_map[p[:code]]= events
+      }
+      map = {events: e_map}
+
+    }
+
+    versions_to_client = {standards: coll}
+    puts versions_to_client
 	end
 
 end

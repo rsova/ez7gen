@@ -6,12 +6,47 @@ class ProfileParser
   include Utils
 
   #instance attributes
-  attr_accessor :version; :event; :xml
+  # attr_accessor :version; :event; :xml; # :version_store; :store_cache;
   @@HL7_VERSIONS = {'2.4'=>'2.4/2.4-schema.xml', 'vaz2.4'=>'vaz2.4/vaz2.4-schema.xml'}
   #class attribute
   # @@segment_patern = /\[([^\[\]]*)\]/
   @@segment_patern = /\[([^\[\]]*)\]|\{([^\[\]]*)\}/
 
+  # Child class has a wrapper TODO: Refactor
+  # def initialize(version=nil, event=nil)
+  def initialize(args)
+    args.each do |k,v|
+      instance_variable_set("@#{k}", v) unless v.nil?
+    end
+
+    # @version_store ||= @@HL7_VERSIONS
+    # @version ||= version;
+    # @event ||= event;
+
+    # @std @version_store @store_cache - used with wrapper child class
+
+    profile, path = nil
+    if(@version_store)
+      profile = @version_store.detect{|v| v[:std] = @std}[:profiles].detect{|p| p[:doc] = @version }[:path]
+      path = @version_store.detect{|v| v[:std] = @std}[:path]
+    else
+      path = self.class.get_schema_location
+      profile = File.path(path+ @@HL7_VERSIONS[@version])
+    end
+
+    @xml = Ox.parse(IO.read(profile))
+
+    # added = File.path(path+'added.xml')
+    begin
+      added = File.path(path+'/added/coded-tables.xml')
+      @added = Ox.parse(IO.read(added))
+    rescue => e
+      puts e.message
+    end
+
+  end
+
+  # instance methods
   def self.get_schema_location
     properties_file = File.expand_path('../resources/properties.yml', __FILE__)
     yml = YAML.load_file properties_file
@@ -41,18 +76,7 @@ class ProfileParser
     }
   end
 
-  def initialize(version, event=nil)
-    @version = version;
-    @event = event;
-
-    path = self.class.get_schema_location
-    profile = File.path(path+ @@HL7_VERSIONS[@version])
-    @xml = Ox.parse(IO.read(profile))
-
-    added = File.path(path+'added.xml')
-    @added = Ox.parse(IO.read(added))
-  end
-
+  # class methods
   def get_segments
     structrue = get_message_definition()
     # puts structrue
