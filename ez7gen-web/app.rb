@@ -75,47 +75,43 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
 
   # https://code.google.com/p/x2js/ as an alternative
   get '/lookup/' do
-    event_list = {}
+    versions_to_client = {}
 
     begin
-      # params = JSON.parse(request.env["rack.input"].read)
-      # puts params
-      # ProfileParser.lookup_versions
-      versions=[{"name"=>"2.4", "code"=>"2.4"}, {"name"=>"VAZ 2.4", "code"=>"vaz2.4"}]
-      # versions =  params['versions']
-      # names={'2.4'=>'adm'.to_sym,'vaz2.4'=>'zseg'.to_sym}
-      # names={'2.4'=>'2.4','vaz2.4'=>'vaz2.4'}
-
-      versions.each{|map|
-        version = map['code']
-        parser = ProfileParser.new(version)
-        events = parser.lookup_message_types(@@ADM_FILTER)
-        event_list[version] = events
-        # version_name = names[version]
-        # event_list[version_name] = events
+      versions = ProfileParser.lookup_versions()
+      std_arr =[]
+      versions.each{ |version|
+        std_attrs={}
+        # standard
+        std_attrs[:std] = version[:std]
+        #versions
+        std_attrs[:versions] = version[:profiles].inject([]){|col,p| col << {name: p[:doc], code: p[:name], desc: (p[:std])? 'Base': p[:description]}}
+        #events
+        evn_attrs = version[:profiles].inject({}){|h,p|
+          h.merge({p[:name] => ProfileParser.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_types('ADT_A|QBP_Q2|RSP_K2')})
+        }
+        std_attrs[:events] = evn_attrs
+        # add map with versions and events for each standard to the array
+        std_arr << std_attrs
       }
+
+      versions_to_client = {standards: std_arr}
 
       # p event_list
       p 'in lookup'
     rescue => e
         puts e
     end
+    versions_to_client.to_json
+     # items = {standards:[
+     #     {std:'2.4',
+     #      versions:[{'name'=> '2.4', 'code'=> '2.4', 'desc'=>'Base'},{'name' =>'VAZ 2.4', 'code'=> 'vaz2.4', 'desc'=>'2.4 schema with VA defined tables and Z segments'}],
+     #      events: {'2.4' => event_list['2.4'], 'vaz2.4' => event_list['vaz2.4']}
+     #     },
+     #     {std:'2.5', versions:[], events:[]}
+     # ]}
+     # items.to_json
 
-     # event_list.to_json
-     #  items = { events: {'2.4' => event_list['2.4'], 'vaz2.4' => event_list['vaz2.4']}, versions: [{'name'=> '2.4', 'code'=> '2.4'}, {'name' =>'VAZ 2.4', 'code'=> 'vaz2.4'}] }
-     # items = { events: {'2.4' => event_list['2.4'], 'vaz2.4' => event_list['vaz2.4']}, versions: [] }
-     # items = [{std:"2.4" , versions: [ {name:"2.4 Base", code:"2.4"}, {name:"2.4 VAZ2.4", code:"2.4 schema with VA defined tables and Z segments"}] , events: {'2.4' => event_list['2.4'], 'VAZ2.4' => event_list['vaz2.4']}}]
-     # items ={standards=>['2.4','2.5'], '2.4'=>{versions: [ {name:"2.4 Base", code:"2.4"}, {name:"VAZ2.4", code:"2.4 schema with VA defined tables and Z segments"}] , events: {'2.4' => event_list['2.4'], 'VAZ2.4' => event_list['vaz2.4']}, '2.5'=>{} }
-     items = {standards:[
-         {std:'2.4',
-          versions:[{'name'=> '2.4', 'code'=> '2.4', 'desc'=>'Base'},{'name' =>'VAZ 2.4', 'code'=> 'vaz2.4', 'desc'=>'2.4 schema with VA defined tables and Z segments'}],
-          events: {'2.4' => event_list['2.4'], 'vaz2.4' => event_list['vaz2.4']}
-         },
-         {std:'2.5', versions:[], events:[]}
-     ]}
-     # {'2.4'=> event_list['2.4'], 'vaz2.4'=> event_list['vaz2.4'] }.to_json
-      # {adm: event_list[:adm], zseg: event_list[:zseg] }.to_json
-      items.to_json
   end
 
   # error do

@@ -51,7 +51,8 @@ class ProfileParser
     properties_file = File.expand_path('../resources/properties.yml', __FILE__)
     yml = YAML.load_file properties_file
     path = yml['web.install.dir'] # set when run intall gem with argument, example: gem install 'c:/ez7Gen/ez7gen-web/config/resources/'
-    path = path<<'config/resources/'
+    path = path<<'config/schema/'
+    # path = path<<'config/resources/'
   end
 
   def self.lookup_versions

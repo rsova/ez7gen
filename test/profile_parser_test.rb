@@ -251,22 +251,27 @@ class ProfileParserTest < Test::Unit::TestCase
 		# }
 		coll=[]
 		versions.each{ |version|
-			map={}
+			ver_attrs={}
       # standard
-			map[:std] = version[:std]
+			ver_attrs[:std] = version[:std]
       #versions
-      map[:versions] = version[:profiles].inject([]){|col,p| col << {name: p[:doc], code: p[:name], desc: (p[:std])? 'Base': p[:description]}}
-      coll << map
+      ver_attrs[:versions] = version[:profiles].inject([]){|col,p| col << {name: p[:doc], code: p[:name], desc: (p[:std])? 'Base': p[:description]}}
+
       #events
-      e_map = {}
-      version[:profiles].each{|p|
+      # version[:profiles].each{|p|
 
-        parser = ProfileParserStub.new({std: version[:std], version: p[:doc], version_store: versions})
-        events = parser.lookup_message_types('ADT_A|QBP_Q2|RSP_K2')#@@ADM_FILTER
-        e_map[p[:code]]= events
-      }
-      map = {events: e_map}
+      #   parser = ProfileParserStub.new({std: version[:std], version: p[:doc], version_store: versions})
+      #   events = parser.lookup_message_types('ADT_A|QBP_Q2|RSP_K2')#@@ADM_FILTER
+      #   e_map[p[:name]]= events
+      # }
 
+			evn_attrs = version[:profiles].inject({}){|h,p|
+				h.merge({p[:name] => ProfileParserStub.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_types('ADT_A|QBP_Q2|RSP_K2')})
+			}
+      ver_attrs[:events] = evn_attrs
+
+      # add map with versions and events for each standard to the array
+			coll << ver_attrs
     }
 
     versions_to_client = {standards: coll}
