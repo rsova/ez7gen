@@ -6,26 +6,43 @@ require_relative '../ez7gen/service/utils'
 
 class MessageFactory
   include Utils
+  # attr_accessor :std; :version; :event; :version_store; loadFactor
 
-  def generate(version, event, loadFactor=nil)
+  def initialize(args)
+    @attributes_hash = args
+    args.each do |k,v|
+      instance_variable_set("@#{k}", v) unless v.nil?
+    end
+    @loadFactor ||= nil
 
-    parser = ProfileParser.new(version, event)
+  end
+
+  def generate(attributes_hash=nil)
+    # loadFactor = nil
+
+    parser = ProfileParser.new(@attributes_hash)
     profile, encoded_segments = parser.get_segments()
 
     #Get list of non required segments randomly selected for this build
-    segment_picker = SegmentPicker.new(profile, encoded_segments, loadFactor)
+    segment_picker = SegmentPicker.new(profile, encoded_segments, @loadFactor)
     segments = segment_picker.pick_segments()
 
     # set primary parser for base schema
     parsers = {PRIMARY => parser}
 
     # if this is a custom Z segment, add the base parser
-    if(version !='2.4')
-       parsers[BASE]= ProfileParser.new('2.4', event)
+    # if(version !='2.4')
+    # check if current version is not the base version, find the base version and add use it as a base parser
+    isBase = @version_store.find{|s| s[:std] = @std}[:profiles].find{|p| p[:doc]=@version}[:std]
+    if(isBase.empty?)
+      # find version for current standard with 'std' attribute
+      v_base = @version_store.find{|s| s[:std] = @version_store[:std]}[:profiles].find{|p| p[:std]}[:doc]
+      v_base_hash = @version_store.clone()
+      v_base_hash[:version] = v_base
+      parsers[BASE]= ProfileParser.new(v_base_hash[v_base_hash])
     end
-
     # configure a segment generator
-    segmentGenerator = SegmentGenerator.new(version, event, parsers)
+    segmentGenerator = SegmentGenerator.new(@version, @event, parsers)
 
     # msh segment configured by hand, due to many requirements that only apply for this segment
     @hl7Msg = HL7::Message.new
@@ -47,6 +64,48 @@ class MessageFactory
     return @hl7Msg
     # (asArray)? (arr=[]; hl7Msg.each{|it| arr << it.to_s.gsub("\r","\n")}; arr): hl7Msg.to_s.gsub("\r","\n")
   end
+
+
+  # def generate(version, event, loadFactor=nil)
+  #
+  #   parser = ProfileParser.new(version, event)
+  #   profile, encoded_segments = parser.get_segments()
+  #
+  #   #Get list of non required segments randomly selected for this build
+  #   segment_picker = SegmentPicker.new(profile, encoded_segments, loadFactor)
+  #   segments = segment_picker.pick_segments()
+  #
+  #   # set primary parser for base schema
+  #   parsers = {PRIMARY => parser}
+  #
+  #   # if this is a custom Z segment, add the base parser
+  #   if(version !='2.4')
+  #      parsers[BASE]= ProfileParser.new('2.4', event)
+  #   end
+  #
+  #   # configure a segment generator
+  #   segmentGenerator = SegmentGenerator.new(version, event, parsers)
+  #
+  #   # msh segment configured by hand, due to many requirements that only apply for this segment
+  #   @hl7Msg = HL7::Message.new
+  #   @hl7Msg << segmentGenerator.init_msh()
+  #
+  #   # groups are elements that come together; they are  stored as Array
+  #   # if groups are present among the segments, identify ranges of the groups
+  #   groups = find_Groups(segments)
+  #
+  #   # then collection of segments can flatten
+  #   segments.flatten!
+  #
+  #   #iterate over selected segments and build the entire message
+  #   segments.each.with_index(){ |segment, idx|
+  #     choiceParser = parsers[get_type_by_name(segment)]
+  #     attributes = choiceParser.get_segment_structure(get_name_without_base(segment))
+  #     segmentGenerator.generate(@hl7Msg, segment, attributes, in_group?(groups, idx))
+  #   }
+  #   return @hl7Msg
+  #   # (asArray)? (arr=[]; hl7Msg.each{|it| arr << it.to_s.gsub("\r","\n")}; arr): hl7Msg.to_s.gsub("\r","\n")
+  # end
 
   def self.to_arr(hl7Msg)
     arr = []

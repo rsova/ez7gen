@@ -6,6 +6,13 @@ class MessageFactoryTest < Test::Unit::TestCase
   # set to true to write messages to a file
   @@PERSIST = true
 
+  @@VS =
+      [
+          {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4.HL7.xml"}]},
+          {:std=>"2.5", :path=>"../test/test-config/schema/2.5", :profiles=>[{:doc=>"2.5.HL7", :name=>"2.5", :std=>"1", :path=>"../test/test-config/schema/2.5/2.5.HL7.xml"}, {:doc=>"TEST2.5.HL7", :name=>"TEST2.5", :description=>"2.5 mockup schema for testing", :base=>"2.4", :path=>"../test/test-config/schema/2.5/VAZ2.5.HL7.xml"}]}
+      ]
+
+
   # helper message to persist the
   def saveMsg(event, hl7, ver)
     if(@@PERSIST) then
@@ -13,11 +20,31 @@ class MessageFactoryTest < Test::Unit::TestCase
     end
   end
 
+  def test1
+    vs =
+        [
+            {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4.HL7.xml"}]},
+            {:std=>"2.5", :path=>"../test/test-config/schema/2.5", :profiles=>[{:doc=>"2.5.HL7", :name=>"2.5", :std=>"1", :path=>"../test/test-config/schema/2.5/2.5.HL7.xml"}, {:doc=>"TEST2.5.HL7", :name=>"TEST2.5", :description=>"2.5 mockup schema for testing", :base=>"2.4", :path=>"../test/test-config/schema/2.5/VAZ2.5.HL7.xml"}]}
+        ]
+    # pps =  ProfileParserStub.new({std: '2.4.', version: '2.4.HL7', version_store: vs})
+     hl7 = MessageFactory.new({std: '2.4.', version: '2.4.HL7', event:'ADT_A01', version_store: @@VS}).generate()
+    puts hl7
+    # hash = {std: '2.4.', version: '2.4.HL7', event:'ADT_A01', version_store: vs}
+    #
+    # z = vs.find{|s| s[:std] = hash[:std]}[:profiles].find{|p| p[:doc]=hash[:version]}[:std]
+    #
+    # puts (z)?'yes':'no'
+    #
+    # puts vs.find{|s| s[:std] = hash[:std]}[:profiles].find{|p| p[:std]}[:doc]
+
+  end
+
 # Admission Messages with Z segment
   def test_msh_vaz_24
     ver='vaz2.4'
     event='ADT_A01'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
+    MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
 
@@ -31,7 +58,8 @@ class MessageFactoryTest < Test::Unit::TestCase
     ver='2.4'
     event='ADT_A01'
     loadFactor = 1
-    hl7 = MessageFactory.new.generate(ver, event, loadFactor)
+    # hl7 = MessageFactory.new.generate(ver, event, loadFactor)
+    hl7 =MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS, loadFactor: loadFactor}).generate()
     x = []
     hl7.each{|it| x << ({name: (it.instance_variable_get(:@elements)[0]), seg:  it.to_s})}
     map = {message: hl7.to_s, segments: x }
@@ -56,7 +84,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_02
     ver='2.4'
     event='ADT_A02'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -67,7 +95,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_03
     ver='2.4'
     event='ADT_A03'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -78,7 +106,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_05
     ver='2.4'
     event='ADT_A05'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -89,7 +117,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_06
     ver='2.4'
     event='ADT_A06'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -100,7 +128,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A09
     ver='2.4'
     event='ADT_A09'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -112,7 +140,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A15
     ver='2.4'
     event='ADT_A15'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -123,7 +151,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A16
     ver='2.4'
     event='ADT_A16'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -135,7 +163,7 @@ class MessageFactoryTest < Test::Unit::TestCase
     # <MessageStructure name='ADT_A17'  definition='MSH~EVN~PID~[~PD1~]~PV1~[~PV2~]~[~{~DB1~}~]~[~{~OBX~}~]~PID~[~PD1~]~PV1~[~PV2~]~[~{~DB1~}~]~[~{~OBX~}~]' />
     ver='2.4'
     event='ADT_A17'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -146,7 +174,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A18
     ver='2.4'
     event='ADT_A18'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -157,7 +185,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A20
     ver='2.4'
     event='ADT_A20'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -168,7 +196,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A21
     ver='2.4'
     event='ADT_A21'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -178,7 +206,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   # def test_ADT_A22
   #   ver='2.4'
   #   event='ADT_A22'
-  #   hl7 = MessageFactory.new.generate(ver, event)
+  #   hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
   #   File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
   #   puts hl7
   #   # # assert(hl7 != nil)
@@ -188,7 +216,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   # def test_ADT_A23
   #   ver='2.4'
   #   event='ADT_A23'
-  #   hl7 = MessageFactory.new.generate(ver, event)
+  #   hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
   #   File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
   #   puts hl7
   #   # # assert(hl7 != nil)
@@ -198,7 +226,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   # def test_ADT_A25
   #   ver='2.4'
   #   event='ADT_A25'
-  #   hl7 = MessageFactory.new.generate(ver, event)
+  #   hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
   #   File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
   #   puts hl7
   #   # # assert(hl7 != nil)
@@ -208,7 +236,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   # def test_ADT_A26
   #   ver='2.4'
   #   event='ADT_A26'
-  #   hl7 = MessageFactory.new.generate(ver, event)
+  #   hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
   #   File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
   #   puts hl7
   #   # # assert(hl7 != nil)
@@ -218,7 +246,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   # def test_ADT_A27
   #   ver='2.4'
   #   event='ADT_A27'
-  #   hl7 = MessageFactory.new.generate(ver, event)
+  #   hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
   #   File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
   #   puts hl7
   #   # # assert(hl7 != nil)
@@ -228,7 +256,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   # def test_ADT_A29
   #   ver='2.4'
   #   event='ADT_A29'
-  #   hl7 = MessageFactory.new.generate(ver, event)
+  #   hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
   #   File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
   #   puts hl7
   #   # # assert(hl7 != nil)
@@ -238,7 +266,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   # def test_ADT_A32
   #   ver='2.4'
   #   event='ADT_A32'
-  #   hl7 = MessageFactory.new.generate(ver, event)
+  #   hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
   #   File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
   #   puts hl7
   #   # # assert(hl7 != nil)
@@ -248,7 +276,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   # def test_ADT_A33
   #   ver='2.4'
   #   event='ADT_A33'
-  #   hl7 = MessageFactory.new.generate(ver, event)
+  #   hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
   #   File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
   #   puts hl7
   #   # # assert(hl7 != nil)
@@ -258,7 +286,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A24
     ver='2.4'
     event='ADT_A24'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -269,7 +297,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A30
     ver='2.4'
     event='ADT_A30'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -280,7 +308,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A37
     ver='2.4'
     event='ADT_A37'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -290,7 +318,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A38
     ver='2.4'
     event='ADT_A38'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -303,7 +331,7 @@ class MessageFactoryTest < Test::Unit::TestCase
     ver='2.4'
     event='ADT_A39'
     # <MessageStructure name='ADT_A39' definition='MSH~EVN~{~PID~[~PD1~]~MRG~[~PV1~]~}' />
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -316,7 +344,7 @@ class MessageFactoryTest < Test::Unit::TestCase
     ver='2.4'
     event='ADT_A43'
     # <MessageStructure name='ADT_A43' definition='MSH~EVN~{~PID~[~PD1~]~MRG~}' />
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -330,7 +358,9 @@ class MessageFactoryTest < Test::Unit::TestCase
     event='ADT_A45'
     loadFactor=1 # build all segments
     # <MessageStructure name='ADT_A45' definition='MSH~EVN~PID~[~PD1~]~{~MRG~PV1~}' />
-    hl7 = MessageFactory.new.generate(ver, event, loadFactor)
+    # hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate(ver, event, loadFactor)
+    hl7 =MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS, loadFactor: loadFactor}).generate()
+
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -341,7 +371,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A50
     ver='2.4'
     event='ADT_A50'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -352,7 +382,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A52
     ver='2.4'
     event='ADT_A52'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -363,7 +393,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A54
     ver='2.4'
     event='ADT_A54'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -374,7 +404,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A60
     ver='2.4'
     event='ADT_A60'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -385,7 +415,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_ADT_A61
     ver='2.4'
     event='ADT_A61'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -396,7 +426,10 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_QBP_Q21
     ver='2.4'
     event='QBP_Q21'
-    hl7 = MessageFactory.new.generate(ver, event, 1)
+    loadFactor = 1
+    # hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate(ver, event, 1)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS, loadFactor: loadFactor}).generate()
+
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -409,7 +442,7 @@ class MessageFactoryTest < Test::Unit::TestCase
     ver='2.4'
     event='RSP_K21'
     # <MessageStructure name='RSP_K21' definition='MSH~MSA~[~ERR~]~QAK~QPD~[~PID~[~PD1~]~]~[~DSC~]' />
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -422,7 +455,7 @@ class MessageFactoryTest < Test::Unit::TestCase
     ver='2.4'
     event='RSP_K22'
     # <MessageStructure name='RSP_K22' definition='MSH~MSA~[~ERR~]~QAK~QPD~{~[~PID~[~PD1~]~[~QRI~]~]~}~[~DSC~]' />
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -433,7 +466,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_RSP_K23
     ver='2.4'
     event='RSP_K23'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
@@ -444,7 +477,7 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_RSP_K24
     ver='2.4'
     event='RSP_K24'
-    hl7 = MessageFactory.new.generate(ver, event)
+    hl7 = MessageFactory.new({std: '2.4.', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)

@@ -55,6 +55,49 @@ app.factory('service',[ '$http', function($http) {
 
     return serviceItems;
 }]);
+app.controller('main', ['$scope', '$http', 'service', 'cachedItems',function($scope, $http, service, cachedItems){
+    //panels.close();
+
+    //fire when controller loaded
+    service.cachedItems = null || cachedItems;
+    $scope.hl7 = service.data;
+    //$scope.versions = service.cachedItems.versions;
+
+    //init select controls
+    $scope.std = {};
+    $scope.version = {};
+    $scope.event = {};
+
+    //set standards select
+    $scope.standards = service.cachedItems.standards;
+
+    $scope.setVersions = function(standard){
+        service.cachedItems.standard = standard;
+        $scope.versions = standard.versions
+    };
+
+    //set an appropriate list of message types for a selected version
+    $scope.setEvents = function(version){
+        $scope.events = (version.code)? service.cachedItems.standard.events[version.code] : [{name: 'Version Required', code: ''}];
+    };
+
+    //method call to the server to generate hl7
+    $scope.generate = function() {
+        service.cachedItems.current = {event: $scope.event, version: $scope.version};
+
+        $http({
+            //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
+            method: 'post',
+            url: 'http://localhost:4567/generate/',
+            data: { 'std': $scope.std.selected.std, 'version': $scope.version.selected, 'event': $scope.event.selected }
+
+        }).success(function(data) {
+            $scope.hl7 = data;
+            service.data = data;
+        });
+    };
+}]);
+
 ////app.controller('navigation', ['$scope','panels','service', function($scope, panels, service) {
 ////    //$scope.isCollapsed = true;
 ////    //$scope.isCollapsed1 = true;
@@ -93,46 +136,6 @@ app.factory('service',[ '$http', function($http) {
 //    };
 //    //$scope.random();
 //}]);
-
-app.controller('main', ['$scope', '$http', 'service', 'cachedItems',function($scope, $http, service, cachedItems){
-    //panels.close();
-
-    //fire when controller loaded
-    service.cachedItems = null || cachedItems;
-    $scope.hl7 = service.data;
-    //$scope.versions = service.cachedItems.versions;
-
-    //init select controls
-    $scope.standards = service.cachedItems.standards;
-    $scope.version = {};
-    $scope.event = {};
-
-    $scope.setVersions = function(standard){
-        service.cachedItems.standard = standard;
-        $scope.versions = standard.versions
-    };
-
-    //set an appropriate list of message types for a selected version
-    $scope.setEvents = function(version){
-        $scope.events = (version.code)? service.cachedItems.standard.events[version.code] : [{name: 'Version Required', code: ''}];
-    };
-
-    //method call to the server to generate hl7
-    $scope.generate = function() {
-        service.cachedItems.current = {event: $scope.event, version: $scope.version};
-
-        $http({
-            //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
-            method: 'post',
-            url: 'http://localhost:4567/generate/',
-            data: { 'version': $scope.version.selected, 'event': $scope.event.selected}
-
-        }).success(function(data) {
-            $scope.hl7 = data;
-            service.data = data;
-        });
-    };
-}]);
 
 //.controller('validate', ['$scope', '$http', 'service', function($scope, $http, service){
 //    $scope.hl7 = service.data

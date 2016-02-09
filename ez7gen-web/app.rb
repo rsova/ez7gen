@@ -30,15 +30,17 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
       params = JSON.parse(request.env["rack.input"].read)
       puts  params
 
+      std = params['std']
       event =  params['event']['name']
       version =  params['version']['name']
-      puts "event: #{event}, version: #{version}"
+      puts  "std: #{std}, event: #{event}, version: #{version}"
 
-      msg = MessageFactory.new
-      @resp = msg.generate(version, event, nil)#msg.replace('\r','\n' )
-      x = []
-      @resp.each{|it| x << ({name: (it.instance_variable_get(:@elements)[0]), seg:  it.to_s})}
-      map = {message: @resp.to_s, segments: x }
+      vs = ProfileParser.lookup_versions()
+      @resp = MessageFactory.new({std: std, version: version, event:event, version_store: vs}).generate() #msg.replace('\r','\n' )
+      # x = []
+      # @resp.each{|it| x << ({name: (it.instance_variable_get(:@elements)[0]), seg:  it.to_s})}
+      # map = {message: @resp.to_s, segments: x }
+      map = {message: @resp.to_s, segments: [] }
 
     rescue => e
       # puts 'inside rescue'
