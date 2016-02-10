@@ -33,13 +33,13 @@ class MessageFactory
     # if this is a custom Z segment, add the base parser
     # if(version !='2.4')
     # check if current version is not the base version, find the base version and add use it as a base parser
-    isBase = @version_store.find{|s| s[:std] = @std}[:profiles].find{|p| p[:doc]=@version}[:std]
-    if(isBase.empty?)
-      # find version for current standard with 'std' attribute
-      v_base = @version_store.find{|s| s[:std] = @version_store[:std]}[:profiles].find{|p| p[:std]}[:doc]
-      v_base_hash = @version_store.clone()
+    isBase = @version_store.find{|s| s[:std] == @std}[:profiles].find{|p| p[:doc] == @version}[:std]
+    if(!isBase)
+      # find version for base standard version - standard with 'std' attribute
+      v_base =  @version_store.find{|s| s[:std] == @std}[:profiles].find{|p| p[:std]!=nil}[:doc]
+      v_base_hash = @attributes_hash.clone()
       v_base_hash[:version] = v_base
-      parsers[BASE]= ProfileParser.new(v_base_hash[v_base_hash])
+      parsers[BASE]= ProfileParser.new(v_base_hash)
     end
     # configure a segment generator
     segmentGenerator = SegmentGenerator.new(@version, @event, parsers)

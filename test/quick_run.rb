@@ -2,6 +2,13 @@ require 'yaml'
 require "pathname"
 
 
+time = Time.new
+puts time
+time = Time.new.strftime("%Y%m%d%H%M%S%L")
+puts time
+time = Time.new.strftime("%Y-%m-%d %H:%M:%S.%L")
+puts time
+
 # path = Dir.new("/Users/romansova/RubymineProjects/ez7gen-staged/ez7gen-web/config/schema")
 # p =  Dir.glob '/Users/romansova/RubymineProjects/ez7gen-staged/ez7gen-web/config/**'
 # puts p

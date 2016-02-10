@@ -3,11 +3,19 @@ require "benchmark"
 require 'test/unit'
 require 'ruby-hl7'
 require_relative "../lib/ez7gen/service/segment_generator"
+require_relative "../lib/ez7gen/profile_parser"
 
 class SegmentGeneratorTest < Test::Unit::TestCase
  #parse xml once
- @@pp = ProfileParser.new('2.4','ADT_A01')
+  vs =
+      [
+          {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4.HL7.xml"}]},
+          {:std=>"2.5", :path=>"../test/test-config/schema/2.5", :profiles=>[{:doc=>"2.5.HL7", :name=>"2.5", :std=>"1", :path=>"../test/test-config/schema/2.5/2.5.HL7.xml"}, {:doc=>"TEST2.5.HL7", :name=>"TEST2.5", :description=>"2.5 mockup schema for testing", :base=>"2.4", :path=>"../test/test-config/schema/2.5/VAZ2.5.HL7.xml"}]}
+      ]
+  @attrs = {std: '2.4', version: '2.4.HL7', event: 'ADT_A01', version_store: vs}
 
+  # @@pp = ProfileParser.new('2.4','ADT_A01')
+   @@pp = ProfileParser.new(@attrs)
 
  # EVN: EVN
  @@evn_attributes ="[max_length:3, description:Event Type Code, ifrepeating:0, datatype:ID, required:B, piece:1, codetable:3]
@@ -173,7 +181,8 @@ class SegmentGeneratorTest < Test::Unit::TestCase
   # TESTS #
   def setup
     puts Benchmark.measure{
-    profilers = { 'primary'=> @@pp }
+      # pp = ProfilerParser.new(@attrs).generate()
+      profilers = { 'primary'=> @@pp }
     @segmentGen = SegmentGenerator.new("2.4","ADT_A01", profilers)
     # @msg = HL7::Message.new
     # @msg << @segmentGen.init_msh()

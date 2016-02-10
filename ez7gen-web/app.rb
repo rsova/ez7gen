@@ -46,6 +46,7 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
       # puts 'inside rescue'
       puts 'Error: processing generate/' << e.inspect
       @resp='Oops, somenthing went wrong...'
+      map = {message: @resp.to_s, segments: [] }
       #  raise e
       # ensure
     end

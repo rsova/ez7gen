@@ -7,7 +7,7 @@ class ProfileParser
 
   #instance attributes
   # attr_accessor :version; :event; :xml; # :version_store; :store_cache;
-  @@HL7_VERSIONS = {'2.4'=>'2.4/2.4-schema.xml', 'vaz2.4'=>'vaz2.4/vaz2.4-schema.xml'}
+  # @@HL7_VERSIONS = {'2.4'=>'2.4/2.4-schema.xml', 'vaz2.4'=>'vaz2.4/vaz2.4-schema.xml'}
   #class attribute
   # @@segment_patern = /\[([^\[\]]*)\]/
   @@segment_patern = /\[([^\[\]]*)\]|\{([^\[\]]*)\}/
@@ -26,13 +26,13 @@ class ProfileParser
     # @std @version_store @store_cache - used with wrapper child class
 
     profile, path = nil
-    if(@version_store)
-      profile = @version_store.detect{|v| v[:std] = @std}[:profiles].detect{|p| p[:doc] = @version }[:path]
-      path = @version_store.detect{|v| v[:std] = @std}[:path]
-    else
-      path = self.class.get_schema_location
-      profile = File.path(path+ @@HL7_VERSIONS[@version])
-    end
+    # if(@version_store)
+      profile = @version_store.find{|v| v[:std] == @std}[:profiles].find{|p| p[:doc] == @version }[:path]
+      path = @version_store.detect{|v| v[:std] == @std}[:path]
+    # else
+    #   # path = self.class.get_schema_location
+    #   # profile = File.path(path+ @@HL7_VERSIONS[@version])
+    # end
 
     @xml = Ox.parse(IO.read(profile))
 

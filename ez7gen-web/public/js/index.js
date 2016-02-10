@@ -96,6 +96,26 @@ app.controller('main', ['$scope', '$http', 'service', 'cachedItems',function($sc
             service.data = data;
         });
     };
+
+    $scope.validate = function() {
+        $http({
+            //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
+            //use call async as a promise
+            method: 'post',
+            url: 'http://localhost:4567/validate/',
+            //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: { version: $scope.version.selected,  hl7: service.data}
+        }).success(function(data) {
+            $scope.response = data;
+            $scope.visible = true;
+        })
+    };
+
+    $scope.visible = false;
+    $scope.toggle = function() {
+        $scope.visible = !$scope.visible;
+    };
+
 }]);
 
 ////app.controller('navigation', ['$scope','panels','service', function($scope, panels, service) {
