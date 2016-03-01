@@ -1,15 +1,15 @@
 require 'sinatra'
 require 'json'
 require 'rest_client'
-require 'ez7gen'
-# require_relative '../lib/ez7gen/message_factory' # local testing
-# require_relative '../lib/ez7gen/profile_parser' # local testing
+# require 'ez7gen'
+require_relative '../lib/ez7gen/message_factory' # local testing
+require_relative '../lib/ez7gen/profile_parser' # local testing
 
 # configure do
 #   set :show_exceptions, :after_handler
 #   disable :raise_errors
 # end
-@@URLS={'2.4'=>'localhost:8890/','vaz2.4'=>'localhost:8891/'}
+@@URLS={'2.4'=>'localhost:9081/','VAZ2.4'=>'localhost:8891/'}
 # admisson messages match pattern
 @@ADM_FILTER = 'ADT_A|QBP_Q2|RSP_K2'
 
@@ -40,18 +40,16 @@ require 'ez7gen'
       # x = []
       # @resp.each{|it| x << ({name: (it.instance_variable_get(:@elements)[0]), seg:  it.to_s})}
       # map = {message: @resp.to_s, segments: x }
-      map = {message: @resp.to_s, segments: [] }
 
     rescue => e
       # puts 'inside rescue'
       puts 'Error: processing generate/' << e.inspect
-      @resp='Oops, somenthing went wrong...'
-      map = {message: @resp.to_s, segments: [] }
+      @resp ='Oops, somenthing went wrong...'
       #  raise e
       # ensure
     end
     #send response
-    map.to_json
+    {message: @resp}.to_json
 
   end
 

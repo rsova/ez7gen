@@ -2,7 +2,7 @@ require 'yaml'
 
 module Ez7gen
 
-  VERSION = "0.1.0"
+  VERSION = "0.1.2"
 
   # Move the Configurator into main module
   class Configurator
@@ -16,7 +16,7 @@ module Ez7gen
 
         #This will remove all comments
         if(ARGV[0])
-          yml['web.install.dir'] =  ARGV[0]
+          yml['web.install.dir'] =  ARGV[0].gsub("\\", '/') # convert windows path to linux, ruby defaults to that
           File.open(properties_file, 'w') { |f| YAML.dump(yml, f) }
         end
 

@@ -7,12 +7,12 @@ require_relative "../lib/ez7gen/profile_parser"
 
 class SegmentGeneratorTest < Test::Unit::TestCase
  #parse xml once
-  vs =
+  @@VS =
       [
           {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4.HL7.xml"}]},
           {:std=>"2.5", :path=>"../test/test-config/schema/2.5", :profiles=>[{:doc=>"2.5.HL7", :name=>"2.5", :std=>"1", :path=>"../test/test-config/schema/2.5/2.5.HL7.xml"}, {:doc=>"TEST2.5.HL7", :name=>"TEST2.5", :description=>"2.5 mockup schema for testing", :base=>"2.4", :path=>"../test/test-config/schema/2.5/VAZ2.5.HL7.xml"}]}
       ]
-  @attrs = {std: '2.4', version: '2.4.HL7', event: 'ADT_A01', version_store: vs}
+  @attrs = {std: '2.4', version: '2.4.HL7', event: 'ADT_A01', version_store: @@VS}
 
   # @@pp = ProfileParser.new('2.4','ADT_A01')
    @@pp = ProfileParser.new(@attrs)
@@ -174,7 +174,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
 
  #helper method
    def lineToHash(line)
-     hash =  line.gsub(/(\[|\])/,'').gsub(':',',').split(',').map{|it| it.strip()}.each_slice(2).to_a.to_h
+     hash =  line.gsub(/(\[|\])/,'').gsub('base:','base~').gsub(':',',').gsub('base~','base:').split(',').map{|it| it.strip()}.each_slice(2).to_a.to_h
      return Hash[hash.map{|(k,v)| [k.to_sym,v]}]
    end
 
@@ -389,7 +389,8 @@ class SegmentGeneratorTest < Test::Unit::TestCase
 
    msg = HL7::Message.new
    msg << @segmentGen.init_msh
-   puts @segmentGen.generate(msg,'[~PD1~]', attributes)
+   # puts @segmentGen.generate(msg,'[~PD1~]', attributes)
+   puts @segmentGen.generate(msg,'[~PD1~]', attributes, 1)
  end
 
  def test_ADT_A01_AL1
@@ -478,4 +479,82 @@ class SegmentGeneratorTest < Test::Unit::TestCase
     puts @segmentGen.generate(msg,'~RCP~', attributes)
 
   end
+
+  def test_ZMH
+
+    vs_alt = @@VS.clone()
+    vs_alt[0][:profiles][1][:path] = "../test/test-config/schema/2.4/VAZ2.4HL7_N.xml"
+    @attrs = {std: '2.4', version: 'VAZ2.4.HL7', event: 'ADT_A01', version_store: vs_alt}
+    bp = ProfileParser.new(@attrs)
+
+    profilers = { 'primary'=> bp , 'base'=> @@pp}
+    @segmentGen = SegmentGenerator.new("2.4","ADT_20", profilers)
+
+     zmh_attributes = "[ piece:1, description:SET ID - ZMH, datatype:base:SI, max_length:4, required:R, ifrepeating:0]
+    [ piece:2, description:MILITARY HISTORY TYPE, datatype:base:IS, max_length:8, required:R, ifrepeating:0, codetable:VA038]
+    [ piece:3, description:SERVICE INDICATOR, datatype:base:CE, max_length:80, required:R, ifrepeating:0]
+    [ piece:4, description:SERVICE ENTRY DATE AND SERVICE SEPARATION DATE, datatype:base:DR, max_length:53, required:R, ifrepeating:0]
+    [ piece:5, description:SERVICE COMPONENT, datatype:base:IS, max_length:8, required:R, ifrepeating:0, codetable:VA026]"
+    msg = HL7::Message.new
+    # msg << @segmentGen.init_msh
+
+    attributes = []
+    zmh_attributes.each_line do |line|
+      # p line
+      attributes << lineToHash( line)
+      # p attributes
+    end
+    puts @segmentGen.generate(msg,'ZMH', attributes)
+  end
+  # piece => 1
+  # description => Set ID - AL1
+  # datatype => base:CE
+  # symbol => !
+  # max_length => 250
+  # required => R
+  # ifrepeating => 0
+  #
+  # [1] = Hash (7 elements)
+  # piece => 2
+  # description => Allergen Type Code
+  # datatype => base:CE
+  # max_length => 250
+  # required => O
+  # ifrepeating => 0
+  # codetable => base:127
+  #
+  # [2] = Hash (7 elements)
+  # piece => 3
+  # description => Allergen Code/Mnemonic/Description
+  # datatype => base:CE
+  # symbol => !
+  # max_length => 250
+  # required => R
+  # ifrepeating => 0
+  #
+  # piece => 4
+  # description => Allergy Severity Code
+  # datatype => base:CE
+  # max_length => 250
+  # required => O
+  # ifrepeating => 0
+  # codetable => base:128
+  #
+  # piece => 5
+  # description => Allergy Reaction Code
+  # datatype => base:ST
+  # symbol => +
+  # max_length => 15
+  # required => R
+  # ifrepeating => 1
+
+#   ~~~~~~~~~~~~
+  #   [4] = Hash (7 elements)
+  #   piece => 5
+  #   description => SERVICE COMPONENT
+  #   datatype => base:IS
+  #   max_length => 8
+  #   required => O
+  #   ifrepeating => 0
+  #   codetable => VA026
 end

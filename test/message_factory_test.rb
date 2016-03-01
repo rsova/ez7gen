@@ -5,13 +5,13 @@ require_relative "../lib/ez7gen/message_factory"
 class MessageFactoryTest < Test::Unit::TestCase
 
 
-  alias :orig_run :run
-  def run(*args,&blk)
-    10.times { orig_run(*args,&blk) }
-  end
+  # alias :orig_run :run
+  # def run(*args,&blk)
+  #   10.times { orig_run(*args,&blk) }
+  # end
 
   # set to true to write messages to a file
-  @@PERSIST = true
+  @@PERSIST = false
 
   @@VS =
       [
@@ -34,7 +34,25 @@ class MessageFactoryTest < Test::Unit::TestCase
     # ver='vaz2.4'
     ver='VAZ2.4.HL7'
     event='ADT_A01'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: vss}).generate()
+    # MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
+    saveMsg(event, hl7, ver)
+    puts hl7
+
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
+
+  def test_vaz24_adt_20
+    # ver='vaz2.4'
+    ver='VAZ2.4.HL7'
+    event='ADT_A20'
+    # {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4.HL7.xml"}]},
+
+    vs = @@VS.clone()
+    vs[0][:profiles][1][:path] = "../test/test-config/schema/2.4/VAZ2.4HL7_N.xml"
+
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: vs}).generate()
     # MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
@@ -52,6 +70,7 @@ class MessageFactoryTest < Test::Unit::TestCase
     loadFactor = 1
     # hl7 = MessageFactory.new.generate(ver, event, loadFactor)
     hl7 =MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: loadFactor}).generate()
+    puts hl7
     saveMsg(event, hl7, ver)
 
     # x = []
@@ -323,8 +342,9 @@ class MessageFactoryTest < Test::Unit::TestCase
     #failed
     ver= '2.4.HL7'
     event='ADT_A39'
+    loadFactor = 1
     # <MessageStructure name='ADT_A39' definition='MSH~EVN~{~PID~[~PD1~]~MRG~[~PV1~]~}' />
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: loadFactor}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)

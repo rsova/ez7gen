@@ -6,7 +6,7 @@ require_relative '../ez7gen/service/utils'
 
 class MessageFactory
   include Utils
-  # attr_accessor :std; :version; :event; :version_store; loadFactor
+  # attr_accessor :std; :version; :event; :version_store; :loadFactor;
 
   def initialize(args)
     @attributes_hash = args
@@ -17,7 +17,8 @@ class MessageFactory
 
   end
 
-  def generate(attributes_hash=nil)
+  # def generate(attributes_hash=nil)
+  def generate()
     # loadFactor = nil
 
     parser = ProfileParser.new(@attributes_hash)
@@ -39,10 +40,13 @@ class MessageFactory
       v_base =  @version_store.find{|s| s[:std] == @std}[:profiles].find{|p| p[:std]!=nil}[:doc]
       v_base_hash = @attributes_hash.clone()
       v_base_hash[:version] = v_base
+      v_base_hash[:isBase] = true
       parsers[BASE]= ProfileParser.new(v_base_hash)
     end
     # configure a segment generator
-    segmentGenerator = SegmentGenerator.new(@version, @event, parsers)
+    # segmentGenerator = SegmentGenerator.new(@version, @event, parsers)
+    baseVerion = @std
+    segmentGenerator = SegmentGenerator.new(baseVerion, @event, parsers)
 
     # msh segment configured by hand, due to many requirements that only apply for this segment
     @hl7Msg = HL7::Message.new
@@ -59,6 +63,7 @@ class MessageFactory
     segments.each.with_index(){ |segment, idx|
       choiceParser = parsers[get_type_by_name(segment)]
       attributes = choiceParser.get_segment_structure(get_name_without_base(segment))
+
       segmentGenerator.generate(@hl7Msg, segment, attributes, in_group?(groups, idx))
     }
     return @hl7Msg
@@ -116,7 +121,7 @@ class MessageFactory
   # Identify segment as a part of a group
   def in_group?(groups, idx)
     is_in_group = !groups.select { |group| group.cover?(idx) }.empty?
-    p is_in_group
+    # p is_in_group
   end
 
   #find ranges of groups before segments collection containing groups can be flattened

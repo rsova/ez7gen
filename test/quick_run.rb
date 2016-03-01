@@ -1,6 +1,32 @@
 require 'yaml'
-require "pathname"
+# require 'pathname'
 
+
+# p = "\\Users\\romansova\\RubymineProjects\\ez7gen-staged\\ez7gen-web\\README.md"
+# p = %w("\Users\romansova\RubymineProjects\ez7gen-staged\ez7gen-web\README.md")
+# puts p.class
+# puts p.gsub(File::SEPARATOR, File::ALT_SEPARATOR || File::SEPARATOR)
+p = '\Users\romansova\RubymineProjects\ez7gen-staged\ez7gen-web\README.md'
+p = 'c:\ez7Gen\ez7gen-web\config\resources'
+puts p
+a = p.gsub("\\", '/')
+a = File.join(a, '/schmea/resources/')
+# a = p.gsub(File::ALT_SEPARATOR || File::SEPARATOR, '/')
+puts a
+exit
+
+p = "/Users/romansova/RubymineProjects/ez7gen-staged/ez7gen-web"
+dir, base = File.split(p)
+puts "dir: " + dir
+puts "base:" + base
+puts
+
+# path = Pathname.new(p)
+# puts path.realpath()
+
+nm = Dir.glob("#{p}*").select {|f| File.directory? f}
+puts nm
+exit
 
 time = Time.new
 puts time

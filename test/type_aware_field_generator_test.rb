@@ -212,6 +212,16 @@ class TypeAwareFieldGeneratorTest < Test::Unit::TestCase
 		assert_equal 8, fld.size, 'date format yyyymmdd, like 20141228'
 	end
 
+	def test_DTN
+		# piece='11' description='Days' datatype='DTN' max_length='3' required='O' ifrepeating='0' codetable='149'
+		line ='[max_length:3, description:Days, ifrepeating:0, datatype:DTN, required:O, piece:11]'
+		fld = @fldGenerator.DTN(lineToHash(line),true)
+		puts fld
+		/d+/.match(fld) #
+		assert 3 >= fld.size
+		# assert_equal 8, fld.size, 'date format yyyymmdd, like 20141228'
+	end
+
 	def test_IS
     # PD1.20 has a value of 27. The value is supposed to come from table 141 (this was the error picked by Ensemble):
     line ='[max_length:2, description:Military Rank/Grade, ifrepeating:0, datatype:IS, required:O, piece:20, codetable:141]'
@@ -487,19 +497,25 @@ class TypeAwareFieldGeneratorTest < Test::Unit::TestCase
   end
 
 	def test_handleRanges
+    # Change was made because Ensemble can't handle validation of ranges.
+    # Invalid value 'Q8' appears in segment 4:PD1, field 20, repetition 1, component 1, subcomponent 1, but does not
+    # appear in code table 2.4:141.
+    # I think you had to fix this one before to pull only the first and the last values from each row.
 
-		# { :position=>'1', :value=>'...', :description=>'No suggested values defined'}
+    # { :position=>'1', :value=>'...', :description=>'No suggested values defined'}
 	  code = @fldGenerator.handle_ranges('...')
 		assert_equal '', code
 
 		# {"position"=>'12' value='12 ... 16' description='Payer codes.' }
 		code = @fldGenerator.handle_ranges('12 ... 16').to_i
-		# puts code
-		assert 11 < code && code < 17
+		puts code
+		# assert 11 < code && code < 17
+		assert 12 == code || code == 16
+
 		#position='1' value='E1 ... E9' description='Enlisted'
 		code = @fldGenerator.handle_ranges('E1 ... E9')
 		puts code
-		assert 'E0' < code && code <= 'E9'
+		assert 'E1' == code || code == 'E9'
 		# {"position"=>position='3', "value"=>value='2 ...', "description"=>description='For ranked secondary diagnoses'}
 		code = @fldGenerator.handle_ranges('2 ...')
 		# puts code

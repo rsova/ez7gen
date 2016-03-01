@@ -37,7 +37,8 @@ class SegmentGenerator
     msh.recv_facility = @fieldGenerators['primary'].HD({:codetable => '362', :required =>'R'})
     msh.processing_id = 'P'#@fieldGenerators['primary'].ID({},true)
     #Per Galina, set version to 2.4 for all of vaz
-    msh.version_id = @@BASE_VER[@version]
+    # msh.version_id = @@BASE_VER[@version]
+    msh.version_id = @version
     msh.security = @fieldGenerators['primary'].ID({:required =>'O'})
 
     # Per Galina's requirement, fix for validation failure.
@@ -95,11 +96,13 @@ class SegmentGenerator
     elements = generate_segment_elements(segmentName, attributes)
 
     # overrite ids for sequential repeating segments use ids
-    elements[1] = (idx)? idx.to_s : elements[1]
+    idx_fld = elements[1]
+    #skip fields which are not numbers
+    idx_fld = (idx && is_number?(idx_fld)) ? idx.to_s : elements[1]
 
     #Set ID field in PID.1, AL1.1, DG1.1 etc. should have number 1 for the first occurrence of the segment.
     if(!idx && ['PID','AL1','DG1'].include?(segmentName))
-      elements[1]=1
+      idx_fld =1
     end
 
     #generate segment using elements
@@ -111,11 +114,10 @@ class SegmentGenerator
 
     fields =[]
     total = attributes.size()
-    fieldGenerator=@fieldGenerators[get_type_by_name(segmentName)]
-
+    # type = get_type_by_name(segmentName)
     # generate segment attributes
     total.times do |i|
-      fields << add_field(attributes[i], fieldGenerator)
+      fields << add_field(attributes[i])
     end
 
     # add segment name to the beginning of the array
@@ -123,9 +125,25 @@ class SegmentGenerator
   end
 
   #adds a generated field based on data type
-  def add_field(attributes, fieldGenerator)
+  def add_field(attributes)
 
-    dt = get_name_without_base(attributes[:datatype])
+    type = get_type_by_name(attributes[:datatype])
+    fieldGenerator= @fieldGenerators[type]
+
+    # dt = get_name_without_base(attributes[:datatype])
+    if(type == Utils::BASE)
+      attributes[:datatype] = get_name_without_base(attributes[:datatype])
+
+      # if code table comes from the primary schema:  datatype => base:IS, codetable => VA026
+      # add a parcer for primary to deal with code tables
+      if (attributes[:codetable] && (type != get_type_by_name(attributes[:codetable])))
+          baseParser = @fieldGenerators['primary'].pp
+          fieldGenerator.instance_variable_set('@bp', baseParser)
+      end
+      attributes[:codetable] = get_name_without_base(attributes[:codetable])
+    end
+
+    dt = attributes[:datatype]
     # puts Utils.blank?(dt)?'~~~~~~~~~> data type is missing': dt
     if(['CK'].include?(dt))
       return nil

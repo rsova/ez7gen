@@ -375,12 +375,14 @@ class TypeAwareFieldGenerator
     #check if the field is optional and randomly generate it of skip
     return '' if(!generate?(map, force))
 
-    val=[]
-    # <day type (IS)>
-    val<<IS(map,true)
-    # <number of days (NM)>
-    val<<NM({},true)
-    val.join(@@HAT)
+    # val=[]
+    # # <day type (IS)>
+    # val<<IS(map,true)
+    # # <number of days (NM)>
+    # val<<NM({},true)
+    # val.join(@@HAT)
+    # per Galina request: Ensemble limits the length of IN3.11 to 3. So, we need to remove the second component from being populated ...
+    NM({},true)
   end
 
   # Encapsulated data
@@ -1386,7 +1388,8 @@ class TypeAwareFieldGenerator
 
   # Value of coded table returned as as single value
   def get_coded_value(attributes)
-  codes = @pp.get_code_table(attributes[:codetable])
+    codes = get_code_table(attributes)
+
     # puts codes
     #Apply rules to find a value and description
     map = apply_rules(codes, attributes)
@@ -1396,11 +1399,22 @@ class TypeAwareFieldGenerator
 
   # Values and Description from code table returned as a pair.
   def get_coded_map(attributes)
-  codes = @pp.get_code_table(attributes[:codetable])
+    codes = get_code_table(attributes)
+
     # puts codes
     #Apply rules to find a value and description
     #Returns map with code and description
     apply_rules(codes, attributes)
+  end
+
+  def get_code_table(attributes)
+    codes = @pp.get_code_table(attributes[:codetable])
+    # Case when we have a case of looking for code values defined in base schema for types
+    # which are in cusotom/primary schema. The SegmentGenerator checked for this condition
+    # and dynamically added an instance value @bp  - the base parser to handle this issue
+    if((codes.first == Utils::DATA_LOOKUP_MIS) && defined?(@bp))
+      codes = @bp.get_code_table(attributes[:codetable])
+    end
   end
 
   # Handle range values specified by '...' sequence, including empty range
@@ -1453,9 +1467,13 @@ class TypeAwareFieldGenerator
       if (ends.empty?) # This is indication that codetable does not have any values
         code = ''
       else #Handle range values, build range and pick random value
-        #TODO: need to handle '2 ...' also
-        range = ends.first..ends.last
-        code = range.to_a.sample
+        # range = ends.first..ends.last
+        # code = range.to_a.sample
+
+        # per Galina: Invalid value 'Q8' appears in segment 4:PD1, field 20, repetition 1, component 1, subcomponent 1,
+        # but does not appear in code table 2.4:141.
+        # I think you had to fix this one before to pull only the first and the last values from each row.
+        code = ends.sample
       end
       return code
   end

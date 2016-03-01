@@ -4,6 +4,8 @@ module Utils
   BASE_INDICATOR = 'base:'
   BASE = 'base'
   PRIMARY = 'primary'
+  DATA_LOOKUP_MIS = {:position => '1', :value => '...', :description => 'No suggested values defined'}
+
 
   def get_segment_name(segment)
     return segment.gsub(/~|\[|\]|\{|\}/,"")

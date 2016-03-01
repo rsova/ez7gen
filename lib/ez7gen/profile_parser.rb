@@ -6,7 +6,10 @@ class ProfileParser
   include Utils
 
   #instance attributes
-  # attr_accessor :version; :event; :xml; # :version_store; :store_cache;
+  attr_reader :base;
+  alias_method :base?, :base;
+
+  # attr_accessor :std; :version; :event; :xml; :version_store;
   # @@HL7_VERSIONS = {'2.4'=>'2.4/2.4-schema.xml', 'vaz2.4'=>'vaz2.4/vaz2.4-schema.xml'}
   #class attribute
   # @@segment_patern = /\[([^\[\]]*)\]/
@@ -18,12 +21,8 @@ class ProfileParser
     args.each do |k,v|
       instance_variable_set("@#{k}", v) unless v.nil?
     end
-
-    # @version_store ||= @@HL7_VERSIONS
-    # @version ||= version;
-    # @event ||= event;
-
-    # @std @version_store @store_cache - used with wrapper child class
+    # set to false if it has not been set already
+    @base ||= false
 
     profile, path = nil
     # if(@version_store)
@@ -51,7 +50,8 @@ class ProfileParser
     properties_file = File.expand_path('../resources/properties.yml', __FILE__)
     yml = YAML.load_file properties_file
     path = yml['web.install.dir'] # set when run intall gem with argument, example: gem install 'c:/ez7Gen/ez7gen-web/config/resources/'
-    path = path<<'config/schema/'
+    path = File.join(path, 'config/schema/')
+      # path = path<<'config/schema/'
     # path = path<<'config/resources/'
   end
 
@@ -117,7 +117,7 @@ class ProfileParser
 
   def lookup_code_table(tableName, path)
     tbl = path.Export.Document.Category.locate('CodeTable').select { |it| it.attributes[:name] == tableName }
-    (!blank?(tbl)) ? tbl.first.locate('Enumerate').map { |it| it.attributes } : [{:position => '1', :value => '...', :description => 'No suggested values defined'}]
+    (!blank?(tbl)) ? tbl.first.locate('Enumerate').map { |it| it.attributes } : [Utils::DATA_LOOKUP_MIS]
   end
 
   def get_segment_structure(segment)
