@@ -34,7 +34,7 @@ class MessageFactoryTest < Test::Unit::TestCase
     # ver='vaz2.4'
     ver='VAZ2.4.HL7'
     event='ADT_A01'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: vss}).generate()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     # MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7

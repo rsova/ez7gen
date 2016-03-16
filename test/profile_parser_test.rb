@@ -148,6 +148,17 @@ class ProfileParserTest < Test::Unit::TestCase
 		attributes = parser.get_code_table("")
 		p attributes
 		print attributes.empty?
+  end
+
+	def test_codeTable_special_ch
+    parser = ProfileParser.new(@attrs)
+		attributes = parser.get_code_table("417")
+		# p attributes.*[:description]
+    actual = attributes.collect{|a| a[:description]}
+    # p actual
+    assert actual.include?("Carcinoma-unspecified type")
+    assert_false actual.include?('Degeneration &amp; necrosise')
+		assert_equal 12, attributes.size
 	end
 
   def test_getSegments

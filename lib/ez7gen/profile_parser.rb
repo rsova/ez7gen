@@ -112,6 +112,10 @@ class ProfileParser
       attributes = lookup_code_table(tableName, @added)
     end
 
+    # Per Galina, code table values with special characters.
+    # Ensemble validation fails.
+    attributes.select!{|a| !has_special_ch?(a[:description])}
+
     return attributes
   end
 

@@ -61,6 +61,7 @@ class UtilsTest < Test::Unit::TestCase
 		#primary is vaz 2.4
 		#base is 2.4
 		assert_equal 'base', get_type_by_name('base:ENV')
+		assert_nil get_type_by_name(nil)
 	end
 
 	def test_numToNil
@@ -88,5 +89,15 @@ class UtilsTest < Test::Unit::TestCase
 		# puts actual
 		assert_equal(0, actual)
 	end
+
+	def test_hasSpecialCh
+		str = 'Degeneration & necrosis'
+		assert has_special_ch?(str)
+    str = 'Approved by the PSRO/UR as billed'
+    assert_false has_special_ch?(str)
+    str = 'Degeneration &amp; necrosis'
+    assert has_special_ch?(str)
+
+  end
 
 end

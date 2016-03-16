@@ -6,6 +6,11 @@ module Utils
   PRIMARY = 'primary'
   DATA_LOOKUP_MIS = {:position => '1', :value => '...', :description => 'No suggested values defined'}
 
+  #special = "?<>',?[]}{=-)(*&^%$#`~{}"
+  @@special = "?<>[]}{)(&^%$#`~{}" # subset to use for now
+  @@regex = /[#{@@special.gsub(/./){|char| "\\#{char}"}}]/
+
+
 
   def get_segment_name(segment)
     return segment.gsub(/~|\[|\]|\{|\}/,"")
@@ -33,7 +38,7 @@ module Utils
   # if name starts with base use base type otherwise primary
   # works for generators and parsers
   def get_type_by_name(name)
-    (name.include?(BASE_INDICATOR))? BASE: PRIMARY
+    (blank?(name)?nil:(name.include?(BASE_INDICATOR))? BASE: PRIMARY)
   end
 
   def get_name_without_base(name)
@@ -54,5 +59,10 @@ module Utils
     #handle stings and garbage
     maxLen = (maxLen||reqLen).to_i
     [maxLen, reqLen].min
+  end
+
+  # check if string has special characters
+  def has_special_ch?(str)
+    (str =~ @@regex)?true:false
   end
 end

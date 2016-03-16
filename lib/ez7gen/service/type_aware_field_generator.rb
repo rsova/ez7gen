@@ -1409,12 +1409,13 @@ class TypeAwareFieldGenerator
 
   def get_code_table(attributes)
     codes = @pp.get_code_table(attributes[:codetable])
-    # Case when we have a case of looking for code values defined in base schema for types
-    # which are in cusotom/primary schema. The SegmentGenerator checked for this condition
+    # Case when we are looking for code values defined in base schema for types
+    # which are in custom/primary schema. The SegmentGenerator checked for this condition
     # and dynamically added an instance value @bp  - the base parser to handle this issue
     if((codes.first == Utils::DATA_LOOKUP_MIS) && defined?(@bp))
       codes = @bp.get_code_table(attributes[:codetable])
     end
+    return codes
   end
 
   # Handle range values specified by '...' sequence, including empty range
