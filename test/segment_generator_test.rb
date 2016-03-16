@@ -323,7 +323,9 @@ class SegmentGeneratorTest < Test::Unit::TestCase
  end
 
  def test_MSH_Version_24_For_Custom
-   @segmentGen = SegmentGenerator.new("vaz2.4","ADT_A01", {'primary' => @@pp })
+   ver = '2.4' # now logic to figure out base version is in the calling class
+   # @segmentGen = SegmentGenerator.new("vaz2.4","ADT_A01", {'primary' => @@pp })
+   @segmentGen = SegmentGenerator.new("2.4","ADT_A01", {'primary' => @@pp })
    msg = HL7::Message.new
    msg << @segmentGen.init_msh
    puts msg.to_hl7
