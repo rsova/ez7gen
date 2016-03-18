@@ -217,8 +217,15 @@ class TypeAwareFieldGeneratorTest < Test::Unit::TestCase
 		line ='[max_length:3, description:Days, ifrepeating:0, datatype:DTN, required:O, piece:11]'
 		fld = @fldGenerator.DTN(lineToHash(line),true)
 		puts fld
-		/d+/.match(fld) #
+    assert_not_nil /\d+/.match(fld) # number
 		assert 3 >= fld.size
+
+		line ='[max_length:3, description:Days, ifrepeating:0, datatype:DTN, required:O, piece:11, codetable:149]'
+		fld = @fldGenerator.DTN(lineToHash(line),true)
+		puts fld
+		assert_not_nil /\w+/.match(fld) # word
+		assert 3 >= fld.size
+
 		# assert_equal 8, fld.size, 'date format yyyymmdd, like 20141228'
 	end
 

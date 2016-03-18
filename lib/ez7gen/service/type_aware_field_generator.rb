@@ -378,11 +378,11 @@ class TypeAwareFieldGenerator
     # val=[]
     # # <day type (IS)>
     # val<<IS(map,true)
+    # per Galina request: Ensemble limits the length of IN3.11 to 3. So, we need to remove the second component from being populated ...
+    IS(map,true)
     # # <number of days (NM)>
     # val<<NM({},true)
     # val.join(@@HAT)
-    # per Galina request: Ensemble limits the length of IN3.11 to 3. So, we need to remove the second component from being populated ...
-    NM({},true)
   end
 
   # Encapsulated data
