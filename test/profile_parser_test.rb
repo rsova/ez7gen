@@ -4,6 +4,7 @@ require "benchmark"
 require_relative '../lib/ez7gen/profile_parser'
 
 class ProfileParserTest < Test::Unit::TestCase
+  include Utils
 	
 	def setup
 		vs =
@@ -71,6 +72,7 @@ class ProfileParserTest < Test::Unit::TestCase
     parser = ProfileParser.new(@attrs)
     struct = "MSH~EVN~PID~[~PD1~]~[~{~ROL~}~]~[~{~NK1~}~]~PV1~[~PV2~]~[~{~ROL~}~]~[~{~DB1~}~]~[~{~OBX~}~]~[~{~AL1~}~]~[~{~DG1~}~]~[~DRG~]~[~{~PR1~[~{~ROL~}~]~}~]~[~{~GT1~}~]~[~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]~[~ACC~]~[~UB1~]~[~UB2~]~[~PDA~]"
     results = parser.process_segments(struct)
+    puts results
     assert_equal(2, results.size())
 
     profile_idx = 0
@@ -268,6 +270,32 @@ class ProfileParserTest < Test::Unit::TestCase
     isCheck, tokens =  parser.is_group?("{~MRG~}")
     assert_true !isCheck
     assert_equal(['MRG'], tokens)
+  end
+
+  def test_is_group_resolved
+    parser = ProfileParser.new(@attrs)
+    tokens =[]
+    isCheck, tokens =  parser.is_group?("{~25~}")
+    p tokens
+    assert_true isCheck && parser.is_group_resolved?(tokens)  # check for case of all groups resolved
+    assert_equal(['25'], tokens)
+
+    isCheck, tokens =  parser.is_group?("{~25~[~17~]~}")
+    p tokens
+    assert_true isCheck && parser.is_group_resolved?(tokens) # check for case of all groups resolved
+    assert_equal(['25','17'], tokens)
+
+    isCheck, tokens =  parser.is_group?("{~25~[~OBX~]~}")
+    p tokens
+    assert_false isCheck && parser.is_group_resolved?(tokens) # check for case of all groups resolved
+    assert_equal(['25','OBX'], tokens)
+
+    # isCheck, tokens =  parser.is_group?("{~ORC~OBR~11~12~13~15~{~25~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}")
+    isCheck, tokens =  parser.is_group?("~ORC~OBR~11~12~13~15~{~25~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~")
+    p tokens
+    assert_false isCheck && parser.is_group_resolved?(tokens) # check for case of all groups resolved
+    assert_equal(["ORC", "OBR", "11", "12", "13", "15", "25", "FT1", "CTI", "BLG"], tokens)
+
 	end
 
 
@@ -335,5 +363,42 @@ class ProfileParserTest < Test::Unit::TestCase
     versions_to_client = {standards: coll}
     puts versions_to_client
 	end
+
+
+  def test_processSegments_pharm
+    # first pass
+    # 1) look for repeading groups
+    # 2) brake them into subgroups - arrays
+    # second pass
+    # 3) go over and find optional groups
+    # 4) brake them into subgroups - arrays
+    #
+    # arr
+    # e
+    # arr [e,arr[e,e,e],arr[e,e,e],e, e,]
+    # seg : "[~17~19~20~{~21~OBR~22~23~{~OBX~24~}~}~]"
+
+    # to do
+    #   resolve {} complex groups
+    #   within {} complex groups finish encoding
+    #   handle complex [] groups
+    #   handle groups need to handle arrays of subgroups
+    #   refactor!!!
+
+
+    parser = ProfileParser.new(@attrs)
+    struct = 'MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~OBR~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~{~AL1~}~]~{~[~ORC~]~OBR~[~{~NTE~}~]~[~CTD~]~{~OBX~[~{~NTE~}~]~}~}~]~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
+    # struct = "MSH~EVN~PID~[~PD1~]~[~{~ROL~}~]~[~{~NK1~}~]~PV1~[~PV2~]~[~{~ROL~}~]~[~{~DB1~}~]~[~{~OBX~}~]~[~{~AL1~}~]~[~{~DG1~}~]~[~DRG~]~[~{~PR1~[~{~ROL~}~]~}~]~[~{~GT1~}~]~[~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]~[~ACC~]~[~UB1~]~[~UB2~]~[~PDA~]"
+    results = parser.process(struct)
+    puts results
+    assert_equal(2, results.size())
+
+    profile_idx = 0
+    segments_idx = 1
+    #refactored, results returned as collection of arrays instead of map
+
+    # assert_equal(21, results[segments_idx].size())
+    # assert_equal('[~PD1~]', results[segments_idx][0])
+  end
 
 end

@@ -2,6 +2,223 @@ require 'yaml'
 # require 'pathname'
 
 
+#ORM_O01 Order message
+# MSH;NTE;PID;PD1;PV1;PV2;IN1;IN2;IN3;GT1;AL1;ORC;OBR;RQD;RQ1;RXO;ODS;ODT;CTD;DG1;OBX;FT1;CTI;BLG
+#RDE_O11 Pharmacy/treatment encoded order message
+# MSH;NTE;PID;PD1;PV1;PV2;IN1;IN2;IN3;GT1;AL1;ORC;RXO;RXR;RXC;OBX;CTI
+#OMG_O19 General clinical order message
+# MSH;NTE;PID;PD1;PV1;PV2;IN1;IN2;IN3;GT1;AL1;ORC;OBR;CTD;DG1;OBX;AL1;FT1;CTI;BLG
+o19 = 'MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~OBR~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~{~AL1~}~]~{~[~ORC~]~OBR~[~{~NTE~}~]~[~CTD~]~{~OBX~[~{~NTE~}~]~}~}~]~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
+# mt = /(?=\{((?:[^{}]*|\{\g<1>\})*)\})/.match(o19)
+# mt = o19.scan(/(?=\{((?:[^{}]*|\{\g<1>\})*)\})/)
+# # [["~NTE~"], ["~NTE~"], ["~IN1~[~IN2~]~[~IN3~]~"], ["~AL1~"], ["~ORC~OBR~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~{~AL1~}~]~{~[~ORC~]~OBR~[~{~NTE~}~]~[~CTD~]~{~OBX~[~{~NTE~}~]~}~}~]~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~"], ["~NTE~"], ["~DG1~"], ["~OBX~[~{~NTE~}~]~"], ["~NTE~"], ["~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~{~AL1~}~]~{~[~ORC~]~OBR~[~{~NTE~}~]~[~CTD~]~{~OBX~[~{~NTE~}~]~}~}~]~"], ["~AL1~"], ["~[~ORC~]~OBR~[~{~NTE~}~]~[~CTD~]~{~OBX~[~{~NTE~}~]~}~"], ["~NTE~"], ["~OBX~[~{~NTE~}~]~"], ["~NTE~"], ["~FT1~"], ["~CTI~"]]
+# puts mt
+# /(\((?:([^\(\)]*)|(?:\g<2>\g<1>\g<2>)*)\))/
+# m = /(\((?:([^\{\}]*)|(?:\g<2>\g<1>\g<2>)*)\))/.match(o19)
+# p m
+  idx = 0
+  encodedSegments =[]
+# m = o19.scan(/(?=\{((?:[^{}]*|\{\g<1>\})*)\})/)
+# p m
+# m = /(?=\{((?:[^{}]*|\{\g<1>\})*)\})/.match(o19)
+# p m
+
+  # while(m = (structure.match(@@segment_patern).to_s))
+  abc = o19
+  xyz = ''
+  m = abc.scan(/(?=\{((?:[^{}]*|\{\g<1>\})*)\})/)
+p m
+
+# /(?=\{((?:[^{}]*|\{\g<1>\})*)\})/.match(abc){|it|
+#   p it
+# }
+
+p o19
+    p abc
+    puts m
+    p m[1]
+    m.each{|it|
+      # p m.begin
+      # p m.end
+      p m.first.begin
+      p m.first.end
+
+      mtch = it.first.to_s
+      o19.sub!(mtch,idx.to_s)
+      encodedSegments << mtch
+      idx +=1
+    }
+    abc = m.post_match
+
+  m = abc.match(/(?=\{((?:[^{}]*|\{\g<1>\})*)\})/)
+  p o19
+  p abc
+  p m
+  p m[1]
+  o19.sub!(m[1],idx.to_s)
+  encodedSegments << m
+  idx +=1
+  abc = m.post_match
+
+  m = abc.match(/(?=\{((?:[^{}]*|\{\g<1>\})*)\})/)
+  p o19
+  p abc
+  p m
+  p m[1]
+  o19.sub!(m[1],idx.to_s)
+  encodedSegments << m
+  idx +=1
+  abc = m.post_match
+
+p '!!!!!!!!!!'
+exit
+
+puts '[~17~19~20~{~21~OBR~22~23~{~OBX~24~}~}~]'.scan(/[\[\]]/).size()
+puts '[~17~19~20~{~21~OBR~22~23~{~OBX~24~}~}~]'.scan(/[\{\}]/).size()
+puts '[~17~19~20~{~21~OBR~22~23~{~OBX~24~}~}~]'.scan(/[\{\}\[\]]/).size()
+
+puts '[~17~19~20~{~21~OBR~22~23~{~OBX~24~}~}~]'.scan(/[\{\}\[\]]/).size().odd?
+
+puts  '{~ORC~OBR~11~12~13~15~{~25~}'.scan(/[\{\}\[\]]/).size
+puts  '{~ORC~OBR~11~12~13~15~{~25~}'.scan(/[\{\}\[\]]/).size.even?
+
+m = '{~ORC~OBR~11~12~13~15~{~25~}'
+puts 'MSH~0~10~{~ORC~OBR~11~12~13~15~{~25~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'.scan(/[\[\]]/).size
+
+
+a25 ='[~17~19~20~{~21~OBR~22~23~{~OBX~24~}~}~]'
+a= 'MSH~0~10~{~ORC~OBR~11~12~13~15~{~[~17~19~20~{~21~OBR~22~23~{~OBX~24~}~}~]~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
+
+a26 = '{~ORC~OBR~11~12~13~15~{~25~}'
+struct ='MSH~0~10~{~ORC~OBR~11~12~13~15~{~25~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
+b = struct.sub('25',a25)
+puts a
+puts b
+puts a.eql?(b)
+
+sq = /[\[\]]/
+crl = /[\{\}]/
+if( a26.scan(sq).size.odd?)
+  puts ((a26.scan(/\[/).size - a26.scan(/\]/).size) <0) ?']':'['
+end
+
+if( a26.scan(crl).size.odd?)
+  puts ((a26.scan(/\{/).size - a26.scan(/\}/).size) <0) ?'{':'}'
+end
+
+p '+++++++++++'
+puts struct
+
+mt = struct.scan(/(?=\{((?:[^{}]++|\{\g<1>\})++)\})/)
+p mt
+mt = struct.scan(/(?=\{((?:[^{}]*|\{\g<1>\})*)\})/)
+p mt
+mt = /(?=\{((?:[^{}]*|\{\g<1>\})*)\})/.match(struct)
+p mt
+
+# mt = /[^{}]*/.match(struct)
+# p mt
+# mt = /(?<={)\*(?=})/.match(struct) #nothing
+# p mt
+# mt = /\{([^\[\]]*)\}/.match(struct) #wrong
+# p mt
+
+p '~~~~~~~'
+exit
+
+mt = /\[([^\[\]]*)\]|\{([^\[\]]*)\}/.match(struct)
+p mt
+# mt = /(\((?:([^\(\)]*)|(?:(?2)(?1)(?2))*)\))/.match("(a)")
+# http://stackoverflow.com/questions/19486686/recursive-nested-matching-pairs-of-curly-braces-in-ruby-regex
+mt = /(\((?:([^\{\}]*)|(?:\g<1>({\g<1>\})({\g<2>\}))*)\))/.match(struct)
+# (?=\{((?:[^{}]++|\{\g<1>\})++)\})
+p mt
+mt = /\{*\}/.match(struct)
+p mt
+#     /(?=\{((?:[^{}]++|\{\g<1>\})++)\})/
+# mt = /(\((?:([^\(\)]*)|(?:(\2)(\1)(\2))*)\))/.match("(a)")
+mt = /(\((?:([^\(\)]*)|(?:(?<out>)(?<in>)(?<out>))*)\))/.match("((c))")
+mt = /(\((?:([^\(\)]*)|(?:\g<2>\g<1>\2<1>)*)\))/.match("((c)a)")
+mt = /(\((?:([^\(\)]*)|(?:\g<2> \g<1> \g<2>)*)\))/.match("(((c)a)v)")
+p mt
+str = "The {quick} brown fox {jumps {over {deep} the} {sfsdf} lazy} dog {sdfsdf {sdfsdf}"
+mt = str.scan(/(?=\{((?:[^{}]++|\{\g<1>\})++)\})/)
+p mt
+
+p '============'
+
+exit
+idx = b.index(a25)+a25.size
+puts b[idx,b.size]
+
+var = 'stac'
+puts /#{var}/.match('haystack')
+
+puts /(?<=<b>)\w+(?=<\/b>)/.match("Fortune favours the <b>bold</b>")
+puts /(?<={)\w+(?=})/.match("Fortune favours the {bold}")
+# $~ is equivalent to ::last_match;
+# $& contains the complete matched text;
+# $` contains string before match;
+# $' contains string after match;
+# $1, $2 and so on contain text matching first, second, etc capture group;
+# $+ contains last capture group.
+
+m = /s(\w{2}).*(c)/.match('haystack') #=> #<MatchData "stac" 1:"ta" 2:"c">
+puts $~                                    #=> #<MatchData "stac" 1:"ta" 2:"c">
+puts Regexp.last_match                     #=> #<MatchData "stac" 1:"ta" 2:"c">
+
+puts $&      #=> "stac"
+# # same as m[0]
+puts  $`      #=> "hay"
+ # same as m.pre_match
+puts  $'      #=> "k"
+# # same as m.post_match
+puts $1      #=> "ta"
+# # same as m[1]
+# $2      #=> "c"
+# # same as m[2]
+# $3      #=> nil
+# # no third group in pattern
+# $+      #=> "c"
+# # same as m[-1]
+puts $+
+ex ='[([^\[\]]*)\]|\{([^\[\]]*)\}'
+#(?<={)[[:alnum:]~]+(?=})
+puts Regexp.escape('[]')
+puts Regexp.union(/dogs/, /cats/i)
+puts Regexp.union(/\[([^\[\]]*)\]/,/\{([^\[\]]*)\}/)
+/^[a-z]*$/ === "HELLO" #=> false
+/^[A-Z]*$/ === "HELLO" #=> true
+
+/(?<lhs>\w+)\s*=\s*(?<rhs>\w+)/ =~ "  x = y  "
+p lhs    #=> "x"
+p rhs    #=> "y"
+#metacharacthers (, ), [, ], {, }, ., ?, +, *
+mt = /[cs](..) [cs]\1 in/.match("The cat sat in the hat")
+p mt[1]
+p mt[2]
+p /[aeiou]\w{2}/.match("Caenorhabditis elegans")
+p /([aeiou]\w){2}/.match("Caenorhabditis elegans")
+mt= /I(n)ves(ti)ga\2ons/.match("Investigations")
+p mt[1] + '....' + mt[2]
+mt= /I(?:n)ves(ti)ga\1ons/.match("Investigations")
+p mt[1] + '....' + mt[2].to_s
+# Finds the outermost pair of parentheses. Compatible with any amount of nesting
+#/(\((?:([^\(\)]*)|(?:(?2)(?1)(?2))*)\))/
+# /(\((?:([^\(\)]*)|(?:\g<1>)*)\))/
+#     /(?=\{((?:[^{}]++|\{\g<1>\})++)\})/
+# mt = /(\((?:([^\(\)]*)|(?:(\2)(\1)(\2))*)\))/.match("(a)")
+mt = /(\((?:([^\(\)]*)|(?:(?<out>)(?<in>)(?<out>))*)\))/.match("((c))")
+mt = /(\((?:([^\(\)]*)|(?:\g<1>)*)\))/.match("((c))")
+p mt
+p '----------------'
+mt=/\A(?<paren>\(<paren>*\))*\z/ =~ "a()"
+p mt
+# result = a.scan(/(?=\{((?:[^{}]++|\{\g<1>\})++)\})/)
+# p result
+
+exit
+
 # p = "\\Users\\romansova\\RubymineProjects\\ez7gen-staged\\ez7gen-web\\README.md"
 # p = %w("\Users\romansova\RubymineProjects\ez7gen-staged\ez7gen-web\README.md")
 # puts p.class

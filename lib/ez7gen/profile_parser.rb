@@ -197,4 +197,78 @@ class ProfileParser
     return profile, encodedSegments
   end
 
-end
+
+  # find all optional, repeating segemnts and segment groups
+  # the required string left un-handled
+  def process(structure)
+    idx = 0
+    encodedSegments =[]
+    profile=[]
+    # while(m = structure[@@segment_patern])
+  while (m = @@segment_patern.match(structure))
+      p m
+      # puts m.last_match
+      if(uch = unbalanced_ch(m.to_s))
+        p uch
+        p structure
+        # do the group {}
+        rcRegEx = /(?=\{((?:[^{}]*|\{\g<1>\})*)\})/
+        m = structure.scan(rcRegEx)
+        # c = /(?=\{((?:[^{}]*|\{\g<1>\})*)\})/.match(structure)
+        p m
+
+        # find a group
+        groups = []
+        m.each{ |it|
+          # keep the matcher from changes
+          subSeg = it.first.clone
+          isGroup,tokens  = is_group?(subSeg)
+
+          if(isGroup)
+             if(!is_group_resolved?(tokens)) then groups << subSeg end
+          else
+            groups.each{|g| g.sub!(subSeg, idx.to_s)}
+            encodedSegments << subSeg
+            idx +=1
+          end
+        }
+        structure.sub!(m[0].first, idx.to_s)
+        encodedSegments << m[0].first
+      else
+        structure.sub!(@@segment_patern,idx.to_s)
+        encodedSegments << m.to_s
+      end
+      idx +=1
+    end
+    # m = structure.scan(/(?=\{((?:[^{}]*|\{\g<1>\})*)\})/)# brake {} repeating groups
+    # puts m
+    # return m
+
+    # pre-process structure into collection of segments
+    profile = structure.split('~').map!{|it| (is_number?(it))?it.to_i : it}
+
+    # handle groups
+     handle_groups(profile, encodedSegments)
+  end
+
+  def unbalanced_ch(segment)
+    sq = /[\[\]]/
+    crl = /[\{\}]/
+    group_ch = nil
+
+    if( segment.scan(sq).size.odd?)
+      group_ch = ((segment.scan(/\[/).size - segment.scan(/\]/).size) <0) ?']':'['
+    end
+
+    if( segment.scan(crl).size.odd?)
+      group_ch = ((segment.scan(/\{/).size - segment.scan(/\}/).size) <0) ?'{':'}'
+    end
+    group_ch
+  end
+
+    # check if group has been processed completely
+    def is_group_resolved?(tokens)
+      blank?(tokens.select { |it| !is_number?(it) })
+    end
+
+  end
