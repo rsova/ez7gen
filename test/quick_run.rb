@@ -1,6 +1,112 @@
 require 'yaml'
 # require 'pathname'
 
+# a = '{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~10~]~11~]~}'
+# e = a.scan(/(?=\[((?:[^\[\]]*|\[\g<1>\])*)\])/)
+# p e
+# exit
+
+structure = 'MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~OBR~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~{~AL1~}~]~{~[~ORC~]~OBR~[~{~NTE~}~]~[~CTD~]~{~OBX~[~{~NTE~}~]~}~}~]~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
+ms = structure.scan(/(?=\{((?:[^{}]*|\{\g<1>\})*)\})/)
+#m = puts o19.scan(/[^{}]*|[^\[\]]*/)
+p ms
+
+idx = 0
+encodedSegments =[]
+profile=[]
+# while(m = structure[@@segment_patern])
+groups = []
+el_ids = []
+
+ms.each {|a|
+  p a
+  m = '{'<< a.first() << '}'
+
+    is_g = (m.scan('{').size > 1)?true:false
+
+    if(groups.size == 0)
+      structure.sub!(m, idx.to_s)
+      # if (is_g) then groups << m end
+    else
+      if(groups.last().include?(m))
+        groups.last().sub!(m, idx.to_s)
+        if(!(groups.last().scan('{').size > 1)) #done resolving a group
+          rslvd = groups.last()
+          eid = el_ids.last()
+          encodedSegments[eid] = rslvd
+          groups.pop()
+          el_ids.pop()
+        end
+      else
+        structure.sub!(m, idx.to_s)
+      end
+      # if (is_g) then groups << m end
+    end
+
+  if (is_g)
+    groups << m
+    el_ids << idx
+  end
+
+  encodedSegments << m
+  idx +=1
+}
+puts '_______________________'
+
+encodedSegments.each{|es|
+  puts es
+
+    is_g = (es.scan('[').size > 1)?true:false
+
+    if(is_g)
+      ms = es.scan(/(?=\[((?:[^\[\]]*|\[\g<1>\])*)\])/)
+
+      # # m = '['<< e.first() << ']'
+      # puts e
+      # puts '++'
+
+      ms.each {|a|
+        p a
+        m = '['<< a.first() << ']'
+        is_g = (m.scan('[').size > 1)?true:false
+
+        if(groups.size == 0)
+          es.sub!(m, idx.to_s)
+          # if (is_g) then groups << m end
+        else
+          if(groups.last().include?(m))
+            groups.last().sub!(m, idx.to_s)
+            if(!(groups.last().scan('[').size > 1)) #done resolving a group
+              rslvd = groups.last()
+              eid = el_ids.last()
+              encodedSegments[eid] = rslvd
+              groups.pop()
+              el_ids.pop()
+            end
+          else
+            es.sub!(m, idx.to_s)
+          end
+          # if (is_g) then groups << m end
+        end
+
+        if (is_g)
+          groups << m
+          el_ids << idx
+        end
+
+        encodedSegments << m
+        idx +=1
+      }
+
+    end
+
+}
+
+puts groups
+puts encodedSegments
+puts structure
+exit
+
 
 #ORM_O01 Order message
 # MSH;NTE;PID;PD1;PV1;PV2;IN1;IN2;IN3;GT1;AL1;ORC;OBR;RQD;RQ1;RXO;ODS;ODT;CTD;DG1;OBX;FT1;CTI;BLG
