@@ -197,7 +197,7 @@ class ProfileParser
     return profile, encodedSegments
   end
 
-
+  # ---- Methods below, moved to StructureParser class and refactored ----- #
   # find all optional, repeating segemnts and segment groups
   # the required string left un-handled
   def process(structure)
@@ -266,9 +266,9 @@ class ProfileParser
     group_ch
   end
 
-    # check if group has been processed completely
-    def is_group_resolved?(tokens)
-      blank?(tokens.select { |it| !is_number?(it) })
-    end
+  # check if group has been processed completely
+  def is_group_resolved?(tokens)
+    blank?(tokens.select { |it| !is_number?(it) })
+  end
 
   end

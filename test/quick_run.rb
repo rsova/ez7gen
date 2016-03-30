@@ -18,29 +18,28 @@ profile=[]
 groups = []
 el_ids = []
 
+brckts = "{}"
+
 ms.each {|a|
   p a
-  m = '{'<< a.first() << '}'
+  m = a.first()
+  brckt = brckts[0]
+  is_g = (m.include?(brckt))
+  m = brckts.clone.insert(1,m)
 
-    is_g = (m.scan('{').size > 1)?true:false
-
-    if(groups.size == 0)
+  if(groups.empty?)
       structure.sub!(m, idx.to_s)
-      # if (is_g) then groups << m end
     else
       if(groups.last().include?(m))
         groups.last().sub!(m, idx.to_s)
-        if(!(groups.last().scan('{').size > 1)) #done resolving a group
-          rslvd = groups.last()
-          eid = el_ids.last()
-          encodedSegments[eid] = rslvd
+        if((groups.last().include?(brckt))) #done resolving a group
+           encodedSegments[el_ids.last()] = groups.last()
           groups.pop()
           el_ids.pop()
         end
       else
         structure.sub!(m, idx.to_s)
       end
-      # if (is_g) then groups << m end
     end
 
   if (is_g)
@@ -51,7 +50,82 @@ ms.each {|a|
   encodedSegments << m
   idx +=1
 }
-puts '_______________________'
+puts '_________1_____________'
+
+ms = structure.scan(/(?=\[((?:[^\[\]]*|\[\g<1>\])*)\])/)
+#m = puts o19.scan(/[^{}]*|[^\[\]]*/)
+p ms
+brckts = "[]"
+
+ms.each {|a|
+  p a
+  m = a.first()
+  brckt = brckts[0]
+  is_g = (m.include?(brckt))
+  m = brckts.clone.insert(1,m)
+
+  if(groups.empty?)
+    structure.sub!(m, idx.to_s)
+  else
+    if(groups.last().include?(m))
+      groups.last().sub!(m, idx.to_s)
+      if((groups.last().include?(brckt))) #done resolving a group
+        encodedSegments[el_ids.last()] = groups.last()
+        groups.pop()
+        el_ids.pop()
+      end
+    else
+      structure.sub!(m, idx.to_s)
+    end
+  end
+
+  if (is_g)
+    groups << m
+    el_ids << idx
+  end
+
+  encodedSegments << m
+  idx +=1
+}
+
+
+# ms.each {|a|
+#   p a
+#
+#   is_g = (a.scan('[').size > 1)?true:false
+#   m = '['<< a.first() << ']'
+#
+#   if(groups.size == 0)
+#     structure.sub!(m, idx.to_s)
+#     # if (is_g) then groups << m end
+#   else
+#     if(groups.last().include?(m))
+#       groups.last().sub!(m, idx.to_s)
+#       if(!(groups.last().scan('[').size > 1)) #done resolving a group
+#       # if(is_group_resolved(groups.last(), '[')) #done resolving a group
+#         rslvd = groups.last()
+#         eid = el_ids.last()
+#         encodedSegments[eid] = rslvd
+#         groups.pop()
+#         el_ids.pop()
+#       end
+#     else
+#       structure.sub!(m, idx.to_s)
+#     end
+#     # if (is_g) then groups << m end
+#   end
+#
+#   if (is_g)
+#     groups << m
+#     el_ids << idx
+#   end
+#
+#   encodedSegments << m
+#   idx +=1
+# }
+
+
+puts '_________2_____________'
 
 encodedSegments.each{|es|
   puts es
@@ -67,8 +141,8 @@ encodedSegments.each{|es|
 
       ms.each {|a|
         p a
+        is_g = (a.scan('[').size > 1)?true:false
         m = '['<< a.first() << ']'
-        is_g = (m.scan('[').size > 1)?true:false
 
         if(groups.size == 0)
           es.sub!(m, idx.to_s)
@@ -77,6 +151,7 @@ encodedSegments.each{|es|
           if(groups.last().include?(m))
             groups.last().sub!(m, idx.to_s)
             if(!(groups.last().scan('[').size > 1)) #done resolving a group
+            #if(is_group_resolved(groups.last(), '[')) #done resolving a group
               rslvd = groups.last()
               eid = el_ids.last()
               encodedSegments[eid] = rslvd
@@ -105,6 +180,11 @@ encodedSegments.each{|es|
 puts groups
 puts encodedSegments
 puts structure
+
+# def self.is_group_resolved(seg, group_token)
+#   (seg.scan(group_token).size > 1)?true:false
+# end
+
 exit
 
 
