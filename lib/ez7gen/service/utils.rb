@@ -66,3 +66,9 @@ module Utils
     (str =~ @@regex)?true:false
   end
 end
+
+class OptionalGroup < Array
+end
+
+class RepeatingGroup < Array
+end

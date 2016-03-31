@@ -1,6 +1,36 @@
 require 'yaml'
 # require 'pathname'
 
+# class OrderedList < List
+# end
+# a = OArray.new([1,2])
+# puts a.class
+# puts a.instance_of?(OArray)
+# puts a.instance_of?(Array)
+# a.each{|it| puts it}
+# bool =  a.kind_of?(Array) # => true
+# p bool
+#
+# a = OptArray.new([1,2])
+# puts a.class
+# puts a.instance_of?(OptArray)
+# puts a.instance_of?(Array)
+# a.each{|it| puts it}
+# bool =  a.kind_of?(Array) # => true
+# p bool
+
+b = a.reverse.class # => Array
+
+# a = [1,2,3,4]
+# b = OArray.new
+# puts b.class
+
+exit
+
+p 'abc'[0]
+p 'abcdef'[-1]
+exit
+
 # a = '{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~10~]~11~]~}'
 # e = a.scan(/(?=\[((?:[^\[\]]*|\[\g<1>\])*)\])/)
 # p e

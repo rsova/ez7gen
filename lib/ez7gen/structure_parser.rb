@@ -1,4 +1,7 @@
+require_relative 'service/utils'
 class StructureParser
+include Utils
+
   attr_accessor :encodedSegments, :idx
   # attr_reader :regExOp, :regExRep
 
@@ -17,6 +20,16 @@ class StructureParser
   def process_struct(struct)
     process_opt_groups(struct)
     process_rep_groups(struct)
+
+    @encodedSegments.each{|seg|
+     if((seg.scan(StructureParser::REGEX_OP).size()>1 || seg.scan(StructureParser::REGEX_REP).size()>1))
+       p seg
+       seg[0] = ''
+       seg[-1] = ''
+       p seg
+       process_struct(seg)
+     end
+    }
   end
 
   def process_opt_groups(struct)
@@ -86,4 +99,47 @@ class StructureParser
     @prnths.clone.insert(1, m)
   end
 
+  def handle_groups(segments)
+
+    #find groups and decode the group elements and put them in array
+    segments.map!{ |seg|
+      # groupFound, tokens = is_group?(seg)
+      if(is_complex_group?(seg))
+        # seg = seg.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
+
+        #substitute encoded group elements with values
+        if(!seg.instance_of? Array)
+          seg = seg.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
+        end
+
+        if(seg.instance_of? Array)
+        # tokens.map!{|it| is_number?(it)? encodedSegments[it.to_i]: it}.flatten
+          seg.map!{|it| is_number?(it)? @encodedSegments[it.to_i]: it}.flatten
+        else
+          is_number?(seg)? @encodedSegments[it.to_i] : seg
+        end
+
+        handle_groups(seg)
+      else
+        seg
+      end
+    }
+    return segments
+  end
+
+  # check if encoded segment is a group
+  def is_complex_group?(encoded)
+
+    # ignore arrays, they have already been resolved
+    return  false if(encoded.instance_of?(Array))
+
+    # group has an index of encoded optional element
+    isGroupWithEncodedElements = ((encoded =~ /\~\d+\~/) || is_number?(encoded)) ? true: false
+
+    # # group consists of all required elements {~MRG~PV1~}, so look ahead for that
+    # subGroups = encoded.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
+    # isGroupOfRequiredElements = (subGroups.size > 1)? true: false
+    #
+    # return (isGroupWithEncodedElements || isGroupOfRequiredElements), subGroups
+  end
 end
