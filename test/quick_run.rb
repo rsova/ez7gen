@@ -1,6 +1,12 @@
 require 'yaml'
+require_relative '../lib/ez7gen/service/utils'
+include Utils
 # require 'pathname'
 
+
+a = [1,2,3,3,3,3,3,5,6,6,7,8]
+p a[2..-2]
+p a
 # class OrderedList < List
 # end
 # a = OArray.new([1,2])
@@ -11,7 +17,7 @@ require 'yaml'
 # bool =  a.kind_of?(Array) # => true
 # p bool
 #
-# a = OptArray.new([1,2])
+a = OptionalGroup.new()
 # puts a.class
 # puts a.instance_of?(OptArray)
 # puts a.instance_of?(Array)
@@ -19,16 +25,17 @@ require 'yaml'
 # bool =  a.kind_of?(Array) # => true
 # p bool
 
-b = a.reverse.class # => Array
+# b = a.reverse.class # => Array
 
 # a = [1,2,3,4]
 # b = OArray.new
 # puts b.class
+a.concat([1,2,3,3,4])
+p a
 
-exit
 
-p 'abc'[0]
-p 'abcdef'[-1]
+p 'abc'[0..1]
+p 'abcdef'[-2..-1]
 exit
 
 # a = '{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~10~]~11~]~}'

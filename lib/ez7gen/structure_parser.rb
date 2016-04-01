@@ -21,14 +21,40 @@ include Utils
     process_opt_groups(struct)
     process_rep_groups(struct)
 
-    @encodedSegments.each{|seg|
-     if((seg.scan(StructureParser::REGEX_OP).size()>1 || seg.scan(StructureParser::REGEX_REP).size()>1))
-       p seg
+
+
+    @encodedSegments.map!{|seg|
+
+     if((seg.scan(REGEX_OP).size()>1 || seg.scan(REGEX_REP).size()>1))
+       # p seg
+       # seg[0] = ''
+       # seg[-1] = ''
+       # p seg
+       # process_struct(seg)
+
+       groupMarker = nil
+       if(seg[0] == PRNTHS_OP[0])
+         groupMarker = OptionalGroup.new()
+       elsif(seg[0] == PRNTHS_REP)
+         groupMarker = RepeatingGroup.new()
+       end
+
+       #trim to strip group marker and ~ folloing it from the front and back
+       # if(groupMarker)
+       # seg = seg[1..-1]
+       # p seg
+       # # end
        seg[0] = ''
        seg[-1] = ''
-       p seg
+       # p seg
        process_struct(seg)
+
+       # wrap group if marker exists
+       (groupMarker)?groupMarker.mark(seg):seg
+     else
+        seg
      end
+
     }
   end
 
@@ -41,7 +67,7 @@ include Utils
   end
 
   def process(structure, regEx, prnths)
-    @prnths = prnths
+    # @prnths = prnths
     # prnth_mtch = @prnths[0]
 
     groups = []
@@ -52,7 +78,8 @@ include Utils
 
     ms.each {|a|
 
-      m = parenthesis_wrap(a.first())
+      # m = parenthesis_wrap(a.first())
+      m = Marker.mark(a.first(), prnths)
 
       # is_g = (m.include?(prnth_mtch))
 
@@ -63,7 +90,7 @@ include Utils
         if(groups.last().include?(m))
           # groups.last().sub!(m, @idx.to_s)
           replace(groups.last, m)
-          if(!is_group?(groups.last)) #done resolving a group
+          if(!is_group?(groups.last, prnths)) #done resolving a group
             # @encodedSegments[el_ids.last()] = groups.last()
             groups.pop()
             # el_ids.pop()
@@ -74,7 +101,7 @@ include Utils
         end
       end
 
-      if (is_group?(m))
+      if (is_group?(m, prnths))
         groups << m
         # el_ids << @idx
       end
@@ -85,9 +112,10 @@ include Utils
   end
 
   # check if there are inside elements of sub-groups defined by the same parenthesis
-  def is_group?(str)
-    prnth_mtch = @prnths[0]
-    (str.scan(prnth_mtch).size > 1)# outside paranthesis expected
+  def is_group?(str, prnths)
+    # prnth_mtch = @prnths[0]
+    # prnth_mtch = prnths[0]
+    (str.scan(prnths[0]).size > 1)# outside paranthesis expected
   end
 
   def replace(str, m)
@@ -141,5 +169,33 @@ include Utils
     # isGroupOfRequiredElements = (subGroups.size > 1)? true: false
     #
     # return (isGroupWithEncodedElements || isGroupOfRequiredElements), subGroups
+  end
+end
+
+class OptionalGroup < Array
+  def mark(group, prnths=StructureParser::PRNTHS_REP)
+    if (group.kind_of?(String))
+      Marker.mark(group, prnths)
+    elsif(group.kind_of?(Array))
+      OptionalGroup.new(group)
+    end
+  end
+end
+
+class RepeatingGroup < Array
+  # include Marker
+  def mark(group, prnths=StructureParser::PRNTHS_REP)
+    if (group.kind_of?(String))
+      Marker.mark(group, prnths)
+    elsif(group.kind_of?(Array))
+      RepeatingGroup.new(group)
+    end
+  end
+end
+
+# module Marker
+class Marker
+  def self.mark(group, prnths)
+      prnths.clone().insert(1,group)
   end
 end
