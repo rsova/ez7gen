@@ -110,8 +110,8 @@ class StructureParserTest < Test::Unit::TestCase
     parser.idx=parser.encodedSegments.size
 
 
-    # parser.handle_groups(["~17~19~21~{~22~OBR~23~24~{~OBX~25~}~}~"])
-    parser.handle_groups(arr)
+    seg = parser.handle_groups(["[~PV1~5~]"])
+    # parser.handle_groups(arr)
     #   groupFound, tokens = is_group?(el)
     #   if(groupFound)
     #     parser.process_struct(el)
@@ -121,6 +121,19 @@ class StructureParserTest < Test::Unit::TestCase
     p parser.encodedSegments
   end
 
+  def test_handle_groups_optMult
+    arr = ["[~{~NTE~}~]", "[~PID~2~3~4~6~9~10~]", "[~PD1~]", "[~{~NTE~}~]", "[~PV1~5~]", "[~PV2~]", "[~{~IN1~7~8~}~]", "[~IN2~]", "[~IN3~]", "[~GT1~]", "[~{~AL1~}~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", "[~{~OBX~15~}~]", "[~{~NTE~}~]", "{~17~19~21~31~}", "[~PID~18~]", "[~PD1~]", "[~PV1~20~]", "[~PV2~]", "[~{~AL1~}~]", "[~ORC~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~NTE~}~]", "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]", "{~ORC~OBR~11~12~13~14~30~26~27~28~}", "{~16~}", "{~22~OBR~23~24~32~}", "{~OBX~25~}"]
+    # MSH~0~1~29
+    parser = StructureParser.new()
+
+    parser.encodedSegments = arr
+    parser.idx=parser.encodedSegments.size
+
+
+    seg = parser.handle_groups(["[~PID~2~3~4~6~9~10~]"])
+    p seg
+
+  end
   def test_is_group_resolved
     arr = ["[~{~NTE~}~]", "[~PID~2~3~4~6~9~10~]", "[~PD1~]", "[~{~NTE~}~]", "[~PV1~5~]", "[~PV2~]", "[~{~IN1~7~8~}~]", "[~IN2~]", "[~IN3~]", "[~GT1~]", "[~{~AL1~}~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", "[~{~OBX~15~}~]", "[~{~NTE~}~]", "[~17~19~21~{~22~OBR~23~24~{~OBX~25~}~}~]", "[~PID~18~]", "[~PD1~]", "[~PV1~20~]", "[~PV2~]", "[~{~AL1~}~]", "[~ORC~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~NTE~}~]", "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]", "{~ORC~OBR~11~12~13~14~30~26~27~28~}", "{~16~}"]
 
@@ -161,10 +174,35 @@ class StructureParserTest < Test::Unit::TestCase
     assert !a.instance_of?(Array)
     a.each{|it| puts it}
     assert a.kind_of?(Array) # => true
+    a = Marker.gen("[~IN1~7~8~]")
+    assert_equal OptionalGroup, a.class
+    a = Marker.gen("{~IN1~7~8~}")
+    assert_equal RepeatingGroup, a.class
+    a = Marker.gen("[~{~IN1~7~8~}~]")
+    assert_equal OptionalGroup, a.class
+    # "[~{~IN1~7~8~}~]"
 
     #[["PID", "[~PD1~]"], ["PV1", "[~PV2~]"], "[~{~AL1~}~]", ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]]]
     #segment can be an array
   end
+
+  def test_markers
+
+    a = Marker.gen("[~IN1~7~8~]")
+    assert_equal OptionalGroup, a.class
+
+    a = Marker.gen("[~{~IN1~7~8~}~]")
+    assert_equal OptionalGroup, a.class
+    assert_equal RepeatingGroup, a[0].class
+
+    p a
+  end
+  def test_groups_markers
+
+   o = OptionalGroup.new('~IN1~7~8~')
+   p o
+  end
+
 #  def handle_groups(segments)
 #
 #    #find groups and decode the group elements and put them in array

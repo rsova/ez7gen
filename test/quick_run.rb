@@ -3,10 +3,43 @@ require_relative '../lib/ez7gen/service/utils'
 include Utils
 # require 'pathname'
 
+ a = Array.new([1,2,3])
 
-a = [1,2,3,3,3,3,3,5,6,6,7,8]
-p a[2..-2]
+OPT =1
+MLT =2
+x = /\[~([^\[\]]*)~\]|\{~([^\[\]]*)~}/
+opt = /\[~([^\[\]]*)~\]/
+mult= /\{~([^\[\]]*)~}/
+
+r = Regexp.union(opt, mult)
+# r = /(\[~([^\[\]]*)\~])|(\{~([^\[\]]*)\~})/
+# r = /(?<opt>\[~([^\[\]]*)~\])|(?<mult>\{~([^\[\]]*)~})/
+# r = /(\[~([^\[\]]*)~\])|(\{~([^\[\]]*)~})/
+# opt =/\[~([^\[\]]*)\~]/
+# mult=//
+# /\$(?<dollars>\d+)\.(?<cents>\d+)/.match("$3.67"
+# a = ("[~{~IN1~7~8~}~]").split(r)
+a = ("[~{~IN1~7~8~}~]").match(r)
 p a
+p a[OPT]
+p a[MLT]
+# p a.names
+# p a['opt']
+# p a['mult']
+# p a['mult']
+# a = ("{~IN1~7~8~}").match(r)
+# p a.opt
+# p a.mult
+# a = ("IN1~7~8").match(r)
+# p a.opt
+# p a.mult
+
+#first match is opt, second is mult
+#
+exit
+a = [1,2,3,3,3,3,3,5,6,6,7,8]
+p a
+p a['opt']
 # class OrderedList < List
 # end
 # a = OArray.new([1,2])
@@ -17,7 +50,7 @@ p a
 # bool =  a.kind_of?(Array) # => true
 # p bool
 #
-a = OptionalGroup.new()
+# a = OptionalGroup.new()
 # puts a.class
 # puts a.instance_of?(OptArray)
 # puts a.instance_of?(Array)
@@ -30,10 +63,11 @@ a = OptionalGroup.new()
 # a = [1,2,3,4]
 # b = OArray.new
 # puts b.class
-a.concat([1,2,3,3,4])
-p a
-
-
+# a.concat([1,2,3,3,4])
+p a[2..-2]
+p "abcdef".slice(0,-1)
+a = '{xyz}'
+p "#{a[0]+a[-1]}"
 p 'abc'[0..1]
 p 'abcdef'[-2..-1]
 exit

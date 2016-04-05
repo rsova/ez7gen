@@ -131,23 +131,27 @@ include Utils
 
     #find groups and decode the group elements and put them in array
     segments.map!{ |seg|
+    #@encodedSegments.map!{ |seg|
       # groupFound, tokens = is_group?(seg)
       if(is_complex_group?(seg))
         # seg = seg.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
-
+        # groupMarker = Marker.gen(seg)
+        seg = Marker.gen(seg)
         #substitute encoded group elements with values
-        if(!seg.instance_of? Array)
-          seg = seg.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
-        end
+        # if(!seg.instance_of? Array)
+        # if(!seg.kind_of? Array)
+        #   seg = seg.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
+        # end
 
-        if(seg.instance_of? Array)
+        if(seg.kind_of? Array)
         # tokens.map!{|it| is_number?(it)? encodedSegments[it.to_i]: it}.flatten
-          seg.map!{|it| is_number?(it)? @encodedSegments[it.to_i]: it}.flatten
+        #   seg.map!{|it| is_number?(it)? @encodedSegments[it.to_i]: it}.flatten
+          seg.resolve(@encodedSegments)
         else
           is_number?(seg)? @encodedSegments[it.to_i] : seg
         end
-
-        handle_groups(seg)
+        # seg = groupMarker.mark(seg)
+        seg = handle_groups(seg)
       else
         seg
       end
@@ -172,30 +176,99 @@ include Utils
   end
 end
 
-class OptionalGroup < Array
+class Group < Array
+include Utils
+  def initialize(*several_variants)
+    if(several_variants!= nil && several_variants[0].instance_of?(String))
+      several_variants = several_variants[0].split('~').delete_if{|it| it.empty?}
+    end
+    super(several_variants)
+  end
+
+  def resolve(encodedSegments)
+    # self.each{|sub|
+      self.map!{|it| is_number?(it)? encodedSegments[it.to_i]: it}.flatten
+    # }
+  end
+end
+
+class OptionalGroup < Group
+  # def initialize(*several_variants)
+  #   if(several_variants!= nil && several_variants[0].instance_of?(String))
+  #     several_variants = several_variants[0].split('~').delete_if{|it| it.empty?}
+  #   end
+  #   super(several_variants)
+  # end
+
   def mark(group, prnths=StructureParser::PRNTHS_REP)
     if (group.kind_of?(String))
-      Marker.mark(group, prnths)
+      group = Marker.mark(group, prnths)
     elsif(group.kind_of?(Array))
-      OptionalGroup.new(group)
+      group = OptionalGroup.new(group)
     end
   end
 end
 
-class RepeatingGroup < Array
+class RepeatingGroup < Group
   # include Marker
   def mark(group, prnths=StructureParser::PRNTHS_REP)
     if (group.kind_of?(String))
-      Marker.mark(group, prnths)
+      group = Marker.mark(group, prnths)
     elsif(group.kind_of?(Array))
-      RepeatingGroup.new(group)
+      group = RepeatingGroup.new(group)
     end
   end
 end
 
-# module Marker
+# class OptRepeatingGroup < Array
+#   # include Marker
+#   def mark(group, prnths=StructureParser::PRNTHS_REP)
+#     if (group.kind_of?(String))
+#       group = Marker.mark(group, prnths)
+#     elsif(group.kind_of?(Array))
+#       group = RepeatingGroup.new(group)
+#     end
+#   end
+# end
+
+# class Marker
 class Marker
+# include Utils
+
+  # def self.gen(str)
+  #   prhths = "#{str[0]+str[-1]}"
+  #   if(prhths == StructureParser::PRNTHS_REP)
+  #     RepeatingGroup.new()
+  #   elsif(prhths == StructureParser::PRNTHS_OP)
+  #
+  #     OptionalGroup.new()
+  #   end
+  # end
+  @@opt = /\[~([^\[\]]*)~\]/
+  @@rpt= /\{~([^\[\]]*)~}/
+  @@match_regex = Regexp.union(@@opt, @@rpt)
+  OPT = 1
+  RPT = 2
+
+  def self.gen(segment)
+    marker = nil
+
+    mtch = segment.match(@@match_regex)
+    return nil if(!mtch)
+    # seg = (mtch[Marker:OPT])?mtch[Marker:OPT]:mtch[Marker:RPT]
+    if(mtch[Marker::OPT])
+      marker = OptionalGroup.new(mtch[Marker::OPT])
+      # check for optional repeating
+      if(repMarker = Marker.gen(mtch[Marker::OPT]))
+       marker= marker.clear.push(repMarker)
+      end
+    elsif(mtch[Marker::RPT])
+      marker = RepeatingGroup.new(mtch[Marker::RPT])
+    end
+    return marker
+  end
+
   def self.mark(group, prnths)
-      prnths.clone().insert(1,group)
+      group = prnths.clone().insert(1,group)
   end
 end
