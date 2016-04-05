@@ -143,7 +143,7 @@ include Utils
         #   seg = seg.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
         # end
 
-        if(seg.kind_of? Array)
+        if(seg.kind_of? Array)# TODO: Refactor Not needed
         # tokens.map!{|it| is_number?(it)? encodedSegments[it.to_i]: it}.flatten
         #   seg.map!{|it| is_number?(it)? @encodedSegments[it.to_i]: it}.flatten
           seg.resolve(@encodedSegments)
@@ -187,8 +187,15 @@ include Utils
 
   def resolve(encodedSegments)
     # self.each{|sub|
-      self.map!{|it| is_number?(it)? encodedSegments[it.to_i]: it}.flatten
-    # }
+      p self
+      self.map!{|sub|
+        if(sub.kind_of?(Array))
+          sub.map!{|it|is_number?(it)? encodedSegments[it.to_i]: it}.flatten
+        else
+           is_number?(sub)? encodedSegments[sub.to_i]: sub
+        end
+      }.flatten
+    p self
   end
 end
 
@@ -200,36 +207,25 @@ class OptionalGroup < Group
   #   super(several_variants)
   # end
 
-  def mark(group, prnths=StructureParser::PRNTHS_REP)
-    if (group.kind_of?(String))
-      group = Marker.mark(group, prnths)
-    elsif(group.kind_of?(Array))
-      group = OptionalGroup.new(group)
-    end
-  end
+  # def mark(group, prnths=StructureParser::PRNTHS_REP)
+  #   if (group.kind_of?(String))
+  #     group = Marker.mark(group, prnths)
+  #   elsif(group.kind_of?(Array))
+  #     group = OptionalGroup.new(group)
+  #   end
+  # end
 end
 
 class RepeatingGroup < Group
   # include Marker
-  def mark(group, prnths=StructureParser::PRNTHS_REP)
-    if (group.kind_of?(String))
-      group = Marker.mark(group, prnths)
-    elsif(group.kind_of?(Array))
-      group = RepeatingGroup.new(group)
-    end
-  end
+  # def mark(group, prnths=StructureParser::PRNTHS_REP)
+  #   if (group.kind_of?(String))
+  #     group = Marker.mark(group, prnths)
+  #   elsif(group.kind_of?(Array))
+  #     group = RepeatingGroup.new(group)
+  #   end
+  # end
 end
-
-# class OptRepeatingGroup < Array
-#   # include Marker
-#   def mark(group, prnths=StructureParser::PRNTHS_REP)
-#     if (group.kind_of?(String))
-#       group = Marker.mark(group, prnths)
-#     elsif(group.kind_of?(Array))
-#       group = RepeatingGroup.new(group)
-#     end
-#   end
-# end
 
 # class Marker
 class Marker
@@ -254,13 +250,14 @@ class Marker
     marker = nil
 
     mtch = segment.match(@@match_regex)
-    return nil if(!mtch)
+    return nil if(!mtch)# done if nothing to mark
+
     # seg = (mtch[Marker:OPT])?mtch[Marker:OPT]:mtch[Marker:RPT]
     if(mtch[Marker::OPT])
       marker = OptionalGroup.new(mtch[Marker::OPT])
       # check for optional repeating
-      if(repMarker = Marker.gen(mtch[Marker::OPT]))
-       marker= marker.clear.push(repMarker)
+      if(repeatingSubMarker = Marker.gen(mtch[Marker::OPT]))
+       marker= marker.clear.push(repeatingSubMarker)
       end
     elsif(mtch[Marker::RPT])
       marker = RepeatingGroup.new(mtch[Marker::RPT])
@@ -268,7 +265,11 @@ class Marker
     return marker
   end
 
-  def self.mark(group, prnths)
-      group = prnths.clone().insert(1,group)
-  end
+  # def self.match_for_complex_group(segment)
+  #   mtch = segment.match(@@match_regex)
+  # end
+
+  # def self.mark(group, prnths)
+  #     group = prnths.clone().insert(1,group)
+  # end
 end
