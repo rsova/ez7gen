@@ -490,8 +490,20 @@ class MessageFactoryTest < Test::Unit::TestCase
   def test_RSP_K24
     ver= '2.4.HL7'
     event='RSP_K24'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
+    # hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
     saveMsg(event, hl7, ver)
+    puts hl7
+    # # assert(hl7 != nil)
+    # refute_nil(hl7)
+  end
+
+  # 32	RSP_K24		                            MSH;MSA;ERR;QAK;QPD;PID;DSC
+  def test_OMG_O19
+    ver= '2.4.HL7'
+    event='OMG_O19'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    # saveMsg(event, hl7, ver)
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)

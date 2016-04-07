@@ -36,6 +36,8 @@ p a[MLT]
 
 #first match is opt, second is mult
 #
+p (1..5).to_a.sample
+# p [1,2,3,3,3,3,3,5,6,6,7,8].sample()
 exit
 a = [1,2,3,3,3,3,3,5,6,6,7,8]
 p a

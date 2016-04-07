@@ -3,6 +3,7 @@ require 'date'
 require 'benchmark'
 
 require_relative 'type_aware_field_generator'
+require_relative '../../../lib/ez7gen/structure_parser'
 require_relative 'utils'
 
 class SegmentGenerator
@@ -64,6 +65,44 @@ class SegmentGenerator
     return msh
   end
 
+  # refactoring
+  def gen(message, segment, parsers, isGroup)
+    if(segment.kind_of?(Array))
+      generate_group(message, segment, parsers)
+    else
+      generate_seg(message, segment, parsers, isGroup)
+    end
+  end
+
+  def generate_seg(message,segment, parsers, isGroup)
+    choiceParser = parsers[get_type_by_name(segment)]
+    attributes = choiceParser.get_segment_structure(get_name_without_base(segment))
+    generate(message, segment, attributes, isGroup)
+  end
+
+  # generate test message segment metadata
+  def generate_group( message,  group,  parsers)
+    #if Group Repeating
+    isRep = group.instance_of?(RepeatingGroup)
+    group.each{|seg|
+        gen(message, seg, parsers,true)
+    }
+    # isRep = segment_repeated?(segment)
+    # segmentName = get_segment_name(segment)
+    #
+    # # decide if segment needs to repeat and how many times
+    # totalReps = (isRep)? @@random.rand(1.. @@maxReps) : 1 # between 1 and maxReps
+    #
+    # totalReps.times do |i|
+    #   # seg = (isRep)?message."get$segmentName"(i) :message."get$segmentName"()
+    #   message << generate_segment(segmentName, attributes, (totalReps>1)?i+1 :((isGroup)?1:nil))
+    # end
+
+    return message
+  end
+
+  # end
+
   # generate test message segment metadata
   def generate( message,  segment,  attributes, isGroup=false)
 
@@ -71,15 +110,20 @@ class SegmentGenerator
     segmentName = get_segment_name(segment)
 
     # decide if segment needs to repeat and how many times
-    totalReps = (isRep)? @@random.rand(1.. @@maxReps) : 1 # between 1 and maxReps
+    # totalReps = (isRep)? @@random.rand(1.. @@maxReps) : 1 # between 1 and maxReps
+    totalReps = (isRep)? (1..@@maxReps).to_a.sample: 1
 
     totalReps.times do |i|
       # seg = (isRep)?message."get$segmentName"(i) :message."get$segmentName"()
-      message << generate_segment(segmentName, attributes, (totalReps>1)?i+1 :((isGroup)?1:nil))
+      #groupId = (totalReps>1)?i+1 :((isGroup)?1:nil)
+      sharedGroupId = (isGroup)? i+1: nil
+      message << generate_segment(segmentName, attributes, sharedGroupId)
     end
 
     return message
   end
+
+
 
   # #generate test message using
   # def generateSegmentFields( segment, attributes)
@@ -91,22 +135,33 @@ class SegmentGenerator
     segment.include?("~{")
   end
 
-  # generate a segment using Ensamble schema
+  # generate a segment using Ensemble schema
   def generate_segment(segmentName, attributes, idx=nil)
     elements = generate_segment_elements(segmentName, attributes)
 
     # overrite ids for sequential repeating segments use ids
-    idx_fld = elements[1]
-    #skip fields which are not numbers
-    idx_fld = (idx && is_number?(idx_fld)) ? idx.to_s : elements[1]
-
-    #Set ID field in PID.1, AL1.1, DG1.1 etc. should have number 1 for the first occurrence of the segment.
-    if(!idx && ['PID','AL1','DG1'].include?(segmentName))
-      idx_fld =1
-    end
+      handle_set_ids(elements, idx, segmentName)
 
     #generate segment using elements
     HL7::Message::Segment::Default.new(elements)
+  end
+
+  def handle_set_ids(elements, idx, segmentName)
+    set_id_fld = elements[1]
+    #skip fields which are not IDs/numbers
+    # idx_fld = (idx && is_number?(idx_fld)) ? idx.to_s : elements[1]
+    # if(idx && is_number?(set_id_fld)) then set_id_fld = idx.to_s end
+
+    #set-id field sometimes set to specific non numeric value, keep it, otherwise override if needed
+    if(idx && (set_id_fld.empty? || is_number?(set_id_fld)))
+      elements[1] = idx.to_s
+    end
+
+    #Set ID field in PID.1, AL1.1, DG1.1 etc. should have number 1 for the first occurrence of the segment.
+    if (['PID', 'AL1', 'DG1'].include?(segmentName)) then
+      elements[1] =(idx) ? idx.to_s : 1
+    end
+
   end
 
   # use attributes to generate contents of a specific segment

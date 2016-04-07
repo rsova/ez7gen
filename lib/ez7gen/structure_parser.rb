@@ -17,96 +17,109 @@ include Utils
     @idx = 0
   end
 
+  # takes a message structure and converts it into array of processed segments, ready for building hl7
+  def process_segments(struct)
+    process_struct(struct)
+    handle_groups(@encodedSegments)
+  end
+
   def process_struct(struct)
+    #process original segments and build encoded segmets
     process_opt_groups(struct)
     process_rep_groups(struct)
 
-
-
+    #check encoded segments to find and process segments which have subgroups
     @encodedSegments.map!{|seg|
+     #has more subgroups
+     if(has_subgroups?(seg))
+       groupMarker = Marker.whatGroup?(seg)
 
-     if((seg.scan(REGEX_OP).size()>1 || seg.scan(REGEX_REP).size()>1))
-       # p seg
-       # seg[0] = ''
-       # seg[-1] = ''
-       # p seg
-       # process_struct(seg)
+       #unwrap for recurcive processing
+       process_struct(groupMarker.unwrap(seg))
 
-       groupMarker = nil
-       if(seg[0] == PRNTHS_OP[0])
-         groupMarker = OptionalGroup.new()
-       elsif(seg[0] == PRNTHS_REP)
-         groupMarker = RepeatingGroup.new()
-       end
+       # wrap group back to restore the original segment
+       groupMarker.mark(seg)
+       # (groupMarker)?groupMarker.mark(seg):seg
 
-       #trim to strip group marker and ~ folloing it from the front and back
-       # if(groupMarker)
-       # seg = seg[1..-1]
-       # p seg
-       # # end
-       seg[0] = ''
-       seg[-1] = ''
-       # p seg
-       process_struct(seg)
-
-       # wrap group if marker exists
-       (groupMarker)?groupMarker.mark(seg):seg
      else
         seg
      end
-
     }
   end
 
-  def process_opt_groups(struct)
-    process(struct, REGEX_OP, PRNTHS_OP)
+  # handle groups in the array of ecnoded segments
+  # groups and subgroups organized as Arrays with specific Markers
+  def handle_groups(segments)
+    #find groups and decode the group elements and put them in array
+    segments.map!{ |seg|
+      if(is_complex_group?(seg))
+        # Generate marker for the segment to preserve specifics of type of the group - opt. vs repeating.
+        seg = Marker.gen(seg)
+
+        if(seg.kind_of? Array)# TODO: Refactor, check not needed?
+          seg.resolve(@encodedSegments)
+        else
+          is_number?(seg)? @encodedSegments[it.to_i] : seg
+        end
+        handle_groups(seg)
+        # seg = handle_groups(seg)
+      else
+        seg
+      end
+    }
+    return segments
   end
 
+  # checks a segment for subgroups
+  def has_subgroups?(seg)
+    (seg.scan(REGEX_OP).size()>1 || seg.scan(REGEX_REP).size()>1)
+  end
+
+  # process groups with optional markers - []
+  def process_opt_groups(struct)
+      process(struct, REGEX_OP, PRNTHS_OP)
+  end
+
+  # process groups with repeating markers - {}
   def process_rep_groups(struct)
     process(struct, REGEX_REP, PRNTHS_REP)
   end
 
+  #process group using regular expression and specific pharenthesis as markers
   def process(structure, regEx, prnths)
-    # @prnths = prnths
-    # prnth_mtch = @prnths[0]
-
     groups = []
-    # el_ids = []
 
-    ms = structure.scan(regEx)
-    # ms = structure.scan(/(?=\{((?:[^{}]*|\{\g<1>\})*)\})/)
+    # brake up the structure into array of subgroups
+    # using recursive regEx
+    subGroups = structure.scan(regEx)
 
-    ms.each {|a|
+    subGroups.each {|subGroup|
 
       # m = parenthesis_wrap(a.first())
-      m = Marker.mark(a.first(), prnths)
+      # group boundaries - parenthesis, stripped by regEx
+      # put the parenthesis back for processing
+      groupElement = Marker.mark(subGroup.first(), prnths)
 
-      # is_g = (m.include?(prnth_mtch))
-
+      # process an array of matches and substitute subgroups
       if(groups.empty?)
-        replace(structure, m)
-        # structure.sub!(m, @idx.to_s)
+        replace(structure, groupElement)
       else
-        if(groups.last().include?(m))
-          # groups.last().sub!(m, @idx.to_s)
-          replace(groups.last, m)
+        if(groups.last().include?(groupElement))
+          replace(groups.last, groupElement)
           if(!is_group?(groups.last, prnths)) #done resolving a group
-            # @encodedSegments[el_ids.last()] = groups.last()
             groups.pop()
-            # el_ids.pop()
           end
         else
-          # structure.sub!(m, @idx.to_s)
-          replace(structure, m)
+          replace(structure, groupElement)
         end
       end
 
-      if (is_group?(m, prnths))
-        groups << m
-        # el_ids << @idx
+      if (is_group?(groupElement, prnths))
+        groups << groupElement
       end
 
-      @encodedSegments << m
+      # resolved group added to encoded segments
+      @encodedSegments << groupElement
       @idx +=1
   }
   end
@@ -127,38 +140,6 @@ include Utils
     @prnths.clone.insert(1, m)
   end
 
-  def handle_groups(segments)
-
-    #find groups and decode the group elements and put them in array
-    segments.map!{ |seg|
-    #@encodedSegments.map!{ |seg|
-      # groupFound, tokens = is_group?(seg)
-      if(is_complex_group?(seg))
-        # seg = seg.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
-        # groupMarker = Marker.gen(seg)
-        seg = Marker.gen(seg)
-        #substitute encoded group elements with values
-        # if(!seg.instance_of? Array)
-        # if(!seg.kind_of? Array)
-        #   seg = seg.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
-        # end
-
-        if(seg.kind_of? Array)# TODO: Refactor Not needed
-        # tokens.map!{|it| is_number?(it)? encodedSegments[it.to_i]: it}.flatten
-        #   seg.map!{|it| is_number?(it)? @encodedSegments[it.to_i]: it}.flatten
-          seg.resolve(@encodedSegments)
-        else
-          is_number?(seg)? @encodedSegments[it.to_i] : seg
-        end
-        # seg = groupMarker.mark(seg)
-        seg = handle_groups(seg)
-      else
-        seg
-      end
-    }
-    return segments
-  end
-
   # check if encoded segment is a group
   def is_complex_group?(encoded)
 
@@ -166,7 +147,8 @@ include Utils
     return  false if(encoded.instance_of?(Array))
 
     # group has an index of encoded optional element
-    isGroupWithEncodedElements = ((encoded =~ /\~\d+\~/) || is_number?(encoded)) ? true: false
+    # isGroupWithEncodedElements = ((encoded =~ /\~\d+\~/) || is_number?(encoded)) ? true: false
+    isGroupWithEncodedElements = (encoded =~ /\~\d+\~/) ? true: false
 
     # # group consists of all required elements {~MRG~PV1~}, so look ahead for that
     # subGroups = encoded.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
@@ -186,8 +168,7 @@ include Utils
   end
 
   def resolve(encodedSegments)
-    # self.each{|sub|
-      p self
+      # p self
       self.map!{|sub|
         if(sub.kind_of?(Array))
           sub.map!{|it|is_number?(it)? encodedSegments[it.to_i]: it}.flatten
@@ -195,51 +176,44 @@ include Utils
            is_number?(sub)? encodedSegments[sub.to_i]: sub
         end
       }.flatten
-    p self
+    # p self
+  end
+
+  #unwrap outer parenthesis.
+  # this works vs. seg = seg[1...-1] TODO: Refactor?
+  def unwrap(seg)
+    seg[0] = ''
+    seg[-1] = ''
+    return seg
   end
 end
 
 class OptionalGroup < Group
-  # def initialize(*several_variants)
-  #   if(several_variants!= nil && several_variants[0].instance_of?(String))
-  #     several_variants = several_variants[0].split('~').delete_if{|it| it.empty?}
-  #   end
-  #   super(several_variants)
-  # end
 
-  # def mark(group, prnths=StructureParser::PRNTHS_REP)
-  #   if (group.kind_of?(String))
-  #     group = Marker.mark(group, prnths)
-  #   elsif(group.kind_of?(Array))
-  #     group = OptionalGroup.new(group)
-  #   end
-  # end
+  def mark(group, prnths=StructureParser::PRNTHS_REP)
+    if (group.kind_of?(String))
+      group = Marker.mark(group, prnths)
+    elsif(group.kind_of?(Array))
+      group = OptionalGroup.new(group)
+    end
+  end
 end
 
 class RepeatingGroup < Group
   # include Marker
-  # def mark(group, prnths=StructureParser::PRNTHS_REP)
-  #   if (group.kind_of?(String))
-  #     group = Marker.mark(group, prnths)
-  #   elsif(group.kind_of?(Array))
-  #     group = RepeatingGroup.new(group)
-  #   end
-  # end
+  def mark(group, prnths=StructureParser::PRNTHS_REP)
+    if (group.kind_of?(String))
+      group = Marker.mark(group, prnths)
+    elsif(group.kind_of?(Array))
+      group = RepeatingGroup.new(group)
+    end
+  end
 end
 
 # class Marker
 class Marker
 # include Utils
 
-  # def self.gen(str)
-  #   prhths = "#{str[0]+str[-1]}"
-  #   if(prhths == StructureParser::PRNTHS_REP)
-  #     RepeatingGroup.new()
-  #   elsif(prhths == StructureParser::PRNTHS_OP)
-  #
-  #     OptionalGroup.new()
-  #   end
-  # end
   @@opt = /\[~([^\[\]]*)~\]/
   @@rpt= /\{~([^\[\]]*)~}/
   @@match_regex = Regexp.union(@@opt, @@rpt)
@@ -250,7 +224,7 @@ class Marker
     marker = nil
 
     mtch = segment.match(@@match_regex)
-    return nil if(!mtch)# done if nothing to mark
+    return nil if(!mtch)# done if nothing to match
 
     # seg = (mtch[Marker:OPT])?mtch[Marker:OPT]:mtch[Marker:RPT]
     if(mtch[Marker::OPT])
@@ -269,7 +243,18 @@ class Marker
   #   mtch = segment.match(@@match_regex)
   # end
 
-  # def self.mark(group, prnths)
-  #     group = prnths.clone().insert(1,group)
-  # end
+  def self.mark(group, prnths)
+      group = prnths.clone().insert(1,group)
+  end
+
+  def self.whatGroup?(segment)
+    mtch = segment.match(@@match_regex)
+    return nil if(!mtch)# done if nothing to match
+
+    if(mtch[Marker::OPT])
+      OptionalGroup.new()
+     elsif(mtch[Marker::RPT])
+       RepeatingGroup.new()
+    end
+  end
 end

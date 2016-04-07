@@ -1,5 +1,6 @@
 require 'ruby-hl7'
 require_relative '../ez7gen/profile_parser'
+require_relative '../ez7gen/structure_parser'
 require_relative '../ez7gen/service/segment_generator'
 require_relative '../ez7gen/service/segment_picker'
 require_relative '../ez7gen/service/utils'
@@ -66,6 +67,74 @@ class MessageFactory
 
       segmentGenerator.generate(@hl7Msg, segment, attributes, in_group?(groups, idx))
     }
+    return @hl7Msg
+    # (asArray)? (arr=[]; hl7Msg.each{|it| arr << it.to_s.gsub("\r","\n")}; arr): hl7Msg.to_s.gsub("\r","\n")
+  end
+
+  def generate1()
+    # loadFactor = nil
+
+    parser = ProfileParser.new(@attributes_hash)
+    structrue = parser.get_message_definition()
+
+    structParser = StructureParser.new()
+    # struct = 'MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~OBR~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~{~AL1~}~]~{~[~ORC~]~OBR~[~{~NTE~}~]~[~CTD~]~{~OBX~[~{~NTE~}~]~}~}~]~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
+    structParser.process_segments(structrue)
+    profile = structrue
+    encoded_segments = structParser.encodedSegments
+
+    # profile, encoded_segments = parser.get_segments()
+
+    #Get list of non required segments randomly selected for this build
+    # segment_picker = SegmentPicker.new(profile, encoded_segments, @loadFactor)
+    # segments = segment_picker.pick_segments()
+    segments = encoded_segments
+    # set primary parser for base schema
+    parsers = {PRIMARY => parser}
+
+    # if this is a custom Z segment, add the base parser
+    # if(version !='2.4')
+    # check if current version is not the base version, find the base version and add use it as a base parser
+    isBase = @version_store.find{|s| s[:std] == @std}[:profiles].find{|p| p[:doc] == @version}[:std]
+    if(!isBase)
+      # find version for base standard version - standard with 'std' attribute
+      v_base =  @version_store.find{|s| s[:std] == @std}[:profiles].find{|p| p[:std]!=nil}[:doc]
+      v_base_hash = @attributes_hash.clone()
+      v_base_hash[:version] = v_base
+      v_base_hash[:isBase] = true
+      parsers[BASE]= ProfileParser.new(v_base_hash)
+    end
+    # configure a segment generator
+    # segmentGenerator = SegmentGenerator.new(@version, @event, parsers)
+    baseVerion = @std
+    segmentGenerator = SegmentGenerator.new(baseVerion, @event, parsers)
+
+    # msh segment configured by hand, due to many requirements that only apply for this segment
+    @hl7Msg = HL7::Message.new
+    @hl7Msg << segmentGenerator.init_msh()
+
+    # groups are elements that come together; they are  stored as Array
+    # if groups are present among the segments, identify ranges of the groups
+    # groups = find_Groups(segments)
+
+    # then collection of segments can flatten
+    # segments.flatten!
+
+    #iterate over selected segments and build the entire message
+    segments.each.with_index(){ |segment, idx|
+      p segment
+      segmentGenerator.gen(@hl7Msg, segment,parsers, false)
+
+      # if(segment.kind_of?(Array))
+      #   segmentGenerator.generate_segment_group(@hl7Msg, segment, parsers)
+      # end
+      #
+      # choiceParser = parsers[get_type_by_name(segment)]
+      # attributes = choiceParser.get_segment_structure(get_name_without_base(segment))
+      #
+      # segmentGenerator.generate(@hl7Msg, segment, attributes, false)
+    }
+
     return @hl7Msg
     # (asArray)? (arr=[]; hl7Msg.each{|it| arr << it.to_s.gsub("\r","\n")}; arr): hl7Msg.to_s.gsub("\r","\n")
   end

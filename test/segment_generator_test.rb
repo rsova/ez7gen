@@ -508,6 +508,22 @@ class SegmentGeneratorTest < Test::Unit::TestCase
     end
     puts @segmentGen.generate(msg,'ZMH', attributes)
   end
+
+  def test_segment_is_optional_group
+
+    parsers = { 'primary'=> @@pp }
+    msg = HL7::Message.new
+    msg << @segmentGen.init_msh
+    segments = []
+    segments << "[~{~NTE~}~]"
+    segments <<  OptionalGroup.new().concat(["PID", "[~PD1~]", "[~{~NTE~}~]", OptionalGroup.new().concat(["PV1", "[~PV2~]"]), OptionalGroup.new(RepeatingGroup.new().concat(["IN1", "[~IN2~]", "[~IN3~]"])), "[~GT1~]", "[~{~AL1~}~]"])
+
+    segments.each.with_index(){ |segment, idx|
+      @segmentGen.gen(msg,segment,parsers, false)
+    }
+    puts msg
+  end
+
   # piece => 1
   # description => Set ID - AL1
   # datatype => base:CE

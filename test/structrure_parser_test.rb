@@ -65,24 +65,28 @@ class StructureParserTest < Test::Unit::TestCase
     # regEx = parser.regExRep
     # parser.process(struct, regEx, '{}')
     parser.process_struct(struct)
-    p parser.encodedSegments
-    p struct
+    assert_equal ["[~ERR~]", "[~PID~2~3~]", "[~PD1~]", "[~QRI~]", "[~DSC~]", "{~1~}"], parser.encodedSegments
+    # p parser.encodedSegments
+    assert_equal "MSH~MSA~0~QAK~QPD~5~4", struct
+    #p struct
 
     # ["[~ERR~]", "[~PD1~]", "[~QRI~]", "[~PID~1~2~]", "{~3~}", "[~DSC~]"]
     #["MSH", "MSA", 0, "QAK", "QPD", 4, 5]
   end
 
  def test_process_struct
+   #omg_019
    parser = StructureParser.new()
    struct = 'MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~OBR~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~{~AL1~}~]~{~[~ORC~]~OBR~[~{~NTE~}~]~[~CTD~]~{~OBX~[~{~NTE~}~]~}~}~]~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
    # regEx = parser::REGEX_REP
    # parser.process(struct, regEx, parser::PRNTHS_REP)# {}
    parser.process_struct(struct)
-   # assert_equal 17,parser.idx
-   # assert_equal 17,parser.encodedSegments.size
+   assert_equal 33,parser.idx
+   assert_equal 33,parser.encodedSegments.size
    p parser.encodedSegments
    puts struct
-
+   expected =["[~{~NTE~}~]", "[~PID~2~3~4~6~9~10~]", "[~PD1~]", "[~{~NTE~}~]", "[~PV1~5~]", "[~PV2~]", "[~{~IN1~7~8~}~]", "[~IN2~]", "[~IN3~]", "[~GT1~]", "[~{~AL1~}~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", "[~{~OBX~15~}~]", "[~{~NTE~}~]", "{~17~19~21~31~}", "[~PID~18~]", "[~PD1~]", "[~PV1~20~]", "[~PV2~]", "[~{~AL1~}~]", "[~ORC~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~NTE~}~]", "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]", "{~ORC~OBR~11~12~13~14~30~26~27~28~}", "{~16~}", "{~22~OBR~23~24~32~}", "{~OBX~25~}"]
+   assert_equal expected, parser.encodedSegments
    # ["[~{~NTE~}~]", "[~PID~2~3~4~6~9~10~]", "[~PD1~]", "[~{~NTE~}~]", "[~PV1~5~]", "[~PV2~]", "[~{~IN1~7~8~}~]", "[~IN2~]", "[~IN3~]", "[~GT1~]", "[~{~AL1~}~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", "[~{~OBX~15~}~]", "[~{~NTE~}~]", "[~17~19~21~{~22~OBR~23~24~{~OBX~25~}~}~]", "[~PID~18~]", "[~PD1~]", "[~PV1~20~]", "[~PV2~]", "[~{~AL1~}~]", "[~ORC~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~NTE~}~]", "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]", "{~ORC~OBR~11~12~13~14~30~26~27~28~}", "{~16~}"]
 
  end
@@ -91,12 +95,17 @@ class StructureParserTest < Test::Unit::TestCase
     struct = "MSH~EVN~PID~[~PD1~]~[~{~ROL~}~]~[~{~NK1~}~]~PV1~[~PV2~]~[~{~ROL~}~]~[~{~DB1~}~]~[~{~OBX~}~]~[~{~AL1~}~]~[~{~DG1~}~]~[~DRG~]~[~{~PR1~[~{~ROL~}~]~}~]~[~{~GT1~}~]~[~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]~[~ACC~]~[~UB1~]~[~UB2~]~[~PDA~]"
     parser = StructureParser.new()
     parser.process_struct(struct)
-    # assert_equal 17,parser.idx
-    # assert_equal 17,parser.encodedSegments.size
+    assert_equal 21, parser.idx
+    assert_equal 21, parser.encodedSegments.size
     p parser.encodedSegments
-    puts struct
-  # ["MSH", "EVN", "PID", 0, 1, 2, "PV1", 3, 4, 5, 6, 7, 8, 9, 11, 12, 16, 17, 18, 19, 20]
-  # ["[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~ROL~}~]", "[~{~PR1~10~}~]", "[~{~GT1~}~]", "[~IN2~]", "[~{~IN3~}~]", "[~{~ROL~}~]", "[~{~IN1~13~14~15~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
+    # p struct
+    # expected = ["MSH", "EVN", "PID", 0, 1, 2, "PV1", 3, 4, 5, 6, 7, 8, 9, 11, 12, 16, 17, 18, 19, 20]
+    assert_equal "MSH~EVN~PID~0~1~2~PV1~3~4~5~6~7~8~9~10~12~13~17~18~19~20", struct
+    expected = ["[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~PR1~11~}~]", "[~{~ROL~}~]", "[~{~GT1~}~]", "[~{~IN1~14~15~16~}~]", "[~IN2~]", "[~{~IN3~}~]", "[~{~ROL~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
+    assert_equal expected, parser.encodedSegments
+
+    # old = ["[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~ROL~}~]", "[~{~PR1~10~}~]", "[~{~GT1~}~]", "[~IN2~]", "[~{~IN3~}~]", "[~{~ROL~}~]", "[~{~IN1~13~14~15~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
+    # assert_equal expected, parser.encodedSegments
   end
 
   def test_handle_groups
@@ -109,16 +118,11 @@ class StructureParserTest < Test::Unit::TestCase
     parser.encodedSegments = arr
     parser.idx=parser.encodedSegments.size
 
-
-    seg = parser.handle_groups(["[~PV1~5~]"])
-    # parser.handle_groups(arr)
-    #   groupFound, tokens = is_group?(el)
-    #   if(groupFound)
-    #     parser.process_struct(el)
-    #   end
-    #
-    # }
+    seg = parser.handle_groups(arr)
     p parser.encodedSegments
+    expected = ["[~{~NTE~}~]", ["PID", "[~PD1~]", "[~{~NTE~}~]", ["PV1", "[~PV2~]"], [["IN1", "[~IN2~]", "[~IN3~]"]], "[~GT1~]", "[~{~AL1~}~]"], "[~PD1~]", "[~{~NTE~}~]", ["PV1", "[~PV2~]"], "[~PV2~]", [["IN1", "[~IN2~]", "[~IN3~]"]], "[~IN2~]", "[~IN3~]", "[~GT1~]", "[~{~AL1~}~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", [["OBX", "[~{~NTE~}~]"]], "[~{~NTE~}~]", [["PID", "[~PD1~]"], ["PV1", "[~PV2~]"], "[~{~AL1~}~]", ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]]], ["PID", "[~PD1~]"], "[~PD1~]", ["PV1", "[~PV2~]"], "[~PV2~]", "[~{~AL1~}~]", "[~ORC~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~NTE~}~]", "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]", ["ORC", "OBR", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", [["OBX", "[~{~NTE~}~]"]], [[["PID", "[~PD1~]"], ["PV1", "[~PV2~]"], "[~{~AL1~}~]", ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]]]], "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]"], [[["PID", "[~PD1~]"], ["PV1", "[~PV2~]"], "[~{~AL1~}~]", ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]]]], ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]], ["OBX", "[~{~NTE~}~]"]]
+    assert_equal expected, parser.encodedSegments
+
   end
 
   def test_handle_groups_optMult
@@ -129,67 +133,131 @@ class StructureParserTest < Test::Unit::TestCase
     parser.encodedSegments = arr
     parser.idx=parser.encodedSegments.size
 
-
     seg = parser.handle_groups(["[~PID~2~3~4~6~9~10~]"])
-    p seg
-
+    assert_equal( [["PID", "[~PD1~]", "[~{~NTE~}~]", ["PV1", "[~PV2~]"], [["IN1", "[~IN2~]", "[~IN3~]"]], "[~GT1~]", "[~{~AL1~}~]"]], seg)
+    # p seg
   end
+
   def test_is_group_resolved
     arr = ["[~{~NTE~}~]", "[~PID~2~3~4~6~9~10~]", "[~PD1~]", "[~{~NTE~}~]", "[~PV1~5~]", "[~PV2~]", "[~{~IN1~7~8~}~]", "[~IN2~]", "[~IN3~]", "[~GT1~]", "[~{~AL1~}~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", "[~{~OBX~15~}~]", "[~{~NTE~}~]", "[~17~19~21~{~22~OBR~23~24~{~OBX~25~}~}~]", "[~PID~18~]", "[~PD1~]", "[~PV1~20~]", "[~PV2~]", "[~{~AL1~}~]", "[~ORC~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~NTE~}~]", "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]", "{~ORC~OBR~11~12~13~14~30~26~27~28~}", "{~16~}"]
 
-
     seg = "[~17~19~21~{~22~OBR~23~24~{~OBX~25~}~}~]"
-    p seg.scan(StructureParser::REGEX_OP).size()
-    p seg.scan(StructureParser::REGEX_REP).size()
+    assert_equal 1, seg.scan(StructureParser::REGEX_OP).size()
+    assert_equal 2, seg.scan(StructureParser::REGEX_REP).size()
 
-    p (seg.scan(StructureParser::REGEX_OP).size()>1 || seg.scan(StructureParser::REGEX_REP).size()>1)
+    assert (seg.scan(StructureParser::REGEX_OP).size()>1 || seg.scan(StructureParser::REGEX_REP).size()>1)
     #   p 'yes'
     # end
       #
 
-    arr.each{|seg|
-     p seg
-     p seg =~ StructureParser::REGEX_OP
-     p seg.scan(StructureParser::REGEX_OP)
-     # p seg.match(StructureParser::REGEX_OP)
+    # arr.each{|seg|
+    #  p seg
+    #  p seg =~ StructureParser::REGEX_OP
+    #  p seg.scan(StructureParser::REGEX_OP)
+    #  # p seg.match(StructureParser::REGEX_OP)
+    #
+    #  p seg =~ StructureParser::REGEX_REP
+    #  p seg.scan(StructureParser::REGEX_REP)
+    #  # p seg.match(StructureParser::REGEX_OP)
+    #  if(seg.scan(StructureParser::REGEX_OP).size()>1 || seg.scan(StructureParser::REGEX_REP).size()>1)
+    #    p 'yes'
+    #  else
+    #    p 'no'
+    #  end
+    #
+    #  p '--'
+    # }
+  end
 
-     p seg =~ StructureParser::REGEX_REP
-     p seg.scan(StructureParser::REGEX_REP)
-     # p seg.match(StructureParser::REGEX_OP)
-     if(seg.scan(StructureParser::REGEX_OP).size()>1 || seg.scan(StructureParser::REGEX_REP).size()>1)
-       p 'yes'
-     else
-       p 'not'
-     end
+  def test_process_segments_ORM_O01
+    parser = StructureParser.new()
+    # struct='MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~[~&lt;~OBR~|~RQD~|~RQ1~|~RXO~|~ODS~|~ODT~&gt;~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~]~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
+    # struct='MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~[~<~OBR~|~RQD~|~RQ1~|~RXO~|~ODS~|~ODT~>~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~]~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
+    struct='MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~[~OBR~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~]~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
+    parser.process_segments(struct)
+    assert_equal 'MSH~0~1~20', struct
+    # expected = ["[~{~NTE~}~]", ["PID", "[~PD1~]", "[~{~NTE~}~]", ["PV1", "[~PV2~]"], [["IN1", "[~IN2~]", "[~IN3~]"]], "[~GT1~]", "[~{~AL1~}~]"], "[~PD1~]", "[~{~NTE~}~]", ["PV1", "[~PV2~]"], "[~PV2~]", [["IN1", "[~IN2~]", "[~IN3~]"]], "[~IN2~]", "[~IN3~]", "[~GT1~]", "[~{~AL1~}~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", [["OBX", "[~{~NTE~}~]"]], "[~{~NTE~}~]", [["PID", "[~PD1~]"], ["PV1", "[~PV2~]"], "[~{~AL1~}~]", ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]]], ["PID", "[~PD1~]"], "[~PD1~]", ["PV1", "[~PV2~]"], "[~PV2~]", "[~{~AL1~}~]", "[~ORC~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~NTE~}~]", "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]", ["ORC", "OBR", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", [["OBX", "[~{~NTE~}~]"]], [[["PID", "[~PD1~]"], ["PV1", "[~PV2~]"], "[~{~AL1~}~]", ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]]]], "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]"], [[["PID", "[~PD1~]"], ["PV1", "[~PV2~]"], "[~{~AL1~}~]", ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]]]], ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]], ["OBX", "[~{~NTE~}~]"]]
+    # assert_equal expected, parser.encodedSegments
+   p parser.encodedSegments
+  end
 
-     p '--'
-    }
+  def test_process_segments_RDE_O11
+    parser = StructureParser.new()
+    struct='MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~[~RXO~[~{~NTE~}~]~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~RXE~{~RXR~}~[~{~RXC~}~]~[~{~OBX~[~{~NTE~}~]~}~]~[~{~CTI~}~]~}'
+    # parser.process_segments(struct)
+    # assert_equal 'MSH~0~1~19', struct
+    # z=parser.process_struct(struct)
+    # p z
+    # ["[~{~NTE~}~]", "[~PID~2~3~4~6~9~10~]", "[~PD1~]", "[~{~NTE~}~]", "[~PV1~5~]", "[~PV2~]", "[~{~IN1~7~8~}~]", "[~IN2~]", "[~IN3~]", "[~GT1~]", "[~{~AL1~}~]", "[~RXO~12~{~RXR~}~13~]", "[~{~NTE~}~]", "[~{~RXC~}~14~]", "[~{~NTE~}~]", "[~{~RXC~}~]", "[~{~OBX~17~}~]", "[~{~NTE~}~]", "[~{~CTI~}~]", "{~ORC~11~RXE~20~15~16~18~}", "{~RXR~}"]
+    # parser.handle_groups()
+    # assert_equal expected, parser.encodedSegments
+  end
 
+  def test_process_segments_OMG_O19
+    #omg_019
+    parser = StructureParser.new()
+    struct = 'MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~OBR~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~{~AL1~}~]~{~[~ORC~]~OBR~[~{~NTE~}~]~[~CTD~]~{~OBX~[~{~NTE~}~]~}~}~]~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
+    parser.process_segments(struct)
+    assert_equal 'MSH~0~1~29', struct
+    expected = ["[~{~NTE~}~]", ["PID", "[~PD1~]", "[~{~NTE~}~]", ["PV1", "[~PV2~]"], [["IN1", "[~IN2~]", "[~IN3~]"]], "[~GT1~]", "[~{~AL1~}~]"], "[~PD1~]", "[~{~NTE~}~]", ["PV1", "[~PV2~]"], "[~PV2~]", [["IN1", "[~IN2~]", "[~IN3~]"]], "[~IN2~]", "[~IN3~]", "[~GT1~]", "[~{~AL1~}~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", [["OBX", "[~{~NTE~}~]"]], "[~{~NTE~}~]", [["PID", "[~PD1~]"], ["PV1", "[~PV2~]"], "[~{~AL1~}~]", ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]]], ["PID", "[~PD1~]"], "[~PD1~]", ["PV1", "[~PV2~]"], "[~PV2~]", "[~{~AL1~}~]", "[~ORC~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~NTE~}~]", "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]", ["ORC", "OBR", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", [["OBX", "[~{~NTE~}~]"]], [[["PID", "[~PD1~]"], ["PV1", "[~PV2~]"], "[~{~AL1~}~]", ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]]]], "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]"], [[["PID", "[~PD1~]"], ["PV1", "[~PV2~]"], "[~{~AL1~}~]", ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]]]], ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]], ["OBX", "[~{~NTE~}~]"]]
+    assert_equal expected, parser.encodedSegments
   end
 
   def test_is_complex_group
+
     a = OptionalGroup.new([1,2,3])
     assert_equal(OptionalGroup, a.class)
     assert a.instance_of?(OptionalGroup)
     assert !a.instance_of?(Array)
     a.each{|it| puts it}
     assert a.kind_of?(Array) # => true
-    a = Marker.gen("[~IN1~7~8~]")
-    assert_equal OptionalGroup, a.class
-    a = Marker.gen("{~IN1~7~8~}")
-    assert_equal RepeatingGroup, a.class
-    a = Marker.gen("[~{~IN1~7~8~}~]")
-    assert_equal OptionalGroup, a.class
-    # "[~{~IN1~7~8~}~]"
 
+    group = "[~IN1~7~8~]"
+    a = Marker.gen(group)
+    assert_equal OptionalGroup, a.class
+    a = Marker.whatGroup?(group)
+    assert_equal OptionalGroup, a.class
+
+    group = "{~IN1~7~8~}"
+    a = Marker.gen(group)
+    assert_equal RepeatingGroup, a.class
+    a = Marker.whatGroup?(group)
+    assert_equal RepeatingGroup, a.class
+
+    group = "[~{~IN1~7~8~}~]"
+    a = Marker.gen(group)
+    assert_equal OptionalGroup, a.class
+    a = Marker.whatGroup?(group)
+    assert_equal OptionalGroup, a.class
+
+    group = "~IN1~7~8~"
+    a = Marker.gen(group)
+    assert_nil a
+    a = Marker.whatGroup?(group)
+    assert_nil a
+
+    # group ='[~{~NTE~}~]' # not a group!
+    # a = Marker.gen(group)
+    # assert_nil a
+    # a = Marker.whatGroup?(group)
+    # assert_nil a
+
+      # "[~{~IN1~7~8~}~]"
+
+    # a = Marker.gen("[~17~19~21~{~22~OBR~23~24~{~OBX~25~}~}~]")
+    # p a
+    # a = Marker.new("[~17~19~21~{~22~OBR~23~24~{~OBX~25~}~}~]")
+    # p a
     #[["PID", "[~PD1~]"], ["PV1", "[~PV2~]"], "[~{~AL1~}~]", ["[~ORC~]", "OBR", "[~{~NTE~}~]", "[~CTD~]", ["OBX", "[~{~NTE~}~]"]]]
     #segment can be an array
   end
 
   def test_markers
-
     a = Marker.gen("[~IN1~7~8~]")
     assert_equal OptionalGroup, a.class
+
+    a = Marker.gen("{~IN1~7~8~}")
+    assert_equal RepeatingGroup, a.class
 
     a = Marker.gen("[~{~IN1~7~8~}~]")
     assert_equal OptionalGroup, a.class
@@ -197,10 +265,16 @@ class StructureParserTest < Test::Unit::TestCase
 
     p a
   end
-  def test_groups_markers
 
+  def test_groups_markers
    o = OptionalGroup.new('~IN1~7~8~')
-   p o
+   assert_equal 3, o.size
+
+   o = OptionalGroup.new().concat(['a','b','c'])
+   assert_equal 3, o.size
+
+   RepeatingGroup.new('~IN1~7~8~')
+   assert_equal 3, o.size
   end
 
 #  def handle_groups(segments)
