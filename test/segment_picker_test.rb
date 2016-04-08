@@ -245,10 +245,21 @@ include Utils
 
   def test_pickSegments
     # profile = ["MSH", "EVN", "PID", "[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "PV1", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~PR1~10~}~]", "[~{~GT1~}~]", "[~{~IN1~13~14~15~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
-    profile = [ "[~{~PR1~10~}~]"]
+    # profile = [ "[~{~PR1~10~}~]"]
     # [~{~PR1~[~{~ROL~}~]~}~] = {RP1 ~ ROL}
     segments = @segmentPicker.pick_segments
     p segments
+
+    teardown
+    setup()
+
+    segments = @segmentPicker.pick_segments1()
+    p segments
+    # p @profile
+    # idxs = @segmentPicker.pick_segment_idx_to_build
+    # p idxs
+    # segments = idxs.map{|it| is_number?(@profile[it])?@segmentPicker.encodedSegments[@profile[it]]: @profile[it]}
+    # p segments
   end
 
   #refactoring

@@ -25,9 +25,30 @@ class SegmentPicker
   end
 
   #refactoring
-  def pick_segment_idx_to_build
-    candidates = get_required_segment_idxs()
+
+  # Get list of segments for test message generation.
+  # MSH is populated with quick generation, skip it here.
+  def pick_segments1()
+    idxs = pick_segment_idx_to_build
+    segmentCandidates = idxs.map{|it| is_number?(@profile[it])?@encodedSegments[@profile[it]]: @profile[it]}
+    return segmentCandidates - @@MSH_SEGMENTS
   end
+
+  def pick_segment_idx_to_build
+    reqIdxs= get_required_segment_idxs()
+    #profile indexes - reqired = optional?
+    optIdxs = get_optional_segment_idxs(reqIdxs)
+    (reqIdxs+optIdxs).sort.uniq
+  end
+
+  def get_optional_segment_idxs(regiredIdxs)
+    # range of indexes
+    allIdxs = (0...@profile.size).to_a
+    optIdxs = allIdxs- regiredIdxs
+    count = get_load_candidates_count(optIdxs.size())
+    optIdxs.sample(count)
+  end
+
   # get segments that will always be build, include z segments
   def get_required_segment_idxs()
     # profile already has all required segments identified
@@ -38,20 +59,6 @@ class SegmentPicker
     (rs+zs).sort.uniq
   end
 
-  # select optional segments and add them to required in correct order
-  def pick_optional_segment_idxs()
-
-    optSegmentIdxs = @profile.select{|it| !is_required?(it)}
-    # optSegmentIdxs = segmentsToBuildArray.each_index.select{|i| segmentsToBuildArray[i] == nil}
-    count = get_load_candidates_count(optSegmentIdxs.size())
-
-    # get indexes of optional segments
-    ids = optSegmentIdxs.sample(count)
-
-    # add selected optional segments to required, maintain order
-    ids.each{|id| @profile[@profile.index(id)]= @encodedSegments[id]}
-
-  end
   #end refactoring
 
   # Get list of segments for test message generation.
