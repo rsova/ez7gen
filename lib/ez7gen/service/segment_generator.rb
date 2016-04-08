@@ -87,7 +87,7 @@ class SegmentGenerator
     group.each{|seg|
         gen(message, seg, parsers,true)
     }
-    # isRep = segment_repeated?(segment)
+    # isRep = is_segment_repeating?(segment)
     # segmentName = get_segment_name(segment)
     #
     # # decide if segment needs to repeat and how many times
@@ -106,7 +106,7 @@ class SegmentGenerator
   # generate test message segment metadata
   def generate( message,  segment,  attributes, isGroup=false)
 
-    isRep = segment_repeated?(segment)
+    isRep = is_segment_repeating?(segment)
     segmentName = get_segment_name(segment)
 
     # decide if segment needs to repeat and how many times
@@ -131,7 +131,7 @@ class SegmentGenerator
   #   generate_segment(segmentName, attributes)
   # end
 
-  def segment_repeated?(segment)
+  def is_segment_repeating?(segment)
     segment.include?("~{")
   end
 

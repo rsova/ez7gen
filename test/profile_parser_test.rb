@@ -74,6 +74,9 @@ class ProfileParserTest < Test::Unit::TestCase
     results = parser.process_segments(struct)
     puts results
     assert_equal(2, results.size())
+    # "MSH~EVN~PID~0~1~2~PV1~3~4~5~6~7~8~9~11~12~16~17~18~19~20"
+    # ["[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~ROL~}~]", ["PR1", "[~{~ROL~}~]"], "[~{~GT1~}~]", "[~IN2~]", "[~{~IN3~}~]", "[~{~ROL~}~]", ["IN1", "[~IN2~]", "[~{~IN3~}~]", "[~{~ROL~}~]"], "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
+
 
     profile_idx = 0
     segments_idx = 1

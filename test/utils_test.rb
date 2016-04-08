@@ -36,13 +36,6 @@ class UtilsTest < Test::Unit::TestCase
 		p kpr.compact
 	end
 
-	def test_isZ
-		assert is_z?('[~ZMH~]')
-		assert is_z?('[~{~ZMH~}~]')
-		assert !is_z?('[~{~AL1~}~]')
-		assert !is_z?('[~{~AZL1~}~]')
-	end
-
 	def test_blank
 		assert blank?(nil)
 		assert blank?('')

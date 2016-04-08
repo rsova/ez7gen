@@ -38,10 +38,12 @@ p a[MLT]
 #
 p (1..5).to_a.sample
 # p [1,2,3,3,3,3,3,5,6,6,7,8].sample()
+
+a = [1,2,3,3,3,3,3,5,6,6,7,9,2,1]
+z = a.each_index.select{|i| a[i] >3}
+p (a + [4,8,11] ).sort
+# p a
 exit
-a = [1,2,3,3,3,3,3,5,6,6,7,8]
-p a
-p a['opt']
 # class OrderedList < List
 # end
 # a = OArray.new([1,2])

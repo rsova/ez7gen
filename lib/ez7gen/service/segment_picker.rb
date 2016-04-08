@@ -1,4 +1,5 @@
 require_relative 'utils'
+require_relative '../../ez7gen/structure_parser'
 
 class SegmentPicker
   include Utils
@@ -6,30 +7,52 @@ class SegmentPicker
   attr_accessor :encodedSegments
   attr_accessor :profile
 
-  # private List segments
-  # private String profile
-
   # load 50 percent of optional segments
   @@LOAD_FACTOR = 0.5
   @@MSH_SEGMENTS = ['MSH', "#{BASE_INDICATOR}MSH"]
   #@@MSH_SEGMENTS = ['MSH', "base:MSH"]
 
-  # static final Random random = new Random()
   @@random = Random.new
 
   def initialize(profile, encodedSegments, loadFactor=nil)
     @profile = profile
     @encodedSegments = encodedSegments
+    #refactoring
+    @candidates =[]
 
     @loadFactor = loadFactor
     @loadFactor||=@@LOAD_FACTOR # set to default if not specified or set to nil
   end
 
-  # def initialize(segmentsMap)
-  #   @encodedSegments = segmentsMap[:segments]
-  #   @profile = segmentsMap[:profile].split('~')
-  #   @profile.map!{|it| (is_number?(it))?it.to_i : it}
-  # end
+  #refactoring
+  def pick_segment_idx_to_build
+    candidates = get_required_segment_idxs()
+  end
+  # get segments that will always be build, include z segments
+  def get_required_segment_idxs()
+    # profile already has all required segments identified
+    rs = @profile.each_index.select{|it| is_required1?(@profile[it])}
+    # promote z segments to required, and add them as required, keeping their index
+    zs = @profile.each_index.select{|it| is_z1?(@profile[it])}
+    # return indexes
+    (rs+zs).sort.uniq
+  end
+
+  # select optional segments and add them to required in correct order
+  def pick_optional_segment_idxs()
+
+    optSegmentIdxs = @profile.select{|it| !is_required?(it)}
+    # optSegmentIdxs = segmentsToBuildArray.each_index.select{|i| segmentsToBuildArray[i] == nil}
+    count = get_load_candidates_count(optSegmentIdxs.size())
+
+    # get indexes of optional segments
+    ids = optSegmentIdxs.sample(count)
+
+    # add selected optional segments to required, maintain order
+    ids.each{|id| @profile[@profile.index(id)]= @encodedSegments[id]}
+
+  end
+  #end refactoring
 
   # Get list of segments for test message generation.
   # MSH is populated with quick generation, skip it here.
@@ -99,10 +122,50 @@ class SegmentPicker
   end
 
   # check is segment is required
+  def is_required1?(encoded)
+    check = false
+    #segment not encoded
+    if(!is_number?(encoded))
+      check = true
+    else
+      # look at encoded segment for the index
+      seg = @encodedSegments[encoded]
+      # Required segments left not encoded as strings, optional and groups encoded - indexes of encoded segments
+      if(seg.instance_of?RepeatingGroup)
+        check = true
+      elsif(seg.instance_of?String)
+        check = (seg[0] == '{' ) # signifies repeating segment
+      end
+    end
+
+    return check
+   end
+
   def is_required?(encoded)
-    # Required segments left not encoded as strings, optional and groups encoded as numbers
+  # Required segments left not encoded as strings, optional and groups encoded as numbers
     !is_number?(encoded)
   end
 
 
+  def is_z?(segment)
+    segment=~/\~Z/
+  end
+
+  #refactoring
+  def is_z1?(encoded)
+  segment = ''
+    if(is_number?(encoded))
+        # look at encoded segment for the index
+        segment = @encodedSegments[encoded]
+        #if segment happen to be a group, flatten it into string
+        if(segment.kind_of?Array)
+          segment = segment.flatten().to_s
+        end
+    else
+      #segment was not encoded to an index, use it as is
+      segment = encoded
+    end
+
+     (segment =~ /\~Z/)? true: false
+  end
 end
