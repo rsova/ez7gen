@@ -38,6 +38,10 @@ class MessageFactoryTest < Test::Unit::TestCase
     # MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
+    puts "\n------------------------------------\n"
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    puts hl7
+    # hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
 
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -56,7 +60,9 @@ class MessageFactoryTest < Test::Unit::TestCase
     # MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
-
+    puts "\n------------------------------------\n"
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
   end
@@ -72,6 +78,10 @@ class MessageFactoryTest < Test::Unit::TestCase
     hl7 =MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: loadFactor}).generate()
     puts hl7
     saveMsg(event, hl7, ver)
+
+    puts "\n------------------------------------\n"
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    puts hl7
 
     # x = []
     # hl7.each{|it| x << ({name: (it.instance_variable_get(:@elements)[0]), seg:  it.to_s})}
@@ -99,6 +109,9 @@ class MessageFactoryTest < Test::Unit::TestCase
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
+    puts "\n------------------------------------\n"
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
   end
@@ -110,6 +123,9 @@ class MessageFactoryTest < Test::Unit::TestCase
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
+    puts "\n------------------------------------\n"
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
   end
@@ -120,6 +136,9 @@ class MessageFactoryTest < Test::Unit::TestCase
     event='ADT_A05'
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
+    puts hl7
+    puts "\n------------------------------------\n"
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
@@ -491,22 +510,110 @@ class MessageFactoryTest < Test::Unit::TestCase
     ver= '2.4.HL7'
     event='RSP_K24'
     # hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
+    puts hl7
+    puts "\n------------------------------------\n"
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
     puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
   end
 
-  # 32	RSP_K24		                            MSH;MSA;ERR;QAK;QPD;PID;DSC
+  # Pharmacy messages
   def test_OMG_O19
     ver= '2.4.HL7'
     event='OMG_O19'
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
     # saveMsg(event, hl7, ver)
     puts hl7
+  end
+
+  def test_OMP_O09
+    # definition='MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~RXO~[~{~NTE~}~]~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~[~{~OBX~[~{~NTE~}~]~}~]~[~{~FT1~}~]~[~BLG~]~}' />
+    ver= '2.4.HL7'
+    event='OMP_O09'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
+  def test_ORP_O10
+    ver= '2.4.HL7'
+    event='ORP_O10'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
+  def test_RDE_O11
+    # MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~[~RXO~[~{~NTE~}~]~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~RXE~{~RXR~}~[~{~RXC~}~]~[~{~OBX~[~{~NTE~}~]~}~]~[~{~CTI~}~]~}
+    ver= '2.4.HL7'
+    event='RDE_O11'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
+  def test_RRE_O12
+    # MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~[~RXE~{~RXR~}~[~{~RXC~}~]~]~}~]
+    ver= '2.4.HL7'
+    event='RRE_O12'
+    loadFactor = 1
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: 1}).generate1()
+    saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
+  def test_RDS_O13
+
+    ver= '2.4.HL7'
+    event='RDS_O13'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    # saveMsg(event, hl7, ver)
+    puts hl7
     # # assert(hl7 != nil)
     # refute_nil(hl7)
+  end
+
+  def test_RRD_O14
+    ver= '2.4.HL7'
+    event='RRD_O14'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
+  def test_RGV_O15
+    ver= '2.4.HL7'
+    event='RGV_O15'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
+  def test_RRG_O16
+    ver= '2.4.HL7'
+    event='RRG_O16'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
+  def test_RAS_O17
+    ver= '2.4.HL7'
+    event='RAS_O17'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    # saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
+  def test_RRA_O18
+    ver= '2.4.HL7'
+    event='RRA_O18'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    saveMsg(event, hl7, ver)
+    puts hl7
   end
 
 end

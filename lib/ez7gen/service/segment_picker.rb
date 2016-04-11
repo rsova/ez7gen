@@ -30,8 +30,20 @@ class SegmentPicker
   # MSH is populated with quick generation, skip it here.
   def pick_segments1()
     idxs = pick_segment_idx_to_build
-    segmentCandidates = idxs.map{|it| is_number?(@profile[it])?@encodedSegments[@profile[it]]: @profile[it]}
+    segmentCandidates = build_segments_for_indexes(idxs)
     return segmentCandidates - @@MSH_SEGMENTS
+  end
+
+  # Turn indexes to segments
+  def build_segments_for_indexes(idxs)
+    idxs.map do |it|
+      if(is_number?(@profile[it]))
+          idx = @profile[it].to_i
+          @encodedSegments[idx]
+        else
+          @profile[it]
+      end
+    end
   end
 
   def pick_segment_idx_to_build
@@ -136,11 +148,11 @@ class SegmentPicker
       check = true
     else
       # look at encoded segment for the index
-      seg = @encodedSegments[encoded]
+      seg = @encodedSegments[encoded.to_i]
       # Required segments left not encoded as strings, optional and groups encoded - indexes of encoded segments
-      if(seg.instance_of?RepeatingGroup)
+      if(seg.instance_of?(RepeatingGroup))
         check = true
-      elsif(seg.instance_of?String)
+      elsif(seg.instance_of?(String))
         check = (seg[0] == '{' ) # signifies repeating segment
       end
     end
@@ -163,9 +175,9 @@ class SegmentPicker
   segment = ''
     if(is_number?(encoded))
         # look at encoded segment for the index
-        segment = @encodedSegments[encoded]
+        segment = @encodedSegments[encoded.to_i]
         #if segment happen to be a group, flatten it into string
-        if(segment.kind_of?Array)
+        if(segment.kind_of?(Array))
           segment = segment.flatten().to_s
         end
     else

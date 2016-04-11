@@ -80,14 +80,15 @@ class MessageFactory
 
     structParser = StructureParser.new()
     structParser.process_segments(structure)
-    profile = structure
+
+    profile = structure.split('~')
     encoded_segments = structParser.encodedSegments
     # profile, encoded_segments = parser.get_segments()
 
     #Get list of non required segments randomly selected for this build
     segment_picker = SegmentPicker.new(profile, encoded_segments, @loadFactor)
-    # segments = segment_picker.pick_segments()
-    segments = encoded_segments
+    segments = segment_picker.pick_segments1()
+
     # set primary parser for base schema
     parsers = {PRIMARY => parser}
 
@@ -117,7 +118,7 @@ class MessageFactory
 
     #iterate over selected segments and build the entire message
     segments.each.with_index(){ |segment, idx|
-      p segment
+      # p segment
       segmentGenerator.gen(@hl7Msg, segment,parsers, false)
      }
 

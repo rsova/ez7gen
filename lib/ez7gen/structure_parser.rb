@@ -34,7 +34,7 @@ include Utils
      if(has_subgroups?(seg))
        groupMarker = Marker.whatGroup?(seg)
 
-       #unwrap for recurcive processing
+       #unwrap for recursive processing
        process_struct(groupMarker.unwrap(seg))
 
        # wrap group back to restore the original segment
@@ -53,9 +53,9 @@ include Utils
     #find groups and decode the group elements and put them in array
     segments.map!{ |seg|
       if(is_complex_group?(seg))
+
         # Generate marker for the segment to preserve specifics of type of the group - opt. vs repeating.
         seg = Marker.gen(seg)
-
         if(seg.kind_of? Array)# TODO: Refactor, check not needed?
           seg.resolve(@encodedSegments)
         else
@@ -72,7 +72,20 @@ include Utils
 
   # checks a segment for subgroups
   def has_subgroups?(seg)
-    (seg.scan(REGEX_OP).size()>1 || seg.scan(REGEX_REP).size()>1)
+    # (seg.scan(REGEX_OP).size()>1 || seg.scan(REGEX_REP).size()>1)
+     # look inside the outer paranthesis
+     # innerSeg =  seg.scan(/\[~{~(.*)~}~\]|\[~(.*)~\]|{~(.*)~}/)
+     innerSeg=  seg.scan(/^\[~(.*?)~\]/)
+     innerSeg = (innerSeg.empty?)? nil: innerSeg.flatten.first
+
+     innerSeg2 = (innerSeg)? innerSeg.scan(/^{~(.*)~}/): seg.scan(/^{~(.*)~}/)
+     innerSeg2 = (innerSeg2.empty?)? nil :innerSeg2.flatten.first
+
+
+     innerSeg = innerSeg2 || innerSeg || seg
+     # inner segment should have no groups identified by {} or []
+    # (innerSeg.scan(REGEX_OP).size + innerSeg.scan(REGEX_REP).size ) > 1
+      innerSeg =~ /[\[{]/
   end
 
   # process groups with optional markers - []
@@ -229,10 +242,10 @@ class Marker
     # seg = (mtch[Marker:OPT])?mtch[Marker:OPT]:mtch[Marker:RPT]
     if(mtch[Marker::OPT])
       marker = OptionalGroup.new(mtch[Marker::OPT])
-      # check for optional repeating
-      if(repeatingSubMarker = Marker.gen(mtch[Marker::OPT]))
-       marker= marker.clear.push(repeatingSubMarker)
-      end
+      # # check for optional repeating
+      # if(repeatingSubMarker = Marker.gen(mtch[Marker::OPT]))
+      #  marker= marker.clear.push(repeatingSubMarker)
+      # end
     elsif(mtch[Marker::RPT])
       marker = RepeatingGroup.new(mtch[Marker::RPT])
     end

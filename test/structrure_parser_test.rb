@@ -146,27 +146,27 @@ class StructureParserTest < Test::Unit::TestCase
     assert_equal 2, seg.scan(StructureParser::REGEX_REP).size()
 
     assert (seg.scan(StructureParser::REGEX_OP).size()>1 || seg.scan(StructureParser::REGEX_REP).size()>1)
-    #   p 'yes'
-    # end
-      #
+  end
 
-    # arr.each{|seg|
-    #  p seg
-    #  p seg =~ StructureParser::REGEX_OP
-    #  p seg.scan(StructureParser::REGEX_OP)
-    #  # p seg.match(StructureParser::REGEX_OP)
-    #
-    #  p seg =~ StructureParser::REGEX_REP
-    #  p seg.scan(StructureParser::REGEX_REP)
-    #  # p seg.match(StructureParser::REGEX_OP)
-    #  if(seg.scan(StructureParser::REGEX_OP).size()>1 || seg.scan(StructureParser::REGEX_REP).size()>1)
-    #    p 'yes'
-    #  else
-    #    p 'no'
-    #  end
-    #
-    #  p '--'
-    # }
+  def test_has_subgroups
+    a = nil || 'a'
+
+    regEx = /\[~{(.*)}~\]/
+    puts "[~{~NTE~}~]".scan(regEx)
+    puts "[~ERR~]".scan(regEx)
+    parser = StructureParser.new()
+
+    arr = ["[~ERR~]", "[~{~NTE~}~]", "[~3~{~ORC~5~}~]", "[~PID~4~]", "[~{~NTE~}~]", "[~RXE~{~RXR~}~6~]", "[~{~RXC~}~]"]
+    assert !parser.has_subgroups?(arr[0])
+    assert !parser.has_subgroups?(arr[1])
+    assert parser.has_subgroups?(arr[2])
+    p arr[2].scan(StructureParser::REGEX_OP)
+    p arr[2].scan(StructureParser::REGEX_REP)
+
+    assert !parser.has_subgroups?(arr[3])
+    assert !parser.has_subgroups?(arr[4])
+    assert parser.has_subgroups?(arr[5])
+    assert !parser.has_subgroups?(arr[6])
   end
 
   def test_process_segments_ORM_O01
@@ -277,7 +277,29 @@ class StructureParserTest < Test::Unit::TestCase
    assert_equal 3, o.size
   end
 
-#  def handle_groups(segments)
+  def test_process_struct_PRE_012
+
+    parser = StructureParser.new()
+    struct = 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~[~RXE~{~RXR~}~[~{~RXC~}~]~]~}~]'
+    # struct = 'RXE~{~RXR~}~6'
+    parser.process_struct(struct)
+    # assert_equal 33,parser.idx
+    # assert_equal 33,parser.encodedSegments.size
+    p parser.encodedSegments
+    puts struct
+    # expected =["[~{~NTE~}~]", "[~PID~2~3~4~6~9~10~]", "[~PD1~]", "[~{~NTE~}~]", "[~PV1~5~]", "[~PV2~]", "[~{~IN1~7~8~}~]", "[~IN2~]", "[~IN3~]", "[~GT1~]", "[~{~AL1~}~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", "[~{~OBX~15~}~]", "[~{~NTE~}~]", "{~17~19~21~31~}", "[~PID~18~]", "[~PD1~]", "[~PV1~20~]", "[~PV2~]", "[~{~AL1~}~]", "[~ORC~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~NTE~}~]", "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]", "{~ORC~OBR~11~12~13~14~30~26~27~28~}", "{~16~}", "{~22~OBR~23~24~32~}", "{~OBX~25~}"]
+    # assert_equal expected, parser.encodedSegments
+    # ["[~{~NTE~}~]", "[~PID~2~3~4~6~9~10~]", "[~PD1~]", "[~{~NTE~}~]", "[~PV1~5~]", "[~PV2~]", "[~{~IN1~7~8~}~]", "[~IN2~]", "[~IN3~]", "[~GT1~]", "[~{~AL1~}~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~DG1~}~]", "[~{~OBX~15~}~]", "[~{~NTE~}~]", "[~17~19~21~{~22~OBR~23~24~{~OBX~25~}~}~]", "[~PID~18~]", "[~PD1~]", "[~PV1~20~]", "[~PV2~]", "[~{~AL1~}~]", "[~ORC~]", "[~{~NTE~}~]", "[~CTD~]", "[~{~NTE~}~]", "[~{~FT1~}~]", "[~{~CTI~}~]", "[~BLG~]", "{~ORC~OBR~11~12~13~14~30~26~27~28~}", "{~16~}"]
+    # [~RXE~{~RXR~}~6~]
+    # seg = parser.handle_groups(["[~PID~2~3~4~6~9~10~]"])
+    # assert_equal( [["PID", "[~PD1~]", "[~{~NTE~}~]", ["PV1", "[~PV2~]"], [["IN1", "[~IN2~]", "[~IN3~]"]], "[~GT1~]", "[~{~AL1~}~]"]], seg)
+    # ["[~ERR~]", "[~{~NTE~}~]", "[~3~{~ORC~5~}~]", "[~PID~4~]", "[~{~NTE~}~]", "[~RXE~{~RXR~}~6~]", "[~{~RXC~}~]"]
+
+    seg = parser.handle_groups(["[~RXE~{~RXR~}~6~]"])
+    p seg
+  end
+
+  #  def handle_groups(segments)
 #
 #    #find groups and decode the group elements and put them in array
 #    segments.map!{ |seg|
