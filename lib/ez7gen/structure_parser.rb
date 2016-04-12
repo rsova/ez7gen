@@ -72,21 +72,28 @@ include Utils
 
   # checks a segment for subgroups
   def has_subgroups?(seg)
-    # (seg.scan(REGEX_OP).size()>1 || seg.scan(REGEX_REP).size()>1)
-     # look inside the outer paranthesis
-     # innerSeg =  seg.scan(/\[~{~(.*)~}~\]|\[~(.*)~\]|{~(.*)~}/)
-     innerSeg=  seg.scan(/^\[~(.*?)~\]/)
-     innerSeg = (innerSeg.empty?)? nil: innerSeg.flatten.first
-
-     innerSeg2 = (innerSeg)? innerSeg.scan(/^{~(.*)~}/): seg.scan(/^{~(.*)~}/)
-     innerSeg2 = (innerSeg2.empty?)? nil :innerSeg2.flatten.first
-
-
-     innerSeg = innerSeg2 || innerSeg || seg
-     # inner segment should have no groups identified by {} or []
-    # (innerSeg.scan(REGEX_OP).size + innerSeg.scan(REGEX_REP).size ) > 1
-      innerSeg =~ /[\[{]/
+    inner = remove_outer_parenthesis(seg)
+    # inner segment should have no groups identified by {} or []
+    inner =~ /[\[{]/
   end
+
+def remove_outer_parenthesis(seg)
+  regexOptOuter = /^\[~(.*?)~\]$/
+  regExRepOuter = /^{~(.*?)~}$/
+  # (seg.scan(REGEX_OP).size()>1 || seg.scan(REGEX_REP).size()>1)
+  # look for the outer parenthesis [] - opt
+  # innerSeg =  seg.scan(/\[~{~(.*)~}~\]|\[~(.*)~\]|{~(.*)~}/)
+  # innerOpt=  seg.scan(/^\[~(.*?)~\]/)
+  innerOpt= seg.scan(regexOptOuter)
+  innerOpt = (innerOpt.empty?) ? nil : innerOpt.flatten.first
+
+  # look for outer {} - rep
+  innerRep = (innerOpt) ? innerOpt.scan(regExRepOuter) : seg.scan(regExRepOuter)
+  innerRep = (innerRep.empty?) ? nil : innerRep.flatten.first
+
+
+  inner = innerRep || innerOpt || seg
+end
 
   # process groups with optional markers - []
   def process_opt_groups(struct)
@@ -157,11 +164,16 @@ include Utils
   def is_complex_group?(encoded)
 
     # ignore arrays, they have already been resolved
-    return  false if(encoded.instance_of?(Array))
+    return  false if(encoded.kind_of?(Array))
 
     # group has an index of encoded optional element
     # isGroupWithEncodedElements = ((encoded =~ /\~\d+\~/) || is_number?(encoded)) ? true: false
     isGroupWithEncodedElements = (encoded =~ /\~\d+\~/) ? true: false
+    return isGroupWithEncodedElements if(isGroupWithEncodedElements)
+
+    inner = remove_outer_parenthesis(encoded)
+    subGroups = inner.split('~')
+    (subGroups.size > 1)? true: false
 
     # # group consists of all required elements {~MRG~PV1~}, so look ahead for that
     # subGroups = encoded.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
@@ -233,6 +245,38 @@ class Marker
   OPT = 1
   RPT = 2
 
+  # decided that segment has subgroups
+  def self.gen1(segment)
+    marker = nil
+
+    # 1 no match - just to cover bases
+    marker = whatGroup?(segment)
+    return nil if(!marker)# done if nothing to match
+
+    # if(mtch[Marker::OPT])# 2 optional
+    #   marker = OptionalGroup.new(mtch[Marker::OPT])
+    #   # # check for optional repeating
+    # elsif(mtch[Marker::RPT])# 3 repeating
+    #   marker = RepeatingGroup.new(mtch[Marker::RPT])
+    # end
+
+    # 3 repeating
+
+    # 4 if optional check for optional-repeating
+
+      # if(mtch[Marker::OPT])
+      #   marker = OptionalGroup.new(mtch[Marker::OPT])
+      #   # # check for optional repeating
+      #   if(repeatingSubMarker = Marker.gen(mtch[Marker::OPT]))
+      #    marker= marker.clear.push(repeatingSubMarker)
+      #   end
+      # elsif(mtch[Marker::RPT])
+      #   marker = RepeatingGroup.new(mtch[Marker::RPT])
+      # end
+      return marker
+
+  end
+
   def self.gen(segment)
     marker = nil
 
@@ -243,9 +287,9 @@ class Marker
     if(mtch[Marker::OPT])
       marker = OptionalGroup.new(mtch[Marker::OPT])
       # # check for optional repeating
-      # if(repeatingSubMarker = Marker.gen(mtch[Marker::OPT]))
-      #  marker= marker.clear.push(repeatingSubMarker)
-      # end
+      if(repeatingSubMarker = Marker.gen(mtch[Marker::OPT]))
+       marker= marker.clear.push(repeatingSubMarker)
+      end
     elsif(mtch[Marker::RPT])
       marker = RepeatingGroup.new(mtch[Marker::RPT])
     end
@@ -261,13 +305,16 @@ class Marker
   end
 
   def self.whatGroup?(segment)
+    group = nil
     mtch = segment.match(@@match_regex)
-    return nil if(!mtch)# done if nothing to match
+    return group if(!mtch)# done if nothing to match
 
     if(mtch[Marker::OPT])
-      OptionalGroup.new()
+       OptionalGroup.new()
      elsif(mtch[Marker::RPT])
        RepeatingGroup.new()
     end
+
   end
+
 end
