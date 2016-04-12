@@ -331,4 +331,15 @@ class StructureParserTest < Test::Unit::TestCase
     p seg
   end
 
-end
+  # def test_process_struct_ORL_O22
+  #   parser = StructureParser.new()
+  #   struct = 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~{~[~SAC~[~{~OBX~}~]~]~[~{~ORC~[~OBR~[~{~SAC~}~]~]~}~]~}~]~]'
+  #   # [~OBR~8~] -broken
+  #   parser.process_struct(struct)
+  #   p parser.encodedSegments
+  #   puts struct
+  #   seg = parser.handle_groups(parser.encodedSegments)
+  #   p seg
+  # end
+
+  end
