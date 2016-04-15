@@ -22,7 +22,7 @@ class ProfileParser
       instance_variable_set("@#{k}", v) unless v.nil?
     end
     # set to false if it has not been set already
-    @base ||= false
+    # @base ||= false
 
     profile, path = nil
     # if(@version_store)
@@ -42,6 +42,9 @@ class ProfileParser
     rescue => e
       puts e.message
     end
+
+    # set flag if this is base or custom schema
+    @base = (@xml.Export.Document.Category.attributes[:std] == '1')
 
   end
 
@@ -125,7 +128,6 @@ class ProfileParser
   end
 
   def get_segment_structure(segment)
-    p segment
     segmentName = get_segment_name(segment)
     # node = export.Document.Category.SegmentStructure.find{ it.@name == segmentName}
     # values = @xml.elements.collect("Export/Document/Category/SegmentStructure[@name ='#{segmentName}']/SegmentSubStructure"){|x| x.attributes}

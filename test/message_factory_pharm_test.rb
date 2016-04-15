@@ -8,7 +8,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
 # end
 
 # set to true to write messages to a file
-  @@PERSIST = false
+#   @@PERSIST = true
 
   @@VS =
       [
@@ -18,7 +18,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
 
   # helper message to persist the
   def saveMsg(event, hl7, ver)
-    if(@@PERSIST) then
+    if(defined?(@@PERSIST) && @@PERSIST) then
       # File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
       File.write("../msg-samples/#{ver}/#{event}-#{Time.new.strftime('%Y%m%d%H%M%S%L')}.txt", hl7);
     end
@@ -29,7 +29,8 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     # definition='MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~RXO~[~{~NTE~}~]~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~[~{~OBX~[~{~NTE~}~]~}~]~[~{~FT1~}~]~[~BLG~]~}' />
     ver= '2.4.HL7'
     event='OMP_O09'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    mf = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: 1})
+    hl7 = mf.generate1()
     saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -66,10 +67,8 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     ver= '2.4.HL7'
     event='RDS_O13'
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
-    # saveMsg(event, hl7, ver)
+    saveMsg(event, hl7, ver)
     puts hl7
-    # # assert(hl7 != nil)
-    # refute_nil(hl7)
   end
 
   def test_RRD_O14
@@ -100,7 +99,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     ver= '2.4.HL7'
     event='RAS_O17'
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
-    # saveMsg(event, hl7, ver)
+    saveMsg(event, hl7, ver)
     puts hl7
   end
 
@@ -110,40 +109,6 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     # MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~[~{~RXA~}~RXR~]~}~]
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadfactor:1}).generate1()
     saveMsg(event, hl7, ver)
-    puts hl7
-  end
-
-  def test_OMG_O19
-    ver= '2.4.HL7'
-    event='OMG_O19'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
-    # saveMsg(event, hl7, ver)
-    puts hl7
-  end
-
-  def test_OMG_O20 #not in schema file
-    ver= '2.4.HL7'
-    event='OMG_O20'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
-    # saveMsg(event, hl7, ver)
-    puts hl7
-  end
-
-  def test_OSQ_Q06
-    ver= '2.4.HL7'
-    event='OSQ_Q06'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
-    # saveMsg(event, hl7, ver)
-    puts hl7
-  end
-
-  def test_OSR_Q06
-    ver= '2.4.HL7'
-    event='OSR_Q06'
-    # 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~QRD~[~QRF~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~&lt;~OBR~|~RQD~|~RQ1~|~RXO~|~ODS~|~ODT~&gt;~[~{~NTE~}~]~[~{~CTI~}~]~}~]~[~DSC~]' />
-
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
-    # saveMsg(event, hl7, ver)
     puts hl7
   end
 

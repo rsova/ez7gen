@@ -12,18 +12,19 @@ class MessageFactoryAdmTest < Test::Unit::TestCase
   # end
 
   # set to true to write messages to a file
-  @@PERSIST = false
+  # @@PERSIST = true
 
   @@VS =
       [
-          {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4.HL7.xml"}]},
+          # {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4.HL7.xml"}]},
+          {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4HL7_N.xml"}]},
           {:std=>"2.5", :path=>"../test/test-config/schema/2.5", :profiles=>[{:doc=>"2.5.HL7", :name=>"2.5", :std=>"1", :path=>"../test/test-config/schema/2.5/2.5.HL7.xml"}, {:doc=>"TEST2.5.HL7", :name=>"TEST2.5", :description=>"2.5 mockup schema for testing", :base=>"2.4", :path=>"../test/test-config/schema/2.5/VAZ2.5.HL7.xml"}]}
       ]
 
 
   # helper message to persist the
   def saveMsg(event, hl7, ver)
-    if(@@PERSIST) then
+    if(defined?(@@PERSIST) && @@PERSIST) then
       # File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
       File.write("../msg-samples/#{ver}/#{event}-#{Time.new.strftime('%Y%m%d%H%M%S%L')}.txt", hl7);
     end
@@ -35,12 +36,12 @@ class MessageFactoryAdmTest < Test::Unit::TestCase
     # ver='vaz2.4'
     ver='VAZ2.4.HL7'
     event='ADT_A01'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
-    # MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
-    saveMsg(event, hl7, ver)
-    puts hl7
+    # hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
+    # # MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
+    # saveMsg(event, hl7, ver)
+    # puts hl7
     puts "\n------------------------------------\n"
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: 1}).generate1()
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
     puts hl7
     # hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
@@ -74,14 +75,13 @@ class MessageFactoryAdmTest < Test::Unit::TestCase
 # Admission Messages
 # 1	  ADT_A01 	ADT_A04; ADT_A08; ADT_A13 	MSH;EVN;PID;PD1;ROL;NK1;PV1;PV2;DB1;OBX;AL1;DG1;DRG;PR1;GT1;IN1;IN2;IN3;ACC;UB1;UB2;PDA
   def test_ADT_01
-    # ver='2.4'
     ver= '2.4.HL7'
     event='ADT_A01'
     loadFactor = 1
-    # hl7 = MessageFactory.new.generate(ver, event, loadFactor)
-    hl7 =MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: loadFactor}).generate()
-    puts hl7
-    saveMsg(event, hl7, ver)
+    # # hl7 = MessageFactory.new.generate(ver, event, loadFactor)
+    # hl7 =MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: loadFactor}).generate()
+    # puts hl7
+    # saveMsg(event, hl7, ver)
 
     puts "\n------------------------------------\n"
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()

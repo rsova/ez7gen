@@ -35,8 +35,7 @@ class MessageFactory
     # if this is a custom Z segment, add the base parser
     # if(version !='2.4')
     # check if current version is not the base version, find the base version and add use it as a base parser
-    isBase = @version_store.find{|s| s[:std] == @std}[:profiles].find{|p| p[:doc] == @version}[:std]
-    if(!isBase)
+    if(!is_base?(@version))
       # find version for base standard version - standard with 'std' attribute
       v_base =  @version_store.find{|s| s[:std] == @std}[:profiles].find{|p| p[:std]!=nil}[:doc]
       v_base_hash = @attributes_hash.clone()
@@ -73,20 +72,18 @@ class MessageFactory
   end
 
   def generate1()
-    # loadFactor = nil
 
+    # get message structure from the schema file for message type and version
     parser = ProfileParser.new(@attributes_hash)
     structure = parser.get_message_definition()
 
+    # brake message structure into segments, handle groups of segments
     structParser = StructureParser.new()
     structParser.process_segments(structure)
 
+    # select segments to build, keep required and z segments, random pick optional segments
     profile = structure.split('~')
-    encoded_segments = structParser.encodedSegments
-    # profile, encoded_segments = parser.get_segments()
-
-    #Get list of non required segments randomly selected for this build
-    segment_picker = SegmentPicker.new(profile, encoded_segments, @loadFactor)
+    segment_picker = SegmentPicker.new(profile, structParser.encodedSegments, @loadFactor)
     segments = segment_picker.pick_segments1()
 
     # set primary parser for base schema
@@ -95,35 +92,30 @@ class MessageFactory
     # if this is a custom Z segment, add the base parser
     # if(version !='2.4')
     # check if current version is not the base version, find the base version and add use it as a base parser
-    isBase = @version_store.find{|s| s[:std] == @std}[:profiles].find{|p| p[:doc] == @version}[:std]
-    if(!isBase)
+    if(!is_base?(@version))
       add_base_parser(parsers)
     end
 
     # configure a segment generator
-    # segmentGenerator = SegmentGenerator.new(@version, @event, parsers)
-    baseVerion = @std
-    segmentGenerator = SegmentGenerator.new(baseVerion, @event, parsers)
+    baseVersion = @std
+    segmentGenerator = SegmentGenerator.new(baseVersion, @event, parsers)
 
     # msh segment configured by hand, due to many requirements that only apply for this segment
     @hl7Msg = HL7::Message.new
     @hl7Msg << segmentGenerator.init_msh()
 
-    # groups are elements that come together; they are  stored as Array
-    # if groups are present among the segments, identify ranges of the groups
-    # groups = find_Groups(segments)
-
-    # then collection of segments can flatten
-    # segments.flatten!
 
     #iterate over selected segments and build the entire message
-    segments.each.with_index(){ |segment, idx|
-      # p segment
-      segmentGenerator.gen(@hl7Msg, segment,parsers, false)
+    # segments.each.with_index(){ |segment, idx|
+    segments.each{ |segment|
+      segmentGenerator.generate1(@hl7Msg, segment, parsers)
      }
 
     return @hl7Msg
-    # (asArray)? (arr=[]; hl7Msg.each{|it| arr << it.to_s.gsub("\r","\n")}; arr): hl7Msg.to_s.gsub("\r","\n")
+  end
+
+  def is_base?(version)
+    isBase = @version_store.find { |s| s[:std] == @std }[:profiles].find { |p| p[:doc] == version }[:std]
   end
 
   # Add parser for base version of schema
@@ -132,7 +124,6 @@ class MessageFactory
   v_base = @version_store.find { |s| s[:std] == @std }[:profiles].find { |p| p[:std]!=nil }[:doc]
     v_base_hash = @attributes_hash.clone()
     v_base_hash[:version] = v_base
-    v_base_hash[:isBase] = true
     parsers[BASE]= ProfileParser.new(v_base_hash)
   end
 

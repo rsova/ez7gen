@@ -3,7 +3,20 @@ require_relative '../lib/ez7gen/service/utils'
 include Utils
 # require 'pathname'
 
- a = Array.new([1,2,3])
+
+a = 5
+b = nil
+a = b || a
+puts a
+b = 25
+a = b || a
+puts a
+b = ''
+a = b || a
+puts a
+exit
+
+a = Array.new([1,2,3])
 
 OPT =1
 MLT =2

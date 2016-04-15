@@ -519,9 +519,87 @@ class SegmentGeneratorTest < Test::Unit::TestCase
     segments <<  OptionalGroup.new().concat(["PID", "[~PD1~]", "[~{~NTE~}~]", OptionalGroup.new().concat(["PV1", "[~PV2~]"]), OptionalGroup.new(RepeatingGroup.new().concat(["IN1", "[~IN2~]", "[~IN3~]"])), "[~GT1~]", "[~{~AL1~}~]"])
 
     segments.each.with_index(){ |segment, idx|
-      @segmentGen.gen(msg,segment,parsers, false)
+      @segmentGen.generate1(msg, segment, parsers, false)
     }
     puts msg
+  end
+
+  def test_segment_is_optional_group_dg1
+
+    parsers = { 'primary'=> @@pp }
+    msg = HL7::Message.new
+    msg << @segmentGen.init_msh
+    segments = []
+    segments << "[~{~NTE~}~]"
+    segments <<  OptionalGroup.new().concat(["PID", "[~PD1~]", "[~{~NTE~}~]", OptionalGroup.new().concat(["PV1", "[~PV2~]"]), OptionalGroup.new(RepeatingGroup.new().concat(["IN1", "[~IN2~]", "[~IN3~]"])), "[~GT1~]", "[~{~AL1~}~]"])
+
+    segments.each.with_index(){ |segment, idx|
+      @segmentGen.generate1(msg, segment, parsers, false)
+    }
+    puts msg
+  end
+
+  def test_handle_set_id
+    #code table value
+    attributes = []
+    attributes << lineToHash('[max_length:3, description:Event Type Code, ifrepeating:0, datatype:ID, required:B, piece:1, codetable:3]')
+    attributes << lineToHash('[max_length:26, symbol:!, description:Recorded Date/Time, ifrepeating:0, datatype:TS, required:R, piece:2]')
+    attributes << lineToHash('[max_length:26, description:Date/Time Planned Event, ifrepeating:0, datatype:TS, required:O, piece:3]')
+
+   # set_id not set set to idx
+   # set_id set set set to idx
+
+   # set_id set with coded table val, don't change
+    set_id = "ABC"
+    @segmentGen.handle_set_id('EVN', attributes, nil) || set_id
+    assert_equal('ABC', set_id)
+
+   # set_id not set with coded table val (opt), don't change
+    set_id = ""
+    @segmentGen.handle_set_id('EVN', attributes, 5) || set_id
+    assert_equal('', set_id)
+    # set_id not set, don't set - idx = nil
+    set_id = ""
+    @segmentGen.handle_set_id('EVN', attributes, nil) || set_id
+    assert_equal('', set_id)
+
+    #set_id set, don't set even if idx != nil
+    set_id = "DFG"
+    @segmentGen.handle_set_id('EVN', attributes, nil) || set_id
+    assert_equal('DFG', set_id)
+
+    #no codetable values
+    attributes = []
+    attributes << lineToHash(' piece:1, description:SET ID - ZMH, datatype:base:SI, max_length:4, required:R, ifrepeating:0]')
+    attributes << lineToHash('[max_length:26, symbol:!, description:Recorded Date/Time, ifrepeating:0, datatype:TS, required:R, piece:2]')
+    attributes << lineToHash('[max_length:26, description:Date/Time Planned Event, ifrepeating:0, datatype:TS, required:O, piece:3]')
+
+   # set_id not set with, don't change if idx = nil
+    set_id = ""
+   set_id = @segmentGen.handle_set_id('ZMH', attributes, nil) || set_id
+    assert_equal('', set_id)
+   # set_id set, idx = nil, do not reset
+    set_id = "1234"
+    set_id = @segmentGen.handle_set_id('ZMH', attributes, nil) || set_id
+    assert_equal('1234', set_id)
+   # set_id set, idx not nil, reset
+    set_id = "456"
+    set_id = @segmentGen.handle_set_id( 'ZMH', attributes, 3) || set_id
+    assert_equal('3', set_id)
+
+   # set id for PID, AL1, DG1 not set, idx is nil
+    set_id = ""
+    set_id = @segmentGen.handle_set_id('PID', attributes, nil) || set_id
+    assert_equal('1', set_id)
+   # set id for PID, AL1, DG1 not set, idx not nil
+    set_id = ""
+    set_id = @segmentGen.handle_set_id('PID', attributes, 2) || set_id
+    assert_equal('2', set_id)
+   # set id for PID, AL1, DG1 set, idx not nil
+    set_id = "2345"
+    set_id = @segmentGen.handle_set_id('PID', attributes, 2) || set_id
+    assert_equal('2', set_id)
+
   end
 
   # piece => 1

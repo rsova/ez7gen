@@ -19,11 +19,47 @@ class MessageFactoryLabTest < Test::Unit::TestCase
 
   # helper message to persist the
   def saveMsg(event, hl7, ver)
-    if(@@PERSIST) then
+    if(defined?(@@PERSIST) && @@PERSIST) then
       # File.open("../msg-samples/#{ver}/#{event}.txt", 'a') { |f| f.write(hl7); f.write("\n\n") }
       File.write("../msg-samples/#{ver}/#{event}-#{Time.new.strftime('%Y%m%d%H%M%S%L')}.txt", hl7);
     end
   end
+
+  # general messages
+  def test_OMG_O19
+    ver= '2.4.HL7'
+    event='OMG_O19'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    # saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
+  def test_ORG_O20
+    ver= '2.4.HL7'
+    event='ORG_O20'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    # saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
+  def test_OSQ_Q06
+    ver= '2.4.HL7'
+    event='OSQ_Q06'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    # saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
+  def test_OSR_Q06
+    ver= '2.4.HL7'
+    event='OSR_Q06'
+    # 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~QRD~[~QRF~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~&lt;~OBR~|~RQD~|~RQ1~|~RXO~|~ODS~|~ODT~&gt;~[~{~NTE~}~]~[~{~CTI~}~]~}~]~[~DSC~]' />
+
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    # saveMsg(event, hl7, ver)
+    puts hl7
+  end
+
 
   # lab messages
   def test_ORU_R01
