@@ -40,11 +40,11 @@ class MessageFactoryAdmTest < Test::Unit::TestCase
     # # MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     # saveMsg(event, hl7, ver)
     # puts hl7
-    puts "\n------------------------------------\n"
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: 1}).generate1()
+    # puts "\n------------------------------------\n"
+    # hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: 1}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
     puts hl7
-    # hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
 
     # # assert(hl7 != nil)
     # refute_nil(hl7)

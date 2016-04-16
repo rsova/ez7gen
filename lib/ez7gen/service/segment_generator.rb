@@ -26,6 +26,14 @@ class SegmentGenerator
     #If there are multiple profile parsers, instantiate a generators for each
     @fieldGenerators = {}
     pp.each{|profileName, profiler| @fieldGenerators[profileName] = TypeAwareFieldGenerator.new(profiler)}
+
+    # for the custom messages, primary field generator has to look up base coded table values
+    # add the parser on the fly to the field generator
+    if(!@fieldGenerators[PRIMARY].pp.base?)
+      baseParser = @fieldGenerators[BASE].pp
+      @fieldGenerators[PRIMARY].instance_variable_set('@bp', baseParser)
+    end
+
   end
 
   # initialize msh segment
@@ -35,13 +43,7 @@ class SegmentGenerator
 
     #pick a field generator
     fieldGenerator = @fieldGenerators['primary']
-    if(!@fieldGenerators[PRIMARY].pp.base?)
-      # 1) if code table comes from the primary schema:  datatype => base:IS, codetable => VA026
-      # add a parcer for primary to deal with code tables
-      # 2) base type needs values from
-      baseParser = @fieldGenerators[BASE].pp
-      fieldGenerator.instance_variable_set('@bp', baseParser)
-    end
+
     msh.enc_chars ='^~\&'
     msh.sending_app = fieldGenerator.HD({:codetable =>'361', :required =>'R'})
     msh.sending_facility = fieldGenerator.HD({:codetable => '362', :required =>'R'})
@@ -112,12 +114,8 @@ class SegmentGenerator
   def generate( message,  segment,  attributes, isGroup=false)
     isRep = is_segment_repeating?(segment)
     segmentName = get_segment_name(segment)
-    p segmentName
-    if(segmentName.include?'DG1')
-      p attributes
-    end
 
-      # decide if segment needs to repeat and how many times
+    # decide if segment needs to repeat and how many times
     # totalReps = (isRep)? @@random.rand(1.. @@maxReps) : 1 # between 1 and maxReps
     totalReps = (isRep)? (1..@@maxReps).to_a.sample: 1
 
@@ -186,15 +184,16 @@ class SegmentGenerator
 
     type = get_type_by_name(attributes[:datatype])
     fieldGenerator= @fieldGenerators[type]
+    dt = get_name_without_base(attributes[:datatype])
 
-    # for messages with custom schemas use both parsers to look for codetable values
-    if(!@fieldGenerators[PRIMARY].pp.base? && attributes[:codetable] )
-      # 1) if code table comes from the primary schema:  datatype => base:IS, codetable => VA026
-      # add a parcer for primary to deal with code tables
-      # 2) base type needs values from
-      baseParser = @fieldGenerators[BASE].pp
-      fieldGenerator.instance_variable_set('@bp', baseParser)
-    end
+    # # for messages with custom schemas use both parsers to look for codetable values
+    # if(!@fieldGenerators[PRIMARY].pp.base? && attributes[:codetable] )
+    #   # 1) if code table comes from the primary schema:  datatype => base:IS, codetable => VA026
+    #   # add a parcer for primary to deal with code tables
+    #   # 2) base type needs values from
+    #   baseParser = @fieldGenerators[BASE].pp
+    #   fieldGenerator.instance_variable_set('@bp', baseParser)
+    # end
     # # dt = get_name_without_base(attributes[:datatype])
     # if(type == Utils::BASE)
     #   attributes[:datatype] = get_name_without_base(attributes[:datatype])
@@ -208,7 +207,7 @@ class SegmentGenerator
     #   if(attributes[:codetable])then get_name_without_base(attributes[:codetable]) end #TODO: Refactor
     # end
 
-    dt = attributes[:datatype]
+    # dt = attributes[:datatype]
     # puts Utils.blank?(dt)?'~~~~~~~~~> data type is missing': dt
     if(['CK'].include?(dt))
       return nil
