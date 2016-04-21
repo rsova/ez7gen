@@ -11,7 +11,8 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
 # end
 @@URLS={'2.4'=>'localhost:9081/','VAZ2.4'=>'localhost:8891/'}
 # admisson messages match pattern
-@@ADM_FILTER = 'ADT_A|QBP_Q2|RSP_K2'
+# @@ADM_FILTER = 'ADT_A|QBP_Q2|RSP_K2'
+@@FILTERS = [ProfileParser::FILTER_ADM, ProfileParser::FILTER_PH]
 
   get '/' do
     # content_type :json
@@ -36,7 +37,7 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
       puts  "std: #{std}, event: #{event}, version: #{version}"
 
       vs = ProfileParser.lookup_versions()
-      @resp = MessageFactory.new({std: std, version: version, event:event, version_store: vs}).generate() #msg.replace('\r','\n' )
+      @resp = MessageFactory.new({std: std, version: version, event:event, version_store: vs}).generate1() #msg.replace('\r','\n' )
       # x = []
       # @resp.each{|it| x << ({name: (it.instance_variable_get(:@elements)[0]), seg:  it.to_s})}
       # map = {message: @resp.to_s, segments: x }
@@ -89,7 +90,8 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
         std_attrs[:versions] = version[:profiles].inject([]){|col,p| col << {name: p[:doc], code: p[:name], desc: (p[:std])? 'Base': p[:description]}}
         #events
         evn_attrs = version[:profiles].inject({}){|h,p|
-          h.merge({p[:name] => ProfileParser.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_types('ADT_A|QBP_Q2|RSP_K2')})
+          # h.merge({p[:name] => ProfileParser.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_types('ADT_A|QBP_Q2|RSP_K2')})
+          h.merge({p[:name] => ProfileParser.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_groups(@@FILTERS)})
         }
         std_attrs[:events] = evn_attrs
         # add map with versions and events for each standard to the array
@@ -97,6 +99,10 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
       }
 
       versions_to_client = {standards: std_arr}
+      # pth = File.join(File.dirname(__FILE__), "v_items_mock.json")
+      # txt = File.read(pth)
+      # versions_to_client = JSON.parse(txt)
+      # versions_to_client.to_json
 
       # p event_list
       p 'in lookup'

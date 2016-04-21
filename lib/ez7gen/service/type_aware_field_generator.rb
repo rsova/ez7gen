@@ -1147,8 +1147,9 @@ class TypeAwareFieldGenerator
     return '' if(!generate?(map, force))
 
     # <quantity (CQ)>
-    CQ(map,true)
-    # <interval (RI)>
+    CQ(reset_map_attr(map, :codetable, '335'), true)
+    # CQ(map,true)
+    # <interval (RI)
     # < duration (ST)>
     # <start date/time (TS)>
     # <end date/time (TS)>

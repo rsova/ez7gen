@@ -215,7 +215,7 @@ end
 
 class OptionalGroup < Group
 
-  def mark(group, prnths=StructureParser::PRNTHS_REP)
+  def mark(group, prnths=StructureParser::PRNTHS_OP)
     if (group.kind_of?(String))
       group = Marker.mark(group, prnths)
     elsif(group.kind_of?(Array))

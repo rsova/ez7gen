@@ -192,11 +192,11 @@ class ProfileParserTest < Test::Unit::TestCase
     @attrs[:version] = 'VAZ2.4.HL7'
     parser = ProfileParser.new(@attrs)
     # parser = ProfileParser.new({version: 'vaz2.4', event: 'ADT_A01'})
-		results =  parser.lookup_message_types('')
+		results =  parser.lookup_message_types()
 		puts results
 		assert_equal 2, results.size
 
-    results =  parser.lookup_message_types('ADT_|QBP_|RSP_')
+    results =  parser.lookup_message_types({filter: 'ADT_|QBP_|RSP_', group:'Admission'})
     puts results
     assert_equal 1, results.size
   end
@@ -219,7 +219,8 @@ class ProfileParserTest < Test::Unit::TestCase
     @attrs.delete(:event)# no events passed to lookup all event types
     parser = ProfileParser.new(@attrs)
 		# parser = ProfileParser.new({version:'2.4'})
-    results =  parser.lookup_message_types('ADT_A')
+    filter = {filter: 'ADT_A', group: 'ADT'}
+    results =  parser.lookup_message_types(filter)
     # puts results
     assert_equal 57, results.size
 
@@ -228,8 +229,9 @@ class ProfileParserTest < Test::Unit::TestCase
 	def test_lookupMessageTypes_24_QBP
     @attrs.delete(:event)# no events passed to lookup all event types
     parser = ProfileParser.new(@attrs)
-  # parser = ProfileParser.new({version:'2.4'})
-    results =  parser.lookup_message_types('QBP_Q2')
+    filter = {filter: 'QBP_Q2', group: 'QBP'}
+    # parser = ProfileParser.new({version:'2.4'})
+    results =  parser.lookup_message_types(filter)
     # puts results
     assert_equal 5, results.size
   end
@@ -238,21 +240,24 @@ class ProfileParserTest < Test::Unit::TestCase
     @attrs.delete(:event)# no events passed to lookup all event types
     parser = ProfileParser.new(@attrs)
 		# parser = ProfileParser.new({version:'2.4'})
-    results =  parser.lookup_message_types('RSP_K2')
+    filter = {filter: 'RSP_K2', group: 'RSP'}
+    results =  parser.lookup_message_types(filter)
     # puts results
     assert_equal 5, results.size
   end
 
-	def test_lookupMessageTypes_24_RSP_Admissions
+	def test_lookupMessageTypes_24_Admissions
     @attrs.delete(:event)# no events passed to lookup all event types
     parser = ProfileParser.new(@attrs)
     # parser = ProfileParser.new({version:'2.4'})
     # if(message.starts_with('ADT_')||message.starts_with('QBP_')||message.starts_with('RSP_'))
-    results =  parser.lookup_message_types('ADT_A|QBP_Q2|RSP_K2')
+    # results =  parser.lookup_message_types('ADT_A|QBP_Q2|RSP_K2')
+    results =  parser.lookup_message_types(ProfileParser::FILTER_ADM)
     puts results[0]
     assert_equal 67, results.size
-    assert_equal({:name=>'ADT_A01', :code=>'ADT/ACK - Admit / visit notification'}, results[0])
+    assert_equal({:name=>'ADT_A01', :code=>'ADT/ACK - Admit / visit notification', :group=>'Admissions'}, results[0])
   end
+
 
   def test_is_group_true_encoded
     parser = ProfileParser.new(@attrs)
@@ -310,7 +315,8 @@ class ProfileParserTest < Test::Unit::TestCase
    #     ]
    # pps =  ProfileParserStub.new({std: '2.4.', version: '2.4.HL7', version_store: vs})
     pps = ProfileParser.new(@attrs)
-    results =  pps.lookup_message_types('QBP_Q2')
+    filter = {filter: 'QBP_Q2', group: 'QBP'}
+    results =  pps.lookup_message_types(filter)
    # puts results
    assert_equal 5, results.size
 
@@ -353,9 +359,10 @@ class ProfileParserTest < Test::Unit::TestCase
       #   events = parser.lookup_message_types('ADT_A|QBP_Q2|RSP_K2')#@@ADM_FILTER
       #   e_map[p[:name]]= events
       # }
+      filter = ProfileParserStub::FILTER_ADM
 
 			evn_attrs = version[:profiles].inject({}){|h,p|
-				h.merge({p[:name] => ProfileParserStub.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_types('ADT_A|QBP_Q2|RSP_K2')})
+				h.merge({p[:name] => ProfileParserStub.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_types(filter)})
 			}
       ver_attrs[:events] = evn_attrs
 
@@ -367,41 +374,67 @@ class ProfileParserTest < Test::Unit::TestCase
     puts versions_to_client
 	end
 
-
-  def test_processSegments_pharm
-    # first pass
-    # 1) look for repeading groups
-    # 2) brake them into subgroups - arrays
-    # second pass
-    # 3) go over and find optional groups
-    # 4) brake them into subgroups - arrays
-    #
-    # arr
-    # e
-    # arr [e,arr[e,e,e],arr[e,e,e],e, e,]
-    # seg : "[~17~19~20~{~21~OBR~22~23~{~OBX~24~}~}~]"
-
-    # to do
-    #   resolve {} complex groups
-    #   within {} complex groups finish encoding
-    #   handle complex [] groups
-    #   handle groups need to handle arrays of subgroups
-    #   refactor!!!
-
-
+  def test_lookupMessageTypes_24_Pharm
+    @attrs.delete(:event)# no events passed to lookup all event types
     parser = ProfileParser.new(@attrs)
-    struct = 'MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~OBR~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~{~AL1~}~]~{~[~ORC~]~OBR~[~{~NTE~}~]~[~CTD~]~{~OBX~[~{~NTE~}~]~}~}~]~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
-    # struct = "MSH~EVN~PID~[~PD1~]~[~{~ROL~}~]~[~{~NK1~}~]~PV1~[~PV2~]~[~{~ROL~}~]~[~{~DB1~}~]~[~{~OBX~}~]~[~{~AL1~}~]~[~{~DG1~}~]~[~DRG~]~[~{~PR1~[~{~ROL~}~]~}~]~[~{~GT1~}~]~[~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]~[~ACC~]~[~UB1~]~[~UB2~]~[~PDA~]"
-    results = parser.process(struct)
-    puts results
-    assert_equal(2, results.size())
+    # 1    OMP_O09    Pharmacy/treatment order message
+    # 2    ORP_O10    Pharmacy/treatment order acknowledgement
+    # 3    RDE_O11    Pharmacy/treatment encoded order message
+    # 4    RRE_O12    Pharmacy/treatment encoded order acknowledgement
+    # 5    RDS_O13    Pharmacy dispense message
+    # 6    RRD_O14    Pharmacy/treatment dispense acknowledgement
+    # 7    RGV_O15    Pharmacy give message
+    # 8    RRG_O16    Pharmacy/treatment give acknowledgement
+    # 9    RAS_O17    Pharmacy administration message
+    # 10  RRA_O18    Pharmacy/treatment administration acknowledgement
 
-    profile_idx = 0
-    segments_idx = 1
-    #refactored, results returned as collection of arrays instead of map
+    # filter= {filter: 'OMP_|ORP_|RDE_|RRE_|RDS_|RRD_|RGV_|RRG_|RAS_|RRA_', group: 'Pharmacy'}
 
-    # assert_equal(21, results[segments_idx].size())
-    # assert_equal('[~PD1~]', results[segments_idx][0])
+    results =  parser.lookup_message_types(ProfileParser::FILTER_PH)
+    puts results[0]
+    assert_equal 10, results.size
+     assert_equal({:name=>"OMP_O09", :code=>"OMP - Pharmacy/treatment order", :group=>"Pharmacy"}, results[0])
   end
+
+  def test_lookup_message_groups
+    @attrs.delete(:event)# no events passed to lookup all event types
+    parser = ProfileParser.new(@attrs)
+    results =  parser.lookup_message_groups([ProfileParser::FILTER_PH, ProfileParser::FILTER_ADM])
+    puts results
+    assert_equal 77, results.size
+    assert_equal({:name=>"OMP_O09", :code=>"OMP - Pharmacy/treatment order", :group=>"Pharmacy"}, results[0])
+    assert_equal({:name=>"RSP_K25", :code=>"RSP - Personnel Information by Segment Response", :group=>"Admissions"}, results[76])
+
+  end
+
+  # def test_processSegments_pharm
+  #   # first pass
+  #   # 1) look for repeading groups
+  #   # 2) brake them into subgroups - arrays
+  #   # second pass
+  #   # 3) go over and find optional groups
+  #   # 4) brake them into subgroups - arrays
+  #   #
+  #   # arr
+  #   # e
+  #   # arr [e,arr[e,e,e],arr[e,e,e],e, e,]
+  #   # seg : "[~17~19~20~{~21~OBR~22~23~{~OBX~24~}~}~]"
+  #
+  #   # to do
+  #   #   resolve {} complex groups
+  #   #   within {} complex groups finish encoding
+  #   #   handle complex [] groups
+  #   #   handle groups need to handle arrays of subgroups
+  #   #   refactor!!!
+  #
+  #
+  #   parser = ProfileParser.new(@attrs)
+  #   struct = 'MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~OBR~[~{~NTE~}~]~[~CTD~]~[~{~DG1~}~]~[~{~OBX~[~{~NTE~}~]~}~]~{~[~[~PID~[~PD1~]~]~[~PV1~[~PV2~]~]~[~{~AL1~}~]~{~[~ORC~]~OBR~[~{~NTE~}~]~[~CTD~]~{~OBX~[~{~NTE~}~]~}~}~]~}~[~{~FT1~}~]~[~{~CTI~}~]~[~BLG~]~}'
+  #   # struct = "MSH~EVN~PID~[~PD1~]~[~{~ROL~}~]~[~{~NK1~}~]~PV1~[~PV2~]~[~{~ROL~}~]~[~{~DB1~}~]~[~{~OBX~}~]~[~{~AL1~}~]~[~{~DG1~}~]~[~DRG~]~[~{~PR1~[~{~ROL~}~]~}~]~[~{~GT1~}~]~[~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]~[~ACC~]~[~UB1~]~[~UB2~]~[~PDA~]"
+  #   results = parser.process(struct)
+  #   puts results
+  #   assert_equal(2, results.size())
+  #
+  # end
 
 end

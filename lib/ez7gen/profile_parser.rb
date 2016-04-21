@@ -9,6 +9,11 @@ class ProfileParser
   attr_reader :base;
   alias_method :base?, :base;
 
+  @@FILTER_ALL = {filter: '.*', group: 'All'}
+  FILTER_ADM = {filter: 'ADT_A|QBP_Q2|RSP_K2', group: 'Admissions'}
+  FILTER_PH= {filter: 'OMP_|ORP_|RDE_|RRE_|RDS_|RRD_|RGV_|RRG_|RAS_|RRA_', group: 'Pharmacy'}
+
+
   # attr_accessor :std; :version; :event; :xml; :version_store;
   # @@HL7_VERSIONS = {'2.4'=>'2.4/2.4-schema.xml', 'vaz2.4'=>'vaz2.4/vaz2.4-schema.xml'}
   #class attribute
@@ -135,21 +140,31 @@ class ProfileParser
     #values.each {|it| puts it}
   end
 
-  def lookup_message_types(filter=nil)
-    filter ||= '.*'# match everything if no filter defined
+  def lookup_message_types(map=nil)
+    # match everything if no filter defined
+    map ||= @@FILTER_ALL
 
+    filter = map[:filter]
     messageTypeColl = @xml.Export.Document.Category.locate('MessageType').select{|it| it.attributes[:name] =~/#{filter}/}.map!{|it| it.attributes[:name]}
-    map = messageTypeColl.map{ |el|
+    messages = messageTypeColl.map{ |el|
       event = (el.split('_')).last
        {
           name: el,
           #chek if there is a match otherwise use the segment name
-          code: ((e = @xml.Export.Document.Category.locate('MessageEvent').select{|it| it.attributes[:name] == event}); e!=[] )? (e.first().attributes[:description]): el
+          code: ((e = @xml.Export.Document.Category.locate('MessageEvent').select{|it| it.attributes[:name] == event}); e!=[] )? (e.first().attributes[:description]): el,
+          group: map[:group]
       }
     }
-    return map
+    return messages
   end
 
+  def lookup_message_groups (groups)
+    messages = []
+    groups.each{|group|
+     messages += lookup_message_types(group)
+    }
+    return messages
+  end
 
   # find all optional, repeating segemnts and segment groups
   # the required string left un-handled
