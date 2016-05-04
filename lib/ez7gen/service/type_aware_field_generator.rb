@@ -169,7 +169,7 @@ class TypeAwareFieldGenerator
 
    val=[]
    # <penalty type (IS)>
-    val=IS(map,true)
+   val=IS(map,true)
    # <penalty amount (NM)>
    val<<NM({},true)
    val.join(@@HAT)
@@ -236,13 +236,19 @@ class TypeAwareFieldGenerator
   def CQ(map, force=false)
     #check if the field is optional and randomly generate it of skip
     return '' if(!generate?(map, force))
-    val =[]
+    # val =[]
     # <quantity (NM)>
-    val<<NM({},true)
+    NM({},true)
+
+    # val<<NM({},true)
     # <units (CE)>
     # val<<CE(map,true) # Per request with QBP_Q21 issue
-    val<<ID(map,true)
-    val.join(@@HAT)
+    # CE always get values from code table 335, schema does not always specify it.
+    # only ID part from CE is used for this data type
+    # val<<ID(reset_map_attr(map, :codetable, '335'), true)
+    # val<<ID(map,true)
+    # val.join(@@HAT)
+    # val.join(@@SUB)
   end
 
   #Channel sensitivity/units
@@ -1147,8 +1153,8 @@ class TypeAwareFieldGenerator
     return '' if(!generate?(map, force))
 
     # <quantity (CQ)>
-    CQ(reset_map_attr(map, :codetable, '335'), true)
-    # CQ(map,true)
+    # CQ(reset_map_attr(map, :codetable, '335'), true)
+    CQ(map,true)
     # <interval (RI)
     # < duration (ST)>
     # <start date/time (TS)>

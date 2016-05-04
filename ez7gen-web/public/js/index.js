@@ -1,6 +1,10 @@
 
 //var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'angular.panels', 'ngSanitize', 'ui.select', 'ngAnimate']);
-var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select', 'ngAnimate']);
+var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'ngSanitize', 'ui.select', 'ngAnimate','xeditable']);
+
+app.run(function(editableOptions) {
+    editableOptions.theme = 'bs3';
+});
 
 //app.config(function($routeProvider, $httpProvider, uiSelectConfig, panelsProvider) {
 app.config(function($routeProvider, $httpProvider, uiSelectConfig) {
@@ -47,7 +51,7 @@ app.factory('service',[ '$http', function($http) {
     };
 
     var serviceItems = {
-        data: {message:'Lets rumbble...'},
+        data: {message:"Let's rumble..."},
         //versions: hl7_versions,
         cachedItems: null,
         lookup: lookup()

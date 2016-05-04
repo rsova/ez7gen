@@ -42,27 +42,27 @@
     </ui-select>
     </div>
 
+    <div class="col-md-2">
+        <md-button class="md-raised">Edit</md-button>
     </div>
+
 </div>
 
     <h4>
 	<i>Version</i>: {{version.selected.name}} <i>Message</i> : {{event.selected.name}}
 </h4>
 
-<pre>{{hl7.message}}</pre>
+<!--<pre>{{hl7.message}}</pre>-->
+<!--<pre editable-textarea="hl7.message" e-form="hl7Area" e-rows="7" e-cols="40">-->
+<pre editable-textarea="hl7.message" e-form="hl7Area" e-style="width: 1000px; height: 400px; white-space: nowrap;">
+{{hl7.message}}
+</pre>
+    <!--<div editable-textarea="user.desc" e-rows="7" e-cols="40">-->
 
-<div ng-show="false">
-
-<uib-accordion close-others="true">
-
-<uib-accordion-group heading="{{segment.name}}" ng-repeat="segment in hl7.segments">
-    <pre aria-multiline="true">{{segment.seg}}</pre>
-</uib-accordion-group>
-</uib-accordion>
-</div>
 
 <button class="btn btn-primary" ng-click="generate()">Generate HL7</button>
 <button class="btn btn-success" ng-click="validate()">Validate HL7</button>
+<button class="btn btn-default" ng-click="hl7Area.$show()" ng-hide="hl7Area.$visible" >Edit HL7</button>
 
 <div>
     <button type="button" ng-click="toggle()" class="btn btn btn-default">+</button>
