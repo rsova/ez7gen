@@ -8,7 +8,8 @@
         <div class="col-md-2">
             <!--<h3>HL7 Version</h3>-->
             <!--<p>Selected: {{event.selected.name}}</p>-->
-            <ui-select ng-model="std.selected" theme="selectize" ng-disabled="disabled" style="width: 150px;" on-select="setVersions(std.selected)">
+            <!--<ui-select ng-model="std.selected" theme="selectize" ng-disabled="disabled" style="width: 150px;" on-select="setVersions(std.selected)">-->
+            <ui-select ng-model="std.selected" theme="select2" ng-disabled="disabled" style="width: 150px;" on-select="setVersions(std.selected)">
                 <ui-select-match placeholder="HL7 Standards">{{$select.selected.std}}</ui-select-match>
                 <ui-select-choices repeat="std in standards | filter: $select.search" refresh="setVersions($select.search)" refresh-delay="0">
                     <span ng-bind-html="std.std | highlight: $select.search"></span>
@@ -21,7 +22,7 @@
         <div class="col-md-2">
             <!--<h3>HL7 Version</h3>-->
             <!--<p>Selected: {{event.selected.name}}</p>-->
-            <ui-select ng-model="version.selected" theme="selectize" ng-disabled="disabled" style="width: 150px;" on-select="setEvents(version.selected)">
+            <ui-select ng-model="version.selected" theme="select2" ng-disabled="disabled" style="width: 150px;" on-select="setEvents(version.selected)">
                 <ui-select-match placeholder="HL7 Version">{{$select.selected.name}}</ui-select-match>
                 <ui-select-choices repeat="version in versions | filter: $select.search" refresh="setEvents($select.search)" refresh-delay="0">
                     <span ng-bind-html="version.name | highlight: $select.search"></span>
@@ -33,17 +34,14 @@
     <div class="col-md-2">
     <!--<h3>HL7 Event</h3>-->
     <!--<p>Selected: {{event.selected.name}}</p>-->
-    <ui-select ng-model="event.selected" theme="selectize" ng-disabled="disabled" style="width: 400px;" group>
+    <ui-select ng-model="event.selected" theme="select2" ng-disabled="disabled" style="width: 400px;" group>
         <ui-select-match placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>
-        <ui-select-choices group-by="'group'"repeat="event in events | filter: $select.search">
+        <!--<ui-select-choices group-by="ctrl.firstLetterGroupFn" group-filter="['Z','B','C']" repeat="country in ctrl.countries | filter: $select.search">-->
+        <ui-select-choices group-by="'group'" group-filter="['Pharmacy']" repeat="event in events | filter: $select.search">
             <span ng-bind-html="event.name | highlight: $select.search"></span>
             <small ng-bind-html="event.code | highlight: $select.search"></small>
         </ui-select-choices>
     </ui-select>
-    </div>
-
-    <div class="col-md-2">
-        <md-button class="md-raised">Edit</md-button>
     </div>
 
 </div>

@@ -91,31 +91,31 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     puts hl7
   end
 
-  # def test_RDS_O13
-  #   #8 'MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~{~AL1~}~]~[~PV1~[~PV2~]~]~]~{~ORC~[~RXO~[~{~NTE~}~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~]~[~RXE~{~RXR~}~[~{~RXC~}~]~]~RXD~{~RXR~}~[~{~RXC~}~]~[~{~OBX~[~{~NTE~}~]~}~]~[~{~FT1~}~]~}
-  #   ver= '2.4.HL7'
-  #   event='RDS_O13'
-  #   hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
-  #   saveMsg(event, hl7, ver)
-  #   puts hl7
-  # end
+  def test_RDS_O13
+    #8 'MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~{~AL1~}~]~[~PV1~[~PV2~]~]~]~{~ORC~[~RXO~[~{~NTE~}~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~]~[~RXE~{~RXR~}~[~{~RXC~}~]~]~RXD~{~RXR~}~[~{~RXC~}~]~[~{~OBX~[~{~NTE~}~]~}~]~[~{~FT1~}~]~}
+    ver= '2.4.HL7'
+    event='RDS_O13'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
+    saveMsg(event, hl7, ver)
+    puts hl7
+  end
 
-  # def test_RGV_O15
-  #   #9 'MSH~[~{~NTE~}~]~[~PID~[~{~NTE~}~]~[~{~AL1~}~]~[~PV1~[~PV2~]~]~]~{~ORC~[~RXO~[~{~NTE~}~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~]~[~RXE~{~RXR~}~[~{~RXC~}~]~]~{~RXG~{~RXR~}~[~{~RXC~}~]~{~[~OBX~]~[~{~NTE~}~]~}~}~}
-  #   ver= '2.4.HL7'
-  #   event='RGV_O15'
-  #   hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
-  #   saveMsg(event, hl7, ver)
-  #   puts hl7
-  # end
+  def test_RGV_O15
+    #9 'MSH~[~{~NTE~}~]~[~PID~[~{~NTE~}~]~[~{~AL1~}~]~[~PV1~[~PV2~]~]~]~{~ORC~[~RXO~[~{~NTE~}~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~]~[~RXE~{~RXR~}~[~{~RXC~}~]~]~{~RXG~{~RXR~}~[~{~RXC~}~]~{~[~OBX~]~[~{~NTE~}~]~}~}~}
+    ver= '2.4.HL7'
+    event='RGV_O15'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
+    saveMsg(event, hl7, ver)
+    puts hl7
+  end
 
-  # def test_RAS_O17
-  #   #10 MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~{~AL1~}~]~[~PV1~[~PV2~]~]~]~{~ORC~[~RXO~[~{~NTE~}~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~]~[~RXE~{~RXR~}~[~{~RXC~}~]~]~{~RXA~}~RXR~{~[~OBX~[~{~NTE~}~]~]~}~[~{~CTI~}~]~}
-  #   ver= '2.4.HL7'
-  #   event='RAS_O17'
-  #   hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
-  #   saveMsg(event, hl7, ver)
-  #   puts hl7
-  # end
+  def test_RAS_O17
+    #10 MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~{~AL1~}~]~[~PV1~[~PV2~]~]~]~{~ORC~[~RXO~[~{~NTE~}~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~]~[~RXE~{~RXR~}~[~{~RXC~}~]~]~{~RXA~}~RXR~{~[~OBX~[~{~NTE~}~]~]~}~[~{~CTI~}~]~}
+    ver= '2.4.HL7'
+    event='RAS_O17'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
+    saveMsg(event, hl7, ver)
+    puts hl7
+  end
 
 end
