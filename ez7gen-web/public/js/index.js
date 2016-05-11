@@ -71,6 +71,7 @@ app.controller('main', ['$scope', '$http', 'service', 'cachedItems',function($sc
     $scope.std = {};
     $scope.version = {};
     $scope.event = {};
+    $scope.radioModel = {};
 
     //set standards select
     $scope.standards = service.cachedItems.standards;
@@ -83,6 +84,12 @@ app.controller('main', ['$scope', '$http', 'service', 'cachedItems',function($sc
     //set an appropriate list of message types for a selected version
     $scope.setEvents = function(version){
         $scope.events = (version.code)? service.cachedItems.standard.events[version.code] : [{name: 'Version Required', code: ''}];
+    };
+
+    $scope.groupFilterFn = function (groups){
+        //return groups.reverse();
+        filtered = groups.filter(function(g) { return g.name == 'Pharmacy'; });
+        return filtered;
     };
 
     //method call to the server to generate hl7

@@ -10,7 +10,7 @@ class ProfileParser
   alias_method :base?, :base;
 
   @@FILTER_ALL = {filter: '.*', group: 'All'}
-  FILTER_ADM = {filter: 'ADT_A|QBP_Q2|RSP_K2', group: 'Admissions'}
+  FILTER_ADM = {filter: 'ADT_A|QBP_Q2|RSP_K2[1-4]', group: 'Admissions'}
   FILTER_PH= {filter: 'OMP_|ORP_|RDE_|RRE_|RDS_|RRD_|RGV_|RRG_|RAS_|RRA_', group: 'Pharmacy'}
 
 
