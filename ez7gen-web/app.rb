@@ -2,14 +2,14 @@ require 'sinatra'
 require 'json'
 require 'rest_client'
 # require 'ez7gen'
-require_relative '../lib/ez7gen/message_factory' # local testing
-require_relative '../lib/ez7gen/profile_parser' # local testing
+# require_relative '../lib/ez7gen/message_factory' # local testing
+# require_relative '../lib/ez7gen/profile_parser' # local testing
 
 # configure do
 #   set :show_exceptions, :after_handler
 #   disable :raise_errors
 # end
-@@URLS={'2.4'=>'localhost:9081/','VAZ2.4'=>'localhost:8891/'}
+@@URLS={'2.4'=>'localhost:9980/','VAZ2.4'=>'localhost:9981/'}
 # admisson messages match pattern
 # @@ADM_FILTER = 'ADT_A|QBP_Q2|RSP_K2'
 @@FILTERS = [ProfileParser::FILTER_ADM, ProfileParser::FILTER_PH]
