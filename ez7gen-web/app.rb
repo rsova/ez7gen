@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'json'
 require 'rest_client'
-# require 'ez7gen'
+require 'ez7gen'
 # require_relative '../lib/ez7gen/message_factory' # local testing
 # require_relative '../lib/ez7gen/profile_parser' # local testing
 
