@@ -18,60 +18,8 @@ class MessageFactory
 
   end
 
-  # def generate(attributes_hash=nil)
-  def generate()
-    # loadFactor = nil
-
-    parser = ProfileParser.new(@attributes_hash)
-    profile, encoded_segments = parser.get_segments()
-
-    #Get list of non required segments randomly selected for this build
-    segment_picker = SegmentPicker.new(profile, encoded_segments, @loadFactor)
-    segments = segment_picker.pick_segments()
-
-    # set primary parser for base schema
-    parsers = {PRIMARY => parser}
-
-    # if this is a custom Z segment, add the base parser
-    # if(version !='2.4')
-    # check if current version is not the base version, find the base version and add use it as a base parser
-    if(!is_base?(@version))
-      # find version for base standard version - standard with 'std' attribute
-      v_base =  @version_store.find{|s| s[:std] == @std}[:profiles].find{|p| p[:std]!=nil}[:doc]
-      v_base_hash = @attributes_hash.clone()
-      v_base_hash[:version] = v_base
-      v_base_hash[:isBase] = true
-      parsers[BASE]= ProfileParser.new(v_base_hash)
-    end
-
-    # configure a segment generator
-    # segmentGenerator = SegmentGenerator.new(@version, @event, parsers)
-    baseVerion = @std
-    segmentGenerator = SegmentGenerator.new(baseVerion, @event, parsers)
-
-    # msh segment configured by hand, due to many requirements that only apply for this segment
-    @hl7Msg = HL7::Message.new
-    @hl7Msg << segmentGenerator.init_msh()
-
-    # groups are elements that come together; they are  stored as Array
-    # if groups are present among the segments, identify ranges of the groups
-    groups = find_Groups(segments)
-
-    # then collection of segments can flatten
-    segments.flatten!
-
-    #iterate over selected segments and build the entire message
-    segments.each.with_index(){ |segment, idx|
-      choiceParser = parsers[get_type_by_name(segment)]
-      attributes = choiceParser.get_segment_structure(get_name_without_base(segment))
-
-      segmentGenerator.generate(@hl7Msg, segment, attributes, in_group?(groups, idx))
-    }
-    return @hl7Msg
-    # (asArray)? (arr=[]; hl7Msg.each{|it| arr << it.to_s.gsub("\r","\n")}; arr): hl7Msg.to_s.gsub("\r","\n")
-  end
-
-  def generate1()
+  # main factory method
+  def generate_message()
 
     # get message structure from the schema file for message type and version
     parser = ProfileParser.new(@attributes_hash)
@@ -84,7 +32,7 @@ class MessageFactory
     # select segments to build, keep required and z segments, random pick optional segments
     profile = structure.split('~')
     segment_picker = SegmentPicker.new(profile, structParser.encodedSegments, @loadFactor)
-    segments = segment_picker.pick_segments1()
+    segments = segment_picker.pick_segments_to_build()
 
     # set primary parser for base schema
     parsers = {PRIMARY => parser}
@@ -108,7 +56,7 @@ class MessageFactory
     #iterate over selected segments and build the entire message
     # segments.each.with_index(){ |segment, idx|
     segments.each{ |segment|
-      segmentGenerator.generate1(@hl7Msg, segment, parsers)
+      segmentGenerator.generate(@hl7Msg, segment, parsers)
      }
 
     return @hl7Msg

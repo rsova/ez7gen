@@ -85,13 +85,6 @@ class ProfileParser
     }
   end
 
-  # class methods
-  def get_segments
-    structrue = get_message_definition()
-    # puts structrue
-    process_segments(structrue)
-  end
-
   # find message structure by event type
   def get_message_definition
     msg_type = get_message_structure(@event)
@@ -158,135 +151,13 @@ class ProfileParser
     return messages
   end
 
+  # helper method to look up messages for specific groups of messages
   def lookup_message_groups (groups)
     messages = []
     groups.each{|group|
      messages += lookup_message_types(group)
     }
     return messages
-  end
-
-  # find all optional, repeating segemnts and segment groups
-  # the required string left un-handled
-  def process_segments(structure)
-    idx = 0
-    encodedSegments =[]
-
-    # while(m = (structure.match(@@segment_patern).to_s))
-    while(m = structure[@@segment_patern])
-      structure.sub!(@@segment_patern,idx.to_s)
-      encodedSegments << m
-      idx +=1
-    end
-
-    # pre-process structure into collection of segments
-    profile = structure.split('~').map!{|it| (is_number?(it))?it.to_i : it}
-
-    # handle groups
-    handle_groups(profile, encodedSegments)
-  end
-
-  # check if encoded segment is a group
-  def is_group?(encoded)
-     # group has an index of encoded optional element
-     isGroupWithEncodedElements = (encoded =~ /\~\d+\~/)? true: false
-
-     # group consists of all required elements {~MRG~PV1~}, so look ahead for that
-     subGroups = encoded.split(/[~\{\[\}\]]/).delete_if{|it| blank?(it)}
-     isGroupOfRequiredElements = (subGroups.size > 1)? true: false
-
-     return (isGroupWithEncodedElements || isGroupOfRequiredElements), subGroups
-    end
-
-  # Groups need to be preprocessed
-  # Group string replaced with array of individual segments
-  def handle_groups(profile, encodedSegments)
-
-    #find groups and decode the group elements and put them in array
-    encodedSegments.map!{ |seg|
-      groupFound, tokens = is_group?(seg)
-      if(groupFound)
-        #substitute encoded group elements with values
-        tokens.map!{|it| is_number?(it)? encodedSegments[it.to_i]: it}.flatten
-      else
-        seg = seg
-      end
-    }
-    return profile, encodedSegments
-  end
-
-  # ---- Methods below, moved to StructureParser class and refactored ----- #
-  # find all optional, repeating segemnts and segment groups
-  # the required string left un-handled
-  def process(structure)
-    idx = 0
-    encodedSegments =[]
-    profile=[]
-    # while(m = structure[@@segment_patern])
-  while (m = @@segment_patern.match(structure))
-      p m
-      # puts m.last_match
-      if(uch = unbalanced_ch(m.to_s))
-        p uch
-        p structure
-        # do the group {}
-        rcRegEx = /(?=\{((?:[^{}]*|\{\g<1>\})*)\})/
-        m = structure.scan(rcRegEx)
-        # c = /(?=\{((?:[^{}]*|\{\g<1>\})*)\})/.match(structure)
-        p m
-
-        # find a group
-        groups = []
-        m.each{ |it|
-          # keep the matcher from changes
-          subSeg = it.first.clone
-          isGroup,tokens  = is_group?(subSeg)
-
-          if(isGroup)
-             if(!is_group_resolved?(tokens)) then groups << subSeg end
-          else
-            groups.each{|g| g.sub!(subSeg, idx.to_s)}
-            encodedSegments << subSeg
-            idx +=1
-          end
-        }
-        structure.sub!(m[0].first, idx.to_s)
-        encodedSegments << m[0].first
-      else
-        structure.sub!(@@segment_patern,idx.to_s)
-        encodedSegments << m.to_s
-      end
-      idx +=1
-    end
-    # m = structure.scan(/(?=\{((?:[^{}]*|\{\g<1>\})*)\})/)# brake {} repeating groups
-    # puts m
-    # return m
-
-    # pre-process structure into collection of segments
-    profile = structure.split('~').map!{|it| (is_number?(it))?it.to_i : it}
-
-    # handle groups
-     handle_groups(profile, encodedSegments)
-  end
-
-  def unbalanced_ch(segment)
-    sq = /[\[\]]/
-    crl = /[\{\}]/
-    group_ch = nil
-
-    if( segment.scan(sq).size.odd?)
-      group_ch = ((segment.scan(/\[/).size - segment.scan(/\]/).size) <0) ?']':'['
-    end
-
-    if( segment.scan(crl).size.odd?)
-      group_ch = ((segment.scan(/\{/).size - segment.scan(/\}/).size) <0) ?'{':'}'
-    end
-    group_ch
-  end
-
-  # check if group has been processed completely
-  def is_group_resolved?(tokens)
-    blank?(tokens.select { |it| !is_number?(it) })
   end
 
   end

@@ -56,11 +56,6 @@ include Utils
     assert_equal Array, @segmentPicker.profile.class
   end
 
-  def test_getSegmentCandidates
-    p @segmentPicker.get_segments_to_build()
-
-  end
-
   def test_getSegmentCandidatesCount
     assert_equal 11, @segmentPicker.get_load_candidates_count(21)
     assert_equal 2, @segmentPicker.get_load_candidates_count(3)
@@ -89,13 +84,9 @@ include Utils
   #   assert_equal  12, @segmentPicker.pick_optional_segments().size, '11 picked out of 21'
   # end
 
-  def test_pickOptionalSegments
-    p @segmentPicker.pick_optional_segments()
-  end
-
-  def test_getSegmentsToBuild
-    p @segmentPicker.get_segments_to_build()
-  end
+  # def test_pickOptionalSegments
+  #   p @segmentPicker.pick_optional_segments()
+  # end
 
   def test_getRequiredSegments_withZ
     # profile = 'base:MSH~base:EVN~base:PID~0~1~base:PV1~2~3~4~5~6~7~9~10~13~14~15~16~17~18~19'
@@ -150,22 +141,22 @@ include Utils
     elements <<  "[~{~OBX~}~]"
 
     # # @segmentMap = {:segments => elements, :profile => profile}
-    @segmentPicker = SegmentPicker.new(profile.clone, elements.clone)
-    segments = @segmentPicker.get_segments_to_build()
-    #  ["MSH", "EVN", "PID", "PV1", "PID", "PV1"]
-    assert_equal 1,segments.count("MSH")
-    assert_equal 1, segments.count("EVN")
-    assert_equal 2, segments.count("PID")
-    assert_equal 2, segments.count("PV1")
+    # @segmentPicker = SegmentPicker.new(profile.clone, elements.clone)
+    # segments = @segmentPicker.get_segments_to_build()
+    # #  ["MSH", "EVN", "PID", "PV1", "PID", "PV1"]
+    # assert_equal 1,segments.count("MSH")
+    # assert_equal 1, segments.count("EVN")
+    # assert_equal 2, segments.count("PID")
+    # assert_equal 2, segments.count("PV1")
 
-    @segmentPicker = SegmentPicker.new(profile.clone, elements.clone)
-    segments = @segmentPicker.get_required_segments()
-    #  ["MSH", "EVN", "PID", "PV1", "PID", "PV1"]
-    p segments
-    assert_equal 1,segments.count("MSH")
-    assert_equal 1, segments.count("EVN")
-    assert_equal 2, segments.count("PID")
-    assert_equal 2, segments.count("PV1")
+    # @segmentPicker = SegmentPicker.new(profile.clone, elements.clone)
+    # segments = @segmentPicker.get_required_segments()
+    # #  ["MSH", "EVN", "PID", "PV1", "PID", "PV1"]
+    # p segments
+    # assert_equal 1,segments.count("MSH")
+    # assert_equal 1, segments.count("EVN")
+    # assert_equal 2, segments.count("PID")
+    # assert_equal 2, segments.count("PV1")
 
     @segmentPicker = SegmentPicker.new(profile.clone, elements.clone)
     assert_equal [0, 1, 2, 4, 8, 10], @segmentPicker.get_required_segment_idxs()
@@ -204,21 +195,21 @@ include Utils
     elements << "[~ZMH~]"  #19
 
     # @segmentMap = {:segments => elements, :profile => profile}
-    @segmentPicker = SegmentPicker.new(profile.clone, elements.clone)
-    segments = @segmentPicker.get_segments_to_build()
-    assert_equal 1,segments.count("base:MSH")
-    assert_equal 1, segments.count("base:EVN")
-    assert_equal 2, segments.count("[~ZEM~]")
-    assert_equal 2, segments.count("[~ZEN~]")
-    assert_equal 2, segments.count("[~ZMH~]")
+    # @segmentPicker = SegmentPicker.new(profile.clone, elements.clone)
+    # segments = @segmentPicker.get_segments_to_build()
+    # assert_equal 1,segments.count("base:MSH")
+    # assert_equal 1, segments.count("base:EVN")
+    # assert_equal 2, segments.count("[~ZEM~]")
+    # assert_equal 2, segments.count("[~ZEN~]")
+    # assert_equal 2, segments.count("[~ZMH~]")
 
-    @segmentPicker = SegmentPicker.new(profile.clone, elements.clone)
-    segments = @segmentPicker.get_required_segments()
-    assert_equal 1,segments.count("base:MSH")
-    assert_equal 1, segments.count("base:EVN")
-    assert_equal 2, segments.count("[~ZEM~]")
-    assert_equal 2, segments.count("[~ZEN~]")
-    assert_equal 2, segments.count("[~ZMH~]")
+    # @segmentPicker = SegmentPicker.new(profile.clone, elements.clone)
+    # segments = @segmentPicker.get_required_segments()
+    # assert_equal 1,segments.count("base:MSH")
+    # assert_equal 1, segments.count("base:EVN")
+    # assert_equal 2, segments.count("[~ZEM~]")
+    # assert_equal 2, segments.count("[~ZEN~]")
+    # assert_equal 2, segments.count("[~ZMH~]")
 
 
     @segmentPicker = SegmentPicker.new(profile.clone, elements.clone)
@@ -247,13 +238,13 @@ include Utils
     # profile = ["MSH", "EVN", "PID", "[~PD1~]", "[~{~ROL~}~]", "[~{~NK1~}~]", "PV1", "[~PV2~]", "[~{~ROL~}~]", "[~{~DB1~}~]", "[~{~OBX~}~]", "[~{~AL1~}~]", "[~{~DG1~}~]", "[~DRG~]", "[~{~PR1~10~}~]", "[~{~GT1~}~]", "[~{~IN1~13~14~15~}~]", "[~ACC~]", "[~UB1~]", "[~UB2~]", "[~PDA~]"]
     # profile = [ "[~{~PR1~10~}~]"]
     # [~{~PR1~[~{~ROL~}~]~}~] = {RP1 ~ ROL}
-    segments = @segmentPicker.pick_segments
-    p segments
+    # segments = @segmentPicker.pick_segments
+    # p segments
+    #
+    # teardown
+    # setup()
 
-    teardown
-    setup()
-
-    segments = @segmentPicker.pick_segments1()
+    segments = @segmentPicker.pick_segments_to_build()
     p segments
     # p @profile
     # idxs = @segmentPicker.pick_segment_idx_to_build

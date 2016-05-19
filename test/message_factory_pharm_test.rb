@@ -8,7 +8,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
   # end
 
 # set to true to write messages to a file
-  @@PERSIST = true
+#   @@PERSIST = true
 
   @@VS =
       [
@@ -31,7 +31,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     ver= '2.4.HL7'
     event='RRE_O12'
     # loadFactor = 1
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()#loadFactor: 1
     saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -40,7 +40,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     #2 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~[~RXD~{~RXR~}~[~{~RXC~}~]~]~}~]'
     ver= '2.4.HL7'
     event='RRD_O14'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()#loadFactor: 1
     saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -49,7 +49,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     #3 MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~[~RXG~{~RXR~}~[~{~RXC~}~]~]~}~]
     ver= '2.4.HL7'
     event='RRG_O16'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()#loadFactor: 1
     saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -58,7 +58,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     #4 MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~[~{~RXA~}~RXR~]~}~]
     ver= '2.4.HL7'
     event='RRA_O18'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()#loadFactor: 1
     saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -67,7 +67,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     #5 definition='MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~[~RXO~[~{~NTE~}~]~{~RXR~}~[~{~RXC~}~]~[~{~NTE~}~]~]~}~]' />
     ver= '2.4.HL7'
     event='ORP_O10'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: 1}).generate1()#loadFactor: 1
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: 1}).generate_message()#loadFactor: 1
     saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -77,7 +77,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     ver= '2.4.HL7'
     event='OMP_O09'
     mf = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS})#loadFactor: 1
-    hl7 = mf.generate1()
+    hl7 = mf.generate_message()
     saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -86,7 +86,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     #7 MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~PV1~[~PV2~]~]~[~{~IN1~[~IN2~]~[~IN3~]~}~]~[~GT1~]~[~{~AL1~}~]~]~{~ORC~[~RXO~[~{~NTE~}~]~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~RXE~{~RXR~}~[~{~RXC~}~]~[~{~OBX~[~{~NTE~}~]~}~]~[~{~CTI~}~]~}
     ver= '2.4.HL7'
     event='RDE_O11'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()#loadFactor: 1
     saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -95,7 +95,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     #8 'MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~{~AL1~}~]~[~PV1~[~PV2~]~]~]~{~ORC~[~RXO~[~{~NTE~}~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~]~[~RXE~{~RXR~}~[~{~RXC~}~]~]~RXD~{~RXR~}~[~{~RXC~}~]~[~{~OBX~[~{~NTE~}~]~}~]~[~{~FT1~}~]~}
     ver= '2.4.HL7'
     event='RDS_O13'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()#loadFactor: 1
     saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -104,7 +104,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     #9 'MSH~[~{~NTE~}~]~[~PID~[~{~NTE~}~]~[~{~AL1~}~]~[~PV1~[~PV2~]~]~]~{~ORC~[~RXO~[~{~NTE~}~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~]~[~RXE~{~RXR~}~[~{~RXC~}~]~]~{~RXG~{~RXR~}~[~{~RXC~}~]~{~[~OBX~]~[~{~NTE~}~]~}~}~}
     ver= '2.4.HL7'
     event='RGV_O15'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()#loadFactor: 1
     saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -113,7 +113,7 @@ class MessageFactoryPharmTest < Test::Unit::TestCase
     #10 MSH~[~{~NTE~}~]~[~PID~[~PD1~]~[~{~NTE~}~]~[~{~AL1~}~]~[~PV1~[~PV2~]~]~]~{~ORC~[~RXO~[~{~NTE~}~{~RXR~}~[~{~RXC~}~[~{~NTE~}~]~]~]~]~[~RXE~{~RXR~}~[~{~RXC~}~]~]~{~RXA~}~RXR~{~[~OBX~[~{~NTE~}~]~]~}~[~{~CTI~}~]~}
     ver= '2.4.HL7'
     event='RAS_O17'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()#loadFactor: 1
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()#loadFactor: 1
     saveMsg(event, hl7, ver)
     puts hl7
   end

@@ -11,7 +11,6 @@ require 'ez7gen'
 # end
 @@URLS={'2.4'=>'localhost:9980/','VAZ2.4'=>'localhost:9981/'}
 # admisson messages match pattern
-# @@ADM_FILTER = 'ADT_A|QBP_Q2|RSP_K2'
 @@FILTERS = [ProfileParser::FILTER_ADM, ProfileParser::FILTER_PH]
 
   get '/' do
@@ -37,10 +36,7 @@ require 'ez7gen'
       puts  "std: #{std}, event: #{event}, version: #{version}"
 
       vs = ProfileParser.lookup_versions()
-      @resp = MessageFactory.new({std: std, version: version, event:event, version_store: vs}).generate1() #msg.replace('\r','\n' )
-      # x = []
-      # @resp.each{|it| x << ({name: (it.instance_variable_get(:@elements)[0]), seg:  it.to_s})}
-      # map = {message: @resp.to_s, segments: x }
+      @resp = MessageFactory.new({std: std, version: version, event:event, version_store: vs}).generate_message() #msg.replace('\r','\n' )
 
     rescue => e
       # puts 'inside rescue'
@@ -90,7 +86,6 @@ require 'ez7gen'
         std_attrs[:versions] = version[:profiles].inject([]){|col,p| col << {name: p[:doc], code: p[:name], desc: (p[:std])? 'Base': p[:description]}}
         #events
         evn_attrs = version[:profiles].inject({}){|h,p|
-          # h.merge({p[:name] => ProfileParser.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_types('ADT_A|QBP_Q2|RSP_K2')})
           h.merge({p[:name] => ProfileParser.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_groups(@@FILTERS)})
         }
         std_attrs[:events] = evn_attrs

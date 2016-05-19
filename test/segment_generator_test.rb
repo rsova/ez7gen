@@ -358,7 +358,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
     end
     msg = HL7::Message.new
     msg << @segmentGen.init_msh
-    puts @segmentGen.generate(msg,'EVN', attributes)
+    puts @segmentGen.generate_segment_in_context(msg, 'EVN', attributes)
   end
 
  def test_ADT_A01_PID
@@ -369,7 +369,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
 
    msg = HL7::Message.new
    msg << @segmentGen.init_msh
-   puts @segmentGen.generate(msg,'PID', attributes)
+   puts @segmentGen.generate_segment_in_context(msg, 'PID', attributes)
  end
 
  def test_ADT_A01_PV1
@@ -380,7 +380,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
 
    msg = HL7::Message.new
    msg << @segmentGen.init_msh
-   puts @segmentGen.generate(msg,'PV1', attributes)
+   puts @segmentGen.generate_segment_in_context(msg, 'PV1', attributes)
  end
 
  def test_ADT_A01_PD1
@@ -392,7 +392,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
    msg = HL7::Message.new
    msg << @segmentGen.init_msh
    # puts @segmentGen.generate(msg,'[~PD1~]', attributes)
-   puts @segmentGen.generate(msg,'[~PD1~]', attributes, 1)
+   puts @segmentGen.generate_segment_in_context(msg, '[~PD1~]', attributes, 1)
  end
 
  def test_ADT_A01_AL1
@@ -403,7 +403,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
 
    msg = HL7::Message.new
    msg << @segmentGen.init_msh
-   puts @segmentGen.generate(msg,'[~{~AL1~}~]', attributes)
+   puts @segmentGen.generate_segment_in_context(msg, '[~{~AL1~}~]', attributes)
  end
 
  def test_ADT_A01_DG1
@@ -414,7 +414,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
 
    msg = HL7::Message.new
    msg << @segmentGen.init_msh
-   puts @segmentGen.generate(msg,'[~{~DG1~}~]', attributes)
+   puts @segmentGen.generate_segment_in_context(msg, '[~{~DG1~}~]', attributes)
  end
 
  def test_ADT_ALL1
@@ -425,37 +425,37 @@ class SegmentGeneratorTest < Test::Unit::TestCase
 
    msg = HL7::Message.new
    msg << @segmentGen.init_msh
-   @segmentGen.generate(msg,'PID', attributes)
+   @segmentGen.generate_segment_in_context(msg, 'PID', attributes)
 
    attributes = []
    @@evn_attributes.each_line do |line|
      attributes << lineToHash( line)
    end
-   @segmentGen.generate(msg,'EVN', attributes)
+   @segmentGen.generate_segment_in_context(msg, 'EVN', attributes)
 
    attributes = []
    @@pv1_attributes.each_line do |line|
      attributes << lineToHash( line)
    end
-   @segmentGen.generate(msg,'PV1', attributes)
+   @segmentGen.generate_segment_in_context(msg, 'PV1', attributes)
 
    attributes = []
    @@pd1_attributes.each_line do |line|
      attributes << lineToHash( line)
    end
-   @segmentGen.generate(msg,'[~PD1~]', attributes)
+   @segmentGen.generate_segment_in_context(msg, '[~PD1~]', attributes)
 
    attributes = []
    @@al1_attributes.each_line do |line|
      attributes << lineToHash( line)
    end
-   @segmentGen.generate(msg,'[~{~AL1~}~]', attributes)
+   @segmentGen.generate_segment_in_context(msg, '[~{~AL1~}~]', attributes)
 
    attributes = []
    @@dg1_attributes.each_line do |line|
      attributes << lineToHash( line)
    end
-   puts @segmentGen.generate(msg,'[~{~DG1~}~]', attributes)
+   puts @segmentGen.generate_segment_in_context(msg, '[~{~DG1~}~]', attributes)
 
  end
 
@@ -478,7 +478,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
       attributes << lineToHash( line)
       # p attributes
     end
-    puts @segmentGen.generate(msg,'~RCP~', attributes)
+    puts @segmentGen.generate_segment_in_context(msg, '~RCP~', attributes)
 
   end
 
@@ -506,7 +506,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
       attributes << lineToHash( line)
       # p attributes
     end
-    puts @segmentGen.generate(msg,'ZMH', attributes)
+    puts @segmentGen.generate_segment_in_context(msg, 'ZMH', attributes)
   end
 
   def test_segment_is_optional_group
@@ -519,7 +519,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
     segments <<  OptionalGroup.new().concat(["PID", "[~PD1~]", "[~{~NTE~}~]", OptionalGroup.new().concat(["PV1", "[~PV2~]"]), OptionalGroup.new(RepeatingGroup.new().concat(["IN1", "[~IN2~]", "[~IN3~]"])), "[~GT1~]", "[~{~AL1~}~]"])
 
     segments.each.with_index(){ |segment, idx|
-      @segmentGen.generate1(msg, segment, parsers, false)
+      @segmentGen.generate(msg, segment, parsers, false)
     }
     puts msg
   end
@@ -534,7 +534,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
     segments <<  OptionalGroup.new().concat(["PID", "[~PD1~]", "[~{~NTE~}~]", OptionalGroup.new().concat(["PV1", "[~PV2~]"]), OptionalGroup.new(RepeatingGroup.new().concat(["IN1", "[~IN2~]", "[~IN3~]"])), "[~GT1~]", "[~{~AL1~}~]"])
 
     segments.each.with_index(){ |segment, idx|
-      @segmentGen.generate1(msg, segment, parsers, false)
+      @segmentGen.generate(msg, segment, parsers, false)
     }
     puts msg
   end

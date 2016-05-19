@@ -28,7 +28,7 @@ class SegmentPicker
 
   # Get list of segments for test message generation.
   # MSH is populated with quick generation, skip it here.
-  def pick_segments1()
+  def pick_segments_to_build()
     idxs = pick_segment_idx_to_build
     segmentCandidates = build_segments_for_indexes(idxs)
     return segmentCandidates - @@MSH_SEGMENTS
@@ -75,41 +75,41 @@ class SegmentPicker
 
   # Get list of segments for test message generation.
   # MSH is populated with quick generation, skip it here.
-  def pick_segments()
-    segmentCandidates = get_segments_to_build()
-    return segmentCandidates - @@MSH_SEGMENTS
-    # "MSH~EVN~PID~[~PD1~]~[~{~ROL~}~]~[~{~NK1~}~]~PV1~[~PV2~]~[~{~ROL~}~]~[~{~DB1~}~]~[~{~OBX~}~]~[~{~AL1~}~]~[~{~DG1~}~]~[~DRG~]~[~{~PR1~[~{~ROL~}~]~}~]~[~{~GT1~}~]~[~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]~[~ACC~]~[~UB1~]~[~UB2~]~[~PDA~]"
-    #return [ 'EVN', 'PID','[~PD1~]', 'PV1','[~{~AL1~}~]', '[~{~DG1~}~]']
-    #return ['~base:EVN','base:PID','[~base:PD1~]','~base:PV1','[~{~base:AL1~}~]','[~{~base:DG1~}~]','[~ZEL~]','[~ZEM~]','[~ZEN~]','[~ZMH~]']
-  end
+  # def pick_segments()
+  #   segmentCandidates = get_segments_to_build()
+  #   return segmentCandidates - @@MSH_SEGMENTS
+  #   # "MSH~EVN~PID~[~PD1~]~[~{~ROL~}~]~[~{~NK1~}~]~PV1~[~PV2~]~[~{~ROL~}~]~[~{~DB1~}~]~[~{~OBX~}~]~[~{~AL1~}~]~[~{~DG1~}~]~[~DRG~]~[~{~PR1~[~{~ROL~}~]~}~]~[~{~GT1~}~]~[~{~IN1~[~IN2~]~[~{~IN3~}~]~[~{~ROL~}~]~}~]~[~ACC~]~[~UB1~]~[~UB2~]~[~PDA~]"
+  #   #return [ 'EVN', 'PID','[~PD1~]', 'PV1','[~{~AL1~}~]', '[~{~DG1~}~]']
+  #   #return ['~base:EVN','base:PID','[~base:PD1~]','~base:PV1','[~{~base:AL1~}~]','[~{~base:DG1~}~]','[~ZEL~]','[~ZEM~]','[~ZEN~]','[~ZMH~]']
+  # end
 
   # pick segments randomly, according to the load factor, exclude groups
-  def get_segments_to_build()
+  # def get_segments_to_build()
+  #
+  #     # place required segments according to their order in the segment
+  #     get_required_segments()
+  #
+  #     # place optional segments according to their order
+  #     pick_optional_segments()
+  #
+  #     # clean up profile, delete unselected optional segments
+  #     @profile.delete_if{|it| (!is_required?(it))||(it==nil)}
+  # end
 
-      # place required segments according to their order in the segment
-      get_required_segments()
-
-      # place optional segments according to their order
-      pick_optional_segments()
-
-      # clean up profile, delete unselected optional segments
-      @profile.delete_if{|it| (!is_required?(it))||(it==nil)}
-  end
-
-  # select optional segments and add them to required in correct order
-  def pick_optional_segments()
-
-      optSegmentIdxs = @profile.select{|it| !is_required?(it)}
-      # optSegmentIdxs = segmentsToBuildArray.each_index.select{|i| segmentsToBuildArray[i] == nil}
-      count = get_load_candidates_count(optSegmentIdxs.size())
-
-      # get indexes of optional segments
-      ids = optSegmentIdxs.sample(count)
-
-      # add selected optional segments to required, maintain order
-      ids.each{|id| @profile[@profile.index(id)]= @encodedSegments[id]}
-
-  end
+  # # select optional segments and add them to required in correct order
+  # def pick_optional_segments()
+  #
+  #     optSegmentIdxs = @profile.select{|it| !is_required?(it)}
+  #     # optSegmentIdxs = segmentsToBuildArray.each_index.select{|i| segmentsToBuildArray[i] == nil}
+  #     count = get_load_candidates_count(optSegmentIdxs.size())
+  #
+  #     # get indexes of optional segments
+  #     ids = optSegmentIdxs.sample(count)
+  #
+  #     # add selected optional segments to required, maintain order
+  #     ids.each{|id| @profile[@profile.index(id)]= @encodedSegments[id]}
+  #
+  # end
 
   # get segments that will always be build, include z segments
   def get_required_segments()

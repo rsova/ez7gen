@@ -9,7 +9,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   # end
 
   # set to true to write messages to a file
-  @@PERSIST = false
+  # @@PERSIST = false
 
   @@VS =
       [
@@ -29,7 +29,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   def test_OMG_O19
     ver= '2.4.HL7'
     event='OMG_O19'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -37,7 +37,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   def test_ORG_O20
     ver= '2.4.HL7'
     event='ORG_O20'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -45,7 +45,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   def test_OSQ_Q06
     ver= '2.4.HL7'
     event='OSQ_Q06'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -55,7 +55,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
     event='OSR_Q06'
     # 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~QRD~[~QRF~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~&lt;~OBR~|~RQD~|~RQ1~|~RXO~|~ODS~|~ODT~&gt;~[~{~NTE~}~]~[~{~CTI~}~]~}~]~[~DSC~]' />
 
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -65,7 +65,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   def test_ORU_R01
     ver= '2.4.HL7'
     event='ORU_R01'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -73,7 +73,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   def test_OUL_R21
     ver= '2.4.HL7'
     event='OUL_R21'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -81,7 +81,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   def test_QRY_R02
     ver= '2.4.HL7'
     event='QRY_R02'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -89,7 +89,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   def test_ORF_R04
     ver= '2.4.HL7'
     event='ORF_R04'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -97,7 +97,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   def test_OML_O21
     ver= '2.4.HL7'
     event='OML_O21'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -106,7 +106,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
     ver= '2.4.HL7'
     event='ORL_O22'
     # MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~{~[~SAC~[~{~OBX~}~]~]~[~{~ORC~[~OBR~[~{~SAC~}~]~]~}~]~}~]~]'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate1()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end

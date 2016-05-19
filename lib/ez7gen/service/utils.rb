@@ -31,19 +31,6 @@ module Utils
     true if Float(str) rescue false
   end
 
-  # def is_z?(segment)
-  #     segment=~/\~Z/
-  # end
-  #
-  #   #refactoring
-  # def is_z1?(segment)
-  #   if(segment.kind_of?Array)
-  #     #   tbd
-  #   else
-  #     segment=~/\~Z/
-  #   end
-  # end
-
   # if name starts with base use base type otherwise primary
   # works for generators and parsers
   def get_type_by_name(name)

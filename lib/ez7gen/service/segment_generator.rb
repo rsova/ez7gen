@@ -80,29 +80,25 @@ class SegmentGenerator
   end
 
   # refactoring
-  def generate1(message, segment, parsers, isGroup=false)
+  def generate(message, segment, parsers, isGroup=false)
     if(segment.kind_of?(Array))
+      # handle group
       generate_group(message, segment, parsers)
     else
-      generate_segment1(message, segment, parsers, isGroup)
+      # build_segment
+      choiceParser = parsers[get_type_by_name(segment)]
+      attributes = choiceParser.get_segment_structure(get_name_without_base(segment))
+      generate_segment_in_context(message, segment, attributes, isGroup)
+
     end
   end
 
-  def generate_segment1(message, segment, parsers, isGroup)
-    choiceParser = parsers[get_type_by_name(segment)]
-    attributes = choiceParser.get_segment_structure(get_name_without_base(segment))
-    generate(message, segment, attributes, isGroup)
-  end
-
-  # generate test message segment metadata
+  # generate a group of segments in test message segment using metadata
   def generate_group( message,  group,  parsers)
     # generate each segment in the group
-
     totalReps = (group.instance_of?(RepeatingGroup))? (1..@@maxReps).to_a.sample: 1
     totalReps.times do |i|
-      group.each{|seg|
-        generate1(message, seg, parsers, true)
-      }
+      group.each{|seg| generate(message, seg, parsers, true) }
     end
 
     return message
@@ -110,8 +106,8 @@ class SegmentGenerator
 
   # end
 
-  # generate test message segment metadata
-  def generate( message,  segment,  attributes, isGroup=false)
+  # generate test message segment using metadata
+  def generate_segment_in_context(message, segment, attributes, isGroup=false)
     isRep = is_segment_repeating?(segment)
     segmentName = get_segment_name(segment)
 
@@ -130,8 +126,7 @@ class SegmentGenerator
   end
 
 
-
-  # #generate test message using
+  # #generate_segment_in_context test message using
   # def generateSegmentFields( segment, attributes)
   #   segmentName = Utils.get_segment_name(segment)
   #   generate_segment(segmentName, attributes)
