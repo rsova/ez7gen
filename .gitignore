@@ -23,15 +23,10 @@ tmp
 mkmf.log
 .idea
 msg-samples
-
 Archive.zip
-
 msg-samples.zip
-
 ez7gen-web.zip
-
-ez7gen-web/config/schema.zip
-
+_ez7gen-web/config/schema.zip
 msg-samples 3.zip
-
+/_ez7gen-web
 *.zip

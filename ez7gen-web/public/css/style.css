@@ -1,9 +1,4 @@
-body { padding-top:50px; }
-
-.btn { margin-bottom:20px; }
-
-pre {
-    overflow: auto;
-    word-wrap: normal;
-    white-space: pre;
+/* cloak */
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
 }

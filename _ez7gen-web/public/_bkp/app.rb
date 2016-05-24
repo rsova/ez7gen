@@ -15,18 +15,12 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
 
   get '/' do
     # content_type :json
-    # redirect 'js/app.js'
-    redirect 'views/index.html'
+    redirect '/index.html'
   end
 
   get '/version/' do
     content_type :json
     { version: Ez7gen::VERSION}.to_json
-  end
-
-  get '/pulse' do
-    # content_type :json
-    'boom boom'
   end
 
   post '/generate/' do

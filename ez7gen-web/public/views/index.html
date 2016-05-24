@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<base>
+<title>Eazy HL7 Generator Tool</title>
+    <base href='/'></base>
+<!--     <link rel="stylesheet" type="text/css" href="/css/app.css" media="all" />
+ -->
+<!--
+	IE8 support, see AngularJS Internet Explorer Compatibility http://docs.angularjs.org/guide/ie
+	For Firefox 3.6, you will also need to include jQuery and ECMAScript 5 shim
+  -->
+<!--[if lt IE 9]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-shim.js"></script>
+<script>
+	document.createElement('ui-select');
+	document.createElement('ui-select-match');
+	document.createElement('ui-select-choices');
+</script>
+<![endif]-->
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-sanitize.js"></script>
+
+<!--bootstrap-->
+<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.0.0.js"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+<!--application  js files-->
+<script src="js/app.js"></script>
+<script src="js/router.js"></script>
+<script src="js/controllers/main_controller.js"></script>
+<script src="js/services/lookup_service.js"></script>
+<link rel="stylesheet" href="css/style.css">
+
+
+<!--Vendors: -->
+<!-- ui-select files -->
+<script src="vendor/js/select.js"></script>
+<link rel="stylesheet" href="vendor/css/select.css">
+<link rel="stylesheet" href="vendor/css/style.css">
+
+<!--Selectize theme-->
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
+<!-- Select2 theme -->
+<!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">-->
+
+<!--<style>-->
+	<!--body {-->
+		<!--padding: 25px;-->
+	<!--}-->
+
+	<!--.selectize-control > .selectize-dropdown {-->
+		<!--top: 36px;-->
+	<!--}-->
+<!--</style>-->
+
+<!-- xeditable-->
+<script src="vendor/js/xeditable.js"></script>
+<link rel="stylesheet" href="vendor/css/xeditable.css">
+
+<!-- HTML With Template Container -->
+</head>
+
+	<body ng-app="app"  ng-cloak class="ng-cloak">
+	<!-- <body> -->
+			<!--container for view-->
+			<div ng-view class="container"></div>
+		<!--</div>-->
+
+	</body>
+</html>

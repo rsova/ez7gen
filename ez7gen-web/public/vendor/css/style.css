@@ -1,0 +1,14 @@
+body { padding-top:50px; }
+
+.btn { margin-bottom:20px; }
+
+pre {
+    overflow: auto;
+    word-wrap: normal;
+    white-space: pre;
+}
+
+/* selectesize css style */
+body { padding: 25px; }
+
+.selectize-control > .selectize-dropdown { top: 36px; }
