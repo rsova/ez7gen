@@ -6,8 +6,10 @@ class ProfileParser
   include Utils
 
   #instance attributes
-  attr_reader :base;
+  attr_reader :base,:xml;
   alias_method :base?, :base;
+
+  # attr_reader :xml;
 
   @@FILTER_ALL = {filter: '.*', group: 'All'}
   FILTER_ADM = {filter: 'ADT_A|QBP_Q2|RSP_K2[1-4]', group: 'Admissions'}
