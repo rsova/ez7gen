@@ -140,4 +140,65 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
     fail()
   end
 
+  def test_dynamic_PID
+    pid = [
+    {:Name=>"Patient Identifier List", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"CX", :Length=>"250", :ItemNo=>"00106", :Pos=>2, :components=>[{:Name=>"ID", :Usage=>"R", :Datatype=>"ST", :Length=>"60", :Pos=>0}, {:Name=>"code identifying the check digit scheme employed", :Usage=>"R", :Datatype=>"ID", :Length=>"3", :Table=>"0061", :Pos=>2}, {:Name=>"assigning authority", :Usage=>"R", :Datatype=>"HD", :Length=>"8", :Pos=>3, :subComponents=>[{:Name=>"namespace ID", :Usage=>"R", :Datatype=>"IS", :Length=>"5", :Table=>"0363", :Pos=>0}, {:Name=>"universal ID type", :Usage=>"R", :Datatype=>"ID", :Length=>"1", :Table=>"0301", :Pos=>2}]}, {:Name=>"identifier type code (ID)", :Usage=>"R", :Datatype=>"ID", :Length=>"2", :Table=>"0203", :Pos=>4}]},
+    {:Name=>"Patient Name", :Usage=>"R", :Min=>"1", :Max=>"*", :Datatype=>"XPN", :Length=>"250", :ItemNo=>"00108", :Pos=>4, :components=>[{:Name=>"family name", :Usage=>"R", :Datatype=>"FN", :Length=>"60", :Pos=>0, :subComponents=>[{:Name=>"surname", :Usage=>"R", :Datatype=>"ST", :Length=>"35", :Pos=>0}]}, {:Name=>"given name", :Usage=>"R", :Datatype=>"ST", :Length=>"25", :Pos=>1}]},
+    {:Name=>"Date/Time Of Birth", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"TS", :Length=>"26", :ItemNo=>"00110", :Pos=>6, :components=>[{:Name=>"Date/Time", :Usage=>"R", :Datatype=>"NM", :Length=>"20", :Pos=>0}]},
+    {:Name=>"Administrative Sex", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"IS", :Length=>"1", :Table=>"0001", :ItemNo=>"00111", :Pos=>7}
+  ]
+    field = [ #Patient Identifier List : CX
+    {:Name=>"ID", :Usage=>"R", :Datatype=>"ST", :Length=>"60", :Pos=>0},
+    {:Name=>"code identifying the check digit scheme employed", :Usage=>"R", :Datatype=>"ID", :Length=>"3", :Table=>"0061", :Pos=>2},
+    {:Name=>"assigning authority", :Usage=>"R", :Datatype=>"HD", :Length=>"8", :Pos=>3,
+      :subComponents=>[
+          {:Name=>"namespace ID", :Usage=>"R", :Datatype=>"IS", :Length=>"5", :Table=>"0363", :Pos=>0},
+          {:Name=>"universal ID type", :Usage=>"R", :Datatype=>"ID", :Length=>"1", :Table=>"0301", :Pos=>2}]},
+    {:Name=>"identifier type code (ID)", :Usage=>"R", :Datatype=>"ID", :Length=>"2", :Table=>"0203", :Pos=>4}
+    ]
+
+
+    dt_partials = []
+    pid.each{|f|
+      if(f[:componets])
+
+      elsif(f[:subComponents])
+        subs = []
+        f[:subComponents].each{|s|
+          subs[s[:Pos].to_i] = prepare_attrs(s)
+        }
+        dt_partials[f[:Pos].to_i] = subs.join('&')
+
+      else
+      dt_partials[f[:Pos].to_i] = prepare_attrs(f)
+      end
+    }
+    puts dt_partials.join('^')
+
+    # AETNA18^^M11^CANON&&UUID^VA-EDI^CANYT
+    # "834^^ISO^CANYT&&^PI"
+  end
+
+  def prepare_attrs(f)
+    map = {}
+    # if (f[:Pos])
+    #   map[:pos]= f[:Pos].to_i
+    # end
+
+    if (f[:Length])
+      map[:max_length]= f[:Length]
+    end
+
+    if (f[:Table])
+      map[:codetable]= f[:Table].sub(/^0+/, '')
+    end
+
+    if (f[:descripion])
+      map[:descripion] = f[:Name]
+    end
+
+    dt = f[:Datatype]
+    @fldGenerator.method(dt).call(map, true)
+  end
+
 end
