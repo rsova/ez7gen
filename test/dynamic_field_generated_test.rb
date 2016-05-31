@@ -153,52 +153,85 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
     {:Name=>"assigning authority", :Usage=>"R", :Datatype=>"HD", :Length=>"8", :Pos=>3,
       :subComponents=>[
           {:Name=>"namespace ID", :Usage=>"R", :Datatype=>"IS", :Length=>"5", :Table=>"0363", :Pos=>0},
-          {:Name=>"universal ID type", :Usage=>"R", :Datatype=>"ID", :Length=>"1", :Table=>"0301", :Pos=>2}]},
-    {:Name=>"identifier type code (ID)", :Usage=>"R", :Datatype=>"ID", :Length=>"2", :Table=>"0203", :Pos=>4}
+          {:Name=>"universal ID type", :Usage=>"R", :Datatype=>"ID", :Length=>"10", :Table=>"0301", :Pos=>2},
+          # {:Name=>"universal ID type", :Usage=>"R", :Datatype=>"ID", :Length=>"1", :Table=>"0301", :Pos=>2}]},
+          {:Name=>"identifier type code (ID)", :Usage=>"R", :Datatype=>"ID", :Length=>"10", :Table=>"0203", :Pos=>4}]}
+    # {:Name=>"identifier type code (ID)", :Usage=>"R", :Datatype=>"ID", :Length=>"2", :Table=>"0203", :Pos=>4}
     ]
 
 
     dt_partials = []
-    pid.each{|f|
-      if(f[:componets])
 
-      elsif(f[:subComponents])
-        subs = []
-        f[:subComponents].each{|s|
-          subs[s[:Pos].to_i] = prepare_attrs(s)
-        }
-        dt_partials[f[:Pos].to_i] = subs.join('&')
+    # f[:components] each {|c| }
+    # f[:subcomponents] each
+    # no comp
 
-      else
-      dt_partials[f[:Pos].to_i] = prepare_attrs(f)
-      end
+    field.each{|f|
+      puts f.to_s
+      dt_partials[f[:Pos].to_i] = break_to_partial(f)
+      puts dt_partials.join('^')
+      # if(f[:componets])
+      #
+      #
+      # elsif(f[:subComponents])
+      #   subs = []
+      #   f[:subComponents].each{|s|
+      #     subs[s[:Pos].to_i] = convert_attributes(s)
+      #   }
+      #   dt_partials[f[:Pos].to_i] = subs.join('&')
+      #
+      # else
+      # dt_partials[f[:Pos].to_i] = convert_attributes(f)
+      # end
     }
-    puts dt_partials.join('^')
+    puts dt_partials
 
     # AETNA18^^M11^CANON&&UUID^VA-EDI^CANYT
     # "834^^ISO^CANYT&&^PI"
   end
 
-  def prepare_attrs(f)
-    map = {}
-    # if (f[:Pos])
-    #   map[:pos]= f[:Pos].to_i
-    # end
+  def break_to_partial(item)
+    partials = []
 
-    if (f[:Length])
-      map[:max_length]= f[:Length]
+    if(item.kind_of? Array)
+
+      item.each{|i|
+        coll = i[:subComponents] || i
+        partials[i[:Pos].to_i] = break_to_partial(coll)
+        puts partials
+      }
+    else
+
+      coll = item[:components] || item[:subComponents]
+      if(coll)
+        partials << break_to_partial(coll).join((item[:subComponents])?'&':'^')
+      else
+        partials << convert_attributes(item)
+      end
+
     end
 
-    if (f[:Table])
-      map[:codetable]= f[:Table].sub(/^0+/, '')
+    return partials
+
+  end
+
+  def convert_attributes(item)
+    attrs = {}
+
+    if (item[:Length])
+      attrs[:max_length]= item[:Length]
     end
 
-    if (f[:descripion])
-      map[:descripion] = f[:Name]
+    if (item[:Table])
+      attrs[:codetable]= item[:Table].sub(/^0+/, '')
     end
 
-    dt = f[:Datatype]
-    @fldGenerator.method(dt).call(map, true)
+    if (item[:descripion])
+      attrs[:descripion] = item[:Name]
+    end
+
+    dt = item[:Datatype]
+    @fldGenerator.method(dt).call(attrs, true)
   end
 
 end
