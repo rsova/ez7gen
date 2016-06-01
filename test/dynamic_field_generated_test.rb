@@ -140,6 +140,7 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
     fail()
   end
 
+
   def test_dynamic_PID
     pid = [
     {:Name=>"Patient Identifier List", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"CX", :Length=>"250", :ItemNo=>"00106", :Pos=>2, :components=>[{:Name=>"ID", :Usage=>"R", :Datatype=>"ST", :Length=>"60", :Pos=>0}, {:Name=>"code identifying the check digit scheme employed", :Usage=>"R", :Datatype=>"ID", :Length=>"3", :Table=>"0061", :Pos=>2}, {:Name=>"assigning authority", :Usage=>"R", :Datatype=>"HD", :Length=>"8", :Pos=>3, :subComponents=>[{:Name=>"namespace ID", :Usage=>"R", :Datatype=>"IS", :Length=>"5", :Table=>"0363", :Pos=>0}, {:Name=>"universal ID type", :Usage=>"R", :Datatype=>"ID", :Length=>"1", :Table=>"0301", :Pos=>2}]}, {:Name=>"identifier type code (ID)", :Usage=>"R", :Datatype=>"ID", :Length=>"2", :Table=>"0203", :Pos=>4}]},
@@ -147,47 +148,75 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
     {:Name=>"Date/Time Of Birth", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"TS", :Length=>"26", :ItemNo=>"00110", :Pos=>6, :components=>[{:Name=>"Date/Time", :Usage=>"R", :Datatype=>"NM", :Length=>"20", :Pos=>0}]},
     {:Name=>"Administrative Sex", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"IS", :Length=>"1", :Table=>"0001", :ItemNo=>"00111", :Pos=>7}
   ]
-    field = [ #Patient Identifier List : CX
-    {:Name=>"ID", :Usage=>"R", :Datatype=>"ST", :Length=>"60", :Pos=>0},
-    {:Name=>"code identifying the check digit scheme employed", :Usage=>"R", :Datatype=>"ID", :Length=>"3", :Table=>"0061", :Pos=>2},
-    {:Name=>"assigning authority", :Usage=>"R", :Datatype=>"HD", :Length=>"8", :Pos=>3,
-      :subComponents=>[
-          {:Name=>"namespace ID", :Usage=>"R", :Datatype=>"IS", :Length=>"5", :Table=>"0363", :Pos=>0},
-          {:Name=>"universal ID type", :Usage=>"R", :Datatype=>"ID", :Length=>"10", :Table=>"0301", :Pos=>2},
-          # {:Name=>"universal ID type", :Usage=>"R", :Datatype=>"ID", :Length=>"1", :Table=>"0301", :Pos=>2}]},
-          {:Name=>"identifier type code (ID)", :Usage=>"R", :Datatype=>"ID", :Length=>"10", :Table=>"0203", :Pos=>4}]}
-    # {:Name=>"identifier type code (ID)", :Usage=>"R", :Datatype=>"ID", :Length=>"2", :Table=>"0203", :Pos=>4}
+
+    #Patient Identifier List"
+    pil = [
+        {:Name=>"Patient Identifier List", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"CX", :Length=>"250", :ItemNo=>"00106", :Pos=>2,
+          :components=>[
+              {:Name=>"ID", :Usage=>"R", :Datatype=>"ST", :Length=>"60", :Pos=>0},
+              {:Name=>"code identifying the check digit scheme employed", :Usage=>"R", :Datatype=>"ID", :Length=>"3", :Table=>"0061", :Pos=>2},
+              {:Name=>"assigning authority", :Usage=>"R", :Datatype=>"HD", :Length=>"8", :Pos=>3,
+               :subComponents=>[
+                   {:Name=>"namespace ID", :Usage=>"R", :Datatype=>"IS", :Length=>"5", :Table=>"0363", :Pos=>0},
+                   {:Name=>"universal ID type", :Usage=>"R", :Datatype=>"ID",  :Table=>"0301", :Pos=>2} #:Length=>"1"
+               ]
+              },
+              {:Name=>"identifier type code (ID)", :Usage=>"R", :Datatype=>"ID", :Length=>"2", :Table=>"0203", :Pos=>4}]}
     ]
 
+    aa = [ {:Name=>"assigning authority", :Usage=>"R", :Datatype=>"HD", :Length=>"8", :Pos=>3,
+                       :subComponents=>[
+                           {:Name=>"namespace ID", :Usage=>"R", :Datatype=>"IS", :Length=>"5", :Table=>"0363", :Pos=>0},
+                           {:Name=>"universal ID type", :Usage=>"R", :Datatype=>"ID",  :Table=>"0301", :Pos=>2} #:Length=>"1"
+                       ]
+           }]
 
-    dt_partials = []
+    #CANAB&&ISO&&HC :  CANAB & &ISO & &HC
+    #MWB
+    #CANON&&UUID: CANON & &UUID
+    #CANON&&UUID
+    # 12345^4^NPI^CANPE&&GUID^MA^^20140325
+    # 12345 <Component Name="ID" Usage="R" Datatype="ST" Length="60"
+    # 4     <Component Name="Check digit" Usage="RE" Datatype="ST" Length="1"
+    # NPI   Component Name="code identifying the check digit scheme employed" Usage="R" Datatype="ID" Length="3" Table="0061"
+    # CANPE&&GUID <Component Name="assigning authority" Usage="R" Datatype="HD" Length="8 : NOTE: length 11
+    #  CANPE  <SubComponent Name="namespace ID" Usage="R" Datatype="IS" Length="5" Table="0363"
+    #  ''     <SubComponent Name="universal ID" Usage="X" Datatype="ST"> NOTE: blank Usage X
+    #  GUID   <SubComponent Name="universal ID type" Usage="R" Datatype="ID" Length="1" Table="0301"
 
-    # f[:components] each {|c| }
-    # f[:subcomponents] each
-    # no comp
+    pn =[{:Name=>"Patient Name", :Usage=>"R", :Min=>"1", :Max=>"*", :Datatype=>"XPN", :Length=>"250", :ItemNo=>"00108", :Pos=>4, :components=>[{:Name=>"family name", :Usage=>"R", :Datatype=>"FN", :Length=>"60", :Pos=>0, :subComponents=>[{:Name=>"surname", :Usage=>"R", :Datatype=>"ST", :Length=>"35", :Pos=>0}]}, {:Name=>"given name", :Usage=>"R", :Datatype=>"ST", :Length=>"25", :Pos=>1}]}]
 
-    field.each{|f|
+    # PID with R and RE
+   pid_re = [{:Name=>"Patient Identifier List", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"CX", :Length=>"250", :ItemNo=>"00106", :Pos=>2, :components=>[{:Name=>"ID", :Usage=>"R", :Datatype=>"ST", :Length=>"60", :Pos=>0}, {:Name=>"Check digit", :Usage=>"RE", :Datatype=>"ST", :Length=>"1", :Pos=>1}, {:Name=>"code identifying the check digit scheme employed", :Usage=>"R", :Datatype=>"ID", :Length=>"3", :Table=>"0061", :Pos=>2}, {:Name=>"assigning authority", :Usage=>"R", :Datatype=>"HD", :Length=>"8", :Pos=>3, :subComponents=>[{:Name=>"namespace ID", :Usage=>"R", :Datatype=>"IS", :Length=>"5", :Table=>"0363", :Pos=>0}, {:Name=>"universal ID type", :Usage=>"R", :Datatype=>"ID", :Length=>"1", :Table=>"0301", :Pos=>2}]}, {:Name=>"identifier type code (ID)", :Usage=>"R", :Datatype=>"ID", :Length=>"2", :Table=>"0203", :Pos=>4}, {:Name=>"assigning facility", :Usage=>"RE", :Datatype=>"HD", :Length=>"14", :Pos=>5, :subComponents=>[{:Name=>"namespace ID", :Usage=>"RE", :Datatype=>"IS", :Length=>"6", :Table=>"0363", :Pos=>0}]}, {:Name=>"effective date (DT)", :Usage=>"RE", :Datatype=>"DT", :Length=>"8", :Pos=>6}]},
+    {:Name=>"Patient Name", :Usage=>"R", :Min=>"1", :Max=>"*", :Datatype=>"XPN", :Length=>"250", :ItemNo=>"00108", :Pos=>4, :components=>[{:Name=>"family name", :Usage=>"R", :Datatype=>"FN", :Length=>"60", :Pos=>0, :subComponents=>[{:Name=>"surname", :Usage=>"R", :Datatype=>"ST", :Length=>"35", :Pos=>0}]}, {:Name=>"given name", :Usage=>"R", :Datatype=>"ST", :Length=>"25", :Pos=>1}, {:Name=>"second and further given names or initials thereof", :Usage=>"RE", :Datatype=>"ST", :Length=>"25", :Pos=>2}]},
+    {:Name=>"Date/Time Of Birth", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"TS", :Length=>"26", :ItemNo=>"00110", :Pos=>6, :components=>[{:Name=>"Date/Time", :Usage=>"R", :Datatype=>"NM", :Length=>"20", :Pos=>0}]},
+    {:Name=>"Administrative Sex", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"IS", :Length=>"1", :Table=>"0001", :ItemNo=>"00111", :Pos=>7},
+    {:Name=>"Race", :Usage=>"RE", :Min=>"0", :Max=>"1", :Datatype=>"CE", :Length=>"250", :Table=>"0005", :ItemNo=>"00113", :Pos=>9, :components=>[{:Name=>"identifier", :Usage=>"RE", :Datatype=>"ST", :Length=>"10", :Table=>"0005", :Pos=>0}, {:Name=>"name of coding system", :Usage=>"RE", :Datatype=>"IS", :Length=>"6", :Table=>"0396", :Pos=>2}, {:Name=>"alternate identifier", :Usage=>"RE", :Datatype=>"ST", :Length=>"6", :Pos=>3}, {:Name=>"name of alternate coding system", :Usage=>"RE", :Datatype=>"IS", :Length=>"3", :Table=>"0396", :Pos=>5}]},
+    {:Name=>"Patient Address", :Usage=>"RE", :Min=>"0", :Max=>"1", :Datatype=>"XAD", :Length=>"250", :ItemNo=>"00114", :Pos=>10, :components=>[{:Name=>"street address (SAD)", :Usage=>"RE", :Datatype=>"SAD", :Length=>"49", :Pos=>0, :subComponents=>[{:Name=>"street or mailing address", :Usage=>"RE", :Datatype=>"ST", :Length=>"35", :Pos=>0}]}, {:Name=>"city", :Usage=>"RE", :Datatype=>"ST", :Length=>"15", :Pos=>2}, {:Name=>"state or province", :Usage=>"RE", :Datatype=>"ST", :Length=>"5", :Pos=>3}, {:Name=>"zip or postal code", :Usage=>"RE", :Datatype=>"ST", :Length=>"5", :Pos=>4}]},
+    {:Name=>"Marital Status", :Usage=>"RE", :Min=>"0", :Max=>"1", :Datatype=>"CE", :Length=>"250", :Table=>"0002", :ItemNo=>"00119", :Pos=>15, :components=>[{:Name=>"identifier", :Usage=>"RE", :Datatype=>"ST", :Length=>"1", :Table=>"0002", :Pos=>0}]},
+    {:Name=>"Religion", :Usage=>"RE", :Min=>"0", :Max=>"1", :Datatype=>"CE", :Length=>"250", :Table=>"0006", :ItemNo=>"00120", :Pos=>16, :components=>[{:Name=>"identifier", :Usage=>"RE", :Datatype=>"ST", :Length=>"2", :Table=>"0006", :Pos=>0}]},
+    {:Name=>"Ethnic Group", :Usage=>"RE", :Min=>"0", :Max=>"1", :Datatype=>"CE", :Length=>"250", :Table=>"0189", :ItemNo=>"00125", :Pos=>21, :components=>[{:Name=>"identifier", :Usage=>"RE", :Datatype=>"ST", :Length=>"10", :Table=>"0189", :Pos=>0}, {:Name=>"name of coding system", :Usage=>"RE", :Datatype=>"IS", :Length=>"6", :Table=>"0396", :Pos=>2}, {:Name=>"alternate identifier", :Usage=>"RE", :Datatype=>"ST", :Length=>"6", :Pos=>3}, {:Name=>"name of alternate coding system", :Usage=>"RE", :Datatype=>"IS", :Length=>"6", :Table=>"0396", :Pos=>5}]}]
+
+
+    flds = []
+
+    pid_re.each{|f|
+      dt_partials = []
+      dt_partials << break_to_partial(f)
+      flds[f[:Pos].to_i] = dt_partials.join('^')
       puts f.to_s
-      dt_partials[f[:Pos].to_i] = break_to_partial(f)
-      puts dt_partials.join('^')
-      # if(f[:componets])
-      #
-      #
-      # elsif(f[:subComponents])
-      #   subs = []
-      #   f[:subComponents].each{|s|
-      #     subs[s[:Pos].to_i] = convert_attributes(s)
-      #   }
-      #   dt_partials[f[:Pos].to_i] = subs.join('&')
-      #
-      # else
-      # dt_partials[f[:Pos].to_i] = convert_attributes(f)
-      # end
+      # puts flds
+      puts flds.last
     }
-    puts dt_partials
+    puts flds.join('|')
 
     # AETNA18^^M11^CANON&&UUID^VA-EDI^CANYT
     # "834^^ISO^CANYT&&^PI"
+
+    # PID|||607    ^1^M11^CANMB&&    ^AN    ^CANQC^20150615||Harper           ^Octavius       ^Stewart||2016-03-25T20:17:16-10:00|F||2106-3^^I9C^497^^ICS|359^^466^150^366    |||||W|   |||||N^^E7^675^^CAS
+    # PID|||AETNA18^ ^M11^CANON&&UUID^VA-EDI^CANYT         ||HL7PFSSZELSURNAME^HL7ZPDFIRSTNAME        ||199901101410             |F||2028-9^^^CST^^MVX   |^^BROOKSVILLE^^38221|||||W|REC|||||^^DCL^NDC^^ACR
+    #      |9999999^4^M11^CANAB&&x400^PEN   ^AUSHIC^20140325
+
   end
 
   def break_to_partial(item)
@@ -197,14 +226,14 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
 
       item.each{|i|
         coll = i[:subComponents] || i
-        partials[i[:Pos].to_i] = break_to_partial(coll)
-        puts partials
+        partials[i[:Pos].to_i] = break_to_partial(coll).join((i[:subComponents])?'&':'^')
+        # puts partials
       }
     else
 
       coll = item[:components] || item[:subComponents]
       if(coll)
-        partials << break_to_partial(coll).join((item[:subComponents])?'&':'^')
+        partials << break_to_partial(coll)
       else
         partials << convert_attributes(item)
       end
@@ -226,8 +255,8 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
       attrs[:codetable]= item[:Table].sub(/^0+/, '')
     end
 
-    if (item[:descripion])
-      attrs[:descripion] = item[:Name]
+    if (item[:Name])
+      attrs[:description] = item[:Name]
     end
 
     dt = item[:Datatype]

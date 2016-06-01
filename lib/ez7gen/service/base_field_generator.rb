@@ -78,6 +78,8 @@ class BaseFieldGenerator
         val = '%.2f' % generate_length_bound_id(5)
       when @@MONEY_FORMAT_REGEX
         val = '%.2f' % ID(map,true)
+      when /Date\/Time/
+        val = to_datetime(map)
       else
         val = ID(map,true) # general rule for a number
         if (map[:datatype] == 'CP' || map[:datatype] == 'MO') # money
@@ -115,7 +117,7 @@ class BaseFieldGenerator
       when 'AGENT ORANGE EXPOSURE LOCATION'
         #ZEL.29 should be 1 digit integer.
         generate_length_bound_id(1)
-      when /family name/
+      when /family name|surname/
         @yml['person.names.last'].sample
       when /given name/
         @yml['person.names.first'].sample

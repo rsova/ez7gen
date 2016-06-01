@@ -71,6 +71,8 @@ class TemplateGeneratorTest < Test::Unit::TestCase
 
   def test_read_template_PID
 
+    usages = ['R','RE']
+
     templatePath = File.path('test-config/templates/ADT_A60_PID.xml')
     xml = Ox.parse(IO.read(templatePath))
     assert_not_nil (xml)
@@ -86,17 +88,17 @@ class TemplateGeneratorTest < Test::Unit::TestCase
       # flds = seg.locate('Field')
       seg.locate('Field').each_with_index { |fld,fld_idx |
         # meta = []
-        if(fld.Usage == 'R') #Usage="R"
+        if(usages.include?(fld.Usage)) #Usage="R"
           fld.attributes.merge!(:Pos => fld_idx)
 
           cmps = []
           fld.locate('Component').each_with_index { |cmp,cmp_idx |
-            if(cmp.Usage == 'R')
+            if(usages.include?(cmp.Usage))
               cmp.attributes.merge!(:Pos => cmp_idx)
 
               sub_comps = []
               cmp.locate('SubComponent').each_with_index { |sub,sub_idx |
-                if(sub.Usage == 'R')
+                if(usages.include?(sub.Usage))
                   sub_comps << sub.attributes.merge(:Pos => sub_idx)
                 end
               }
@@ -117,7 +119,7 @@ class TemplateGeneratorTest < Test::Unit::TestCase
     end
     # p map
     assert_equal 1, map.size
-    assert_equal 4, map['PID'].size
+    assert_equal 9, map['PID'].size
 
     # puts map
     puts map['PID']

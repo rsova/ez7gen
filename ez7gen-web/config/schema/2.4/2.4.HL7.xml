@@ -8858,8 +8858,7 @@
 					description='No suggested values defined' />
 			</CodeTable>
 			<CodeTable name='61' tabletype='2' description='Check digit scheme'>
-				<Enumerate position='1' value='NPI'
-					description='Check digit algorithm in the US National Provider Identifier' />
+				<Enumerate position='1' value='NPI' description='Check digit algorithm in the US National Provider Identifier' />
 				<Enumerate position='2' value='ISO' description='ISO 7064: 1983' />
 				<Enumerate position='3' value='M10' description='Mod 10 algorithm' />
 				<Enumerate position='4' value='M11' description='Mod 11 algorithm' />
@@ -10493,21 +10492,17 @@
 				<Enumerate position='4' value='BR' description='Birth registry number' />
 				<Enumerate position='5' value='BRN' description='Breed Registry Number' />
 				<Enumerate position='6' value='DI' description='Diner&apos;s Club card' />
-				<Enumerate position='7' value='DL'
-					description='Driver&apos;s license number' />
+				<Enumerate position='7' value='DL' description='Driver&apos;s license number' />
 				<Enumerate position='8' value='DN' description='Doctor number' />
 				<Enumerate position='9' value='DR' description='Donor Registration Number' />
 				<Enumerate position='10' value='DS' description='Discover Card' />
 				<Enumerate position='11' value='EI' description='Employee number' />
 				<Enumerate position='12' value='EN' description='Employer number' />
 				<Enumerate position='13' value='FI' description='Facility ID' />
-				<Enumerate position='14' value='GI'
-					description='Guarantor internal identifier' />
-				<Enumerate position='15' value='GN'
-					description='Guarantor external identifier' />
+				<Enumerate position='14' value='GI' description='Guarantor internal identifier' />
+				<Enumerate position='15' value='GN' description='Guarantor external identifier' />
 				<Enumerate position='16' value='HC' description='Health Card Number' />
-				<Enumerate position='17' value='JHN'
-					description='Jurisdictional health number (Canada)' />
+				<Enumerate position='17' value='JHN' description='Jurisdictional health number (Canada)' />
 				<Enumerate position='18' value='LN' description='License number' />
 				<Enumerate position='19' value='LR' description='Local Registry ID' />
 				<Enumerate position='20' value='MA' description='Medicaid number' />
@@ -10515,32 +10510,23 @@
 				<Enumerate position='22' value='MCN' description='Microchip Number' />
 				<Enumerate position='23' value='MR' description='Medical record number' />
 				<Enumerate position='24' value='MS' description='MasterCard' />
-				<Enumerate position='25' value='NE'
-					description='National employer identifier' />
-				<Enumerate position='26' value='NH'
-					description='National Health Plan Identifier' />
-				<Enumerate position='27' value='NI'
-					description='National unique individual identifier' />
-				<Enumerate position='28' value='NNxxx'
-					description='National Person Identifier where the xxx is the ISO table 3166 3-character (alphabetic) country code' />
-				<Enumerate position='29' value='NPI'
-					description='National provider identifier' />
+				<Enumerate position='25' value='NE' description='National employer identifier' />
+				<Enumerate position='26' value='NH' description='National Health Plan Identifier' />
+				<Enumerate position='27' value='NI' description='National unique individual identifier' />
+				<Enumerate position='28' value='NNxxx' description='National Person Identifier where the xxx is the ISO table 3166 3-character (alphabetic) country code' />
+				<Enumerate position='29' value='NPI' description='National provider identifier' />
 				<Enumerate position='30' value='PEN' description='Pension Number' />
-				<Enumerate position='31' value='PI'
-					description='Patient internal identifier' />
+				<Enumerate position='31' value='PI' description='Patient internal identifier' />
 				<Enumerate position='32' value='PN' description='Person number' />
 				<Enumerate position='33' value='PRN' description='Provider number' />
-				<Enumerate position='34' value='PT'
-					description='Patient external identifier' />
-				<Enumerate position='35' value='RR'
-					description='Railroad Retirement number' />
+				<Enumerate position='34' value='PT' description='Patient external identifier' />
+				<Enumerate position='35' value='RR' description='Railroad Retirement number' />
 				<Enumerate position='36' value='RRI' description='Regional registry ID' />
 				<Enumerate position='37' value='SL' description='State license' />
 				<Enumerate position='38' value='SR' description='State registry ID' />
 				<Enumerate position='39' value='SS' description='Social Security number' />
 				<Enumerate position='40' value='U' description='Unspecified' />
-				<Enumerate position='41' value='UPIN'
-					description='Medicare/HCFA&apos;s Universal Physician Identification numbers' />
+				<Enumerate position='41' value='UPIN' description='Medicare/HCFA&apos;s Universal Physician Identification numbers' />
 				<Enumerate position='42' value='VN' description='Visit number' />
 				<Enumerate position='43' value='VS' description='VISA' />
 				<Enumerate position='44' value='WC' description='WIC identifier' />
@@ -11856,23 +11842,15 @@
 					description='No suggested values defined' />
 			</CodeTable>
 			<CodeTable name='301' tabletype='2' description='Universal ID type'>
-				<Enumerate position='1' value='DNS'
-					description='An Internet dotted name. Either in ASCII or as integers' />
+				<Enumerate position='1' value='DNS' description='An Internet dotted name. Either in ASCII or as integers' />
 				<Enumerate position='2' value='GUID' description='Same as UUID.' />
-				<Enumerate position='3' value='HCD'
-					description='The CEN Healthcare Coding Scheme Designator. (Identifiers used in DICOM follow this assignment scheme.)' />
-				<Enumerate position='4' value='HL7'
-					description='Reserved for future HL7 registration schemes' />
-				<Enumerate position='5' value='ISO'
-					description='An International Standards Organization Object Identifier' />
-				<Enumerate position='6' value='L,M,N'
-					description='These are reserved for locally defined coding schemes.' />
-				<Enumerate position='7' value='Random'
-					description='Usually a base64 encoded string of random bits.  The uniqueness depends on the length of the bits. Mail systems often generate ASCII string "unique names," from a combination of random bits and system names. Obviously, such identifiers will not be constructed' />
-				<Enumerate position='8' value='UUID'
-					description='The DCE Universal Unique Identifier' />
-				<Enumerate position='9' value='x400'
-					description='An X.400 MHS format identifier' />
+				<Enumerate position='3' value='HCD' description='The CEN Healthcare Coding Scheme Designator. (Identifiers used in DICOM follow this assignment scheme.)' />
+				<Enumerate position='4' value='HL7' description='Reserved for future HL7 registration schemes' />
+				<Enumerate position='5' value='ISO' description='An International Standards Organization Object Identifier' />
+				<Enumerate position='6' value='L,M,N' description='These are reserved for locally defined coding schemes.' />
+				<Enumerate position='7' value='Random' description='Usually a base64 encoded string of random bits.  The uniqueness depends on the length of the bits. Mail systems often generate ASCII string "unique names," from a combination of random bits and system names. Obviously, such identifiers will not be constructed' />
+				<Enumerate position='8' value='UUID' description='The DCE Universal Unique Identifier' />
+				<Enumerate position='9' value='x400' description='An X.400 MHS format identifier' />
 				<Enumerate position='10' value='x500' description='An X.500 directory name' />
 			</CodeTable>
 			<CodeTable name='302' tabletype='1'
@@ -12622,34 +12600,25 @@
 					description='No suggested values defined' />
 			</CodeTable>
 			<CodeTable name='363' tabletype='1' description='Assigning authority'>
-				<Enumerate position='1' value='AUSDVA'
-					description='Australia - Dept. of Veterans Affairs' />
-				<Enumerate position='2' value='AUSHIC'
-					description='Australia - Health Insurance Commission' />
+				<Enumerate position='1' value='AUSDVA' description='Australia - Dept. of Veterans Affairs' />
+				<Enumerate position='2' value='AUSHIC' description='Australia - Health Insurance Commission' />
 				<Enumerate position='3' value='CANAB' description='Canada - Alberta' />
 				<Enumerate position='4' value='CANBC' description='Canada - British Columbia' />
 				<Enumerate position='5' value='CANMB' description='Canada - Manitoba' />
 				<Enumerate position='6' value='CANNB' description='Canada - New Brunswick' />
 				<Enumerate position='7' value='CANNF' description='Canada - Newfoundland' />
 				<Enumerate position='8' value='CANNS' description='Canada - Nova Scotia' />
-				<Enumerate position='9' value='CANNT'
-					description='Canada - Northwest Territories' />
+				<Enumerate position='9' value='CANNT' description='Canada - Northwest Territories' />
 				<Enumerate position='10' value='CANNU' description='Canada - Nanavut' />
 				<Enumerate position='11' value='CANON' description='Canada - Ontario' />
-				<Enumerate position='12' value='CANPE'
-					description='Canada - Prince Edward Island' />
+				<Enumerate position='12' value='CANPE' description='Canada - Prince Edward Island' />
 				<Enumerate position='13' value='CANQC' description='Canada - Quebec' />
 				<Enumerate position='14' value='CANSK' description='Canada - Saskatchewan' />
-				<Enumerate position='15' value='CANYT'
-					description='Canada - Yukon Territories' />
-				<Enumerate position='16' value='NLVWS'
-					description='NL - Ministerie van Volksgezondheid, Welzijn en Sport' />
-				<Enumerate position='17' value='USCDC'
-					description='US Center for Disease Control' />
-				<Enumerate position='18' value='USHCFA'
-					description='US Healthcare Finance Authority' />
-				<Enumerate position='19' value='USSSA'
-					description='US Social Security Administration' />
+				<Enumerate position='15' value='CANYT' description='Canada - Yukon Territories' />
+				<Enumerate position='16' value='NLVWS' description='NL - Ministerie van Volksgezondheid, Welzijn en Sport' />
+				<Enumerate position='17' value='USCDC' description='US Center for Disease Control' />
+				<Enumerate position='18' value='USHCFA' description='US Healthcare Finance Authority' />
+				<Enumerate position='19' value='USSSA' description='US Social Security Administration' />
 			</CodeTable>
 			<CodeTable name='364' tabletype='1' description='Comment type'>
 				<Enumerate position='1' value='PI' description='Patient Instructions' />
