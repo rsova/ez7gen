@@ -129,6 +129,7 @@ class ProfileParser
 
   def get_segment_structure(segment)
     segmentName = get_segment_name(segment)
+    puts segmentName
     # node = export.Document.Category.SegmentStructure.find{ it.@name == segmentName}
     # values = @xml.elements.collect("Export/Document/Category/SegmentStructure[@name ='#{segmentName}']/SegmentSubStructure"){|x| x.attributes}
     @xml.Export.Document.Category.locate('SegmentStructure').select{|it| it.attributes[:name] == segmentName }.first.locate('SegmentSubStructure').map{|it| it.attributes}

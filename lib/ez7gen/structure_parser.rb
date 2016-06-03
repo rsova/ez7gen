@@ -55,7 +55,10 @@ include Utils
       if(is_complex_group?(seg))
 
         # Generate marker for the segment to preserve specifics of type of the group - opt. vs repeating.
-        seg = Marker.gen(seg)
+        if(!seg.kind_of? Array )
+          seg = Marker.gen(seg)
+        end
+
         if(seg.kind_of? Array)# TODO: Refactor, check not needed?
           seg.resolve(@encodedSegments)
         else
@@ -163,8 +166,16 @@ end
   # check if encoded segment is a group
   def is_complex_group?(encoded)
 
-    # ignore arrays, they have already been resolved
-    return  false if(encoded.kind_of?(Array))
+    # most of arrays have already been resolved
+    # look inside if any of complex group left unresolved
+    # return  false if(encoded.kind_of?(Array))
+    if(encoded.kind_of?(Array))
+      is_complex = false
+      encoded.each{|it|
+        is_complex = is_complex_group?(it) ||is_complex
+      }
+      return is_complex
+    end
 
     # group has an index of encoded optional element
     # isGroupWithEncodedElements = ((encoded =~ /\~\d+\~/) || is_number?(encoded)) ? true: false

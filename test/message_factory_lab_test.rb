@@ -55,7 +55,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
     event='OSR_Q06'
     # 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~QRD~[~QRF~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~&lt;~OBR~|~RQD~|~RQ1~|~RXO~|~ODS~|~ODT~&gt;~[~{~NTE~}~]~[~{~CTI~}~]~}~]~[~DSC~]' />
 
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: 1}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end
@@ -105,8 +105,8 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   def test_ORL_O22
     ver= '2.4.HL7'
     event='ORL_O22'
-    # MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~{~[~SAC~[~{~OBX~}~]~]~[~{~ORC~[~OBR~[~{~SAC~}~]~]~}~]~}~]~]'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate_message()
+     # MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~{~[~SAC~[~{~OBX~}~]~]~[~{~ORC~[~OBR~[~{~SAC~}~]~]~}~]~}~]~]'
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event: event, version_store: @@VS, loadFactor: 1}).generate_message()
     # saveMsg(event, hl7, ver)
     puts hl7
   end

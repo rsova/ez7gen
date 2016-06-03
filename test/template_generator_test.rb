@@ -16,107 +16,38 @@ class TemplateGeneratorTest < Test::Unit::TestCase
     # Do nothing
   end
 
-  def test_read_template
+  def test_read_template_ADT_A60
+    templatePath = 'test-config/templates/ADT_A60.xml'
+    usages = ['R','RE']
 
-    templatePath = File.path('test-config/templates/ADT_A60.xml')
-    xml = Ox.parse(IO.read(templatePath))
-    assert_not_nil (xml)
-
-    # list of segments
-    segs = xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
-
-    map = {}
-    for seg in segs
-      puts seg.attributes[:Name]
-      requiredFlds = []
-      # list of fields
-      # flds = seg.locate('Field')
-      seg.locate('Field').each_with_index { |fld,idx |
-        if(fld.Usage == 'R') #Usage="R"
-          requiredFlds << {idx+1 => fld.attributes}
-        end
-      }
-      map[seg.attributes[:Name]] = requiredFlds
-      puts map
-    end
+    map = build_template_metadata(templatePath, usages)
     p map
+    assert_equal(4, map.size)
+    assert_equal 'Recorded Date/Time', map['EVN'].first[:Name]
+    assert_equal '20', map['EVN'].first[:components].first[:Length]
+
   end
 
   def test_read_template_EVN
 
-    templatePath = File.path('test-config/templates/ADT_A60_EVN.xml')
-    xml = Ox.parse(IO.read(templatePath))
-    assert_not_nil (xml)
+    templatePath = 'test-config/templates/ADT_A60_EVN.xml'
+    usages = ['R','RE']
 
-    # list of segments
-    segs = xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
-
-    map = {}
-    for seg in segs
-      puts seg.attributes[:Name]
-      requiredFlds = []
-      # list of fields
-      # flds = seg.locate('Field')
-      seg.locate('Field').each_with_index { |fld,idx |
-        if(fld.Usage == 'R') #Usage="R"
-            requiredFlds << {idx => fld.attributes}
-        end
-      }
-      map[seg.attributes[:Name]] = requiredFlds
-      puts map
-    end
+    map = build_template_metadata(templatePath, usages)
     puts map
     assert_equal(4, map.size)
+    assert_equal 'Recorded Date/Time', map['EVN'].first[:Name]
+    assert_equal '20', map['EVN'].first[:components].first[:Length]
+
   end
 
   def test_read_template_PID
 
+
+    templatePath = 'test-config/templates/ADT_A60_PID.xml'
     usages = ['R','RE']
+    map = build_template_metadata(templatePath, usages)
 
-    templatePath = File.path('test-config/templates/ADT_A60_PID.xml')
-    xml = Ox.parse(IO.read(templatePath))
-    assert_not_nil (xml)
-
-    # list of segments
-    segs = xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
-
-    map = {}
-    for seg in segs
-      puts seg.attributes[:Name]
-      requiredFlds = []
-      # list of fields
-      # flds = seg.locate('Field')
-      seg.locate('Field').each_with_index { |fld,fld_idx |
-        # meta = []
-        if(usages.include?(fld.Usage)) #Usage="R"
-          fld.attributes.merge!(:Pos => fld_idx)
-
-          cmps = []
-          fld.locate('Component').each_with_index { |cmp,cmp_idx |
-            if(usages.include?(cmp.Usage))
-              cmp.attributes.merge!(:Pos => cmp_idx)
-
-              sub_comps = []
-              cmp.locate('SubComponent').each_with_index { |sub,sub_idx |
-                if(usages.include?(sub.Usage))
-                  sub_comps << sub.attributes.merge(:Pos => sub_idx)
-                end
-              }
-
-              if(!sub_comps.empty?) then cmp.attributes.merge!(:subComponents => sub_comps) end
-              if(cmp.attributes) then cmps << cmp.attributes end
-
-            end
-          }
-
-          if(!cmps.empty?)then fld.attributes.merge!(:components => cmps)end
-          requiredFlds <<  fld.attributes
-        end
-
-      }
-
-      map[seg.attributes[:Name]] = requiredFlds
-    end
     # p map
     assert_equal 1, map.size
     assert_equal 9, map['PID'].size
@@ -130,8 +61,63 @@ class TemplateGeneratorTest < Test::Unit::TestCase
     puts
     puts map['PID'][1][:components][0][:subComponents]
     # map['PID'].first[2][:components].each {|it| p it.keys}
-
     # puts map['PID'].first[4]
+  end
+
+  def build_template_metadata(path, usages)
+    text = File.path(path)
+    xml = Ox.parse(IO.read(text))
+
+    # list of segments
+    segs = xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
+
+    map = {}
+    for seg in segs
+
+      puts seg.attributes[:Name]
+      meta = []
+      # list of fields
+      seg.locate('Field').each_with_index { |fld, fld_idx|
+        if (usages.include?(fld.Usage)) #Usage="R"
+          fld.attributes.merge!(:Pos => fld_idx)
+
+          cmps = []
+          fld.locate('Component').each_with_index { |cmp, cmp_idx|
+
+            if (usages.include?(cmp.Usage))
+
+              cmp.attributes.merge!(:Pos => cmp_idx)
+
+              sub_comps = []
+              cmp.locate('SubComponent').each_with_index { |sub, sub_idx|
+                if (usages.include?(sub.Usage))
+                  sub_comps << sub.attributes.merge(:Pos => sub_idx)
+                end
+              }# end locate SubComponent
+
+              if (!sub_comps.empty?) then
+                cmp.attributes.merge!(:subComponents => sub_comps)
+              end
+              if (cmp.attributes) then
+                cmps << cmp.attributes
+              end
+
+            end
+          }# end locate Component
+
+          if (!cmps.empty?) then
+            fld.attributes.merge!(:components => cmps)
+          end
+
+          meta << fld.attributes
+        end
+
+      }# end locate Field
+
+      map[seg.attributes[:Name]] = meta
+    end
+
+    return map
   end
 
 

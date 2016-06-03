@@ -455,6 +455,7 @@
         <Enumerate position="5" value="DADS" description="TX Dept of Aging &amp; Disability Services"/>
       </CodeTable>
       <CodeTable name="361">
+        <!--<Enumerate position="1" value="VISTA SQWM" description="VISTA SQWM"/>-->
         <Enumerate position="1" value="101" description="Application A"/>
         <Enumerate position="2" value="202" description="Application B"/>
         <Enumerate position="3" value="303" description="Application C"/>

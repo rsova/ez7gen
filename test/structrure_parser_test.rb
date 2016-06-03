@@ -206,7 +206,12 @@ class StructureParserTest < Test::Unit::TestCase
   end
 
   def test_is_complex_group
+    parser = StructureParser.new()
+    group ='["ORC", "[~OBR~8~]"]' # bug in ORL_22
+    assert_true parser.is_complex_group?(group)
+  end
 
+  def test_markers
     a = OptionalGroup.new([1,2,3])
     assert_equal(OptionalGroup, a.class)
     assert a.instance_of?(OptionalGroup)
@@ -331,15 +336,21 @@ class StructureParserTest < Test::Unit::TestCase
     p seg
   end
 
-  # def test_process_struct_ORL_O22
-  #   parser = StructureParser.new()
-  #   struct = 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~{~[~SAC~[~{~OBX~}~]~]~[~{~ORC~[~OBR~[~{~SAC~}~]~]~}~]~}~]~]'
-  #   # [~OBR~8~] -broken
-  #   parser.process_struct(struct)
-  #   p parser.encodedSegments
-  #   puts struct
-  #   seg = parser.handle_groups(parser.encodedSegments)
-  #   p seg
-  # end
+  def test_process_struct_ORL_O22
+    parser = StructureParser.new()
+    struct = 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~{~[~SAC~[~{~OBX~}~]~]~[~{~ORC~[~OBR~[~{~SAC~}~]~]~}~]~}~]~]'
+    # [~OBR~8~] -broken
+    parser.process_struct(struct)
+    p parser.encodedSegments
+    # puts struct
+    assert_equal 13, struct.size
+    seg = parser.handle_groups(parser.encodedSegments)
+    p seg
+    assert_equal 10, seg.size
+    # ["[~ERR~]", "[~{~NTE~}~]", [["PID", [["SAC", "[~{~OBX~}~]"], [["ORC", ["OBR", "[~{~SAC~}~]"]]]]]], ["PID", [["SAC", "[~{~OBX~}~]"], [["ORC", ["OBR", "[~{~SAC~}~]"]]]]], ["SAC", "[~{~OBX~}~]"], "[~{~OBX~}~]", [["ORC", ["OBR", "[~{~SAC~}~]"]]], ["OBR", "[~{~SAC~}~]"], "[~{~SAC~}~]", [["SAC", "[~{~OBX~}~]"], [["ORC", ["OBR", "[~{~SAC~}~]"]]]]]
 
   end
+
+  # ["ORC", "[~OBR~8~]"]
+
+end
