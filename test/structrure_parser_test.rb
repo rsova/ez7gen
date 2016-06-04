@@ -259,7 +259,7 @@ class StructureParserTest < Test::Unit::TestCase
     #segment can be an array
   end
 
-  def test_markers
+  def test_markers_1
 
     # [RXE~{~RXR~}~6]
     a = Marker.gen1("[~RXE~{~RXR~}~6~]")
@@ -275,7 +275,6 @@ class StructureParserTest < Test::Unit::TestCase
     a = Marker.gen("[~{~IN1~7~8~}~]")
     assert_equal OptionalGroup, a.class
     assert_equal RepeatingGroup, a[0].class
-
 
   end
 

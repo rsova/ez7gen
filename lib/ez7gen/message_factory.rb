@@ -2,11 +2,13 @@ require 'ruby-hl7'
 require_relative '../ez7gen/profile_parser'
 require_relative '../ez7gen/structure_parser'
 require_relative '../ez7gen/service/segment_generator'
+require_relative '../ez7gen/service/template_generator'
 require_relative '../ez7gen/service/segment_picker'
 require_relative '../ez7gen/service/utils'
 
 class MessageFactory
   include Utils
+  attr_accessor :templatePath #TODO: refactor
   # attr_accessor :std; :version; :event; :version_store; :loadFactor;
 
   def initialize(args)
@@ -58,6 +60,73 @@ class MessageFactory
     segments.each{ |segment|
       segmentGenerator.generate(@hl7Msg, segment, parsers)
      }
+
+    return @hl7Msg
+  end
+
+  # factory method
+  def generate_message_from_template()
+
+    # if (@templatePath)
+    #   templatePath = @templatePath
+    # end
+
+    # get message structure from the schema file for message type and version
+    parser = ProfileParser.new(@attributes_hash)
+    # structure = parser.get_message_definition()
+
+    # brake message structure into segments, handle groups of segments
+    # structParser = StructureParser.new()
+    # structParser.process_segments(structure)
+
+    # select segments to build, keep required and z segments, random pick optional segments
+    # profile = structure.split('~')
+    # segment_picker = SegmentPicker.new(profile, structParser.encodedSegments, @loadFactor)
+    # segments = segment_picker.pick_segments_to_build()
+
+    # set primary parser for base schema
+    parsers = {PRIMARY => parser}
+
+    # if this is a custom Z segment, add the base parser
+    # if(version !='2.4')
+    # check if current version is not the base version, find the base version and add use it as a base parser
+    if(!is_base?(@version))
+      add_base_parser(parsers)
+    end
+
+    # configure a segment generator
+    baseVersion = @std
+
+    templateGenerator = TemplateGenerator.new(templatePath, parsers)
+    @hl7Msg = HL7::Message.new
+
+    template = templateGenerator.build_template_metadata()
+    templateGenerator.generate(@hl7Msg, template)
+
+    # msh segment configured by hand, due to many requirements that only apply for this segment
+    # @hl7Msg << segmentGenerator.init_msh()
+
+    # segments = template.keys
+    #
+    #   # f = template[s]
+    #   #
+    #   # dt_partials = []
+    #   # dt_partials << break_to_partial(f)
+    #   #
+    #   # # flds[f[:Pos].to_i] = dt_partials.join('^')
+    #   # flds << dt_partials.join('|')
+    #   segments.each{ |segment|
+    #     segmentGenerator.generate(@hl7Msg, segment, parsers)
+    #   }
+
+    # }
+
+
+    # #iterate over selected segments and build the entire message
+    # # segments.each.with_index(){ |segment, idx|
+    # segments.each{ |segment|
+    #   segmentGenerator.generate(@hl7Msg, segment, parsers)
+    #  }
 
     return @hl7Msg
   end

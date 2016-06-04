@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HL7v2xConformanceProfile HL7Version="2.4" ProfileType="Implementation">
+<MetaData Name="mhvsm_standardhl7lib_ecs_filer_response_ack_p03" OrgName="MHV SM" Version="1" Status="D" Topics="confsig-MHV SM-2.4-profile-accNE_accAL-Deferred" />
+<Encodings>
+<Encoding>ER7</Encoding>
+</Encodings>
+<DynamicDef AccAck="NE" AppAck="AL" MsgAckMode="Deferred" />
+<HL7v2xStaticDef MsgType="ACK" EventType="P03" MsgStructID="ACK_P03" EventDesc="" Role="Receiver">
+<MetaData Name="mhvsm_standardhl7lib_ecs_filer_response_ack_p03" OrgName="MHV SM" Version="1" Status="D" Topics="confsig-MHV SM-2.4-static-ACK-P03-null-ACK_P03-1-D-Receiver" />
+<Segment Name="MSH" LongName="Message Header" Usage="R" Min="1" Max="1">
+<Field Name="Field Separator" Usage="R" Min="1" Max="1" Datatype="ST" Length="1" ItemNo="00001">
+<Reference>2.16.9.1</Reference>
+<DataValues ExValue="|" />
+</Field>
+<Field Name="Encoding Characters" Usage="R" Min="1" Max="1" Datatype="ST" Length="4" ItemNo="00002">
+<Reference>2.16.9.2</Reference>
+<DataValues ExValue="^~\&amp;" />
+</Field>
+<Field Name="Sending Application" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0361" ItemNo="00003">
+<Reference>2.16.9.3</Reference>
+<Component Name="namespace ID" Usage="R" Datatype="IS" Length="10" Table="0363">
+<DataValues ExValue="MHV ECS" />
+</Component>
+<Component Name="universal ID" Usage="X" Datatype="ST">
+</Component>
+<Component Name="universal ID type" Usage="X" Datatype="ID" Table="0301">
+</Component>
+</Field>
+<Field Name="Sending Facility" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0362" ItemNo="00004">
+<Reference>2.16.9.4</Reference>
+<Component Name="namespace ID" Usage="R" Datatype="IS" Length="3" Table="0363">
+<DataValues ExValue="989" />
+</Component>
+<Component Name="universal ID" Usage="R" Datatype="ST" Length="30">
+<DataValues ExValue="DAYT29.FO-BAYPINES.MED.VA.GOV" />
+</Component>
+<Component Name="universal ID type" Usage="R" Datatype="ID" Length="3" Table="0301">
+<DataValues ExValue="DNS" />
+</Component>
+</Field>
+<Field Name="Receiving Application" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0361" ItemNo="00005">
+<Reference>2.16.9.5</Reference>
+<Component Name="namespace ID" Usage="R" Datatype="IS" Length="10" Table="0363">
+<DataValues ExValue="MHV SM" />
+</Component>
+<Component Name="universal ID" Usage="X" Datatype="ST">
+</Component>
+<Component Name="universal ID type" Usage="X" Datatype="ID" Table="0301">
+</Component>
+</Field>
+<Field Name="Receiving Facility" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0362" ItemNo="00006">
+<Reference>2.16.9.6</Reference>
+<Component Name="namespace ID" Usage="R" Datatype="IS" Length="10" Table="0363">
+<DataValues ExValue="200MHS" />
+</Component>
+<Component Name="universal ID" Usage="R" Datatype="ST" Length="20">
+<DataValues ExValue="SYS.MHV.MED.VA.GOV" />
+</Component>
+<Component Name="universal ID type" Usage="R" Datatype="ID" Length="3" Table="0301">
+<DataValues ExValue="DNS" />
+</Component>
+</Field>
+<Field Name="Date/Time Of Message" Usage="R" Min="1" Max="1" Datatype="TS" Length="26" ItemNo="00007">
+<Reference>2.16.9.7</Reference>
+<Component Name="Date/Time" Usage="R" Datatype="NM" Length="20">
+<ImpNote>YYYYMMDD[HHHMM[SS[.SSSS]]][+-
+ZZZZ]
+</ImpNote>
+<DataValues ExValue="20140611091820-0400" />
+</Component>
+<Component Name="degree of precision" Usage="X" Datatype="ST">
+<ImpNote>Retained for backward compatibility only
+</ImpNote>
+<DataValues ExValue="D" />
+</Component>
+</Field>
+<Field Name="Security" Usage="X" Min="0" Max="*" Datatype="ST" Length="40" ItemNo="00008">
+<Reference>2.16.9.8</Reference>
+</Field>
+<Field Name="Message Type" Usage="R" Min="1" Max="1" Datatype="CM_MSG" Length="15" Table="0076" ItemNo="00009">
+<Reference>2.16.9.9</Reference>
+<Component Name="message type" Usage="R" Datatype="ID" Length="3" Table="0076">
+<DataValues ExValue="ACK" />
+</Component>
+<Component Name="trigger event" Usage="R" Datatype="ID" Length="3" Table="0003">
+<DataValues ExValue="P03" />
+</Component>
+<Component Name="message structure" Usage="R" Datatype="ID" Length="7" Table="0354">
+<DataValues ExValue="DFT_P03" />
+</Component>
+</Field>
+<Field Name="Message Control ID" Usage="R" Min="1" Max="1" Datatype="ST" Length="20" ItemNo="00010">
+<Reference>2.16.9.10</Reference>
+<DataValues ExValue="98958869583" />
+</Field>
+<Field Name="Processing ID" Usage="R" Min="1" Max="1" Datatype="PT" Length="3" ItemNo="00011">
+<Reference>2.16.9.11</Reference>
+<Component Name="processing ID" Usage="R" Datatype="ID" Length="3" Table="0103">
+<DataValues ExValue="T" />
+</Component>
+<Component Name="processing mode" Usage="X" Datatype="ID" Table="0207">
+</Component>
+</Field>
+<Field Name="Version ID" Usage="R" Min="1" Max="1" Datatype="VID" Length="60" Table="0104" ItemNo="00012">
+<Reference>2.16.9.12</Reference>
+<Component Name="version ID" Usage="R" Datatype="ID" Length="3" Table="0104">
+<DataValues ExValue="2.4" />
+</Component>
+<Component Name="internationalization code" Usage="X" Datatype="CE" Table="0399">
+<SubComponent Name="identifier" Usage="O" Datatype="ST" Table="0399">
+</SubComponent>
+<SubComponent Name="text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+<SubComponent Name="alternate identifier" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="alternate text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of alternate coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+</Component>
+<Component Name="international version ID" Usage="X" Datatype="CE">
+<SubComponent Name="identifier" Usage="O" Datatype="ST">
+</SubComponent>
+<SubComponent Name="text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+<SubComponent Name="alternate identifier" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="alternate text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of alternate coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+</Component>
+</Field>
+<Field Name="Sequence Number" Usage="X" Min="0" Max="*" Datatype="NM" Length="15" ItemNo="00013">
+<Reference>2.16.9.13</Reference>
+</Field>
+<Field Name="Continuation Pointer" Usage="X" Min="0" Max="*" Datatype="ST" Length="180" ItemNo="00014">
+<Reference>2.16.9.14</Reference>
+</Field>
+<Field Name="Accept Acknowledgment Type" Usage="R" Min="1" Max="1" Datatype="ID" Length="2" Table="0155" ItemNo="00015">
+<Reference>2.16.9.15</Reference>
+<DataValues ExValue="AL" />
+</Field>
+<Field Name="Application Acknowledgment Type" Usage="R" Min="1" Max="1" Datatype="ID" Length="2" Table="0155" ItemNo="00016">
+<Reference>2.16.9.16</Reference>
+<DataValues ExValue="NE" />
+</Field>
+<Field Name="Country Code" Usage="X" Min="0" Max="*" Datatype="ID" Length="3" Table="0399" ItemNo="00017">
+<Reference>2.16.9.17</Reference>
+</Field>
+<Field Name="Character Set" Usage="X" Min="0" Max="*" Datatype="ID" Length="16" Table="0211" ItemNo="00692">
+<Reference>2.16.9.18</Reference>
+</Field>
+<Field Name="Principal Language Of Message" Usage="X" Min="0" Max="*" Datatype="CE" Length="250" ItemNo="00693">
+<Reference>2.16.9.19</Reference>
+<Component Name="identifier" Usage="X" Datatype="ST">
+</Component>
+<Component Name="text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+<Component Name="alternate identifier" Usage="X" Datatype="ST">
+</Component>
+<Component Name="alternate text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of alternate coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+</Field>
+<Field Name="Alternate Character Set Handling Scheme" Usage="X" Min="0" Max="*" Datatype="ID" Length="20" Table="0356" ItemNo="01317">
+<Reference>2.16.9.20</Reference>
+</Field>
+<Field Name="Conformance Statement ID" Usage="X" Min="0" Max="*" Datatype="ID" Length="10" Table="0449" ItemNo="01598">
+<Reference>2.16.9.21</Reference>
+</Field>
+</Segment>
+<Segment Name="MSA" LongName="Message Acknowledgment" Usage="R" Min="1" Max="1">
+<Field Name="Acknowledgment Code" Usage="R" Min="1" Max="1" Datatype="ID" Length="2" Table="0008" ItemNo="00018">
+<Reference>2.16.8.1</Reference>
+<DataValues ExValue="AA" />
+</Field>
+<Field Name="Message Control ID" Usage="R" Min="1" Max="1" Datatype="ST" Length="20" ItemNo="00010">
+<Reference>2.16.9.10</Reference>
+<DataValues ExValue="300000000000016958" />
+</Field>
+<Field Name="Text Message" Usage="RE" Min="0" Max="1" Datatype="ST" Length="80" ItemNo="00020">
+<ImpNote>- only if  error (the Ack Code = AE)
+</ImpNote>
+<Reference>2.16.8.3</Reference>
+<DataValues ExValue="INVALID DATA LINK" />
+</Field>
+<Field Name="Expected Sequence Number" Usage="X" Min="0" Max="*" Datatype="NM" Length="15" ItemNo="00021">
+<Reference>2.16.8.4</Reference>
+</Field>
+<Field Name="Delayed Acknowledgment Type" Usage="X" Min="0" Max="*" Datatype="ID" Length="1" Table="0102" ItemNo="00022">
+<Reference>2.16.8.5</Reference>
+</Field>
+<Field Name="Error Condition" Usage="X" Min="0" Max="*" Datatype="CE" Length="250" Table="0357" ItemNo="00023">
+<Reference>2.16.8.6</Reference>
+<Component Name="identifier" Usage="X" Datatype="ST" Table="0357">
+</Component>
+<Component Name="text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+<Component Name="alternate identifier" Usage="X" Datatype="ST">
+</Component>
+<Component Name="alternate text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of alternate coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+</Field>
+</Segment>
+<Segment Name="ERR" LongName="Error" Usage="R" Min="1" Max="1">
+<ImpNote>This segment will have the output values
+for the ECS Filer Request- data elements:
+-Success or Failure Flag
+-Message
+-Workload IEN
+</ImpNote>
+<Field Name="Error Code and Location" Usage="R" Min="1" Max="1" Datatype="CM_ELD" Length="404" ItemNo="00024">
+<Reference>2.16.5.1</Reference>
+<Component Name="segment ID" Usage="RE" Datatype="ST" Length="1">
+</Component>
+<Component Name="sequence" Usage="RE" Datatype="NM" Length="1">
+</Component>
+<Component Name="field position" Usage="RE" Datatype="NM" Length="1">
+</Component>
+<Component Name="code identifying error" Usage="R" Datatype="CE" Length="398">
+<SubComponent Name="identifier" Usage="R" Datatype="ST" Length="1">
+<ImpNote>Status:
+0 for Failure and 1 for Success
+</ImpNote>
+<DataValues ExValue="0" />
+</SubComponent>
+<SubComponent Name="text" Usage="R" Datatype="ST" Length="80">
+<ImpNote>Reason:
+It will indicate successful filing or error
+message
+</ImpNote>
+<DataValues ExValue="Record Filed" />
+</SubComponent>
+<SubComponent Name="name of coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+<SubComponent Name="alternate identifier" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="alternate text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of alternate coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+</Component>
+</Field>
+<Field Name="field 2" Usage="RE" Min="0" Max="1" Datatype="NM" Length="15">
+<ImpNote>ECS Record IEN
+</ImpNote>
+<DataValues ExValue="69621" />
+</Field>
+<Field Name="field 3" Usage="RE" Min="0" Max="1" Datatype="NM" Length="15">
+<ImpNote>Visit IEN
+</ImpNote>
+<DataValues ExValue="6658665" />
+</Field>
+</Segment>
+</HL7v2xStaticDef>
+</HL7v2xConformanceProfile>
+

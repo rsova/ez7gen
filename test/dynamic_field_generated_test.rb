@@ -279,49 +279,49 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
     }
 
   end
-
-  def break_to_partial(item)
-    partials = []
-
-    if(item.kind_of? Array)
-
-      item.each{|i|
-        coll = i[:subComponents] || i
-        partials[i[:Pos].to_i] = break_to_partial(coll).join((i[:subComponents])?'&':'^')
-        # puts partials
-      }
-    else
-
-      coll = item[:components] || item[:subComponents]
-      if(coll)
-        partials << break_to_partial(coll)
-      else
-        partials << convert_attributes(item)
-      end
-
-    end
-
-    return partials
-
-  end
-
-  def convert_attributes(item)
-    attrs = {}
-
-    if (item[:Length])
-      attrs[:max_length]= item[:Length]
-    end
-
-    if (item[:Table])
-      attrs[:codetable]= item[:Table].sub(/^0+/, '')
-    end
-
-    if (item[:Name])
-      attrs[:description] = item[:Name]
-    end
-
-    dt = item[:Datatype]
-    @fldGenerator.method(dt).call(attrs, true)
-  end
+  #
+  # def break_to_partial(item)
+  #   partials = []
+  #
+  #   if(item.kind_of? Array)
+  #
+  #     item.each{|i|
+  #       coll = i[:subComponents] || i
+  #       partials[i[:Pos].to_i] = break_to_partial(coll).join((i[:subComponents])?'&':'^')
+  #       # puts partials
+  #     }
+  #   else
+  #
+  #     coll = item[:components] || item[:subComponents]
+  #     if(coll)
+  #       partials << break_to_partial(coll)
+  #     else
+  #       partials << convert_attributes(item)
+  #     end
+  #
+  #   end
+  #
+  #   return partials
+  #
+  # end
+  #
+  # def convert_attributes(item)
+  #   attrs = {}
+  #
+  #   if (item[:Length])
+  #     attrs[:max_length]= item[:Length]
+  #   end
+  #
+  #   if (item[:Table])
+  #     attrs[:codetable]= item[:Table].sub(/^0+/, '')
+  #   end
+  #
+  #   if (item[:Name])
+  #     attrs[:description] = item[:Name]
+  #   end
+  #
+  #   dt = item[:Datatype]
+  #   @fldGenerator.method(dt).call(attrs, true)
+  # end
 
 end

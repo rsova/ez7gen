@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HL7v2xConformanceProfile HL7Version="2.4" ProfileType="Implementation">
+<MetaData Name="mhvsm_standardhl7lib_patient_problems_response_rsp_k11-rsp_k11" OrgName="MHV" Version="" Status="D" Topics="confsig-MHV-2.4-profile-accNE_accAL-Deferred" />
+<Encodings>
+<Encoding>ER7</Encoding>
+</Encodings>
+<DynamicDef AccAck="NE" AppAck="AL" MsgAckMode="Deferred" />
+<HL7v2xStaticDef MsgType="RSP" EventType="K11" MsgStructID="RSP_K11" EventDesc="RSP - Segment pattern response in response to QBP^Q11" Role="Receiver">
+<MetaData Name="mhvsm_standardhl7lib_patient_problems_response_rsp_k11-rsp_k11" OrgName="MHV" Version="" Status="D" Topics="confsig-MHV-2.4-static-RSP-K11-null-RSP_K11--D-Receiver" />
+<Segment Name="MSH" LongName="Message Header" Usage="R" Min="1" Max="1">
+<Field Name="Field Separator" Usage="R" Min="1" Max="1" Datatype="ST" Length="1" ItemNo="00001">
+<Reference>2.16.9.1</Reference>
+<DataValues ExValue="|" />
+</Field>
+<Field Name="Encoding Characters" Usage="R" Min="1" Max="1" Datatype="ST" Length="4" ItemNo="00002">
+<Reference>2.16.9.2</Reference>
+<DataValues ExValue="^~\&amp;" />
+</Field>
+<Field Name="Sending Application" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0361" ItemNo="00003">
+<Reference>2.16.9.3</Reference>
+<Component Name="namespace ID" Usage="R" Datatype="IS" Length="10" Table="0363">
+<DataValues ExValue="MHV VISTA" />
+</Component>
+<Component Name="universal ID" Usage="X" Datatype="ST">
+</Component>
+<Component Name="universal ID type" Usage="X" Datatype="ID" Table="0301">
+</Component>
+</Field>
+<Field Name="Sending Facility" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0362" ItemNo="00004">
+<Reference>2.16.9.4</Reference>
+<Component Name="namespace ID" Usage="R" Datatype="IS" Length="3" Table="0363">
+<DataValues ExValue="991" />
+</Component>
+<Component Name="universal ID" Usage="R" Datatype="ST" Length="30">
+<DataValues ExValue="SLC4.FO-BAYPINES.MED.VA.GOV" />
+</Component>
+<Component Name="universal ID type" Usage="R" Datatype="ID" Length="3" Table="0301">
+<DataValues ExValue="DNS" />
+</Component>
+</Field>
+<Field Name="Receiving Application" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0361" ItemNo="00005">
+<Reference>2.16.9.5</Reference>
+<Component Name="namespace ID" Usage="R" Datatype="IS" Length="10" Table="0363">
+<DataValues ExValue="MHV SM" />
+</Component>
+<Component Name="universal ID" Usage="X" Datatype="ST">
+</Component>
+<Component Name="universal ID type" Usage="X" Datatype="ID" Table="0301">
+</Component>
+</Field>
+<Field Name="Receiving Facility" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0362" ItemNo="00006">
+<Reference>2.16.9.6</Reference>
+<Component Name="namespace ID" Usage="R" Datatype="IS" Length="10" Table="0363">
+<DataValues ExValue="200MHS" />
+</Component>
+<Component Name="universal ID" Usage="R" Datatype="ST" Length="20">
+<DataValues ExValue="SYS.MHV.MED.VA.GOV" />
+</Component>
+<Component Name="universal ID type" Usage="R" Datatype="ID" Length="3" Table="0301">
+<DataValues ExValue="DNS" />
+</Component>
+</Field>
+<Field Name="Date/Time Of Message" Usage="R" Min="1" Max="1" Datatype="TS" Length="26" ItemNo="00007">
+<Reference>2.16.9.7</Reference>
+<Component Name="Date/Time" Usage="R" Datatype="NM" Length="20">
+<ImpNote>YYYYMMDD[HHHMM[SS[.SSSS]]][+-
+ZZZZ]
+</ImpNote>
+<DataValues ExValue="20140320155617-0500" />
+</Component>
+<Component Name="degree of precision" Usage="X" Datatype="ST">
+<ImpNote>Retained for backward compatibility only
+</ImpNote>
+<DataValues ExValue="D" />
+</Component>
+</Field>
+<Field Name="Security" Usage="X" Min="0" Max="*" Datatype="ST" Length="40" ItemNo="00008">
+<Reference>2.16.9.8</Reference>
+</Field>
+<Field Name="Message Type" Usage="R" Min="1" Max="1" Datatype="CM_MSG" Length="15" Table="0076" ItemNo="00009">
+<Reference>2.16.9.9</Reference>
+<Component Name="message type" Usage="R" Datatype="ID" Length="3" Table="0076">
+<DataValues ExValue="RSP" />
+</Component>
+<Component Name="trigger event" Usage="R" Datatype="ID" Length="3" Table="0003">
+<DataValues ExValue="K11" />
+</Component>
+<Component Name="message structure" Usage="R" Datatype="ID" Length="7" Table="0354">
+<DataValues ExValue="RTB_K11" />
+</Component>
+</Field>
+<Field Name="Message Control ID" Usage="R" Min="1" Max="1" Datatype="ST" Length="20" ItemNo="00010">
+<Reference>2.16.9.10</Reference>
+<DataValues ExValue="99146086191" />
+</Field>
+<Field Name="Processing ID" Usage="R" Min="1" Max="1" Datatype="PT" Length="3" ItemNo="00011">
+<Reference>2.16.9.11</Reference>
+<Component Name="processing ID" Usage="R" Datatype="ID" Length="3" Table="0103">
+<DataValues ExValue="T" />
+</Component>
+<Component Name="processing mode" Usage="X" Datatype="ID" Table="0207">
+</Component>
+</Field>
+<Field Name="Version ID" Usage="R" Min="1" Max="1" Datatype="VID" Length="60" Table="0104" ItemNo="00012">
+<Reference>2.16.9.12</Reference>
+<Component Name="version ID" Usage="R" Datatype="ID" Length="3" Table="0104">
+<DataValues ExValue="2.4" />
+</Component>
+<Component Name="internationalization code" Usage="X" Datatype="CE" Table="0399">
+<SubComponent Name="identifier" Usage="O" Datatype="ST" Table="0399">
+</SubComponent>
+<SubComponent Name="text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+<SubComponent Name="alternate identifier" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="alternate text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of alternate coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+</Component>
+<Component Name="international version ID" Usage="X" Datatype="CE">
+<SubComponent Name="identifier" Usage="O" Datatype="ST">
+</SubComponent>
+<SubComponent Name="text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+<SubComponent Name="alternate identifier" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="alternate text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of alternate coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+</Component>
+</Field>
+<Field Name="Sequence Number" Usage="X" Min="0" Max="*" Datatype="NM" Length="15" ItemNo="00013">
+<Reference>2.16.9.13</Reference>
+</Field>
+<Field Name="Continuation Pointer" Usage="X" Min="0" Max="*" Datatype="ST" Length="180" ItemNo="00014">
+<Reference>2.16.9.14</Reference>
+</Field>
+<Field Name="Accept Acknowledgment Type" Usage="X" Min="0" Max="*" Datatype="ID" Length="2" Table="0155" ItemNo="00015">
+<Reference>2.16.9.15</Reference>
+</Field>
+<Field Name="Application Acknowledgment Type" Usage="X" Min="0" Max="*" Datatype="ID" Length="2" Table="0155" ItemNo="00016">
+<Reference>2.16.9.16</Reference>
+</Field>
+<Field Name="Country Code" Usage="X" Min="0" Max="*" Datatype="ID" Length="3" Table="0399" ItemNo="00017">
+<Reference>2.16.9.17</Reference>
+</Field>
+<Field Name="Character Set" Usage="X" Min="0" Max="*" Datatype="ID" Length="16" Table="0211" ItemNo="00692">
+<Reference>2.16.9.18</Reference>
+</Field>
+<Field Name="Principal Language Of Message" Usage="X" Min="0" Max="*" Datatype="CE" Length="250" ItemNo="00693">
+<Reference>2.16.9.19</Reference>
+<Component Name="identifier" Usage="X" Datatype="ST">
+</Component>
+<Component Name="text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+<Component Name="alternate identifier" Usage="X" Datatype="ST">
+</Component>
+<Component Name="alternate text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of alternate coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+</Field>
+<Field Name="Alternate Character Set Handling Scheme" Usage="X" Min="0" Max="*" Datatype="ID" Length="20" Table="0356" ItemNo="01317">
+<Reference>2.16.9.20</Reference>
+</Field>
+<Field Name="Conformance Statement ID" Usage="X" Min="0" Max="*" Datatype="ID" Length="10" Table="0449" ItemNo="01598">
+<Reference>2.16.9.21</Reference>
+</Field>
+</Segment>
+<Segment Name="MSA" LongName="Message Acknowledgment" Usage="R" Min="1" Max="1">
+<Field Name="Acknowledgment Code" Usage="R" Min="1" Max="1" Datatype="ID" Length="2" Table="0008" ItemNo="00018">
+<Reference>2.16.8.1</Reference>
+<DataValues ExValue="AA" />
+</Field>
+<Field Name="Message Control ID" Usage="R" Min="1" Max="1" Datatype="ST" Length="20" ItemNo="00010">
+<Reference>2.16.9.10</Reference>
+<DataValues ExValue="500000000000011828" />
+</Field>
+<Field Name="Text Message" Usage="RE" Min="0" Max="1" Datatype="ST" Length="80" ItemNo="00020">
+<ImpNote>- only if  error (the Ack Code = AE)
+</ImpNote>
+<Reference>2.16.8.3</Reference>
+<DataValues ExValue="INVALID DATA LINK" />
+</Field>
+<Field Name="Expected Sequence Number" Usage="X" Min="0" Max="*" Datatype="NM" Length="15" ItemNo="00021">
+<Reference>2.16.8.4</Reference>
+</Field>
+<Field Name="Delayed Acknowledgment Type" Usage="X" Min="0" Max="*" Datatype="ID" Length="1" Table="0102" ItemNo="00022">
+<Reference>2.16.8.5</Reference>
+</Field>
+<Field Name="Error Condition" Usage="X" Min="0" Max="*" Datatype="CE" Length="250" Table="0357" ItemNo="00023">
+<Reference>2.16.8.6</Reference>
+<Component Name="identifier" Usage="X" Datatype="ST" Table="0357">
+</Component>
+<Component Name="text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+<Component Name="alternate identifier" Usage="X" Datatype="ST">
+</Component>
+<Component Name="alternate text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of alternate coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+</Field>
+</Segment>
+<Segment Name="QAK" LongName="Query Acknowledgment" Usage="R" Min="1" Max="1">
+<Field Name="Query Tag" Usage="X" Min="0" Max="*" Datatype="ST" Length="40" ItemNo="00696">
+<ImpNote>Ensemble will accept the length of 40
+chars.
+</ImpNote>
+<Reference>5.10.5.8.1</Reference>
+<DataValues ExValue="B350C65E-B069-11E3-9CA9-50569E013100" />
+</Field>
+<Field Name="Query Response Status" Usage="R" Min="1" Max="1" Datatype="ID" Length="2" Table="0208" ItemNo="00708">
+<Reference>5.5.2.2</Reference>
+<DataValues ExValue="OK" />
+</Field>
+<Field Name="Message Query Name" Usage="R" Min="1" Max="1" Datatype="CE" Length="250" Table="0471" ItemNo="01375">
+<Reference>5.5.3.1</Reference>
+<Component Name="identifier" Usage="R" Datatype="ST" Length="10" Table="0471">
+<DataValues ExValue="Q13" />
+</Component>
+<Component Name="text" Usage="R" Datatype="ST" Length="20">
+<DataValues ExValue="PATIENT PROBLEMS" />
+</Component>
+<Component Name="name of coding system" Usage="R" Datatype="IS" Length="10" Table="0396">
+<DataValues ExValue="HL70471" />
+</Component>
+<Component Name="alternate identifier" Usage="X" Datatype="ST">
+</Component>
+<Component Name="alternate text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of alternate coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+</Field>
+<Field Name="Hit Count" Usage="R" Min="1" Max="1" Datatype="NM" Length="10" ItemNo="01434">
+<Reference>5.5.2.4</Reference>
+<DataValues ExValue="4" />
+</Field>
+<Field Name="This payload" Usage="R" Min="1" Max="1" Datatype="NM" Length="10" ItemNo="01622">
+<Reference>5.5.2.5</Reference>
+<DataValues ExValue="4" />
+</Field>
+<Field Name="Hits remaining" Usage="R" Min="1" Max="1" Datatype="NM" Length="10" ItemNo="01623">
+<Reference>5.5.2.6</Reference>
+<DataValues ExValue="0" />
+</Field>
+</Segment>
+<Segment Name="QPD" LongName="Query Parameter Definition" Usage="R" Min="1" Max="1">
+<Field Name="Message Query Name" Usage="R" Min="1" Max="1" Datatype="CE" Length="250" Table="0471" ItemNo="01375">
+<Reference>5.5.3.1</Reference>
+<Component Name="identifier" Usage="R" Datatype="ST" Length="10" Table="0471">
+<DataValues ExValue="Q13" />
+</Component>
+<Component Name="text" Usage="R" Datatype="ST" Length="20">
+<DataValues ExValue="PATIENT PROBLEMS" />
+</Component>
+<Component Name="name of coding system" Usage="R" Datatype="IS" Length="20" Table="0396">
+<DataValues ExValue="HL70471" />
+</Component>
+<Component Name="alternate identifier" Usage="X" Datatype="ST">
+</Component>
+<Component Name="alternate text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of alternate coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+</Field>
+<Field Name="Query Tag" Usage="R" Min="1" Max="1" Datatype="ST" Length="40" ItemNo="00696">
+<ImpNote>Ensemble accepts the string max 40 for
+this
+field.
+</ImpNote>
+<Reference>5.10.5.8.1</Reference>
+<DataValues ExValue="B350C65E-B069-11E3-9CA9-50569E013100" />
+</Field>
+<Field Name="User Parameters (in successive fields)" Usage="R" Min="1" Max="1" Datatype="ST" Length="256">
+<ImpNote>The User Parameters are a string
+separated by "^":
+1.-Query Name in MHV Request File:
+SMPatientProblems
+2.- Patient ICN: 1012664530V239151
+</ImpNote>
+<Reference>5.5.3.3</Reference>
+<DataValues ExValue="SMPatientProblems^1012664530V239151" />
+</Field>
+</Segment>
+<Segment Name="DG1" LongName="Diagnosis" Usage="R" Min="1" Max="*">
+<ImpNote>This is a list of all Patient problems
+retrieved from the CPRS Patient record.
+ 
+Each DG1 segment will represent values
+for one Patient Problem item retrieved in
+the list.
+</ImpNote>
+<Field Name="Set ID - DG1" Usage="R" Min="1" Max="1" Datatype="SI" Length="4">
+<ImpNote>Row ID
+</ImpNote>
+<Reference>6.5.2.1</Reference>
+<DataValues ExValue="3" />
+</Field>
+<Field Name="Diagnosis Coding Method" Usage="X" Min="0" Max="*" Datatype="ID" Length="2" Table="0053" ItemNo="00376">
+<Reference>6.5.2.2</Reference>
+</Field>
+<Field Name="Diagnosis Code - DG1" Usage="R" Min="1" Max="1" Datatype="CE" Length="250" Table="0051" ItemNo="00377">
+<Reference>6.5.2.3</Reference>
+<Component Name="identifier" Usage="R" Datatype="ST" Length="15" Table="0051">
+<ImpNote>Diagnosis Code
+</ImpNote>
+<DataValues ExValue="799.9" />
+</Component>
+<Component Name="text" Usage="R" Datatype="ST" Length="70">
+<ImpNote>Diagnosis Description
+</ImpNote>
+<DataValues ExValue="Other specified disorders of stomach and duodenum (ICD-9-CM 537.89)" />
+</Component>
+<Component Name="name of coding system" Usage="R" Datatype="IS" Length="3" Table="0396">
+<ImpNote>Coding System:
+ICD9    - I9
+ICD10  - I10 (after compliance
+implementation date)
+</ImpNote>
+<DataValues ExValue="I9" />
+</Component>
+<Component Name="alternate identifier" Usage="R" Datatype="ST" Length="15">
+<ImpNote>Diagnosis Code IEN
+</ImpNote>
+<DataValues ExValue="5570" />
+</Component>
+<Component Name="alternate text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of alternate coding system" Usage="R" Datatype="IS" Length="3" Table="0396" ConstantValue="L">
+<ImpNote>The alternate coding system (L) Indicates
+that the field "Alternate Identifier" is a
+local unique identifier of Diagnosis code
+in Data Dictionary
+</ImpNote>
+<DataValues ExValue="L" />
+</Component>
+</Field>
+<Field Name="Diagnosis Description" Usage="X" Min="0" Max="*" Datatype="ST" Length="40" ItemNo="00378">
+<Reference>6.5.2.4</Reference>
+</Field>
+<Field Name="Diagnosis Date/Time" Usage="R" Min="1" Max="1" Datatype="TS" Length="26" ItemNo="00379">
+<Reference>6.5.2.5</Reference>
+<Component Name="Date/Time" Usage="R" Datatype="NM" Length="26">
+<ImpNote>Current system Date and Time
+YYYYMMDD[HHHMM[SS[.SSSS]]][+-
+ZZZZ]
+</ImpNote>
+<DataValues ExValue="20040328134602.1234+0600" />
+</Component>
+<Component Name="degree of precision" Usage="X" Datatype="ST">
+<ImpNote>Retained for backward compatibility only
+</ImpNote>
+<DataValues ExValue="D" />
+</Component>
+</Field>
+<Field Name="Diagnosis Type" Usage="R" Min="1" Max="1" Datatype="IS" Length="2" Table="0052" ItemNo="00380">
+<ImpNote>Diagnosis Type
+F-Final
+</ImpNote>
+<Reference>6.5.2.6</Reference>
+<DataValues ExValue="F" />
+</Field>
+<Field Name="Major Diagnostic Category" Usage="X" Min="0" Max="*" Datatype="CE" Length="250" Table="0118" ItemNo="00381">
+<Reference>6.5.2.7</Reference>
+<Component Name="identifier" Usage="X" Datatype="ST" Table="0118">
+</Component>
+<Component Name="text" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="name of coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</Component>
+<Component Name="alternate identifier" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="alternate text" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="name of alternate coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</Component>
+</Field>
+<Field Name="Diagnostic Related Group" Usage="X" Min="0" Max="*" Datatype="CE" Length="250" Table="0055" ItemNo="00382">
+<Reference>6.5.3.1</Reference>
+<Component Name="identifier" Usage="X" Datatype="ST" Table="0055">
+</Component>
+<Component Name="text" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="name of coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</Component>
+<Component Name="alternate identifier" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="alternate text" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="name of alternate coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</Component>
+</Field>
+<Field Name="DRG Approval Indicator" Usage="X" Min="0" Max="*" Datatype="ID" Length="1" Table="0136" ItemNo="00383">
+<Reference>6.5.3.3</Reference>
+</Field>
+<Field Name="DRG Grouper Review Code" Usage="X" Min="0" Max="*" Datatype="IS" Length="2" Table="0056" ItemNo="00384">
+<Reference>6.5.3.4</Reference>
+</Field>
+<Field Name="Outlier Type" Usage="X" Min="0" Max="*" Datatype="CE" Length="250" Table="0083" ItemNo="00385">
+<Reference>6.5.3.5</Reference>
+<Component Name="identifier" Usage="X" Datatype="ST" Table="0083">
+</Component>
+<Component Name="text" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="name of coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</Component>
+<Component Name="alternate identifier" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="alternate text" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="name of alternate coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</Component>
+</Field>
+<Field Name="Outlier Days" Usage="X" Min="0" Max="*" Datatype="NM" Length="3" ItemNo="00386">
+<Reference>6.5.3.6</Reference>
+</Field>
+<Field Name="Outlier Cost" Usage="X" Min="0" Max="*" Datatype="CP" Length="44" ItemNo="00387">
+<Reference>6.5.15.5</Reference>
+<Component Name="price" Usage="O" Datatype="MO" Length="7">
+<SubComponent Name="quantity" Usage="O" Datatype="NM" Length="3">
+</SubComponent>
+<SubComponent Name="denomination" Usage="O" Datatype="ID" Length="3">
+</SubComponent>
+</Component>
+<Component Name="price type" Usage="O" Datatype="ID" Length="3" Table="0205">
+</Component>
+<Component Name="from value" Usage="O" Datatype="NM" Length="3">
+</Component>
+<Component Name="to value" Usage="O" Datatype="NM" Length="3">
+</Component>
+<Component Name="range units" Usage="O" Datatype="CE" Length="20">
+<SubComponent Name="identifier" Usage="O" Datatype="ST">
+</SubComponent>
+<SubComponent Name="text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+<SubComponent Name="alternate identifier" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="alternate text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of alternate coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+</Component>
+<Component Name="range type" Usage="O" Datatype="ID" Length="3" Table="0298">
+</Component>
+</Field>
+<Field Name="Grouper Version And Type" Usage="X" Min="0" Max="*" Datatype="ST" Length="4" ItemNo="00388">
+<Reference>6.5.2.14</Reference>
+</Field>
+<Field Name="Diagnosis Priority" Usage="X" Min="0" Max="*" Datatype="ID" Length="2" Table="0359" ItemNo="00389">
+<Reference>6.5.2.15</Reference>
+</Field>
+<Field Name="Diagnosing Clinician" Usage="X" Min="0" Max="*" Datatype="XCN" Length="250" ItemNo="00390">
+<Reference>6.5.2.16</Reference>
+<Component Name="ID number (ST)" Usage="X" Datatype="ST">
+</Component>
+<Component Name="family name" Usage="X" Datatype="FN">
+<SubComponent Name="surname" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="own surname prefix" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="own surname" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="surname prefix from partner/spouse" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="surname from partner/spouse" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+</Component>
+<Component Name="given name" Usage="X" Datatype="ST">
+</Component>
+<Component Name="second and further given names or initials thereof" Usage="X" Datatype="ST">
+</Component>
+<Component Name="suffix (e.g., JR or III)" Usage="X" Datatype="ST">
+</Component>
+<Component Name="prefix (e.g., DR)" Usage="X" Datatype="ST">
+</Component>
+<Component Name="degree (e.g., MD)" Usage="X" Datatype="IS" Table="0360">
+</Component>
+<Component Name="source table" Usage="X" Datatype="IS" Table="0297">
+</Component>
+<Component Name="assigning authority" Usage="X" Datatype="HD">
+<SubComponent Name="namespace ID" Usage="O" Datatype="IS" Length="3" Table="0363">
+</SubComponent>
+<SubComponent Name="universal ID" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="universal ID type" Usage="O" Datatype="ID" Length="3" Table="0301">
+</SubComponent>
+</Component>
+<Component Name="name type code" Usage="X" Datatype="ID" Table="0200">
+</Component>
+<Component Name="identifier check digit" Usage="X" Datatype="ST">
+</Component>
+<Component Name="code identifying the check digit scheme employed" Usage="X" Datatype="ID" Table="0061">
+</Component>
+<Component Name="identifier type code (IS)" Usage="X" Datatype="IS">
+</Component>
+<Component Name="assigning facility" Usage="X" Datatype="HD">
+<SubComponent Name="namespace ID" Usage="O" Datatype="IS" Length="3" Table="0363">
+</SubComponent>
+<SubComponent Name="universal ID" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="universal ID type" Usage="O" Datatype="ID" Length="3" Table="0301">
+</SubComponent>
+</Component>
+<Component Name="Name Representation code" Usage="X" Datatype="ID" Table="0465">
+</Component>
+<Component Name="name context" Usage="X" Datatype="CE" Table="0448">
+<SubComponent Name="identifier" Usage="O" Datatype="ST" Table="0448">
+</SubComponent>
+<SubComponent Name="text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+<SubComponent Name="alternate identifier" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="alternate text" Usage="O" Datatype="ST" Length="3">
+</SubComponent>
+<SubComponent Name="name of alternate coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</SubComponent>
+</Component>
+<Component Name="name validity range" Usage="X" Datatype="DR">
+<SubComponent Name="range start date/time" Usage="X" Datatype="TS">
+</SubComponent>
+<SubComponent Name="range end date/time" Usage="X" Datatype="TS">
+</SubComponent>
+</Component>
+<Component Name="name assembly order" Usage="X" Datatype="ID" Table="0444">
+</Component>
+</Field>
+<Field Name="Diagnosis Classification" Usage="X" Min="0" Max="*" Datatype="IS" Length="3" Table="0228" ItemNo="00766">
+<Reference>6.5.2.17</Reference>
+</Field>
+<Field Name="Confidential Indicator" Usage="X" Min="0" Max="*" Datatype="ID" Length="1" Table="0136" ItemNo="00767">
+<Reference>6.5.3.10</Reference>
+</Field>
+<Field Name="Attestation Date/Time" Usage="X" Min="0" Max="*" Datatype="TS" Length="283" ItemNo="00768">
+<Reference>6.5.2.19</Reference>
+<Component Name="Date/Time" Usage="R" Datatype="NM" Length="270">
+<ImpNote>YYYYMMDD[HHHMM[SS[.SSSS]]][+-
+ZZZZ]
+</ImpNote>
+<DataValues ExValue="20040328134602.1234+0600" />
+</Component>
+<Component Name="degree of precision" Usage="X" Datatype="ST">
+<ImpNote>Retained for backward compatibility only
+</ImpNote>
+<DataValues ExValue="D" />
+</Component>
+</Field>
+</Segment>
+</HL7v2xStaticDef>
+</HL7v2xConformanceProfile>
+
