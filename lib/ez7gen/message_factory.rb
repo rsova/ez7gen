@@ -17,15 +17,40 @@ class MessageFactory
       instance_variable_set("@#{k}", v) unless v.nil?
     end
     @loadFactor ||= nil
+    # lookup for a template by name if client speified using a template
+    @templatePath = (args[:use_template])? self.class.lookup_template_for_event(@std, @event):nil
 
   end
 
+  # look up for message template file for an event and standard: 2.4, ADT_A60
+  def self.lookup_template_for_event(std, event)
+    properties_file = File.expand_path('../resources/properties.yml', __FILE__)
+    yml = YAML.load_file properties_file
+    path = yml['web.install.dir']
+    path = File.join(path, "config/templates/#{std}/*#{event}*")
+    Dir.glob(path, File::FNM_CASEFOLD).sort.last
+  end
+
   # main factory method
-  def generate_message()
+  def generate()
+    parsers = {}
+    # get message structure from the schema file for message type and version
+    parsers[PRIMARY] = ProfileParser.new(@attributes_hash)
+
+    # check if current version is not the base version, find the base version and add use it as a base parser
+    if(!is_base?(@version))# version is not standard != '2.4'
+      parsers[BASE]= get_base_parser()
+    end
+
+    return (@templatePath)? generate_message_from_template(parsers, templatePath) : generate_message(parsers)
+  end
+
+  # factory method to build message using schema
+  def generate_message(parsers)
 
     # get message structure from the schema file for message type and version
-    parser = ProfileParser.new(@attributes_hash)
-    structure = parser.get_message_definition()
+    # use primary schema
+    structure = parsers[PRIMARY].get_message_definition()
 
     # brake message structure into segments, handle groups of segments
     structParser = StructureParser.new()
@@ -36,112 +61,46 @@ class MessageFactory
     segment_picker = SegmentPicker.new(profile, structParser.encodedSegments, @loadFactor)
     segments = segment_picker.pick_segments_to_build()
 
-    # set primary parser for base schema
-    parsers = {PRIMARY => parser}
-
-    # if this is a custom Z segment, add the base parser
-    # if(version !='2.4')
-    # check if current version is not the base version, find the base version and add use it as a base parser
-    if(!is_base?(@version))
-      add_base_parser(parsers)
-    end
-
     # configure a segment generator
     baseVersion = @std
     segmentGenerator = SegmentGenerator.new(baseVersion, @event, parsers)
 
     # msh segment configured by hand, due to many requirements that only apply for this segment
-    @hl7Msg = HL7::Message.new
-    @hl7Msg << segmentGenerator.init_msh()
-
+    hl7Msg = HL7::Message.new
+    hl7Msg << segmentGenerator.init_msh()
 
     #iterate over selected segments and build the entire message
-    # segments.each.with_index(){ |segment, idx|
     segments.each{ |segment|
-      segmentGenerator.generate(@hl7Msg, segment, parsers)
+      segmentGenerator.generate(hl7Msg, segment, parsers)
      }
 
-    return @hl7Msg
+    return hl7Msg
   end
 
-  # factory method
-  def generate_message_from_template()
+  # factory method to build message using MWB templates
+  def generate_message_from_template(parsers, templatePath)
 
-    # if (@templatePath)
-    #   templatePath = @templatePath
-    # end
-
-    # get message structure from the schema file for message type and version
-    parser = ProfileParser.new(@attributes_hash)
-    # structure = parser.get_message_definition()
-
-    # brake message structure into segments, handle groups of segments
-    # structParser = StructureParser.new()
-    # structParser.process_segments(structure)
-
-    # select segments to build, keep required and z segments, random pick optional segments
-    # profile = structure.split('~')
-    # segment_picker = SegmentPicker.new(profile, structParser.encodedSegments, @loadFactor)
-    # segments = segment_picker.pick_segments_to_build()
-
-    # set primary parser for base schema
-    parsers = {PRIMARY => parser}
-
-    # if this is a custom Z segment, add the base parser
-    # if(version !='2.4')
-    # check if current version is not the base version, find the base version and add use it as a base parser
-    if(!is_base?(@version))
-      add_base_parser(parsers)
-    end
-
-    # configure a segment generator
-    baseVersion = @std
+    hl7Msg = HL7::Message.new
 
     templateGenerator = TemplateGenerator.new(templatePath, parsers)
-    @hl7Msg = HL7::Message.new
-
     template = templateGenerator.build_template_metadata()
-    templateGenerator.generate(@hl7Msg, template)
 
-    # msh segment configured by hand, due to many requirements that only apply for this segment
-    # @hl7Msg << segmentGenerator.init_msh()
+    return templateGenerator.generate(hl7Msg, template)
 
-    # segments = template.keys
-    #
-    #   # f = template[s]
-    #   #
-    #   # dt_partials = []
-    #   # dt_partials << break_to_partial(f)
-    #   #
-    #   # # flds[f[:Pos].to_i] = dt_partials.join('^')
-    #   # flds << dt_partials.join('|')
-    #   segments.each{ |segment|
-    #     segmentGenerator.generate(@hl7Msg, segment, parsers)
-    #   }
-
-    # }
-
-
-    # #iterate over selected segments and build the entire message
-    # # segments.each.with_index(){ |segment, idx|
-    # segments.each{ |segment|
-    #   segmentGenerator.generate(@hl7Msg, segment, parsers)
-    #  }
-
-    return @hl7Msg
   end
+
 
   def is_base?(version)
     isBase = @version_store.find { |s| s[:std] == @std }[:profiles].find { |p| p[:doc] == version }[:std]
   end
 
   # Add parser for base version of schema
-  def add_base_parser(parsers)
+  def get_base_parser()
     # find version for base standard version - standard with 'std' attribute
-  v_base = @version_store.find { |s| s[:std] == @std }[:profiles].find { |p| p[:std]!=nil }[:doc]
+    v_base = @version_store.find { |s| s[:std] == @std }[:profiles].find { |p| p[:std]!=nil }[:doc]
     v_base_hash = @attributes_hash.clone()
     v_base_hash[:version] = v_base
-    parsers[BASE]= ProfileParser.new(v_base_hash)
+    ProfileParser.new(v_base_hash)
   end
 
   def self.to_arr(hl7Msg)

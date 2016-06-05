@@ -31,26 +31,26 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   end
 
 
-# Admission Messages with Z segment
   def test_ADT_60
     # ver='vaz2.4'
     ver='VAZ2.4.HL7'
-    event='ADT_60'
+    event='ADT_A60'
     # hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     # # MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     # saveMsg(event, hl7, ver)
     # puts hl7
     # puts "\n------------------------------------\n"
     # hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: 1}).generate1()
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS})
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/ez7gen-web/config/templates/2.4/vista sqwm-adt_a60.xml"
-
-    hl7 = factory.generate_message_from_template()
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    hl7 = factory.generate()
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/ez7gen-web/config/templates/2.4/vista sqwm-adt_a60.xml"
+    # hl7 = factory.generate_message_from_template()
     # saveMsg(Ez7gen::VERSION+event, hl7, ver)
     puts hl7
-
-    # # assert(hl7 != nil)
-    # refute_nil(hl7)
+    assert_equal 'MSH', hl7[0].e0
+    assert_equal 'EVN', hl7[1].e0
+    assert_equal 'PID', hl7[2].e0
+    assert_equal 'IAM', hl7[3].e0
   end
 
 

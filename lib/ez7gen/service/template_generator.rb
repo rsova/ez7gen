@@ -78,7 +78,6 @@ class TemplateGenerator
   #
   # end
 
-
   # parse template xml file into collection
   def build_template_metadata(usages=@@USAGES)
     # list of segments
@@ -191,4 +190,107 @@ class TemplateGenerator
   #
   # end
 
+  #  TODO Refactor build_template_metadata
+  def build_metadata(usages=@@USAGES)
+    # list of segments
+    segs = @xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
+    map = {}
+
+    for seg in segs
+      p seg[:Name]
+      if (usages.include?(seg.Usage))
+        map[seg.attributes[:Name]] = get_metadata(seg, usages)
+      end
+    end
+
+    return map
+  end
+
+  # parse template xml file into collection
+  def get_metadata(partial, usages=@@USAGES)
+    meta = []
+    element = partial.locate('Field')
+    element = (element.empty?) ? partial.locate('Component') : element
+    element = (element.empty?) ? partial.locate('SubComponent') : element
+
+
+    # field is req and has no subs
+      # get attributes
+
+    # field has subs
+    # get attributes
+    # brake to subs
+    # each type added to array and merged into attribute as map name => subs
+
+
+
+    # # try to brake it into partials
+    # element = partial.locate('Field')
+    # if(!element.empty?)
+    #   # field has sub components
+    #   handle_field (element, usages)
+    # else
+    #   handle_partials(element, usages)
+    # end
+    if(element.empty? && usages.include?(partial.Usage))
+      meta = partial.attributes
+    else
+        name = if(element.first.value.include?('Component'))then element.first.value end
+        p name
+
+        element.each_with_index { |el, idx|
+          sub = []
+
+          if (usages.include?(el.Usage))
+            el.attributes.merge!(:Pos => idx)
+            sub[idx.to_i] = get_metadata(el,usages)
+            p '~~~~~~'
+            p sub
+          end
+         }
+
+        if(name)
+          element.attributes.merge!(name => sub)
+          meta << el.attributes
+        end
+
+    end
+
+    # # more partials
+    # if(!element.empty?)
+    #   sub = []
+    #
+    #   element.each_with_index { |el, idx|
+    #
+    #     if (usages.include?(el.Usage))
+    #       el.attributes.merge!(:Pos => idx)
+    #       sub[idx.to_i] = get_metadata(el,usages)
+    #     end
+    #
+    #   }
+    #
+    #   if(!sub.empty?)
+    #     name = '*'
+    #     element.attributes.merge!( name => subs)
+    #     meta << sub
+    #   end
+    #
+    # else
+    #   if (usages.include?(partial.Usage))
+    #     meta << partial.attributes
+    #   end
+    #
+    # end
+
+    return meta
+  end
+
+  def handle_field(element, usages)
+
+  end
+
+  def handle_partials(element, usages)
+
+  end
+  #  TODO Refactor
 end

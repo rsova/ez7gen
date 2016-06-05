@@ -52,6 +52,8 @@ class TemplateGeneratorTest < Test::Unit::TestCase
     assert_equal '20', map['EVN'].first[:components].first[:Length]
   end
 
+
+
   def test_read_template_PID
 
     templatePath = 'test-config/templates/ADT_A60_PID.xml'
@@ -82,6 +84,36 @@ class TemplateGeneratorTest < Test::Unit::TestCase
     assert_equal 3, map.size
     assert_equal 3, map['MFI'].size
     assert_equal 5, map['MFE'].size
+  end
+
+  def _test_get_metadata_EVN #TODO finish refactoring of the 'build_template_metadata' method
+
+    templatePath = 'test-config/templates/ADT_A60_EVN.xml'
+    usages = ['R','RE']
+    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata( usages)
+
+    puts map
+    assert_equal(4, map.size)
+    assert_equal 'Recorded Date/Time', map['EVN'].first[:Name]
+    assert_equal '20', map['EVN'].first[:components].first[:Length]
+    # {"MSH"=>[],
+    # "EVN"=>[
+    #  {:Name=>"Recorded Date/Time", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"TS", :Length=>"26", :ItemNo=>"00100", :Pos=>1,
+    #   :components=>[
+    #     {:Name=>"Date/Time", :Usage=>"R", :Datatype=>"NM", :Length=>"20", :Pos=>0}
+    #    ]
+    #   }
+    # ],
+    # "PID"=>[],
+    # "IAM"=>[]}
+
+    # {"MSH"=>[{:Name=>"MSH", :LongName=>"Message Header", :Usage=>"R", :Min=>"1", :Max=>"1"}],
+    # "EVN"=>[
+    # {"Field"=>[[{"Component"=>[[{:Name=>"Date/Time", :Usage=>"R", :Datatype=>"NM", :Length=>"20", :Pos=>0}]]}]]}],
+
+    # "PID"=>[{:Name=>"PID", :LongName=>"Patient identification", :Usage=>"R", :Min=>"1", :Max=>"1"}], "IAM"=>[{:Name=>"IAM", :LongName=>"Patient adverse reaction information - unique iden", :Usage=>"R", :Min=>"1", :Max=>"*"}]}
+
+
   end
 
   # End of tests, supporting methods to be moved to the class
