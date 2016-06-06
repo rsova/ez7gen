@@ -3,9 +3,22 @@ require_relative 'utils'
 
 class TemplateGenerator
   include Utils
+  #TODO: refactor in one place
+  @@HAT = '^' # Component separator, aka hat
+  @@SUB ='&' # Subcomponent separator
 
+  # xml tags used in MWB schemas
+  COMPONENT = 'Component'
+  SUBCOMPONENT = 'SubComponent'
+
+  # use xml tags as symbols for name of collections
+  COMP = COMPONENT.downcase.intern
+  SUB = SUBCOMPONENT.downcase.intern
+
+  # list of usages to be picked up, other ignored
   @@USAGES = ['R','RE']
 
+  # initialise template generator with the path to template xml (MWB) and parcers
   def initialize(tempalte_path, pp)
 
     # parse template  TODO: refactor if not needed on class level move to 'build_template_metadata'
@@ -27,22 +40,21 @@ class TemplateGenerator
 
   # build hl7 message using template as guideline
   # def generate(message, template, parsers, isGroup=false)
-  def generate(message, template, isGroup=false)
+  def generate(message)
+    # read MWB xml file into collection of metadata for each segment
+    metadata = build_metadata()
 
-    segments = template.keys
-    # fields = []
+    # segment names
+    segments = metadata.keys
 
-    segments.each{|segment|
-
-      f = template[segment]
-
-      partials = break_to_partial(f)
-
-      message << generate_segment(segment, partials)
+    # add each segment to message using template metadata
+    segments.each{|segName|
+      meta = metadata[segName]
+      processed = process_partials(meta)
+      message << generate_segment(segName, processed)
     }
 
     return message
-    # @fldGenerator.method(dt).call(attrs, true)
   end
 
   # generate a segment using Ensemble schema
@@ -54,8 +66,104 @@ class TemplateGenerator
     # elements[@@SET_ID_PIECE] = handle_set_id(segmentName, attributes, idx) || elements[@@SET_ID_PIECE]
 
     #generate segment using elements
-    HL7::Message::Segment::Default.new(attributes)
+    return HL7::Message::Segment::Default.new(attributes)
   end
+
+  # working with template hash brake field metadata to components and then to subcomponents
+  def process_partials(item)
+    partials = []
+
+    # process each sub type
+    if(item.kind_of? Array)
+
+      item.each{|subType| # at this level we have components or subcomponents
+        coll = subType[SUB] || subType # if subcomponents found process again
+        unit = process_partials(coll)
+        flag = (subType[SUB]) ? @@SUB : @@HAT
+        partials[subType[:Pos].to_i] = unit.join(flag)
+      }
+
+    else
+      # check for components first and then subcomponents
+      coll = item[COMP] || item[SUB]
+      if(coll)
+        partials << process_partials(coll)
+      else
+        partials << build_partial_field_data(item)
+      end
+    end
+
+    return partials
+
+  end
+
+  # convert
+  def build_partial_field_data(item)
+    attrs = {}
+    # strip leading zeros from table name, MWB format.
+    if (item[:Table]) then attrs[:codetable]= item[:Table].sub(/^0+/, '') end
+    if (item[:Length]) then attrs[:max_length]= item[:Length] end
+    if (item[:Name]) then attrs[:description] = item[:Name] end
+    if (item[:Datatype]) then attrs[:datatype] = item[:Datatype] end
+
+    # return attrs
+    @fieldGenerators[PRIMARY].method(attrs[:datatype]).call(attrs, true)#TODO: fix this use proper field generator
+    # @fieldGenerators[BASE].dynamic(attrs[:datatype], attrs, true)#TODO: fix this use proper field generator
+  end
+
+  # using MWB profiles build collection of message metadata, to use for building a message
+  def build_metadata(usages=@@USAGES)
+    meta = {}
+
+    # list of segments
+    segments = @xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
+
+    segments.each{|seg|
+
+      fields = []
+      seg.locate('Field').each_with_index { |f,idx |
+        if (usages.include?(f.Usage))
+          f.attributes.merge!(:Pos => idx)
+          fields << get_metadata(f, usages)
+        end
+      }
+
+      meta[seg.attributes[:Name]] = fields
+    }
+
+    return meta
+  end
+
+  # parse template xml file into collection
+  def get_metadata(partial, usages=@@USAGES)
+
+    element = partial.locate(COMPONENT)
+    element = (element.empty?) ? partial.locate(SUBCOMPONENT) : element
+
+    if(!element.empty?)
+        sub = []
+
+        element.each_with_index { |el, idx|
+
+          if (usages.include?(el.Usage))
+            el.attributes.merge!(:Pos => idx)
+            # sub[idx.to_i] = get_metadata(el,usages)
+            sub << get_metadata(el,usages)
+          end
+
+        }
+
+        if(!sub.empty?)
+          subElementName = (element.first.value.downcase).intern # subcomponent or component
+          partial.attributes[subElementName] = sub
+        end
+
+    end
+
+    return partial.attributes
+
+  end
+
   # def add_field()
   #   # f = template[s]
   #   #
@@ -79,6 +187,7 @@ class TemplateGenerator
   # end
 
   # parse template xml file into collection
+  # Obsolete
   def build_template_metadata(usages=@@USAGES)
     # list of segments
     segs = @xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
@@ -94,21 +203,22 @@ class TemplateGenerator
           fld.attributes.merge!(:Pos => fld_idx)
 
           cmps = []
-          fld.locate('Component').each_with_index { |cmp, cmp_idx|
+          fld.locate(COMPONENT).each_with_index { |cmp, cmp_idx|
 
             if (usages.include?(cmp.Usage))
 
               cmp.attributes.merge!(:Pos => cmp_idx)
 
               sub_comps = []
-              cmp.locate('SubComponent').each_with_index { |sub, sub_idx|
+              cmp.locate(SUBCOMPONENT).each_with_index { |sub, sub_idx|
                 if (usages.include?(sub.Usage))
                   sub_comps << sub.attributes.merge(:Pos => sub_idx)
                 end
               }# end locate SubComponent
 
               if (!sub_comps.empty?) then
-                cmp.attributes.merge!(:subComponents => sub_comps)
+                # cmp.attributes.merge!(:subComponents => sub_comps)
+                cmp.attributes.merge!(SUB => sub_comps)
               end
               if (cmp.attributes) then
                 cmps << cmp.attributes
@@ -118,7 +228,8 @@ class TemplateGenerator
           }# end locate Component
 
           if (!cmps.empty?) then
-            fld.attributes.merge!(:components => cmps)
+            # fld.attributes.merge!(:components => cmps)
+            fld.attributes.merge!(COMP => cmps)
           end
 
           meta << fld.attributes
@@ -131,166 +242,4 @@ class TemplateGenerator
 
     return map
   end
-
-  # woring with template hash using it to brake field metadata to components and then to subcomponents
-  def break_to_partial(item)
-    partials = []
-
-    if(item.kind_of? Array)
-
-      item.each{|i|
-        coll = i[:subComponents] || i
-        partials[i[:Pos].to_i] = break_to_partial(coll).join((i[:subComponents])?'&':'^')
-      }
-
-    else
-
-      coll = item[:components] || item[:subComponents]
-      if(coll)
-        partials << break_to_partial(coll)
-      else
-        partials << convert_attributes(item)
-      end
-    end
-
-    return partials
-
-  end
-
-  # convert
-  def convert_attributes(item)
-    attrs = {}
-
-    if (item[:Length]) then attrs[:max_length]= item[:Length] end
-
-    if (item[:Table]) then attrs[:codetable]= item[:Table].sub(/^0+/, '') end
-
-    if (item[:Name]) then attrs[:description] = item[:Name] end
-
-    if (item[:Datatype]) then attrs[:datatype] = item[:Datatype] end
-
-    # return attrs
-    #
-     # @fldGenerator[0].method(dt).call(attrs, true)#TODO: fix this
-    @fieldGenerators[PRIMARY].method(attrs[:datatype]).call(attrs, true)#TODO: fix this
-  end
-
-
-  # def find_field_exValue(fld, idx)
-  #
-  #   if (!fld.locate('DataValues').empty?)
-  #     {idx => fld.DataValues.attributes[:ExValue]  }
-  #     # {fld.attributes[:ItemNo] => fld.DataValues.attributes[:ExValue]  }
-  #   elsif (!fld.locate('Component/DataValues').empty?)
-  #     puts fld
-  #     {idx => fld.Component.DataValues.attributes[:ExValue]}
-  #     # {fld.attributes[:ItemNo] => fld.Component.DataValues.attributes[:ExValue]}
-  #   elsif ()
-  #   end
-  #
-  # end
-
-  #  TODO Refactor build_template_metadata
-  def build_metadata(usages=@@USAGES)
-    # list of segments
-    segs = @xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
-    map = {}
-
-    for seg in segs
-      p seg[:Name]
-      if (usages.include?(seg.Usage))
-        map[seg.attributes[:Name]] = get_metadata(seg, usages)
-      end
-    end
-
-    return map
-  end
-
-  # parse template xml file into collection
-  def get_metadata(partial, usages=@@USAGES)
-    meta = []
-    element = partial.locate('Field')
-    element = (element.empty?) ? partial.locate('Component') : element
-    element = (element.empty?) ? partial.locate('SubComponent') : element
-
-
-    # field is req and has no subs
-      # get attributes
-
-    # field has subs
-    # get attributes
-    # brake to subs
-    # each type added to array and merged into attribute as map name => subs
-
-
-
-    # # try to brake it into partials
-    # element = partial.locate('Field')
-    # if(!element.empty?)
-    #   # field has sub components
-    #   handle_field (element, usages)
-    # else
-    #   handle_partials(element, usages)
-    # end
-    if(element.empty? && usages.include?(partial.Usage))
-      meta = partial.attributes
-    else
-        name = if(element.first.value.include?('Component'))then element.first.value end
-        p name
-
-        element.each_with_index { |el, idx|
-          sub = []
-
-          if (usages.include?(el.Usage))
-            el.attributes.merge!(:Pos => idx)
-            sub[idx.to_i] = get_metadata(el,usages)
-            p '~~~~~~'
-            p sub
-          end
-         }
-
-        if(name)
-          element.attributes.merge!(name => sub)
-          meta << el.attributes
-        end
-
-    end
-
-    # # more partials
-    # if(!element.empty?)
-    #   sub = []
-    #
-    #   element.each_with_index { |el, idx|
-    #
-    #     if (usages.include?(el.Usage))
-    #       el.attributes.merge!(:Pos => idx)
-    #       sub[idx.to_i] = get_metadata(el,usages)
-    #     end
-    #
-    #   }
-    #
-    #   if(!sub.empty?)
-    #     name = '*'
-    #     element.attributes.merge!( name => subs)
-    #     meta << sub
-    #   end
-    #
-    # else
-    #   if (usages.include?(partial.Usage))
-    #     meta << partial.attributes
-    #   end
-    #
-    # end
-
-    return meta
-  end
-
-  def handle_field(element, usages)
-
-  end
-
-  def handle_partials(element, usages)
-
-  end
-  #  TODO Refactor
 end

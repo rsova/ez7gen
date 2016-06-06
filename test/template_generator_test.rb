@@ -32,11 +32,13 @@ class TemplateGeneratorTest < Test::Unit::TestCase
     templatePath = 'test-config/templates/ADT_A60.xml'
     usages = ['R','RE']
 
+    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(usages)
+    p map
     map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
     p map
     assert_equal(4, map.size)
     assert_equal 'Recorded Date/Time', map['EVN'].first[:Name]
-    assert_equal '20', map['EVN'].first[:components].first[:Length]
+    assert_equal '20', map['EVN'].first[TemplateGenerator::COMP].first[:Length]
 
   end
 
@@ -44,21 +46,21 @@ class TemplateGeneratorTest < Test::Unit::TestCase
 
     templatePath = 'test-config/templates/ADT_A60_EVN.xml'
     usages = ['R','RE']
+    # map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata( usages)
     map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
 
     puts map
     assert_equal(4, map.size)
     assert_equal 'Recorded Date/Time', map['EVN'].first[:Name]
-    assert_equal '20', map['EVN'].first[:components].first[:Length]
+    assert_equal '20', map['EVN'].first[TemplateGenerator::COMP].first[:Length]
   end
-
-
 
   def test_read_template_PID
 
     templatePath = 'test-config/templates/ADT_A60_PID.xml'
     usages = ['R','RE']
-    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
+    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata( usages)
+    # map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
     # p map
     assert_equal 1, map.size
     assert_equal 9, map['PID'].size
@@ -66,11 +68,33 @@ class TemplateGeneratorTest < Test::Unit::TestCase
     # puts map
     puts map['PID']
     puts
-    assert_equal 0, map['PID'].first[:components].first[:Pos]
-    assert_equal 0, map['PID'].first[:components].first[:Pos]
-    puts map['PID'][1][:components]
+    assert_equal 0, map['PID'].first[TemplateGenerator::COMP].first[:Pos]
+    assert_equal 0, map['PID'].first[TemplateGenerator::COMP].first[:Pos]
+    puts map['PID'][1][TemplateGenerator::COMP]
     puts
-    puts map['PID'][1][:components][0][:subComponents]
+    puts map['PID'][1][TemplateGenerator::COMP][0][TemplateGenerator::SUB]
+    # map['PID'].first[2][:components].each {|it| p it.keys}
+    # puts map['PID'].first[4]
+  end
+
+  def test_read_template_PID_1
+
+    templatePath = 'test-config/templates/ADT_A60_PID.xml'
+    usages = ['R','RE']
+    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata( usages)
+
+    puts map
+    assert_equal 1, map.size
+    assert_equal 9, map['PID'].size
+
+    # puts map
+    puts map['PID']
+    puts
+    assert_equal 0, map['PID'].first[TemplateGenerator::COMP].first[:Pos]
+    assert_equal 0, map['PID'].first[TemplateGenerator::COMP].first[:Pos]
+    puts map['PID'][1][TemplateGenerator::COMP]
+    puts
+    puts map['PID'][1][TemplateGenerator::COMP][0][TemplateGenerator::SUB]
     # map['PID'].first[2][:components].each {|it| p it.keys}
     # puts map['PID'].first[4]
   end
@@ -79,23 +103,25 @@ class TemplateGeneratorTest < Test::Unit::TestCase
 
     usages = ['R','RE']
     templatePath = 'test-config/templates/2.4/eiv table update-mfn_m01 20151201.xml'
-    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
+    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata( usages)
+    # map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
     p map
     assert_equal 3, map.size
     assert_equal 3, map['MFI'].size
     assert_equal 5, map['MFE'].size
   end
 
-  def _test_get_metadata_EVN #TODO finish refactoring of the 'build_template_metadata' method
+  def test_get_metadata_EVN
 
+    # templatePath = 'test-config/templates/ADT_A60_EVN_only.xml'
     templatePath = 'test-config/templates/ADT_A60_EVN.xml'
     usages = ['R','RE']
     map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata( usages)
 
     puts map
-    assert_equal(4, map.size)
+    # assert_equal(4, map.size)
     assert_equal 'Recorded Date/Time', map['EVN'].first[:Name]
-    assert_equal '20', map['EVN'].first[:components].first[:Length]
+    assert_equal '20', map['EVN'].first[TemplateGenerator::COMP].first[:Length]
     # {"MSH"=>[],
     # "EVN"=>[
     #  {:Name=>"Recorded Date/Time", :Usage=>"R", :Min=>"1", :Max=>"1", :Datatype=>"TS", :Length=>"26", :ItemNo=>"00100", :Pos=>1,
@@ -116,76 +142,5 @@ class TemplateGeneratorTest < Test::Unit::TestCase
 
   end
 
-  # End of tests, supporting methods to be moved to the class
-  # def build_template_metadata(path, usages)
-  #   text = File.path(path)
-  #   xml = Ox.parse(IO.read(text))
-  #
-  #   # list of segments
-  #   segs = xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
-  #
-  #   map = {}
-  #   for seg in segs
-  #
-  #     puts seg.attributes[:Name]
-  #     meta = []
-  #     # list of fields
-  #     seg.locate('Field').each_with_index { |fld, fld_idx|
-  #       if (usages.include?(fld.Usage)) #Usage="R"
-  #         fld.attributes.merge!(:Pos => fld_idx)
-  #
-  #         cmps = []
-  #         fld.locate('Component').each_with_index { |cmp, cmp_idx|
-  #
-  #           if (usages.include?(cmp.Usage))
-  #
-  #             cmp.attributes.merge!(:Pos => cmp_idx)
-  #
-  #             sub_comps = []
-  #             cmp.locate('SubComponent').each_with_index { |sub, sub_idx|
-  #               if (usages.include?(sub.Usage))
-  #                 sub_comps << sub.attributes.merge(:Pos => sub_idx)
-  #               end
-  #             }# end locate SubComponent
-  #
-  #             if (!sub_comps.empty?) then
-  #               cmp.attributes.merge!(:subComponents => sub_comps)
-  #             end
-  #             if (cmp.attributes) then
-  #               cmps << cmp.attributes
-  #             end
-  #
-  #           end
-  #         }# end locate Component
-  #
-  #         if (!cmps.empty?) then
-  #           fld.attributes.merge!(:components => cmps)
-  #         end
-  #
-  #         meta << fld.attributes
-  #       end
-  #
-  #     }# end locate Field
-  #
-  #     map[seg.attributes[:Name]] = meta
-  #   end
-  #
-  #   return map
-  # end
-  #
-  #
-  # def find_field_exValue(fld, idx)
-  #
-  #   if (!fld.locate('DataValues').empty?)
-  #     {idx => fld.DataValues.attributes[:ExValue]  }
-  #     # {fld.attributes[:ItemNo] => fld.DataValues.attributes[:ExValue]  }
-  #   elsif (!fld.locate('Component/DataValues').empty?)
-  #     puts fld
-  #     {idx => fld.Component.DataValues.attributes[:ExValue]}
-  #     # {fld.attributes[:ItemNo] => fld.Component.DataValues.attributes[:ExValue]}
-  #   elsif ()
-  #   end
-  #
-  # end
 
 end

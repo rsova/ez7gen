@@ -31,16 +31,10 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   end
 
 
-  def test_ADT_60
+  def test_ADT_A60
     # ver='vaz2.4'
     ver='VAZ2.4.HL7'
     event='ADT_A60'
-    # hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
-    # # MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
-    # saveMsg(event, hl7, ver)
-    # puts hl7
-    # puts "\n------------------------------------\n"
-    # hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: 1}).generate1()
     factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
     hl7 = factory.generate()
     # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/ez7gen-web/config/templates/2.4/vista sqwm-adt_a60.xml"

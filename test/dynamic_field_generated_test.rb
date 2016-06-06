@@ -197,7 +197,7 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
     flds = []
     pid_re.each{|f|
       dt_partials = []
-      dt_partials << break_to_partial(f)
+      dt_partials << process_partials(f)
       flds[f[:Pos].to_i] = dt_partials.join('^')
       puts f.to_s
       # puts flds
@@ -243,7 +243,7 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
 
     msh.each{|f|
       dt_partials = []
-      dt_partials << break_to_partial(f)
+      dt_partials << process_partials(f)
       flds[f[:Pos].to_i] = dt_partials.join('^')
     }
     puts flds.join('|')
@@ -261,7 +261,7 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
       f = adt_60[s]
 
       dt_partials = []
-      dt_partials << break_to_partial(f)
+      dt_partials << process_partials(f)
 
       # flds[f[:Pos].to_i] = dt_partials.join('^')
       flds << dt_partials.join('|')

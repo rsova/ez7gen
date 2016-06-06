@@ -83,9 +83,10 @@ class MessageFactory
     hl7Msg = HL7::Message.new
 
     templateGenerator = TemplateGenerator.new(templatePath, parsers)
-    template = templateGenerator.build_template_metadata()
+    # template = templateGenerator.build_metadata()
+    # template = templateGenerator.build_template_metadata()
 
-    return templateGenerator.generate(hl7Msg, template)
+    return templateGenerator.generate(hl7Msg)
 
   end
 
