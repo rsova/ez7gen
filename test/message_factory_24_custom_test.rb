@@ -3,7 +3,7 @@ require 'test/unit'
 require_relative "../lib/ez7gen/message_factory"
 require_relative "../lib/ez7gen/version"
 
-class MessageFactoryTemplate24Test < Test::Unit::TestCase
+class MessageFactoryTemplate24CusotmTest < Test::Unit::TestCase
 
 
   # alias :orig_run :run
@@ -17,8 +17,8 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   @@VS =
       [
           # {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4.HL7.xml.bkp"}]},
-          {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4HL7_N.xml"}]},
-          {:std=>"2.5", :path=>"../test/test-config/schema/2.5", :profiles=>[{:doc=>"2.5.HL7", :name=>"2.5", :std=>"1", :path=>"../test/test-config/schema/2.5/2.5.HL7.xml"}, {:doc=>"TEST2.5.HL7", :name=>"TEST2.5", :description=>"2.5 mockup schema for testing", :base=>"2.4", :path=>"../test/test-config/schema/2.5/VAZ2.5.HL7.xml"}]}
+          {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ24CustomMSH062216.xml"}]},
+         # {:std=>"2.5", :path=>"../test/test-config/schema/2.5", :profiles=>[{:doc=>"2.5.HL7", :name=>"2.5", :std=>"1", :path=>"../test/test-config/schema/2.5/2.5.HL7.xml"}, {:doc=>"TEST2.5.HL7", :name=>"TEST2.5", :description=>"2.5 mockup schema for testing", :base=>"2.4", :path=>"../test/test-config/schema/2.5/VAZ2.5.HL7.xml"}]}
       ]
 
 
@@ -31,22 +31,21 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   end
 
 
-  def test_ADT_A60
+  def test_ADT_ZA60
     # ver='vaz2.4'
-    # view xml as grid http://xmlgrid.net/
     ver='VAZ2.4.HL7'
-    event='ADT_A60'
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
-    #factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS})
+    event='ADT_Z60'
+    # factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, loadFactor: 1})
     hl7 = factory.generate()
     # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/ez7gen-web/config/templates/2.4/vista sqwm-adt_a60.xml"
     # hl7 = factory.generate_message_from_template()
     # saveMsg(Ez7gen::VERSION+event, hl7, ver)
     puts hl7
-    assert_equal 'MSH', hl7[0].e0
-    assert_equal 'EVN', hl7[1].e0
-    assert_equal 'PID', hl7[2].e0
-    assert_equal 'IAM', hl7[3].e0
+    # assert_equal 'MSH', hl7[0].e0
+    # assert_equal 'EVN', hl7[1].e0
+    # assert_equal 'PID', hl7[2].e0
+    # assert_equal 'IAM', hl7[3].e0
   end
 
 

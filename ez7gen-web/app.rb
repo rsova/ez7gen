@@ -1,17 +1,36 @@
-require 'sinatra'
+# require 'sinatra'
+require 'sinatra/base'
+
 require 'json'
 require 'rest_client'
+require 'diskcached'
 # require 'ez7gen'
 require_relative '../lib/ez7gen/message_factory' # local testing
 require_relative '../lib/ez7gen/profile_parser' # local testing
 
-# configure do
+class MyApp < Sinatra::Application
+
+  # configure do
 #   set :show_exceptions, :after_handler
 #   disable :raise_errors
 # end
 @@URLS={'2.4'=>'localhost:9980/','VAZ2.4'=>'localhost:9981/'}
 # admisson messages match pattern
 @@FILTERS = [ProfileParser::FILTER_ADM, ProfileParser::FILTER_PH]
+
+
+  configure do
+    $diskcache = Diskcached.new(File.join(settings.root, 'cache'))
+    $diskcache.flush # ensure caches are empty on startup
+    #cahe version store
+    # MyApp.class.cache_lookup('version_store')
+    puts 'in configure'
+  end
+
+  #
+  # before do
+  #     @cache_key = cache_sha(request.path_info)
+  # end
 
   get '/' do
     # content_type :json
@@ -24,10 +43,11 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
     { version: Ez7gen::VERSION}.to_json
   end
 
-  get '/pulse' do
-    # content_type :json
-    'boom boom'
-  end
+
+
+ get '/pulse' do
+    # vs = cache_lookup('version_store')
+ end
 
   post '/generate/' do
     begin
@@ -41,7 +61,7 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
       puts  "std: #{std}, event: #{event}, version: #{version}"
 
       vs = ProfileParser.lookup_versions()
-      @resp = MessageFactory.new({std: std, version: version, event:event, version_store: vs}).generate_message() #msg.replace('\r','\n' )
+      @resp = MessageFactory.new({std: std, version: version, event:event, version_store: vs}).generate() #msg.replace('\r','\n' )
 
     rescue => e
       # puts 'inside rescue'
@@ -82,6 +102,8 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
 
     begin
       versions = ProfileParser.lookup_versions()
+      puts cache_lookup('hW')
+
       std_arr =[]
       versions.each{ |version|
         std_attrs={}
@@ -125,3 +147,26 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
   #   puts 'inside error'
   #   # 'Sorry there was a nasty error - ' + env['sinatra.error'].message
   # end
+
+  def cache_lookup(key)
+    begin
+      value = $diskcache.get(key)
+    rescue Diskcached::NotFound => e # prevents easy replacement, but is safer.
+      case key
+        when 'version_store'
+          value = ProfileParser.lookup_versions()
+        else
+          value  = 'Hello World'
+      end
+      if(value) then $diskcache.set(key, value) end
+    end
+    return value
+  end
+
+
+  # $0 is the executed file
+  # __FILE__ is the current file
+  run! if __FILE__ == $0
+end
+ # HELPER METHODS
+ # cache lookup method

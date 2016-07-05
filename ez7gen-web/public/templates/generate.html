@@ -30,8 +30,8 @@
         <div class="col-md-6">
             <ui-select ng-model="event.selected" theme="selectize">
                 <ui-select-match placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>
-                <!--<ui-select-choices group-by="'group'" group-filter="groupFilterFn" repeat="event in events | filter: $select.search">-->
-                <ui-select-choices group-by="'group'"  repeat="event in events | filter: $select.search">
+                <ui-select-choices group-by="'group'" group-filter="groupFilterFn" repeat="event in events | filter: $select.search">
+                <!--<ui-select-choices group-by="'group'"  repeat="event in events | filter: $select.search">-->
                     <span ng-bind-html="event.name | highlight: $select.search"></span>
                     <small ng-bind-html="event.code | highlight: $select.search"></small>
                 </ui-select-choices>
@@ -39,8 +39,8 @@
 
         </div>
 
-        <!--<div class="col-md-2" ng-show="subGroupVisible">-->
-        <div class="col-md-2" ng-show="false">
+        <div class="col-md-2" ng-show="subGroupVisible">
+        <!--<div class="col-md-2" ng-show="false">-->
             <ui-select ng-model="subGroup.selected" theme="selectize" on-select="setSubGroup(subGroup.selected)">
             <ui-select-match placeholder="Event Types">{{$select.selected.name}}</ui-select-match>
                 <ui-select-choices repeat="subGroup in subGroups | filter: $select.search">

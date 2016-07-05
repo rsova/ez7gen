@@ -91,7 +91,24 @@ class ProfileParser
   def get_message_definition
     msg_type = get_message_structure(@event)
     p msg_type
-    @xml.Export.Document.Category.locate('MessageStructure').select{|it| it.attributes[:name] == msg_type }.first.attributes[:definition]
+    definition = @xml.Export.Document.Category.locate('MessageStructure').select{|it| it.attributes[:name] == msg_type }.first.attributes[:definition]
+    post_process(definition)
+  end
+
+  # helper method to handle corner cases
+  def post_process(definition)
+
+    if(@event == 'OSR_Q06')
+      # 1.If the OSQ_O06 query is about the status of the general messages OMG_O19 General Clinical Order and OML_O21 Lab Order, which only have the OBR segment, then the OSR_O06 should only have the OBR segment in its Order Detail Segment <   >.
+      # 2.If the OSQ_O06 query is about the status of the Pharmacy order messages (OMP_O09, RDE_O11) that do not have OBR segment, but have RXO segment, then the OSR_O06 Order Detail Segment <     > should only contain RXO.
+      definition.sub(/<(.*?)>/,['OBR','RXO'].sample())
+    elsif(@event == 'ORL_O22')
+      # work around for Ensemble issue where repeating group causes error in validation, remove repeating {} tag
+      definition.sub('[~{~ORC~[~OBR~[~{~SAC~}~]~]~}~]', '[~ORC~[~OBR~[~{~SAC~}~]~]~]')
+    else
+      definition
+    end
+
   end
 
   def get_message_structure(event)

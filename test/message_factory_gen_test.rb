@@ -25,83 +25,39 @@ class MessageFactoryLabTest < Test::Unit::TestCase
     end
   end
 
-  # lab messages
-  def test_ORU_R01
+  # general messages
+  def test_OMG_O19
     ver= '2.4.HL7'
-    event='ORU_R01'
+    event='OMG_O19'
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
   end
 
-  def test_OUL_R21
+  def test_ORG_O20
     ver= '2.4.HL7'
-    event='OUL_R21'
+    event='ORG_O20'
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
   end
 
-  def test_QRY_R02
+  def test_OSQ_Q06
     ver= '2.4.HL7'
-    event='QRY_R02'
+    event='OSQ_Q06'
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
     saveMsg(event, hl7, ver)
     puts hl7
   end
 
-  def test_ORF_R04
+  def test_OSR_Q06
     ver= '2.4.HL7'
-    event='ORF_R04'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
+    event='OSR_Q06'
+    # 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~QRD~[~QRF~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~&lt;~OBR~|~RQD~|~RQ1~|~RXO~|~ODS~|~ODT~&gt;~[~{~NTE~}~]~[~{~CTI~}~]~}~]~[~DSC~]' />
+
+    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate() #loadFactor: 1
     saveMsg(event, hl7, ver)
     puts hl7
   end
 
-  def test_OML_O21
-    ver= '2.4.HL7'
-    event='OML_O21'
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS}).generate()
-    saveMsg(event, hl7, ver)
-    puts hl7
   end
-
-  def test_ORL_O22
-    ver= '2.4.HL7'
-    event='ORL_O22'
-     # MSH~MSA~[~ERR~]~[~{~NTE~}~]~[~[~PID~{~[~SAC~[~{~OBX~}~]~]~[~{~ORC~[~OBR~[~{~SAC~}~]~]~}~]~}~]~]
-    #  MSH
-    # ~MSA~
-    # [~ERR~]
-    # ~[~{~NTE~}~]~
-    #   [~
-    #       [~PID~
-    #       {~[~SAC~[~{~OBX~}~]~]
-    #       ~[~
-    #         {~ORC~
-    #         [~OBR~[~{~SAC~}~]~]
-    #         ~}
-    #       ~]~
-    #       }
-    #     ~ ]
-    #   ~]
-       # MSH
-     # ~MSA~
-     # [~ERR~]
-     # ~[~{~NTE~}~]~
-     # [~ group starts g1
-     #  [
-     #    ~PID~ g11
-     #    {
-     #     ~[ g12 group beg
-     #       ~SAC~ g121
-     #       [~{~OBX~}~] g122
-     #    ~]~ g12 end
-     #    ~[
-     # ~{~ORC~[~OBR~[~{~SAC~}~]~]~}~]~}~]~]
-
-    hl7 = MessageFactory.new({std: '2.4', version: ver, event: event, version_store: @@VS}).generate()
-    saveMsg(event, hl7, ver)
-    puts hl7
-  end
-end

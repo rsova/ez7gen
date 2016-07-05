@@ -1,4 +1,4 @@
-/ez7gen-web-org
+/_ez7gen-web-org
 *.gem
 *.rbc
 .bundle
@@ -31,3 +31,5 @@ msg-samples 3.zip
 /_ez7gen-web
 *.zip
 .idea/.rakeTasks
+/msg-samples/
+ez7gen-web/cache/
