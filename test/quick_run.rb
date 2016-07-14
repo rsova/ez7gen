@@ -2,7 +2,9 @@ require 'yaml'
 require_relative '../lib/ez7gen/service/utils'
 include Utils
 # require 'pathname'
+d = 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~QRD~[~QRF~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~<~OBR~|~RQD~|~RQ1~|~RXO~|~ODS~|~ODT~>~[~{~NTE~}~]~[~{~CTI~}~]~}~]~[~DSC~]'
 
+puts d.sub(/<(.*?)>/,['OBR','RXO'].sample())
 
 a = 5
 b = nil

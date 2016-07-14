@@ -9,7 +9,7 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   # end
   #
   # # set to true to write messages to a file
-  # @@PERSIST = true
+  @@PERSIST = true
 
   @@VS =
       [
