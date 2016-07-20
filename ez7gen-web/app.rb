@@ -7,6 +7,7 @@ require 'diskcached'
 # require 'ez7gen'
 require_relative '../lib/ez7gen/message_factory' # local testing
 require_relative '../lib/ez7gen/profile_parser' # local testing
+require_relative '../lib/ez7gen/msg_error_handler' # local testing
 
 class MyApp < Sinatra::Application
 
@@ -84,8 +85,13 @@ class MyApp < Sinatra::Application
       payload = params['hl7']['message']
       puts payload
       @url = @@URLS[version]
-      @resp = RestClient.post @url, payload.gsub!("\n","\r")
+      # @resp = RestClient.post @url, payload.gsub!("\n","\r")
         # { message: resp}.to_json
+      @resp = "MSH|^~\&|EnsembleHL7|ISC|404|808|201607162206||ACK^A05|218|P|2.4|936
+MSA|AE|218
+ERR||||E|<Ens>ErrGeneral|||ERROR <Ens>ErrGeneral: Not forwarding message 9292 with message body Id=4610, Doc Identifier=218, SessionId=9292 because of validation failure: ERROR <Ens>ErrGeneral: Field size restriction exceeded in segment 8:DB1.  Field 2, repetition 1 is larger than segment structure 2.4:DB1 permits it to be.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Invalid value 'ABCDDEFRTYURYRURURUR' appears in segment 8:DB1, field 2, repetition 1, component 1, subcomponent 1, but does not appear in code table 2.4:334.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Field size restriction exceeded in segment 11:DG1.  Field 6, repetition 1 is larger than segment structure 2.4:DG1 permits it to be.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Invalid value 'xxxxxxxxxx' appears in segment 11:DG1, field 6, repetition 1, component 1, subcomponent 1, but does not appear in code table 2.4:52.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Field size restriction exceeded in segment 11:DG1.  Field 18, repetition 1 is larger than segment structure 2.4:DG1 permits it to be.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Invalid value 'ZZZZZZZ' appears in segment 11:DG1, field 18, repetition 1, component 1, subcomponent 1, but does not appear in code table 2.4:136."
+
+      @errors = MsgErrorHandler.new().handle(@resp)
     rescue => e
       @resp = 'Error connecting to ' + @url
       puts e
@@ -93,7 +99,7 @@ class MyApp < Sinatra::Application
     end
 
     # send response
-    {message: @resp}.to_json
+    {message: @resp, errors: @errors}.to_json
   end
 
   # https://code.google.com/p/x2js/ as an alternative

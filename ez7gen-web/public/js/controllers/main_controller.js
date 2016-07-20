@@ -1,12 +1,11 @@
 // main.js
-angular.module("app").controller('MainController', ['$scope', '$http', 'service', 'cachedItems',function($scope, $http, service, cachedItems){
+angular.module("app").controller('MainController', ['$scope', '$http', 'toastr', 'service', 'cachedItems',function($scope, $http, toastr, service, cachedItems){
     //panels.close();
 
     //fire when controller loaded
     service.cachedItems = null || cachedItems;
     $scope.hl7 = service.data;
     //$scope.versions = service.cachedItems.versions;
-
     //init select controls
     $scope.std = {};
     $scope.version = {};
@@ -78,6 +77,7 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'service'
     };
 
     $scope.validate = function() {
+
         $http({
             //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
             //use call async as a promise
@@ -88,6 +88,22 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'service'
         }).success(function(data) {
             $scope.response = data;
             $scope.visible = true;
+
+            //toastr.error('Validation Failed ...', 'Error!');
+            //
+            //errors = data.errors;
+            //angular.forEach(errors, function(value){
+            //    toastr.info(value, '<Ens>ErrGeneral');
+            //})
+            //header='Success'
+            //msg='Your message have being submitted'
+            toastr.success('Success', 'Validation Passed');
+            //toastr.error(msg,header);
+            //toastr.warning('Waring!', "Error details. \n Ebeies Jibies");
+
+        }).error(function(data) {
+            //this should never happen when back-end is running on the same server
+            toastr.error('Error!', "Oops something went wrong...");
         })
     };
 

@@ -2,6 +2,47 @@ require 'yaml'
 require_relative '../lib/ez7gen/service/utils'
 include Utils
 # require 'pathname'
+require 'ruby-hl7'
+
+
+ok="MSH|^~\&|EnsembleHL7|ISC|404|707|201607162200||ACK^A01|171|P|2.4|234
+MSA|AA|171"
+puts ok
+# text.gsub!(/\r\n?/, "\n")
+# raw_input = open( "my_hl7_msg.txt" ).readlines
+lines = ok.split("\n")
+msg = HL7::Message.new( lines)
+puts "message type: %s" % msg[:MSH].message_type
+# puts msg[:ERR]|'N/A'
+puts msg[:MSA]
+
+bad = "MSH|^~\&|EnsembleHL7|ISC|404|808|201607162206||ACK^A05|218|P|2.4|936
+MSA|AE|218
+ERR||||E|<Ens>ErrGeneral|||ERROR <Ens>ErrGeneral: Not forwarding message 9292 with message body Id=4610, Doc Identifier=218, SessionId=9292 because of validation failure: ERROR <Ens>ErrGeneral: Field size restriction exceeded in segment 8:DB1.  Field 2, repetition 1 is larger than segment structure 2.4:DB1 permits it to be.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Invalid value 'ABCDDEFRTYURYRURURUR' appears in segment 8:DB1, field 2, repetition 1, component 1, subcomponent 1, but does not appear in code table 2.4:334.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Field size restriction exceeded in segment 11:DG1.  Field 6, repetition 1 is larger than segment structure 2.4:DG1 permits it to be.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Invalid value 'xxxxxxxxxx' appears in segment 11:DG1, field 6, repetition 1, component 1, subcomponent 1, but does not appear in code table 2.4:52.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Field size restriction exceeded in segment 11:DG1.  Field 18, repetition 1 is larger than segment structure 2.4:DG1 permits it to be.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Invalid value 'ZZZZZZZ' appears in segment 11:DG1, field 18, repetition 1, component 1, subcomponent 1, but does not appear in code table 2.4:136.
+"
+puts bad
+puts '~~~~~~~~~~~~~~~~~~~~~'
+msg = HL7::Message.new( bad.split("\n") )
+puts "message type: %s" % msg[:MSH].message_type
+puts "message type: %s" % msg[:ERR]
+puts '~~~~~~~~~~~~~'
+# puts msg[:ERR] == nil
+# puts msg[:ERR].error_code_and_location
+# puts msg[:ERR].error_location
+# puts msg[:ERR].hl7_error_code
+puts msg[:ERR].severity
+puts msg[:ERR].application_error_code
+# puts msg[:ERR].application_error_parameter
+# puts msg[:ERR].diagnostic_information
+errors = msg[:ERR].user_message
+# puts errors
+# puts msg[:ERR].help_desk_contact_point
+# lines = errors.split("ERROR <Ens>ErrGeneral:")
+lines = errors.split("ERROR #{msg[:ERR].application_error_code}:")
+puts lines
+
+
+exit
 d = 'MSH~MSA~[~ERR~]~[~{~NTE~}~]~QRD~[~QRF~]~[~[~PID~[~{~NTE~}~]~]~{~ORC~<~OBR~|~RQD~|~RQ1~|~RXO~|~ODS~|~ODT~>~[~{~NTE~}~]~[~{~CTI~}~]~}~]~[~DSC~]'
 
 puts d.sub(/<(.*?)>/,['OBR','RXO'].sample())
