@@ -32,7 +32,7 @@ class MessageFactory
   end
 
   # main factory method
-  def generate()
+  def generate(useExVal=false)
     parsers = {}
     # get message structure from the schema file for message type and version
     parsers[PRIMARY] = ProfileParser.new(@attributes_hash)
@@ -42,7 +42,8 @@ class MessageFactory
       parsers[BASE]= get_base_parser()
     end
 
-    return (@templatePath)? generate_message_from_template(parsers, templatePath) : generate_message(parsers)
+    #useExVal can be passed from the client - future feature
+    return (@templatePath)? generate_message_from_template(parsers, templatePath, useExVal) : generate_message(parsers)
   end
 
   # factory method to build message using schema
@@ -78,15 +79,13 @@ class MessageFactory
   end
 
   # factory method to build message using MWB templates
-  def generate_message_from_template(parsers, templatePath)
+  def generate_message_from_template(parsers, templatePath, useExVal)
 
     hl7Msg = HL7::Message.new
 
     templateGenerator = TemplateGenerator.new(templatePath, parsers)
-    # template = templateGenerator.build_metadata()
-    # template = templateGenerator.build_template_metadata()
 
-    return templateGenerator.generate(hl7Msg)
+    return templateGenerator.generate(hl7Msg, useExVal)
 
   end
 

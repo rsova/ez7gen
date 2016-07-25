@@ -32,7 +32,8 @@ class TemplateGeneratorTest < Test::Unit::TestCase
     templatePath = 'test-config/templates/ADT_A60.xml'
     usages = ['R','RE']
 
-    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(usages)
+    useExVal = false
+    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(useExVal)
     p map
     map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
     p map
@@ -59,7 +60,8 @@ class TemplateGeneratorTest < Test::Unit::TestCase
 
     templatePath = 'test-config/templates/ADT_A60_PID.xml'
     usages = ['R','RE']
-    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata( usages)
+    useExVal = false
+    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(useExVal)
     # map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
     # p map
     assert_equal 1, map.size
@@ -81,7 +83,8 @@ class TemplateGeneratorTest < Test::Unit::TestCase
 
     templatePath = 'test-config/templates/ADT_A60_PID.xml'
     usages = ['R','RE']
-    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata( usages)
+    useExVal = false
+    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(useExVal)
 
     puts map
     assert_equal 1, map.size
@@ -101,9 +104,10 @@ class TemplateGeneratorTest < Test::Unit::TestCase
 
   def test_read_template_MFN_M01
 
-    usages = ['R','RE']
     templatePath = 'test-config/templates/2.4/eiv table update-mfn_m01 20151201.xml'
-    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata( usages)
+    usages = ['R','RE']
+    useExVal = false
+    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(useExVal)
     # map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
     p map
     assert_equal 3, map.size
@@ -116,7 +120,8 @@ class TemplateGeneratorTest < Test::Unit::TestCase
     # templatePath = 'test-config/templates/ADT_A60_EVN_only.xml'
     templatePath = 'test-config/templates/ADT_A60_EVN.xml'
     usages = ['R','RE']
-    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata( usages)
+    useExVal = false
+    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(useExVal)
 
     puts map
     # assert_equal(4, map.size)

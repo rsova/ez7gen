@@ -8,6 +8,7 @@ class TemplateGenerator
   @@SUB ='&' # Subcomponent separator
 
   # xml tags used in MWB schemas
+  DATAVALUES = 'DataValues'
   COMPONENT = 'Component'
   SUBCOMPONENT = 'SubComponent'
 
@@ -40,9 +41,9 @@ class TemplateGenerator
 
   # build hl7 message using template as guideline
   # def generate(message, template, parsers, isGroup=false)
-  def generate(message)
+  def generate(message, useExVal)
     # read MWB xml file into collection of metadata for each segment
-    metadata = build_metadata()
+    metadata = build_metadata(useExVal)
 
     # segment names
     segments = metadata.keys
@@ -99,6 +100,10 @@ class TemplateGenerator
 
   # convert
   def build_partial_field_data(item)
+    # use the Example Value 'ExValue' defined in the xml file instead
+    if(item[:ExValue]) then return item[:ExValue] end
+
+    # convert attributes from MWB into Ensemble and use the
     attrs = {}
     # strip leading zeros from table name, MWB format.
     if (item[:Table]) then attrs[:codetable]= item[:Table].sub(/^0+/, '') end
@@ -106,13 +111,12 @@ class TemplateGenerator
     if (item[:Name]) then attrs[:description] = item[:Name] end
     if (item[:Datatype]) then attrs[:datatype] = item[:Datatype] end
 
-    # return attrs
+    # return genereated field
     @fieldGenerators[PRIMARY].method(attrs[:datatype]).call(attrs, true)#TODO: fix this use proper field generator
-    # @fieldGenerators[BASE].dynamic(attrs[:datatype], attrs, true)#TODO: fix this use proper field generator
   end
 
   # using MWB profiles build collection of message metadata, to use for building a message
-  def build_metadata(usages=@@USAGES)
+  def build_metadata(useExVal)
     meta = {}
 
     # list of segments
@@ -122,9 +126,9 @@ class TemplateGenerator
 
       fields = []
       seg.locate('Field').each_with_index { |f,idx |
-        if (usages.include?(f.Usage))
+        if (@@USAGES.include?(f.Usage))
           f.attributes.merge!(:Pos => idx)
-          fields << get_metadata(f, usages)
+          fields << get_metadata(f,useExVal)
         end
       }
 
@@ -135,20 +139,28 @@ class TemplateGenerator
   end
 
   # parse template xml file into collection
-  def get_metadata(partial, usages=@@USAGES)
+  def get_metadata(partial, useExVal)
 
     element = partial.locate(COMPONENT)
-    element = (element.empty?) ? partial.locate(SUBCOMPONENT) : element
 
+    # first look for DataValues example if it's there use it and stop looking any farther.
+    if(useExVal && (element.empty?) && !partial.locate(DATAVALUES).empty?)
+        exVal = partial.locate(DATAVALUES).first.attributes
+        partial.attributes.merge!(exVal)
+        return partial.attributes
+    end
+
+    # continue lookinf for subcomponents
+    element = (element.empty?) ? partial.locate(SUBCOMPONENT) : element
     if(!element.empty?)
         sub = []
 
         element.each_with_index { |el, idx|
 
-          if (usages.include?(el.Usage))
+          if (@@USAGES.include?(el[:Usage]))
             el.attributes.merge!(:Pos => idx)
             # sub[idx.to_i] = get_metadata(el,usages)
-            sub << get_metadata(el,usages)
+            sub << get_metadata(el, useExVal)
           end
 
         }

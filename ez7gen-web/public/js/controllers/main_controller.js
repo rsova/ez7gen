@@ -41,16 +41,24 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
         $scope.event = {};
     };
 
-    $scope.groupFilterFn = function (groups){
-        //return groups.reverse();
-        if( typeof($scope.subGroup.selected) == "undefined"){
-            return groups;
-        }else{
-            filtered = groups.filter(function(g) { return g.name == $scope.subGroup.selected.name; });
-            $scope.event = {};
-            return filtered;
-        }
-        //return filtered;
+    //$scope.groupFilterFn = function (groups){
+    //    //return groups.reverse();
+    //    if( typeof($scope.subGroup.selected) == "undefined"){
+    //        return groups;
+    //    }else{
+    //        filtered = groups.filter(function(g) { return g.name == $scope.subGroup.selected.name; });
+    //        $scope.event = {};
+    //        return filtered;
+    //    }
+    //    //return filtered;
+    //};
+
+    $scope.groupFilterFn = function (item){
+        if (item.name[0] >= 'A' && item.name[0] <= 'M')
+            return 'From A - M';
+
+        if (item.name[0] >= 'N' && item.name[0] <= 'Z')
+            return 'From N - Z';
     };
 
     //function to apply filter change that happened via another control selection
