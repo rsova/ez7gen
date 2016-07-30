@@ -28,16 +28,18 @@ class TemplateGenerator
 
     #If there are multiple profile parsers, instantiate a generators for each
     @fieldGenerators = {}
-    pp.each{|profileName, profiler| @fieldGenerators[profileName] = DynamicFieldGenerator.new(profiler)}
+    pp.each{|profileName, parser|
+      # helper parser for lookup in the other schema
+      # when generating segments for custom (not base) ex VAZ2.4 the field generator will have to look in both schemas
+      # to resolve types and coded tables value.
+      # we will assign the other schema parser as a helper parser
+      helper_parser = pp.select{|key, value| key != profileName}
+      helper_parser = (helper_parser.empty?) ? nil: helper_parser.values.first
+      @fieldGenerators[profileName] = TypeAwareFieldGenerator.new( parser, helper_parser)
+    }
 
-    # for the custom messages, primary field generator has to look up base coded table values
-    # add the parser on the fly to the field generator
-    if(!@fieldGenerators[PRIMARY].pp.base?)
-      baseParser = @fieldGenerators[BASE].pp
-      @fieldGenerators[PRIMARY].instance_variable_set('@bp', baseParser)
-    end
 
-   end
+  end
 
   # build hl7 message using template as guideline
   # def generate(message, template, parsers, isGroup=false)

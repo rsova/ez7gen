@@ -304,10 +304,9 @@ class BaseFieldGenerator
   def get_code_table(attributes)
     codes = @pp.get_code_table(attributes[:codetable])
     # Case when we are looking for code values defined in base schema for types
-    # which are in custom/primary schema. The SegmentGenerator checked for this condition
-    # and dynamically added an instance value @bp  - the base parser to handle this issue
-    if ((codes.first == Utils::DATA_LOOKUP_MIS) && defined?(@bp))
-      codes = @bp.get_code_table(attributes[:codetable])
+    # which are in custom/primary schema, or the other way around
+    if (@hp && (codes.first == Utils::DATA_LOOKUP_MIS))
+      codes = @hp.get_code_table(attributes[:codetable])
     end
     return codes
   end

@@ -18,8 +18,13 @@ class TypeAwareFieldGenerator
   @@random = Random.new
 
   # constructor
-  def initialize(pp)#/Users/romansova/RubymineProjects/ez7gen-staged/lib/ez7gen/resources/properties.yml
-    @pp = pp
+  def initialize(parser, helper_parser=nil)
+    @pp = parser
+    # Coded table value lookup profiler. Only set for custom schemas.
+    # Custom schema has types which coming from the base schema but using coded tables from primary schema.
+    # Also primary schemas use base type coded tables.
+    @hp = helper_parser
+
     # dirname =  File.join(File.dirname(File.expand_path(__FILE__)),'../../resources/properties.yml')
     propertiesFile = File.expand_path('../../resources/properties.yml', __FILE__)
     @yml = YAML.load_file propertiesFile
@@ -1417,10 +1422,9 @@ class TypeAwareFieldGenerator
   def get_code_table(attributes)
     codes = @pp.get_code_table(attributes[:codetable])
     # Case when we are looking for code values defined in base schema for types
-    # which are in custom/primary schema. The SegmentGenerator checked for this condition
-    # and dynamically added an instance value @bp  - the base parser to handle this issue
-    if((codes.first == Utils::DATA_LOOKUP_MIS) && defined?(@bp))
-      codes = @bp.get_code_table(attributes[:codetable])
+    # which are in custom/primary schema or the othere way around.
+    if(@hp && (codes.first == Utils::DATA_LOOKUP_MIS))
+      codes = @hp.get_code_table(attributes[:codetable])
     end
     return codes
   end

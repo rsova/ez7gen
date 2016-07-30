@@ -25,14 +25,15 @@ class SegmentGenerator
 
     #If there are multiple profile parsers, instantiate a generators for each
     @fieldGenerators = {}
-    pp.each{|profileName, profiler| @fieldGenerators[profileName] = TypeAwareFieldGenerator.new(profiler)}
-
-    # for the custom messages, primary field generator has to look up base coded table values
-    # add the parser on the fly to the field generator
-    if(!@fieldGenerators[PRIMARY].pp.base?)
-      baseParser = @fieldGenerators[BASE].pp
-      @fieldGenerators[PRIMARY].instance_variable_set('@bp', baseParser)
-    end
+    pp.each{|profileName, parser|
+      # helper parser for lookup in the other schema
+      # when generating segments for custom (not base) ex VAZ2.4 the field generator will have to look in both schemas
+      # to resolve types and coded tables value.
+      # we will assign the other schema parser as a helper parser
+      helper_parser = pp.select{|key, value| key != profileName}
+      helper_parser = (helper_parser.empty?) ? nil: helper_parser.values.first
+      @fieldGenerators[profileName] = TypeAwareFieldGenerator.new( parser, helper_parser)
+    }
 
   end
 
@@ -180,27 +181,6 @@ class SegmentGenerator
     type = get_type_by_name(attributes[:datatype])
     fieldGenerator= @fieldGenerators[type]
     dt = get_name_without_base(attributes[:datatype])
-
-    # # for messages with custom schemas use both parsers to look for codetable values
-    # if(!@fieldGenerators[PRIMARY].pp.base? && attributes[:codetable] )
-    #   # 1) if code table comes from the primary schema:  datatype => base:IS, codetable => VA026
-    #   # add a parcer for primary to deal with code tables
-    #   # 2) base type needs values from
-    #   baseParser = @fieldGenerators[BASE].pp
-    #   fieldGenerator.instance_variable_set('@bp', baseParser)
-    # end
-    # # dt = get_name_without_base(attributes[:datatype])
-    # if(type == Utils::BASE)
-    #   attributes[:datatype] = get_name_without_base(attributes[:datatype])
-    #
-    #   # if code table comes from the primary schema:  datatype => base:IS, codetable => VA026
-    #   # add a parcer for primary to deal with code tables
-    #   if (attributes[:codetable] && (type != get_type_by_name(attributes[:codetable])))
-    #       baseParser = @fieldGenerators['primary'].pp
-    #       fieldGenerator.instance_variable_set('@bp', baseParser)
-    #   end
-    #   if(attributes[:codetable])then get_name_without_base(attributes[:codetable]) end #TODO: Refactor
-    # end
 
     # dt = attributes[:datatype]
     # puts Utils.blank?(dt)?'~~~~~~~~~> data type is missing': dt

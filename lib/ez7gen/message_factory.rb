@@ -50,7 +50,7 @@ class MessageFactory
   def generate_message(parsers)
 
     # get message structure from the schema file for message type and version
-    # use primary schema
+    # use primary parser
     structure = parsers[PRIMARY].get_message_definition()
 
     # brake message structure into segments, handle groups of segments

@@ -7,9 +7,9 @@ class MessageFactoryLabTest < Test::Unit::TestCase
   # def run(*args,&blk)
   #   10.times { orig_run(*args,&blk) }
   # end
-  #
-  # # set to true to write messages to a file
-  @@PERSIST = true
+  # #
+  # # # set to true to write messages to a file
+  # @@PERSIST = true
 
   @@VS =
       [
