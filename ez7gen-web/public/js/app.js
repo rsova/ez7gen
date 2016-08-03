@@ -11,7 +11,7 @@ app.config(function(toastrConfig) {
         closeButton: true,
         timeOut: 0,
         autoDismiss: false,
-        containerId: 'toast-container',
+        //containerId: 'toast-container',
         //maxOpened: 0,
         newestOnTop: false,
         positionClass: 'toast-bottom-full-width',

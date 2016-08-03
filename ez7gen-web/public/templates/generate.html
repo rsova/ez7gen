@@ -60,14 +60,42 @@
 </h4>
 <!--background-image: url(data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mOMivJRBgADOwElVN79SQAAAABJRU5ErkJggg==);-->
 <!--dynamic hight: http://stackoverflow.com/questions/17772260/textarea-auto-height-->
-<pre  editable-textarea="hl7.message" e-form="hl7Area" e-style="width: 1000px; height: 400px; white-space: pre; word-break:break-word;
-font-family: Menlo,Monaco,Consolas,'Courier New',monospace;
-background-color: #f5f5f5;
-font-size: 12px;
-color: SteelBlue;
-!important;">{{hl7.message}}</pre>
+<!--<pre  editable-textarea="hl7.message" e-form="hl7Area" e-style="width: 1000px; height: 400px; white-space: pre; word-break:break-word;-->
+<!--font-family: Menlo,Monaco,Consolas,'Courier New',monospace;-->
+<!--background-color: #f5f5f5;-->
+<!--font-size: 13px;-->
+<!--color: SteelBlue;-->
+<!--!important;">{{hl7.message}}</pre>-->
+<!--<style type="text/css">-->
+    <!--editable-textarea {-->
+    <!--width: 1000px;-->
+    <!--height: 400px;-->
+    <!--white-space: nowrap;-->
+    <!--overflow:auto;-->
+    <!--white-space: pre;-->
+    <!--word-break: break-word;-->
+    <!--background-color: #f5f5f5;-->
+    <!--font-size: 13px;-->
+    <!--color: SteelBlue;-->
+    <!--!important;-->
+    <!--}-->
+<!--</style>-->
+<pre  editable-textarea="hl7.message" e-form="hl7Area" e-style="
+    width: 1000px;
+    height: 400px;
+    white-space: nowrap
+    overflow:auto;
+    white-space: pre;
+    font-family: Menlo,Monaco,Consolas,'Courier New',monospace;
+    word-break: break-word;
+    background-color: #f5f5f5;
+    font-size: 14px;
+    color: SteelBlue;
+    !important;
+    ">{{hl7.message}}</pre>
 
-<div/>
+<p>&nbsp;</p>
+
 <button class="btn btn-primary" ng-click="generate()">Generate HL7</button>
 <button class="btn btn-success" ng-click="validate()">Validate HL7</button>
 <button class="btn btn-info" ng-click="hl7Area.$show()" ng-hide="hl7Area.$visible">Edit HL7</button>
@@ -75,12 +103,13 @@ color: SteelBlue;
 <div>
     <!--<button type="button" ng-click="toggle()" class="btn btn btn-default">+</button>-->
     <button type="button"  ng-click="toggle()" class="btn default">
-        <span class="glyphicon glyphicon-plus"></span>
+        <!--<span class="glyphicon glyphicon-plus"></span>-->
+        <span>ACK Response</span>
     </button>
 </div>
 <!--</p>-->
-<pre ng-show="visible"><h4 ng-style={"color":"green"}>{{response.message}}</h4></pre>
-
+<!--<pre ng-show="visible"><h4 ng-style={"color":"green"}>{{response.message}}</h4></pre>-->
+<pre ng-show="visible"><h5 ng-style={width: 100%; height: auto; white-space:pre; word-break:break-word; font-family: Menlo,Monaco,Consolas,'Courier New',monospace}>{{response.message}}</h5></pre>
 
 <!--http://eu81273.github.io/angular.panels/-->
 <!--http://blackrockdigital.github.io/startbootstrap-simple-sidebar/-->

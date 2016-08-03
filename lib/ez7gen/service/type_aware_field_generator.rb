@@ -11,7 +11,9 @@ class TypeAwareFieldGenerator
   @@HAT = '^' # Component separator, aka hat
   @@SUB ='&' # Subcomponent separator
   # @@MONEY_FORMAT_INDICATORS = ['Money', 'Balance', 'Charge', 'Adjustment', 'Income', 'Amount', 'Payment','Cost']
-  @@MONEY_FORMAT_REGEX = /\bMoney\b|\bBalance\b|\bCharge|\bAdjustment\b|\bIncome\b|\bAmount\b|\bPayment\b|\bCost\b|\bPercentage\b/
+  # @@MONEY_FORMAT_REGEX = /\bMoney\b|\bBalance\b|\bCharge|\bAdjustment\b|\bIncome\b|\bAmount\b|\bPayment\b|\bCost\b|\bPercentage\b/
+  @@MONEY_FORMAT_REGEX = /\bMoney\b|\bBalance\b|\bCharge|\bAdjustment\b|\bIncome\b|\bAmount\b|\bPayment\b|\bCost\b/
+  @@PERCENT_FORMAT_REGEX = /\bPercentage\b|%/
   @@INITIALS = ('A'..'Z').to_a
   @@GENERAL_TEXT = 'Notes'
 
@@ -376,9 +378,9 @@ class TypeAwareFieldGenerator
 		#check if the field is optional and randomly generate it of skip
 		return '' if(!generate?(map, force))
 
+    is_year_only = (map[:max_length]) ? map[:max_length].to_i == 4 : false
     # #time of an event (TSComponentOne)
-    to_datetime(map).strftime('%Y%m%d') #format('YYYYMMdd.SSS')Date.iso8601
-
+   (is_year_only)?  to_datetime(map).strftime('%Y') : to_datetime(map).strftime('%Y%m%d') #format('YYYYMMdd.SSS')Date.iso8601
   end
 
   # Day Type and Number
@@ -702,6 +704,8 @@ class TypeAwareFieldGenerator
         val = '%.2f' % generate_length_bound_id(5)
       when @@MONEY_FORMAT_REGEX
         val = '%.2f' % ID(map,true)
+      when  @@PERCENT_FORMAT_REGEX
+        val = @@random.rand(0..100) # generate proper % value < 100
       else
         val = ID(map,true) # general rule for a number
         if (map[:datatype] == 'CP' || map[:datatype] == 'MO') # money

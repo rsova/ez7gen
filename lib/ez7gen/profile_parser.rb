@@ -12,9 +12,10 @@ class ProfileParser
   # attr_reader :xml;
 
   @@FILTER_ALL = {filter: '.*', group: 'All'}
-  FILTER_ADM = {filter: 'ADT_A|QBP_Q2|RSP_K2[1-4]', group: 'Admissions'}
-  FILTER_PH= {filter: 'OMP_|ORP_|RDE_|RRE_|RDS_|RRD_|RGV_|RRG_|RAS_|RRA_', group: 'Pharmacy'}
-
+  FILTER_ADM =  {filter: 'ADT_A|QBP_Q2|RSP_K2[1-4]', group: 'Admissions'}
+  FILTER_PH =   {filter: 'OMP_|ORP_|RDE_|RRE_|RDS_|RRD_|RGV_|RRG_|RAS_|RRA_', group: 'Pharmacy'}
+  FILER_LAB =   {filter: 'ORL_O22|OML_O21|QRY_R02|OUL_R21|ORU_R01', group: 'Laboratory'}
+  FILER_GEN =   {filter: 'OSR_Q06|OSQ_Q06|ORG_O20|OMG_O19', group: 'General'}
 
   # attr_accessor :std; :version; :event; :xml; :version_store;
   # @@HL7_VERSIONS = {'2.4'=>'2.4/2.4-schema.xml', 'vaz2.4'=>'vaz2.4/vaz2.4-schema.xml'}

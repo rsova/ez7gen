@@ -113,6 +113,19 @@ class TypeAwareFieldGeneratorTest < Test::Unit::TestCase
 		fld = @fldGenerator.NM(lineToHash(line))
 		puts fld
 		assert fld.to_i < 10
+
+    line = '[piece=:6, description:Percentage, datatype:NM, max_length:3, required:R, ifrepeating:0]'
+		fld = @fldGenerator.NM(lineToHash(line))
+		puts fld
+		assert fld.to_i < 100
+
+    # <SegmentSubStructure piece='3' description='Disability %' datatype='base:NM' max_length='3' required='O' ifrepeating='0'/>
+    line = '[piece=:3, description:Disability %, datatype:NM, max_length:3, required:R, ifrepeating:0]'
+		fld = @fldGenerator.NM(lineToHash(line))
+		puts fld
+		assert fld.to_i < 100
+
+
   end
 
   def test_CP
@@ -209,8 +222,14 @@ class TypeAwareFieldGeneratorTest < Test::Unit::TestCase
 		line ='[max_length:8, symbol:*, description:Contract Effective Date, ifrepeating:1, datatype:DT, required:O, piece:25]'
 		fld = @fldGenerator.DT(lineToHash(line),true)
 		puts fld
-		assert_equal 8, fld.size, 'date format yyyymmdd, like 20141228'
-	end
+    assert_equal 8, fld.size, 'date format yyyymmdd, like 20141228'
+
+    # <SegmentSubStructure piece='2' description='Income Year' datatype='base:DT' max_length='4' required='O' ifrepeating='0'/>
+    line ='[max_length:4,  description:Income Year, ifrepeating:0, datatype:DT, required:O, piece:2]'
+    fld = @fldGenerator.DT(lineToHash(line),true)
+    puts fld
+    assert_equal 4, fld.size, 'date format yyyy, like 2016'
+  end
 
 	def test_DTN
 		# piece='11' description='Days' datatype='DTN' max_length='3' required='O' ifrepeating='0' codetable='149'

@@ -41,25 +41,25 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
         $scope.event = {};
     };
 
-    //$scope.groupFilterFn = function (groups){
-    //    //return groups.reverse();
-    //    if( typeof($scope.subGroup.selected) == "undefined"){
-    //        return groups;
-    //    }else{
-    //        filtered = groups.filter(function(g) { return g.name == $scope.subGroup.selected.name; });
-    //        $scope.event = {};
-    //        return filtered;
-    //    }
-    //    //return filtered;
-    //};
-
-    $scope.groupFilterFn = function (item){
-        if (item.name[0] >= 'A' && item.name[0] <= 'M')
-            return 'From A - M';
-
-        if (item.name[0] >= 'N' && item.name[0] <= 'Z')
-            return 'From N - Z';
+    $scope.groupFilterFn = function (groups){
+        //return groups.reverse();
+        if( typeof($scope.subGroup.selected) == "undefined"){
+            return groups;
+        }else{
+            filtered = groups.filter(function(g) { return g.name == $scope.subGroup.selected.name; });
+            $scope.event = {};
+            return filtered;
+        }
+        //return filtered;
     };
+
+    //$scope.groupFilterFn = function (item){
+    //    if (item.name[0] >= 'A' && item.name[0] <= 'M')
+    //        return 'From A - M';
+    //
+    //    if (item.name[0] >= 'N' && item.name[0] <= 'Z')
+    //        return 'From N - Z';
+    //};
 
     //function to apply filter change that happened via another control selection
     $scope.setSubGroup = function(group){
@@ -97,20 +97,19 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
             $scope.response = data;
             $scope.visible = true;
 
-            //toastr.error('Validation Failed ...', 'Error!');
-            //
-            //errors = data.errors;
-            //angular.forEach(errors, function(value){
-            //    toastr.info(value, '<Ens>ErrGeneral');
-            //})
-            //header='Success'
-            //msg='Your message have being submitted'
-            toastr.success('Success', 'Validation Passed');
-            //toastr.error(msg,header);
-            //toastr.warning('Waring!', "Error details. \n Ebeies Jibies");
+            if(data.errors) {
+                toastr.error('Validation Error!', '');
+
+                errors = data.errors;
+                angular.forEach(errors, function (value) {
+                    toastr.info(value, '');
+                })
+            }else{
+                toastr.success('Success', 'Validation Passed');
+            }
 
         }).error(function(data) {
-            //this should never happen when back-end is running on the same server
+            //this should never happen, the back end id running on the same server
             toastr.error('Error!', "Oops something went wrong...");
         })
     };
