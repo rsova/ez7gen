@@ -17,8 +17,7 @@ class MyApp < Sinatra::Application
 # end
 @@URLS={'2.4'=>'localhost:9980/','VAZ2.4'=>'localhost:9981/'}
 # admisson messages match pattern
-@@FILTERS = [ProfileParser::FILTER_ADM, ProfileParser::FILTER_PH, ProfileParser::FILER_LAB, ProfileParser::FILER_GEN]
-
+@@FILTERS = [ProfileParser::FILTER_ADM, ProfileParser::FILTER_FM, ProfileParser::FILTER_GEN,  ProfileParser::FILTER_LAB, ProfileParser::FILTER_MSR, ProfileParser::FILTER_OBS, ProfileParser::FILTER_PH]
 
   configure do
     $diskcache = Diskcached.new(File.join(settings.root, 'cache'))
@@ -60,9 +59,11 @@ class MyApp < Sinatra::Application
       event =  params['event']['name']
       version =  params['version']['name']
       puts  "std: #{std}, event: #{event}, version: #{version}"
+      useExVal = params['useExVal']
+      useTemplate = params['useTemplate']
 
       vs = ProfileParser.lookup_versions()
-      @resp = MessageFactory.new({std: std, version: version, event:event, version_store: vs}).generate() #msg.replace('\r','\n' )
+      @resp = MessageFactory.new({std: std, version: version, event:event, version_store: vs, use_template: useTemplate}).generate(useExVal) #msg.replace('\r','\n' )
 
     rescue => e
       # puts 'inside rescue'
@@ -88,8 +89,8 @@ class MyApp < Sinatra::Application
       # @resp = RestClient.post @url, payload.gsub!("\n","\r")
         # { message: resp}.to_json
       @resp = "MSH|^~\&|EnsembleHL7|ISC|404|808|201607162206||ACK^A05|218|P|2.4|936
-MSA|AE|218"
-# ERR||||E|<Ens>ErrGeneral|||ERROR <Ens>ErrGeneral: Not forwarding message 9292 with message body Id=4610, Doc Identifier=218, SessionId=9292 because of validation failure: ERROR <Ens>ErrGeneral: Field size restriction exceeded in segment 8:DB1.  Field 2, repetition 1 is larger than segment structure 2.4:DB1 permits it to be.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Invalid value 'ABCDDEFRTYURYRURURUR' appears in segment 8:DB1, field 2, repetition 1, component 1, subcomponent 1, but does not appear in code table 2.4:334.\X0D\\X0A\+\X0D\\X0A\ERROR"
+MSA|AE|218
+ERR||||E|<Ens>ErrGeneral|||ERROR <Ens>ErrGeneral: Not forwarding message 9292 with message body Id=4610, Doc Identifier=218, SessionId=9292 because of validation failure: ERROR <Ens>ErrGeneral: Field size restriction exceeded in segment 8:DB1.  Field 2, repetition 1 is larger than segment structure 2.4:DB1 permits it to be.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Invalid value 'ABCDDEFRTYURYRURURUR' appears in segment 8:DB1, field 2, repetition 1, component 1, subcomponent 1, but does not appear in code table 2.4:334.\X0D\\X0A\+\X0D\\X0A\ERROR"
 # ERR||||E|<Ens>ErrGeneral|||ERROR <Ens>ErrGeneral: Not forwarding message 9292 with message body Id=4610, Doc Identifier=218, SessionId=9292 because of validation failure: ERROR <Ens>ErrGeneral: Field size restriction exceeded in segment 8:DB1.  Field 2, repetition 1 is larger than segment structure 2.4:DB1 permits it to be.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Invalid value 'ABCDDEFRTYURYRURURUR' appears in segment 8:DB1, field 2, repetition 1, component 1, subcomponent 1, but does not appear in code table 2.4:334.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Field size restriction exceeded in segment 11:DG1.  Field 6, repetition 1 is larger than segment structure 2.4:DG1 permits it to be.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Invalid value 'xxxxxxxxxx' appears in segment 11:DG1, field 6, repetition 1, component 1, subcomponent 1, but does not appear in code table 2.4:52.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Field size restriction exceeded in segment 11:DG1.  Field 18, repetition 1 is larger than segment structure 2.4:DG1 permits it to be.\X0D\\X0A\+\X0D\\X0A\ERROR <Ens>ErrGeneral: Invalid value 'ZZZZZZZ' appears in segment 11:DG1, field 18, repetition 1, component 1, subcomponent 1, but does not appear in code table 2.4:136."
 
       @errors = MsgErrorHandler.new().handle(@resp)

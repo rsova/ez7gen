@@ -19,6 +19,7 @@ class MessageFactory
     @loadFactor ||= nil
     # lookup for a template by name if client speified using a template
     @templatePath = (args[:use_template])? self.class.lookup_template_for_event(@std, @event):nil
+    # @templatePath = self.class.lookup_template_for_event(@std, @event)
 
   end
 

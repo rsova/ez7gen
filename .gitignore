@@ -33,3 +33,7 @@ msg-samples 3.zip
 .idea/.rakeTasks
 /msg-samples/
 ez7gen-web/cache/
+
+test/Additional Tables with values_v1.1.txt
+
+test/at.txt

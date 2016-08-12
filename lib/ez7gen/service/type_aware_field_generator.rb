@@ -1424,11 +1424,12 @@ class TypeAwareFieldGenerator
   end
 
   def get_code_table(attributes)
-    codes = @pp.get_code_table(attributes[:codetable])
+    codeTable = get_name_without_base(attributes[:codetable])
+    codes = @pp.get_code_table(codeTable)
     # Case when we are looking for code values defined in base schema for types
     # which are in custom/primary schema or the othere way around.
     if(@hp && (codes.first == Utils::DATA_LOOKUP_MIS))
-      codes = @hp.get_code_table(attributes[:codetable])
+      codes = @hp.get_code_table(codeTable)
     end
     return codes
   end

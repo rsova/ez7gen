@@ -1,6 +1,6 @@
 // lookup_service.js
 //http://stackoverflow.com/questions/21919962/share-data-between-angularjs-controllers
-angular.module("app").factory('service',[ '$http', function($http) {
+angular.module("app").factory('lookup_service',[ '$http', function($http) {
 
     lookup = function(){
        return $http({

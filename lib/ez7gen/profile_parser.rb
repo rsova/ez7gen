@@ -13,9 +13,31 @@ class ProfileParser
 
   @@FILTER_ALL = {filter: '.*', group: 'All'}
   FILTER_ADM =  {filter: 'ADT_A|QBP_Q2|RSP_K2[1-4]', group: 'Admissions'}
+  FILTER_FM =   {filter: 'DFT_P03|DFT_P11|DFT_X03', group: 'Financial Management'}
+  FILTER_GEN =  {filter: 'OSR_Q06|OSQ_Q06|ORG_O20|OMG_O19', group: 'General'}
+  FILTER_LAB =  {filter: 'ORL_O22|OML_O21|QRY_R02|OUL_R21|ORU_R01', group: 'Laboratory'}
+  FILTER_MSR =  {filter: 'MFN_X01|MFN_X01|MFN_Y01', group: 'Master Files'}
+  FILTER_OBS =  {filter: 'OMS_O05', group: 'Order'}
   FILTER_PH =   {filter: 'OMP_|ORP_|RDE_|RRE_|RDS_|RRD_|RGV_|RRG_|RAS_|RRA_', group: 'Pharmacy'}
-  FILER_LAB =   {filter: 'ORL_O22|OML_O21|QRY_R02|OUL_R21|ORU_R01', group: 'Laboratory'}
-  FILER_GEN =   {filter: 'OSR_Q06|OSQ_Q06|ORG_O20|OMG_O19', group: 'General'}
+  # Laboratory:
+  #     1.    ORL_O22
+  # Observation Reporting:
+  #                 2.    ORF_Z07
+  # 3.    ORF_Z10
+  # 4.    ORF_Z11
+  # Order:
+  #     5.    OMS_O05
+  # Financial Management:
+  #               6.    DFT_P03
+  # 7.    DFT_P11
+  # 8.    DFT_X03
+  # Patient Administration:
+  #             9.    ADT_A60
+  # Master Files:
+  #            10.                    MFN_M01
+  # 11.                    MFN_X01
+  # 12.                    MFN_Y01
+
 
   # attr_accessor :std; :version; :event; :xml; :version_store;
   # @@HL7_VERSIONS = {'2.4'=>'2.4/2.4-schema.xml', 'vaz2.4'=>'vaz2.4/vaz2.4-schema.xml'}

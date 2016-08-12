@@ -3,13 +3,13 @@ require_relative "../lib/ez7gen/message_factory"
 
 class MessageFactoryGenTest < Test::Unit::TestCase
 
-  alias :orig_run :run
-  def run(*args,&blk)
-    10.times { orig_run(*args,&blk) }
-  end
-
-  # set to true to write messages to a file
-  @@PERSIST = true
+  # alias :orig_run :run
+  # def run(*args,&blk)
+  #   10.times { orig_run(*args,&blk) }
+  # end
+  #
+  # # set to true to write messages to a file
+  # @@PERSIST = true
 
   @@VS =
       [

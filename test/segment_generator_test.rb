@@ -263,11 +263,11 @@ class SegmentGeneratorTest < Test::Unit::TestCase
    #  3	Sending Application	2.4:HD	180	O	0	2.4:361	Always populated	<namespace ID (IS)>                                                                 Table 361 has no suggested values.                           The field will be populated with value 'Sending App'
    # assert_equal ['101','202','303','404'].include?(msg[0].e2)
    #  4	Sending Facility	2.4:HD	180	O	0	2.4:362	Always populated	<namespace ID (IS)>                                                                Table 362 has no suggested values.                              The field will be populated with value 'Sending Facility'
-   assert ['505','606','707','808','909'].include? msg[0].e3
+   assert ['505','606','707','808','909','200','500'].include? msg[0].e3
    #  5	Receiving Application	2.4:HD	180	O	0	2.4:361	Always populated	<namespace ID (IS)>                                                                  Table 361 has no suggested values.                        The field will be populated with value 'MARM'
-   assert ['101','202','303','404'].include? msg[0].e4
+   assert ['101','202','303','404','PRCHCPR','PRCHCPS'].include? msg[0].e4
    #  6	Receiving Facility	2.4:HD	180	O	0	2.4:362	Always populated	<namespace ID (IS)>                                                               Table 362 has no suggested values.                                  The field will be populated with value 'HL7 Generator'
-   assert ['505','606','707','808','909'].include? msg[0].e5
+   assert ['505','606','707','808','909','200','500'].include? msg[0].e5
    #  7	Date/Time Of Message	2.4:TS	26	R	0		Always populated	Any randomly generated date/time within one year into the past. Example value: 20150824160140.761
    assert msg[0].e6.include?('.')
    #  8	Security	2.4:ST	40	O	0		Randomly Populated	Any randomly generated positive integer with up to 3 digits.                                                            Example value: 123
@@ -303,11 +303,11 @@ class SegmentGeneratorTest < Test::Unit::TestCase
    #  3	Sending Application	2.4:HD	180	O	0	2.4:361	Always populated	<namespace ID (IS)>                                                                 Table 361 has no suggested values.                           The field will be populated with value 'Sending App'
    # assert_equal ['101','202','303','404'].include?(msg[0].e2)
    #  4	Sending Facility	2.4:HD	180	O	0	2.4:362	Always populated	<namespace ID (IS)>                                                                Table 362 has no suggested values.                              The field will be populated with value 'Sending Facility'
-   assert ['505','606','707','808','909'].include? msg[0].e3
+   assert ['505','606','707','808','909','200','500'].include? msg[0].e3
    #  5	Receiving Application	2.4:HD	180	O	0	2.4:361	Always populated	<namespace ID (IS)>                                                                  Table 361 has no suggested values.                        The field will be populated with value 'MARM'
-   assert ['101','202','303','404'].include? msg[0].e4
+   assert ['101','202','303','404','PRCHCPR','PRCHCPS'].include? msg[0].e4
    #  6	Receiving Facility	2.4:HD	180	O	0	2.4:362	Always populated	<namespace ID (IS)>                                                               Table 362 has no suggested values.                                  The field will be populated with value 'HL7 Generator'
-   assert ['505','606','707','808','909'].include? msg[0].e5
+   assert ['505','606','707','808','909','200','500'].include? msg[0].e5
    #  7	Date/Time Of Message	2.4:TS	26	R	0		Always populated	Any randomly generated date/time within one year into the past. Example value: 20150824160140.761
    assert msg[0].e6.include?('.')
 

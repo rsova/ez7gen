@@ -1,16 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2014.1.3 (Build 775U)" ts="2016-05-27 18:12:47">
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2014.1.3 (Build 775U)" ts="2016-08-03 10:51:35">
 <Document name="VAZ2.4.HL7">
-<Category name="VAZ2.4" base="2.4">
+<Category name="VAZ2.4" description="(MARM Team)" base="2.4">
 
+<MessageType name='ACK_P03' structure='ACK' description='MHVSM ECS Filer Response'/>
 <MessageType name='ADT_A01' structure='ADT_A01' returntype='base:ACK_A01'/>
-<MessageType name='ADT_A60' structure='ADT_A60' returntype='base:ACK_A60'/>
+<MessageType name='ADT_A60' structure='ADT_A60' returntype='base:ACK_A60' description='Update allergy information - VISTA SQWM'/>
+<MessageType name='ADT_Z60' structure='ADT_Z60' returntype='base:ACK_A60'/>
+<MessageType name='DFT_P03' structure='DFT_P03' returntype='ACK_P03' description='Detail financial transactions - Post detail financial transaction - MHVSM ECS Filer Request'/>
+<MessageType name='DFT_P11' structure='DFT_P11' description='Post detail financial transaction CPRS_IFCAP (2.5 Compliant)'/>
+<MessageType name='DFT_X03' structure='DFT_X03' returntype='base:ACK' description='DFT_P03 Post detail financial transaction CPRS_IFCAP (2.5 Compliant)'/>
+<MessageType name='MFN_M01' structure='MFN_M01' returntype='base:MFK_M01' description='Master files notification - Table Update - e-Pharmacy'/>
+<MessageType name='MFN_X01' structure='MFN_X01' returntype='base:ACK' description='MFN_M01 Master file notification - Table Update - eIV VISTA Reg Request-mod'/>
+<MessageType name='MFN_Y01' structure='MFN_Y01' returntype='base:ACK' description='MFN_M01 Master file notification - Table Update - eIV table update (non payer &amp; non X12)'/>
+<MessageType name='OMS_O05' structure='OMS_O05' description='PADE Inventory - Stock requisition order (2.5 Min Compliant)'/>
+<MessageType name='ORF_Z07' structure='ORF_Z04' description='ORF_Z04 ES Message based on ORF_R04 Response to query, transmission of requested observation (2.3.1)'/>
+<MessageType name='ORF_Z10' structure='ORF_Y10' description='ORF_Y10 ORF_Z10 Income Test Transmission (2.3.1)'/>
+<MessageType name='ORF_Z11' structure='ORF_ZY1' description='ORF_ZY1 ESR ORF_Z11 Message based on ORF_R04 Response to query, transmission of requested observation (2.3.1)'/>
+<MessageType name='ORL_O22' structure='ORL_O22'/>
+<MessageType name='ORM_O01' structure='ORM_O01' description='Pharmacy/treatment order message - Order message - LABUI VISTALAB AUTORELEASE (2.5.1)'/>
+<MessageType name='ORU_R01' structure='ORU_R01' returntype='base:ACK_R01' description='Unsolicited transmission of an observation message - SQWM VITALS'/>
+<MessageType name='ORU_RX1' structure='ORU_RX1' returntype='base:ACK' description='ORU_R01 Unsolicited transmission of an observation message - LABUI VISTALAB AUTORELEASE (2.5.1)'/>
+<MessageType name='ORU_Y11' structure='ORU_Y11' returntype='base:ACK' description='ESR ORU_Z11(2.3.1)'/>
+<MessageType name='ORU_Z01' structure='ORU_Z01' returntype='base:ACK_R01' description='Unsolicited transmission of an observation message - VBECS'/>
+<MessageType name='ORU_Z06' structure='ORU_Z06' description='ORU_Z06 Means Test IVM Converted Tests(2.3.1)'/>
+<MessageType name='ORU_Z07' structure='ORU_Z07' description='ESR ORU_Z07 based on ORU_R01(2.3.1)'/>
+<MessageType name='ORU_Z10' structure='ORU_Z10' description='ORU_Z10 Means Test IVM Converted Tests(2.3.1)'/>
+<MessageType name='ORU_Z11' structure='ORU_Z11' description='ORU_Z11 Unsolicited transmission of an observation message (2.3.1)'/>
+<MessageType name='QBP_Q11' structure='QBP_Q11' description='Query by parameter - query by parameter/segment pattern response - Diagnosis, Patient Problems and Patient EClass Queries - MHVSM'/>
+<MessageType name='QBP_Q13' structure='QBP_Q13' description='Query by parameter - quey by parameter/tabluar response - ECS Procedures and DSS Units Queries - MHVSM'/>
+<MessageType name='REF_I12' structure='REF_I12' returntype='RRI_I12' description='Patient Referral GMRC (2.5 Min Compliant)'/>
+<MessageType name='REF_I13' structure='REF_I12' returntype='RRI_I13' description='Send Update patient referral GMRC (2.5 Min Compliant)'/>
+<MessageType name='REF_I14' structure='REF_I12' returntype='RRI_I14' description='Send Cancel or Discontinue patient referral GMRC (2.5 Min Compliant)'/>
+<MessageType name='RPA_I08' structure='RPA_I08' description='Return patient authorization - Request for treatment authorization information - VistA X12 Response (2.6)'/>
+<MessageType name='RQA_I08' structure='RQA_I08' returntype='RPA_I08' description='Request patient authorization - Request for treatment authorization information - VistA X12 278 Request (2.6)'/>
+<MessageType name='RRI_I12' structure='RRI_I12' description='Return Patient Referral Information GMRC (2.5 Min Compliant)'/>
+<MessageType name='RRI_I13' structure='RRI_I12' description='Send return patient referral information GMRC (2.5 Min Compliant)'/>
+<MessageType name='RRI_I14' structure='RRI_I12' description='Return referral information - Cancel patient referral '/>
+<MessageType name='RSP_D11' structure='RSP_D11' returntype='base:ACK' description='RSP_K11 Query by parameter response - NIF Response NIF Found and/or NIF Unsolicited Broadcast (2.5.1) - HPID'/>
+<MessageType name='RSP_F11' structure='RSP_F11' returntype='base:ACK' description='RSP_K11 Query by parameter Response Problem NIF and/or NIF Response Reject and/or NIF Response Exception Report (2.5.1) - HPID'/>
+<MessageType name='RSP_K11' structure='RSP_K11' returntype='base:ACK' description='Segment pattern response - Query by parameter/segment pattern response - Standard Diagnosis Response or Patient Problems Response - MHVSM '/>
+<MessageType name='RSP_X11' structure='RSP_X11' returntype='base:ACK' description='RSP_K11 Query by parameter/segment pattern response - Patient Eligibility Response - MHVSM'/>
+<MessageType name='RTB_K13' structure='RTB_K13' description='Segment pattern response - query by parameter/tabular response - ECS Procedures and DSS Units Responses - MHVSM '/>
 
-<MessageStructure name='ADT_A01' definition='base:MSH~base:EVN~base:PID~[~base:PD1~]~[~{~base:NK1~}~]~base:PV1~[~base:PV2~]~[~{~base:DB1~}~]~[~{~base:OBX~}~]~[~{~base:AL1~}~]~[~{~base:DG1~}~]~[~base:DRG~]~[~{~base:PR1~[~{~base:ROL~}~]~}~]~[~{~base:GT1~}~]~[~{~base:IN1~[~base:IN2~]~[~base:IN3~]~}~]~[~base:ACC~]~[~base:UB1~]~[~base:UB2~]~[~ZEL~]~[~ZEM~]~[~ZEN~]~[~ZMH~]'/>
-<MessageStructure name='ADT_A60' definition='base:MSH~base:EVN~base:PID~{~base:IAM~}'/>
-<MessageStructure name='ORU_Z07' definition='base:MSH~[~base:PID~]~[~base:PD1~]~[~ZPD~]~[~ZTA~]~[~ZIE~]~[~ZEL~]~[~ZEN~]~{~[~ZCD~]~}~{~[~ZMH~]~}~{~[~ZRD~]~}~[~ZCT~]~{~[~ZEM~]~}~{~[~ZGD~]~}~[~[~ZIC~]~[~ZIR~]~[~ZPD~]~]~[~ZIO~]~{~[~base:NTE~]~}~{~[~base:IN1~]~}~{~[~ZMT~]~}~[~ZBT~]~[~ZSP~]~{~[~base:OBX~]~}~{~[~base:RF1~]~}' description='Z07 based on ORU_R01(2.3.1)'/>
-<MessageStructure name='ORU_Z11' definition='base:MSH~[~base:PID~]~[~ZPD~]~[~ZIE~]~[~ZIO~]~[~ZEL~]~[~ZEN~]~[~ZMT~]~[~ZCD~]'/>
+<MessageStructure name='ACK' definition='base:MSH~base:MSA~base:ERR' description='MHVSM ECS Filer Response'/>
+<MessageStructure name='ADT_A01' definition='MSH~base:EVN~base:PID~[~base:PD1~]~[~{~base:NK1~}~]~base:PV1~[~base:PV2~]~[~{~base:DB1~}~]~[~{~base:OBX~}~]~[~{~base:AL1~}~]~[~{~base:DG1~}~]~[~base:DRG~]~[~{~base:PR1~[~{~base:ROL~}~]~}~]~[~{~base:GT1~}~]~[~{~base:IN1~[~base:IN2~]~[~base:IN3~]~}~]~[~base:ACC~]~[~base:UB1~]~[~base:UB2~]~[~ZEL~]~[~ZEM~]~[~ZEN~]~[~ZMH~]'/>
+<MessageStructure name='ADT_A60' definition='MSH~base:EVN~base:PID~{~base:IAM~}' description='Update allergy information - VISTA SQWM'/>
+<MessageStructure name='ADT_Z60' definition='MSH~base:EVN~base:PID~base:PV1~base:PV2~base:IAM~[~ZEL~]'/>
+<MessageStructure name='DFT_P03' definition='MSH~EVN~base:PID~base:PV1~[~ZEL~]' description='Detail financial transactions - Post detail financial transaction - MHVSM ECS Filer Request'/>
+<MessageStructure name='DFT_P11' definition='MSH~EVN~base:PID~{~FT1~base:NTE~}' description='Post detail financial transaction CPRS_IFCAP (2.5 Compliant)'/>
+<MessageStructure name='DFT_X03' definition='MSH~EVN~base:PID~{~FT1~base:NTE~}' description='DFT_P03 Post detail financial transaction CPRS_IFCAP (2.5 Compliant)'/>
+<MessageStructure name='MFN_M01' definition='MSH~base:MFI~MFE~[~ZPT~]~[~ZPP~]~[~ZPL~]~[~ZPB~]~[~ZCM~]' description='Master files notification - Table Update - e-Pharmacy'/>
+<MessageStructure name='MFN_X01' definition='MSH~base:MFI~{~MFE~[~ZRR~]~}~base:NTE' description='MFN_M01 Master file notification - Table Update - eIV VISTA Reg Request-mod'/>
+<MessageStructure name='MFN_Y01' definition='MSH~base:MFI~MFE' description='MFN_M01 Master file notification - Table Update - eIV table update (non payer &amp; non X12)'/>
+<MessageStructure name='OMS_O05' definition='MSH~[~base:PID~]~[~base:PV1~]~base:RQD~base:ORC~[~ZPM~]~[~base:NTE~]'/>
+<MessageStructure name='ORF_Y10' definition='MSH~base:MSA~base:QRD~base:PID~[~ZIC~]~[~ZIR~]~{~[~ZDP~]~[~ZIC~]~[~ZIR~]~}~[~ZMT~]~[~ZBT~]' description='ORF_Z10 Income Test Transmission (2.3.1)'/>
+<MessageStructure name='ORF_Z04' definition='MSH~base:MSA~base:QRD~base:PID~base:PD1~[~ZPD~]~[~ZTA~]~[~ZIE~]~[~ZEL~]~[~ZE2~]~[~ZHP~]~[~ZEN~]~[~ZCD~]~[~{~ZMH~}~]~[~{~ZRD~}~]~[~{~ZCT~}~]~[~ZEM~]~[~{~ZGD~}~]~[~ZIC~]~[~ZIR~]~{~[~ZDP~]~[~ZIC~]~[~ZIR~]~}~[~ZIO~]~{~base:NTE~}~{~base:IN1~}~[~ZMT~]~[~ZBT~]~[~ZFE~]~[~ZSP~]~[~base:OBX~]~base:RF1' description='ORF_Z07 ES Message based on ORF_R04 Response to query, transmission of requested observation (2.3.1)'/>
+<MessageStructure name='ORF_ZY1' definition='MSH~base:MSA~base:QRD~base:QRF~base:PID~[~ZPD~]~[~ZIE~]~[~ZIO~]~[~{~ZEL~}~]~[~ZE2~]~[~{~ZHP~}~]~[~ZEN~]~[~ZMT~]~[~{~ZCD~}~]~[~ZSP~]~[~{~ZMH~}~]~[~{~ZRD~}~]~{~base:OBX~}' description='ORF_ZY1 ESR ORF_Z11 Message based on ORF_R04 Response to query, transmission of requested observation (2.3.1)'/>
+<MessageStructure name='ORL_O22' definition='MSH~base:MSA~[~base:ERR~]~[~{~base:NTE~}~]~[~[~base:PID~[~base:SAC~[~{~base:OBX~}~]~]~[~{~base:ORC~[~base:OBR~[~{~base:SAC~}~]~]~}~]~]~]'/>
+<MessageStructure name='ORM_O01' definition='MSH~base:PID~base:PV1~{~{~base:ORC~}~{~base:OBR~}~}' description='Pharmacy/treatment order message - Order message - LABUI VISTALAB AUTORELEASE (2.5.1)'/>
+<MessageStructure name='ORU_R01' definition='MSH~base:PID~base:PV1~{~base:OBR~}~{~base:OBX~}' description='Unsolicited transmission of an observation message - SQWM VITALS '/>
+<MessageStructure name='ORU_RX1' definition='MSH~base:PID~[~base:PV1~]~{~base:ORC~{~{~base:OBR~}~[~{~base:NTE~}~]~{~base:OBX~[~{~base:NTE~}~]~}~}~}' description='ORU_R01 Unsolicited transmission of an observation message - LABUI VISTALAB AUTORELEASE (2.5.1)'/>
+<MessageStructure name='ORU_Y11' definition='MSH~base:PID~[~ZPD~]~[~ZIE~]~[~ZIO~]~[~{~ZEL~}~]~[~ZE2~]~[~{~ZHP~}~]~[~ZEN~]~[~ZMT~]~[~{~ZCD~}~]~[~ZSP~]~[~{~ZMH~}~]~[~ZRD~]~base:OBX'/>
+<MessageStructure name='ORU_Z01' definition='MSH~base:OBR~{~base:OBX~}' description='Unsolicited transmission of an observation message - VBECS '/>
+<MessageStructure name='ORU_Z06' definition='{~MSH~base:PID~[~ZIC~]~[~ZIR~]~{~[~ZDP~]~[~ZIC~]~[~ZIR~]~}~[~ZMT~]~[~ZIV~]~}'/>
+<MessageStructure name='ORU_Z07' definition='MSH~[~base:PID~]~[~base:PD1~]~[~ZPD~]~[~ZTA~]~[~ZIE~]~[~ZEL~]~[~ZEN~]~[~{~ZCD~}~]~[~{~ZMH~}~]~[~{~ZRD~}~]~[~ZCT~]~[~{~ZEM~}~]~[~{~ZGD~}~]~[~[~ZIC~]~[~ZIR~]~[~ZPD~]~]~[~ZIO~]~[~{~base:NTE~}~]~[~{~base:IN1~}~]~[~{~ZMT~}~]~[~ZBT~]~[~ZSP~]~[~{~base:OBX~}~]~[~{~base:RF1~}~]' description='Z07 based on ORU_R01(2.3.1)'/>
+<MessageStructure name='ORU_Z10' definition='MSH~base:PID~[~ZIC~]~[~ZIR~]~{~[~ZDP~]~[~ZIC~]~[~ZIR~]~}~[~{~ZMT~}~]~[~ZBT~]' description='ORU_Z10 Means Test IVM Converted Tests (2.3.1)'/>
+<MessageStructure name='ORU_Z11' definition='MSH~[~base:PID~]~[~ZPD~]~[~ZIE~]~[~ZIO~]~[~ZEL~]~[~ZEN~]~[~ZMT~]~[~ZCD~]' description='ORU_Z11 Unsolicited transmission of an observation message (2.3.1)'/>
+<MessageStructure name='QBP_Q11' definition='MSH~base:QPD~base:RCP' description='Query by parameter - query by parameter/segment pattern response - Diagnosis, Patient Problems and Patient EClass Queries - MHVSM'/>
+<MessageStructure name='QBP_Q13' definition='MSH~base:QPD~base:RDF~base:RCP' description='Query by parameter - quey by parameter/tabluar response - ECS Procedures and DSS Units Queries - MHVSM'/>
+<MessageStructure name='REF_I12' definition='MSH~base:RF1~base:PRD~base:PID~base:DG1~base:OBR~base:PV1~{~base:NTE~}'/>
+<MessageStructure name='RPA_I08' definition='MSH~base:EVN~[~{~base:MSA~}~]~base:IN1~[~{~base:MSA~}~]~base:PRD~[~{~base:MSA~}~]~[~base:PRD~]~base:GT1~[~{~base:MSA~}~]~[~base:PID~]~[~{~base:MSA~}~]~[~base:PRB~[~base:PV1~]~]~[~{~base:AUT~}~]~[~{~ZTP~}~]~[~{~base:DG1~}~]~[~ZHS~]~[~base:PV1~]~[~base:OBR~]~[~base:RXA~]~[~base:RXE~]~[~base:PRB~]~[~{~PSL~}~]~[~base:NTE~]~[~{~base:PRD~[~{~base:MSA~}~]~[~base:NK1~]~[~base:CTD~]~[~{~base:PRD~}~]~[~{~base:MSA~}~]~}~]~[~{~{~base:MSA~}~[~base:PRB~]~[~{~base:AUT~}~]~[~{~ZTP~}~]~[~{~base:DG1~}~]~[~{~PSL~}~]~[~ZHS~]~[~{~PSL~}~]~[~base:NTE~]~[~{~base:PRD~}~]~[~{~base:MSA~}~]~[~{~base:PRD~}~]~[~base:CTD~]~}~]'/>
+<MessageStructure name='RQA_I08' definition='MSH~base:EVN~base:IN1~base:PRD~[~base:CTD~]~[~base:PRD~]~base:GT1~base:PID~[~base:PRB~[~base:PV1~]~]~[~base:AUT~]~[~{~ZTP~}~]~[~{~base:DG1~}~]~[~ZHS~]~[~{~base:PV1~}~]~[~base:OBR~]~[~[~base:RXA~]~[~{~base:NTE~}~]~]~[~base:RXE~]~[~base:PRB~]~[~{~PSL~}~]~[~base:NTE~]~[~{~[~base:PRD~]~[~base:AUT~]~[~ZTP~]~}~]~[~{~[~base:PRB~]~[~base:AUT~]~[~ZTP~]~[~{~PSL~}~]~[~ZHS~]~[~{~PSL~}~]~[~base:NTE~]~[~{~base:PRD~}~]~}~]' description='Request patient authorization - Request for treatment authorization information - VistA X12 278 Request (2.6)'/>
+<MessageStructure name='RRI_I12' definition='MSH~base:RF1~base:PRD~base:PID~base:DG1~base:OBR~base:PV1~{~base:NTE~}' description=' Return Patient Referral Information GMRC (2.5 Min Compliant)'/>
+<MessageStructure name='RSP_D11' definition='MSH~base:MSA~base:QAK~base:QPD~base:IN1' description='RSP_K11 Query by parameter response - NIF Response NIF Found and/or NIF Unsolicited Broadcast (2.5.1) - HPID'/>
+<MessageStructure name='RSP_F11' definition='MSH~base:MSA~base:ERR~base:QAK~base:QPD' description='RSP_K11 Query by parameter Response Problem NIF and/or NIF Response Reject and/or NIF Response Exception Report (2.5.1) - HPID'/>
+<MessageStructure name='RSP_K11' definition='MSH~base:MSA~base:QAK~base:QPD~{~base:DG1~}' description='Segment pattern response - Query by parameter/segment pattern response - Standard Diagnosis Response or Patient Problems Response - MHVSM '/>
+<MessageStructure name='RSP_X11' definition='MSH~base:MSA~base:QAK~[~{~ZEL~}~]' description='RSP_K11 Query by parameter/segment pattern response - Patient Eligibility Response - MHVSM'/>
+<MessageStructure name='RTB_K13' definition='MSH~base:MSA~base:QAK~base:QPD~base:RDF~{~base:RDT~}' description='Segment pattern response - query by parameter/tabular response - ECS Procedures and DSS Units Responses - MHVSM '/>
 
+<SegmentStructure name='EVN' description='Event Type'>
+    <SegmentSubStructure piece='1' description='Event Type Code' datatype='base:ID' max_length='3' required='B' ifrepeating='0' codetable='Z3'/>
+    <SegmentSubStructure piece='2' description='Recorded Date/Time' datatype='base:TS' symbol='!' max_length='26' required='R' ifrepeating='0'/>
+    <SegmentSubStructure piece='3' description='Date/Time Planned Event' datatype='base:TS' max_length='26' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='4' description='Event Reason Code' datatype='base:IS' max_length='3' required='O' ifrepeating='0' codetable='base:62'/>
+    <SegmentSubStructure piece='5' description='Operator ID' datatype='base:XCN' symbol='*' max_length='250' required='O' ifrepeating='1' codetable='base:188'/>
+    <SegmentSubStructure piece='6' description='Event Occurred' datatype='base:TS' max_length='26' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='7' description='Event Facility' datatype='base:HD' max_length='180' required='O' ifrepeating='0'/>
+</SegmentStructure>
+<SegmentStructure name='FT1' description='Financial Transaction'>
+    <SegmentSubStructure piece='1' description='Set ID - FT1' datatype='base:SI' max_length='4' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='2' description='Transaction ID' datatype='base:ST' max_length='12' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='3' description='Transaction Batch ID' datatype='base:ST' max_length='10' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='4' description='Transaction Date' datatype='base:TS' symbol='!' max_length='26' required='R' ifrepeating='0'/>
+    <SegmentSubStructure piece='5' description='Transaction Posting Date' datatype='base:TS' max_length='26' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='6' description='Transaction Type' datatype='base:IS' symbol='!' max_length='8' required='R' ifrepeating='0' codetable='Z17'/>
+    <SegmentSubStructure piece='7' description='Transaction Code' datatype='base:CE' symbol='!' max_length='250' required='R' ifrepeating='0' codetable='base:132'/>
+    <SegmentSubStructure piece='8' description='Transaction Description' datatype='base:ST' max_length='40' required='B' ifrepeating='0'/>
+    <SegmentSubStructure piece='9' description='Transaction Description - Alt' datatype='base:ST' max_length='40' required='B' ifrepeating='0'/>
+    <SegmentSubStructure piece='10' description='Transaction Quantity' datatype='base:NM' max_length='6' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='11' description='Transaction Amount - Extended' datatype='base:CP' max_length='12' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='12' description='Transaction Amount - Unit' datatype='base:CP' max_length='12' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='13' description='Department Code' datatype='base:CE' max_length='250' required='O' ifrepeating='0' codetable='base:49'/>
+    <SegmentSubStructure piece='14' description='Insurance Plan ID' datatype='base:CE' max_length='250' required='O' ifrepeating='0' codetable='base:72'/>
+    <SegmentSubStructure piece='15' description='Insurance Amount' datatype='base:CP' max_length='12' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='16' description='Assigned Patient Location' datatype='base:PL' max_length='80' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='17' description='Fee Schedule' datatype='base:IS' max_length='1' required='O' ifrepeating='0' codetable='base:24'/>
+    <SegmentSubStructure piece='18' description='Patient Type' datatype='base:IS' max_length='2' required='O' ifrepeating='0' codetable='base:18'/>
+    <SegmentSubStructure piece='19' description='Diagnosis Code - FT1' datatype='base:CE' symbol='*' max_length='250' required='O' ifrepeating='1' codetable='base:51'/>
+    <SegmentSubStructure piece='20' description='Performed By Code' datatype='base:XCN' symbol='*' max_length='250' required='O' ifrepeating='1' codetable='base:84'/>
+    <SegmentSubStructure piece='21' description='Ordered By Code' datatype='base:XCN' symbol='*' max_length='250' required='O' ifrepeating='1'/>
+    <SegmentSubStructure piece='22' description='Unit Cost' datatype='base:CP' max_length='12' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='23' description='Filler Order Number' datatype='base:EI' max_length='22' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='24' description='Entered By Code' datatype='base:XCN' symbol='*' max_length='250' required='O' ifrepeating='1'/>
+    <SegmentSubStructure piece='25' description='Procedure Code' datatype='base:CE' max_length='250' required='O' ifrepeating='0' codetable='base:88'/>
+    <SegmentSubStructure piece='26' description='Procedure Code Modifier' datatype='base:CE' symbol='*' max_length='250' required='O' ifrepeating='1' codetable='base:340'/>
+</SegmentStructure>
+<SegmentStructure name='MFE' description='Master File Entry'>
+    <SegmentSubStructure piece='1' description='Record-Level Event Code' datatype='base:ID' symbol='!' max_length='3' required='R' ifrepeating='0' codetable='base:180'/>
+    <SegmentSubStructure piece='2' description='MFN Control ID' datatype='base:ST' symbol='?' max_length='20' required='C' ifrepeating='0'/>
+    <SegmentSubStructure piece='3' description='Effective Date/Time' datatype='base:TS' max_length='26' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='4' description='Primary Key Value - MFE' datatype='base:ST' symbol='+' max_length='20' required='R' ifrepeating='1'/>
+    <SegmentSubStructure piece='5' description='Primary Key Value Type' datatype='base:ID' symbol='+' max_length='3' required='R' ifrepeating='1' codetable='base:355'/>
+</SegmentStructure>
+<SegmentStructure name='MSH' description='Message Header'>
+    <SegmentSubStructure piece='1' description='Field Separator' datatype='base:ST' symbol='!' max_length='1' required='R' ifrepeating='0'/>
+    <SegmentSubStructure piece='2' description='Encoding Characters' datatype='base:ST' symbol='!' max_length='4' required='R' ifrepeating='0'/>
+    <SegmentSubStructure piece='3' description='Sending Application' datatype='base:HD' max_length='180' required='O' ifrepeating='0' codetable='base:361'/>
+    <SegmentSubStructure piece='4' description='Sending Facility' datatype='base:HD' max_length='180' required='O' ifrepeating='0' codetable='base:362'/>
+    <SegmentSubStructure piece='5' description='Receiving Application' datatype='base:HD' max_length='180' required='O' ifrepeating='0' codetable='base:361'/>
+    <SegmentSubStructure piece='6' description='Receiving Facility' datatype='base:HD' max_length='180' required='O' ifrepeating='0' codetable='base:362'/>
+    <SegmentSubStructure piece='7' description='Date/Time Of Message' datatype='base:TS' symbol='!' max_length='26' required='R' ifrepeating='0'/>
+    <SegmentSubStructure piece='8' description='Security' datatype='base:ST' max_length='40' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='9' description='Message Type' datatype='ZMSG' symbol='!' max_length='15' required='R' ifrepeating='0' codetable='base:76'/>
+    <SegmentSubStructure piece='10' description='Message Control ID' datatype='base:ST' symbol='!' max_length='20' required='R' ifrepeating='0'/>
+    <SegmentSubStructure piece='11' description='Processing ID' datatype='base:PT' symbol='!' max_length='3' required='R' ifrepeating='0'/>
+    <SegmentSubStructure piece='12' description='Version ID' datatype='base:VID' symbol='!' max_length='60' required='R' ifrepeating='0' codetable='base:104'/>
+    <SegmentSubStructure piece='13' description='Sequence Number' datatype='base:NM' max_length='15' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='14' description='Continuation Pointer' datatype='base:ST' max_length='180' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='15' description='Accept Acknowledgment Type' datatype='base:ID' max_length='2' required='O' ifrepeating='0' codetable='base:155'/>
+    <SegmentSubStructure piece='16' description='Application Acknowledgment Type' datatype='base:ID' max_length='2' required='O' ifrepeating='0' codetable='base:155'/>
+    <SegmentSubStructure piece='17' description='Country Code' datatype='base:ID' max_length='3' required='O' ifrepeating='0' codetable='base:399'/>
+    <SegmentSubStructure piece='18' description='Character Set' datatype='base:ID' symbol='*' max_length='16' required='O' ifrepeating='1' codetable='base:211'/>
+    <SegmentSubStructure piece='19' description='Principal Language Of Message' datatype='base:CE' max_length='250' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='20' description='Alternate Character Set Handling Scheme' datatype='base:ID' max_length='20' required='O' ifrepeating='0' codetable='base:356'/>
+    <SegmentSubStructure piece='21' description='Conformance Statement ID' datatype='base:ID' symbol='*' max_length='10' required='O' ifrepeating='1' codetable='base:449'/>
+</SegmentStructure>
+<SegmentStructure name='PSL' description='Product/Service Line Item'>
+    <SegmentSubStructure piece='1' description='Provider Product/Service Line Item Number' datatype='base:EI' symbol='!' max_length='424' required='R' ifrepeating='0'/>
+    <SegmentSubStructure piece='2' description='Payer Product/Service Line Item Number' datatype='base:EI' max_length='73' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='3' description='Product/Service Line Item Sequence Number' datatype='base:SI' symbol='!' max_length='4' required='R' ifrepeating='0'/>
+    <SegmentSubStructure piece='4' description='Provider Tracking ID' datatype='base:EI' max_length='20' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='5' description='Payer Tracking ID' datatype='base:EI' max_length='20' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='6' description='Product/Service Line Item Status' datatype='base:CWE' symbol='!' max_length='2' required='R' ifrepeating='0' codetable='Z559'/>
+    <SegmentSubStructure piece='7' description='Product/Service Code' datatype='base:CWE' symbol='!' max_length='2' required='R' ifrepeating='0' codetable='Z879'/>
+    <SegmentSubStructure piece='8' description='Product/Service Code Modifier' datatype='base:CWE' max_length='2' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='9' description='Product/Service Code Description' datatype='base:ST' max_length='80' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='10' description='Product/Service Effective Date' datatype='base:DT' max_length='24' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='11' description='Product/Service Expiration Date' datatype='base:DT' max_length='24' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='12' description='Product/Service Quantity' datatype='base:CQ' max_length='222' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='13' description='Product/Service Unit Cost' datatype='base:CP' max_length='254' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='14' description='Number of Items per Unit' datatype='base:NM' max_length='10' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='15' description='Product/Service Gross Amount' datatype='base:CP' max_length='254' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='16' description='Product/Service Billed Amount' datatype='base:CP' max_length='254' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='17' description='Product/Service Clarification Code Type' datatype='base:IS' max_length='10' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='18' description='Product/Service Clarification Code Value' datatype='base:ST' max_length='40' required='X' ifrepeating='0'/>
+    <SegmentSubStructure piece='19' description='Health Document Reference Identifier' datatype='base:EI' max_length='73' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='20' description='Processing Consideration Code' datatype='base:IS' max_length='10' required='O' ifrepeating='0' codetable='Z562'/>
+    <SegmentSubStructure piece='21' description='Restricted Disclosure Indicator' datatype='base:ID' symbol='!' max_length='2' required='R' ifrepeating='0' codetable='Z532'/>
+</SegmentStructure>
 <SegmentStructure name='ZBT' description='Beneficiary Travel Segment'>
     <SegmentSubStructure piece='1' description='SET ID' datatype='base:SI' max_length='4' required='O' ifrepeating='0'/>
     <SegmentSubStructure piece='2' description='DATE CERTIFIED' datatype='base:DT' max_length='8' required='O' ifrepeating='0'/>
@@ -185,11 +343,11 @@
     <SegmentSubStructure piece='8' description='Date Ruled Incompetent' datatype='base:DT' max_length='8' required='O' ifrepeating='0'/>
 </SegmentStructure>
 <SegmentStructure name='ZHP' description='Health Benefits Plan'>
-    <SegmentSubStructure piece='1' description='SET ID' datatype='base:SI' min_length='4' required='O' ifrepeating='0'/>
-    <SegmentSubStructure piece='2' description='HBP CODE' datatype='base:CE' min_length='3' required='O' ifrepeating='0'/>
-    <SegmentSubStructure piece='3' description='HBP LAST UPDATE DATE' datatype='base:TS' min_length='19' required='O' ifrepeating='0'/>
-    <SegmentSubStructure piece='4' description='HBP LAST UPDATE' datatype='base:ST' min_length='12' required='O' ifrepeating='0'/>
-    <SegmentSubStructure piece='5' description='HBP LAST UPDATED BY STATION NUMBER' datatype='base:ST' symbol='!' min_length='6' required='R' ifrepeating='0'/>
+    <SegmentSubStructure piece='1' description='SET ID' datatype='base:SI' max_length='4' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='2' description='HBP CODE' datatype='base:CE' max_length='3' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='3' description='HBP LAST UPDATE DATE' datatype='base:TS' max_length='19' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='4' description='HBP LAST UPDATE' datatype='base:ST' max_length='12' required='O' ifrepeating='0'/>
+    <SegmentSubStructure piece='5' description='HBP LAST UPDATED BY STATION NUMBER' datatype='base:ST' symbol='!' max_length='6' required='R' ifrepeating='0'/>
 </SegmentStructure>
 <SegmentStructure name='ZHS' description='Health Care Services Delivery (HSD) Segment'>
     <SegmentSubStructure piece='1' description='Set ID' datatype='base:SI' max_length='4' required='X' ifrepeating='0'/>
@@ -576,6 +734,11 @@
     <DataSubType piece='6' description='assigning facility' datatype='base:HD' required='O'/>
     <DataSubType piece='7' description='effective date (DT)' datatype='base:DT' required='O'/>
     <DataSubType piece='8' description='expiration date' datatype='base:DT' required='O'/>
+</DataType>
+<DataType name='ZMSG' description='Message Type'>
+    <DataSubType piece='1' description='message type' datatype='base:ID' codetable='base:76' required='O'/>
+    <DataSubType piece='2' description='trigger event' datatype='base:ID' codetable='Z3' required='O'/>
+    <DataSubType piece='3' description='message structure' datatype='base:ID' codetable='Z354' required='O'/>
 </DataType>
 
 <CodeTable name='301' tabletype='2' description='!Copied from 2.3.1 - Universal ID Type'>
@@ -2422,6 +2585,501 @@
    <Enumerate position='3' value='3' description='Paraplegia-Non-Traumatic'/>
    <Enumerate position='4' value='4' description='Quadriplegia-Non-Traumatic'/>
 </CodeTable>
-
+<CodeTable name='Z17' tabletype='1' description='Transaction type'>
+   <Enumerate position='1' value='CG' description='Charge'/>
+   <Enumerate position='2' value='CD' description='Credit'/>
+   <Enumerate position='3' value='PY' description='Payment'/>
+   <Enumerate position='4' value='AJ' description='Adjustment'/>
+   <Enumerate position='5' value='CO' description='Co-payment'/>
+   <Enumerate position='6' value='R' description='Return'/>
+   <Enumerate position='7' value='V' description='VEND'/>
+   <Enumerate position='8' value='VAAQ' description='Authorization Status Request'/>
+   <Enumerate position='9' value='VAAU' description='Authorization'/>
+   <Enumerate position='10' value='VAOQ' description='Obligation Status Request'/>
+   <Enumerate position='11' value='VASC' description='Status change of 1358 Obligation'/>
+   <Enumerate position='12' value='W' description='Waste'/>
+</CodeTable>
+<CodeTable name='Z3' tabletype='2' description='Event type'>
+   <Enumerate position='1' value='A01' description='ADT/ACK - Admit/visit notification'/>
+   <Enumerate position='2' value='A02' description='ADT/ACK - Transfer a patient'/>
+   <Enumerate position='3' value='A03' description='ADT/ACK - Discharge/end visit'/>
+   <Enumerate position='4' value='A04' description='ADT/ACK - Register a patient'/>
+   <Enumerate position='5' value='A05' description='ADT/ACK - Pre-admit a patient'/>
+   <Enumerate position='6' value='A06' description='ADT/ACK - Change an outpatient to an inpatient'/>
+   <Enumerate position='7' value='A07' description='ADT/ACK - Change an inpatient to an outpatient'/>
+   <Enumerate position='8' value='A08' description='ADT/ACK - Update patient information'/>
+   <Enumerate position='9' value='A09' description='ADT/ACK - Patient departing - tracking'/>
+   <Enumerate position='10' value='A10' description='ADT/ACK - Patient arriving - tracking'/>
+   <Enumerate position='11' value='A11' description='ADT/ACK - Cancel admit/visit notification'/>
+   <Enumerate position='12' value='A12' description='ADT/ACK - Cancel transfer'/>
+   <Enumerate position='13' value='A13' description='ADT/ACK - Cancel discharge/end visit'/>
+   <Enumerate position='14' value='A14' description='ADT/ACK - Pending admit'/>
+   <Enumerate position='15' value='A15' description='ADT/ACK - Pending transfer'/>
+   <Enumerate position='16' value='A16' description='ADT/ACK - Pending discharge'/>
+   <Enumerate position='17' value='A17' description='ADT/ACK - Swap patients'/>
+   <Enumerate position='18' value='A18' description='ADT/ACK - Merge patient information (for backward compatibility only)'/>
+   <Enumerate position='19' value='A19' description='QRY/ADR - Patient query'/>
+   <Enumerate position='20' value='A20' description='ADT/ACK - Bed status update'/>
+   <Enumerate position='21' value='A21' description='ADT/ACK - Patient goes on a "leave of absence"'/>
+   <Enumerate position='22' value='A22' description='ADT/ACK - Patient returns from a "leave of absence"'/>
+   <Enumerate position='23' value='A23' description='ADT/ACK - Delete a patient record'/>
+   <Enumerate position='24' value='A24' description='ADT/ACK - Link patient information'/>
+   <Enumerate position='25' value='A25' description='ADT/ACK - Cancel pending discharge'/>
+   <Enumerate position='26' value='A26' description='ADT/ACK - Cancel pending transfer'/>
+   <Enumerate position='27' value='A27' description='ADT/ACK - Cancel pending admit'/>
+   <Enumerate position='28' value='A28' description='ADT/ACK - Add person information'/>
+   <Enumerate position='29' value='A29' description='ADT/ACK - Delete person information'/>
+   <Enumerate position='30' value='A30' description='ADT/ACK - Merge person information (for backward compatibility only)'/>
+   <Enumerate position='31' value='A31' description='ADT/ACK - Update person information'/>
+   <Enumerate position='32' value='A32' description='ADT/ACK - Cancel patient arriving - tracking'/>
+   <Enumerate position='33' value='A33' description='ADT/ACK - Cancel patient departing - tracking'/>
+   <Enumerate position='34' value='A34' description='ADT/ACK - Merge patient information - patient ID only (for backward compatibility only)'/>
+   <Enumerate position='35' value='A35' description='ADT/ACK - Merge patient information - account number only (for backward compatibility only)'/>
+   <Enumerate position='36' value='A36' description='ADT/ACK - Merge patient information - patient ID and account number (for backward compatibility only)'/>
+   <Enumerate position='37' value='A37' description='ADT/ACK - Unlink patient information'/>
+   <Enumerate position='38' value='A38' description='ADT/ACK - Cancel pre-admit'/>
+   <Enumerate position='39' value='A39' description='ADT/ACK - Merge person - patient ID (for backward compatibility only)'/>
+   <Enumerate position='40' value='A40' description='ADT/ACK - Merge patient - patient identifier list'/>
+   <Enumerate position='41' value='A41' description='ADT/ACK - Merge account - patient account number'/>
+   <Enumerate position='42' value='A42' description='ADT/ACK - Merge visit - visit number'/>
+   <Enumerate position='43' value='A43' description='ADT/ACK - Move patient information - patient identifier list'/>
+   <Enumerate position='44' value='A44' description='ADT/ACK - Move account information - patient account number'/>
+   <Enumerate position='45' value='A45' description='ADT/ACK - Move visit information - visit number'/>
+   <Enumerate position='46' value='A46' description='ADT/ACK - Change patient ID (for backward compatibility only)'/>
+   <Enumerate position='47' value='A47' description='ADT/ACK - Change patient identifier list'/>
+   <Enumerate position='48' value='A48' description='ADT/ACK - Change alternate patient ID (for backward compatibility only)'/>
+   <Enumerate position='49' value='A49' description='ADT/ACK - Change patient account number'/>
+   <Enumerate position='50' value='A50' description='ADT/ACK - Change visit number'/>
+   <Enumerate position='51' value='A51' description='ADT/ACK - Change alternate visit ID'/>
+   <Enumerate position='52' value='A52' description='ADT/ACK - Cancel leave of absence for a patient'/>
+   <Enumerate position='53' value='A53' description='ADT/ACK - Cancel patient returns from a leave of absence'/>
+   <Enumerate position='54' value='A54' description='ADT/ACK - Change attending doctor'/>
+   <Enumerate position='55' value='A55' description='ADT/ACK - Cancel change attending doctor'/>
+   <Enumerate position='56' value='A60' description='ADT/ACK - Update allergy information - VISTA SQWM'/>
+   <Enumerate position='57' value='A61' description='ADT/ACK - Change consulting doctor'/>
+   <Enumerate position='58' value='A62' description='ADT/ACK - Cancel change consulting doctor'/>
+   <Enumerate position='59' value='B01' description='PMU/ACK - Add personnel record'/>
+   <Enumerate position='60' value='B02' description='PMU/ACK - Update personnel record'/>
+   <Enumerate position='61' value='B03' description='PMU/ACK - Delete personnel re cord'/>
+   <Enumerate position='62' value='B04' description='PMU/ACK - Active practicing person'/>
+   <Enumerate position='63' value='B05' description='PMU/ACK - Deactivate practicing person'/>
+   <Enumerate position='64' value='B06' description='PMU/ACK - Terminate practicing person'/>
+   <Enumerate position='65' value='C01' description='CRM - Register a patient on a clinical trial'/>
+   <Enumerate position='66' value='C02' description='CRM - Cancel a patient registration on clinical trial (for clerical mistakes only)'/>
+   <Enumerate position='67' value='C03' description='CRM - Correct/update registration information'/>
+   <Enumerate position='68' value='C04' description='CRM - Patient has gone off a clinical trial'/>
+   <Enumerate position='69' value='C05' description='CRM - Patient enters phase of clinical trial'/>
+   <Enumerate position='70' value='C06' description='CRM - Cancel patient entering a phase (clerical mistake)'/>
+   <Enumerate position='71' value='C07' description='CRM - Correct/update phase information'/>
+   <Enumerate position='72' value='C08' description='CRM - Patient has gone off phase of clinical trial'/>
+   <Enumerate position='73' value='C09' description='CSU - Automated time intervals for reporting, like monthly'/>
+   <Enumerate position='74' value='C10' description='CSU - Patient completes the clinical trial'/>
+   <Enumerate position='75' value='C11' description='CSU - Patient completes a phase of the clinical trial'/>
+   <Enumerate position='76' value='C12' description='CSU - Update/correction of patient order/result information'/>
+   <Enumerate position='77' value='I01' description='RQI/RPI - Request for insurance information'/>
+   <Enumerate position='78' value='I02' description='RQI/RPL - Request/receipt of patient selection display list'/>
+   <Enumerate position='79' value='I03' description='RQI/RPR - Request/receipt of patient selection list'/>
+   <Enumerate position='80' value='I04' description='RQD/RPI - Request for patient demographic data'/>
+   <Enumerate position='81' value='I05' description='RQC/RCI - Request for patient clinical information'/>
+   <Enumerate position='82' value='I06' description='RQC/RCL - Request/receipt of clinical data listing'/>
+   <Enumerate position='83' value='I07' description='PIN/ACK - Unsolicited insurance information'/>
+   <Enumerate position='84' value='I08' description='RQA/RPA - Request for treatment authorization information'/>
+   <Enumerate position='85' value='I09' description='RQA/RPA - Request for modification to an authorization'/>
+   <Enumerate position='86' value='I10' description='RQA/RPA - Request for resubmission of an authorization'/>
+   <Enumerate position='87' value='I11' description='RQA/RPA - Request for cancellation of an authorization'/>
+   <Enumerate position='88' value='I12' description='REF/RRI - Patient referral'/>
+   <Enumerate position='89' value='I13' description='REF/RRI - Modify patient referral'/>
+   <Enumerate position='90' value='I14' description='REF/RRI - Cancel patient referral'/>
+   <Enumerate position='91' value='I15' description='REF/RRI - Request patient referral status'/>
+   <Enumerate position='92' value='J01' description='QCN/ACK - Cancel query/acknowledge message'/>
+   <Enumerate position='93' value='J02' description='QSX/ACK - Cancel subscription/acknowledge message'/>
+   <Enumerate position='94' value='K21' description='RSP - Get person demographics response'/>
+   <Enumerate position='95' value='K22' description='RSP - Find candidates response'/>
+   <Enumerate position='96' value='K23' description='RSP - Get corresponding identifiers response'/>
+   <Enumerate position='97' value='K24' description='RSP - Allocate identifiers response'/>
+   <Enumerate position='98' value='K25' description='RSP - Personnel Information by Segment Response'/>
+   <Enumerate position='99' value='M01' description='MFN/MFK - Master file  notification - Table Update - e-PHARMACY'/>
+   <Enumerate position='100' value='M02' description='MFN/MFK - Master file - staff practitioner'/>
+   <Enumerate position='101' value='M03' description='MFN/MFK - Master file - test/observation (for backward compatibility only)'/>
+   <Enumerate position='102' value='M04' description='MFN/MFK - Master files charge description'/>
+   <Enumerate position='103' value='M05' description='MFN/MFK - Patient location master file'/>
+   <Enumerate position='104' value='M06' description='MFN/MFK - Clinical study with phases and schedules master file'/>
+   <Enumerate position='105' value='M07' description='MFN/MFK - Clinical study without phases but with schedules master file'/>
+   <Enumerate position='106' value='M08' description='MFN/MFK - Test/observation (numeric) master file'/>
+   <Enumerate position='107' value='M09' description='MFN/MFK - Test/observation (categorical) master file'/>
+   <Enumerate position='108' value='M10' description='MFN/MFK - Test /observation batteries master file'/>
+   <Enumerate position='109' value='M11' description='MFN/MFK - Test/calculated observations master file'/>
+   <Enumerate position='110' value='M12' description='MFN/MFK - Master file notification message'/>
+   <Enumerate position='111' value='N01' description='NMQ/NMR - Application management query message'/>
+   <Enumerate position='112' value='N02' description='NMD/ACK - Application management data message (unsolicited)'/>
+   <Enumerate position='113' value='O01' description='ORM - Order message (also RDE, RDS, RGV, RAS)'/>
+   <Enumerate position='114' value='O02' description='ORR - Order response (also RRE, RRD, RRG, RRA)'/>
+   <Enumerate position='115' value='O03' description='OMD - Diet order'/>
+   <Enumerate position='116' value='O04' description='ORD - Diet order acknowledgement'/>
+   <Enumerate position='117' value='O05' description='OMS - Stock requisition order'/>
+   <Enumerate position='118' value='O06' description='ORS - Stock requisition acknowledgement'/>
+   <Enumerate position='119' value='O07' description='OMN - Non-stock requisition order'/>
+   <Enumerate position='120' value='O08' description='ORN - Non-stock requisition acknowledgement'/>
+   <Enumerate position='121' value='O09' description='OMP - Pharmacy/treatment order'/>
+   <Enumerate position='122' value='O10' description='ORP - Pharmacy/treatment order acknowledgement'/>
+   <Enumerate position='123' value='O11' description='RDE - Pharmacy/treatment encoded order'/>
+   <Enumerate position='124' value='O12' description='RRE - Pharmacy/treatment encoded order acknowledgement'/>
+   <Enumerate position='125' value='O13' description='RDS - Pharmacy/treatment dispense'/>
+   <Enumerate position='126' value='O14' description='RRD - Pharmacy/treatment dispense acknowledgement'/>
+   <Enumerate position='127' value='O15' description='RGV - Pharmacy/treatment give'/>
+   <Enumerate position='128' value='O16' description='RRG - Pharmacy/treatment give acknowledgement'/>
+   <Enumerate position='129' value='O17' description='RAS - Pharmacy/treatment administration'/>
+   <Enumerate position='130' value='O18' description='RRA - Pharmacy/treatment administration acknowledgement'/>
+   <Enumerate position='131' value='O19' description='OMG - General clinical order'/>
+   <Enumerate position='132' value='O20' description='ORG/ORL - General clinical order response'/>
+   <Enumerate position='133' value='O21' description='OML - Laboratory order'/>
+   <Enumerate position='134' value='P01' description='BAR/ACK - Add patient accounts'/>
+   <Enumerate position='135' value='P02' description='BAR/ACK - Purge patient accounts'/>
+   <Enumerate position='136' value='P03' description='DFT/ACK - Post detail financial transaction'/>
+   <Enumerate position='137' value='P04' description='QRY/DSP - Generate bill and A/R statements'/>
+   <Enumerate position='138' value='P05' description='BAR/ACK - Update account'/>
+   <Enumerate position='139' value='P06' description='BAR/ACK - End account'/>
+   <Enumerate position='140' value='P07' description='PEX - Unsolicited initial individual product experience report'/>
+   <Enumerate position='141' value='P08' description='PEX - Unsolicited update individual product experience report'/>
+   <Enumerate position='142' value='P09' description='SUR - Summary product experience report'/>
+   <Enumerate position='143' value='P10' description='BAR/ACK -Transmit Ambulatory Payment Classification(APC)'/>
+   <Enumerate position='144' value='PC1' description='PPR - PC/ problem add'/>
+   <Enumerate position='145' value='PC2' description='PPR - PC/ problem update'/>
+   <Enumerate position='146' value='PC3' description='PPR - PC/ problem delete'/>
+   <Enumerate position='147' value='PC4' description='QRY - PC/ problem query'/>
+   <Enumerate position='148' value='PC5' description='PRR - PC/ problem response'/>
+   <Enumerate position='149' value='PC6' description='PGL - PC/ goal add'/>
+   <Enumerate position='150' value='PC7' description='PGL - PC/ goal update'/>
+   <Enumerate position='151' value='PC8' description='PGL - PC/ goal delete'/>
+   <Enumerate position='152' value='PC9' description='QRY - PC/ goal query'/>
+   <Enumerate position='153' value='PCA' description='PPV - PC/ goal response'/>
+   <Enumerate position='154' value='PCB' description='PPP - PC/ pathway (problem-oriented) add'/>
+   <Enumerate position='155' value='PCC' description='PPP - PC/ pathway (problem-oriented) update'/>
+   <Enumerate position='156' value='PCD' description='PPP - PC/ pathway (problem-oriented) delete'/>
+   <Enumerate position='157' value='PCE' description='QRY - PC/ pathway (problem-oriented) query'/>
+   <Enumerate position='158' value='PCF' description='PTR - PC/ pathway (problem-oriented) query response'/>
+   <Enumerate position='159' value='PCG' description='PPG - PC/ pathway (goal-oriented) add'/>
+   <Enumerate position='160' value='PCH' description='PPG - PC/ pathway (goal-oriented) update'/>
+   <Enumerate position='161' value='PCJ' description='PPG - PC/ pathway (goal-oriented) delete'/>
+   <Enumerate position='162' value='PCK' description='QRY - PC/ pathway (goal-oriented) query'/>
+   <Enumerate position='163' value='PCL' description='PPT - PC/ pathway (goal-oriented) query response'/>
+   <Enumerate position='164' value='Q01' description='QRY/DSR - Query sent for immediate response'/>
+   <Enumerate position='165' value='Q02' description='QRY/QCK - Query sent for deferred response'/>
+   <Enumerate position='166' value='Q03' description='DSR/ACK - Deferred response to a query'/>
+   <Enumerate position='167' value='Q04' description='EQQ - Embedded query language query'/>
+   <Enumerate position='168' value='Q05' description='UDM/ACK - Unsolicited display update message'/>
+   <Enumerate position='169' value='Q06' description='OSQ/OSR - Query for order status'/>
+   <Enumerate position='170' value='Q07' description='VQQ - Virtual table query'/>
+   <Enumerate position='171' value='Q08' description='SPQ - Stored procedure request'/>
+   <Enumerate position='172' value='Q09' description='RQQ - event replay query'/>
+   <Enumerate position='173' value='Q16' description='QSB - Create subscription'/>
+   <Enumerate position='174' value='Q17' description='QVR - Query for previous events'/>
+   <Enumerate position='175' value='Q21' description='QBP - Get person demographics'/>
+   <Enumerate position='176' value='Q22' description='QBP - Find candidates'/>
+   <Enumerate position='177' value='Q23' description='QBP - Get corresponding identifiers'/>
+   <Enumerate position='178' value='Q24' description='QBP - Allocate identifiers'/>
+   <Enumerate position='179' value='Q25' description='QBP - Personnel Information by Segment Query'/>
+   <Enumerate position='180' value='R01' description='ORU/ACK - Unsolicited transmission of an observation message'/>
+   <Enumerate position='181' value='R02' description='QRY - Query for results of observation'/>
+   <Enumerate position='182' value='R03' description='QRY/DSR Display-oriented results, query/unsol. update (for backward compatibility only) (Replaced by Q05)'/>
+   <Enumerate position='183' value='R04' description='ORF - Response to query; transmission of requested observation'/>
+   <Enumerate position='184' value='R05' description='QRY/DSR - query for display results (See Q01)'/>
+   <Enumerate position='185' value='R06' description='UDM - unsolicited update/display results (See Q05)'/>
+   <Enumerate position='186' value='R07' description='EDR - enhanced display response'/>
+   <Enumerate position='187' value='R08' description='TBR - tabular data response'/>
+   <Enumerate position='188' value='R09' description='ERP - event replay response'/>
+   <Enumerate position='189' value='ROR' description='ROR - Pharmacy prescription order query response'/>
+   <Enumerate position='190' value='R21' description='OUL - Unsolicited laboratory observation'/>
+   <Enumerate position='191' value='RAR' description='RAR - Pharmacy administration information query response'/>
+   <Enumerate position='192' value='RDR' description='RDR - Pharmacy dispense information query response'/>
+   <Enumerate position='193' value='RER' description='RER - Pharmacy encoded order information query response'/>
+   <Enumerate position='194' value='RGR' description='RGR - Pharmacy dose information query response'/>
+   <Enumerate position='195' value='S01' description='SRM/SRR - Request new appointment booking'/>
+   <Enumerate position='196' value='S02' description='SRM/SRR - Request appointment rescheduling'/>
+   <Enumerate position='197' value='S03' description='SRM/SRR - Request appointment modification'/>
+   <Enumerate position='198' value='S04' description='SRM/SRR - Request appointment cancellation'/>
+   <Enumerate position='199' value='S05' description='SRM/SRR - Request appointment discontinuation'/>
+   <Enumerate position='200' value='S06' description='SRM/SRR - Request appointment deletion'/>
+   <Enumerate position='201' value='S07' description='SRM/SRR - Request addition of service/resource on appointment'/>
+   <Enumerate position='202' value='S08' description='SRM/SRR - Request modification of service/resource on appointment'/>
+   <Enumerate position='203' value='S09' description='SRM/SRR - Request cancellation of service/resource on appointment'/>
+   <Enumerate position='204' value='S10' description='SRM/SRR - Request discontinuation of service/resource on appointment'/>
+   <Enumerate position='205' value='S11' description='SRM/SRR - Request deletion of service/resource on appointment'/>
+   <Enumerate position='206' value='S12' description='SIU/ACK - Notification of new appointment booking'/>
+   <Enumerate position='207' value='S13' description='SIU/ACK - Notification of appointment rescheduling'/>
+   <Enumerate position='208' value='S14' description='SIU/ACK - Notification of appointment modification'/>
+   <Enumerate position='209' value='S15' description='SIU/ACK - Notification of appointment cancellation'/>
+   <Enumerate position='210' value='S16' description='SIU/ACK - Notification of appointment discontinuation'/>
+   <Enumerate position='211' value='S17' description='SIU/ACK - Notification of appointment deletion'/>
+   <Enumerate position='212' value='S18' description='SIU/ACK - Notification of addition of service/resource on appointment'/>
+   <Enumerate position='213' value='S19' description='SIU/ACK - Notification of modification of service/resource on appointment'/>
+   <Enumerate position='214' value='S20' description='SIU/ACK - Notification of cancellation of service/resource on appointment'/>
+   <Enumerate position='215' value='S21' description='SIU/ACK - Notification of discontinuation of service/resource on appointment'/>
+   <Enumerate position='216' value='S22' description='SIU/ACK - Notification of deletion of service/resource on appointment'/>
+   <Enumerate position='217' value='S23' description='SIU/ACK - Notification of blocked schedule time slot(s)'/>
+   <Enumerate position='218' value='S24' description='SIU/ACK - Notification of opened ("unblocked") schedule time slot(s)'/>
+   <Enumerate position='219' value='S25' description='SQM/SQR - Schedule query message and response'/>
+   <Enumerate position='220' value='S26' description='SIU/ACK Notification that patient did not show up for schedule appointment'/>
+   <Enumerate position='221' value='T01' description='MDM/ACK - Original document notification'/>
+   <Enumerate position='222' value='T02' description='MDM/ACK - Original document notification and content'/>
+   <Enumerate position='223' value='T03' description='MDM/ACK - Document status change notification'/>
+   <Enumerate position='224' value='T04' description='MDM/ACK - Document status change notification and content'/>
+   <Enumerate position='225' value='T05' description='MDM/ACK - Document addendum notification'/>
+   <Enumerate position='226' value='T06' description='MDM/ACK - Document addendum notification and content'/>
+   <Enumerate position='227' value='T07' description='MDM/ACK - Document edit notification'/>
+   <Enumerate position='228' value='T08' description='MDM/ACK - Document edit notification and content'/>
+   <Enumerate position='229' value='T09' description='MDM/ACK - Document replacement notification'/>
+   <Enumerate position='230' value='T10' description='MDM/ACK - Document replacement notification and content'/>
+   <Enumerate position='231' value='T11' description='MDM/ACK - Document cancel notification'/>
+   <Enumerate position='232' value='T12' description='QRY/DOC - Document query'/>
+   <Enumerate position='233' value='U01' description='ESU/ACK - Automated equipment status update'/>
+   <Enumerate position='234' value='U02' description='ESR/ACK - Automated equipment status request'/>
+   <Enumerate position='235' value='U03' description='SSU/ACK - Specimen status update'/>
+   <Enumerate position='236' value='U04' description='SSR/ACK - specimen status request'/>
+   <Enumerate position='237' value='U05' description='INU/ACK - Automated equipment inventory update'/>
+   <Enumerate position='238' value='U06' description='INR/ACK - Automated equipment inventory request'/>
+   <Enumerate position='239' value='U07' description='EAC/ACK - Automated equipment command'/>
+   <Enumerate position='240' value='U08' description='EAR/ACK - Automated equipment response'/>
+   <Enumerate position='241' value='U09' description='EAN/ACK - Automated equipment notification'/>
+   <Enumerate position='242' value='U10' description='TCU/ACK - Automated equipment test code settings update'/>
+   <Enumerate position='243' value='U11' description='TCR/ACK - Automated equipment test code settings request'/>
+   <Enumerate position='244' value='U12' description='LSU/ACK - Automated equipment log/service update'/>
+   <Enumerate position='245' value='U13' description='LSR/ACK - Automated equipment log/service request'/>
+   <Enumerate position='246' value='V01' description='VXQ - Query for vaccination record'/>
+   <Enumerate position='247' value='V02' description='VXX - Response to vaccination query returning multiple PID matches'/>
+   <Enumerate position='248' value='V03' description='VXR - Vaccination record response'/>
+   <Enumerate position='249' value='V04' description='VXU - Unsolicited vaccination record update'/>
+   <Enumerate position='250' value='Varies' description='MFQ/MFR - Master files query (use event same as asking for e.g., M05 - location)'/>
+   <Enumerate position='251' value='W01' description='ORU - Waveform result, unsolicited transmission of requested information'/>
+   <Enumerate position='252' value='W02' description='QRF - Waveform result, response to query'/>
+   <Enumerate position='253' value='Z60' description='ADT - Custom Allergy Update'/>
+   <Enumerate position='254' value='Z01' description='ORU - Unsolicited transmission of an observation message - VBECS '/>
+   <Enumerate position='255' value='X01' description='MFN_M01 - Master file notification - Table Update - eIV VISTA Reg Request-mod'/>
+   <Enumerate position='256' value='Y01' description='MFN_M01 - Master file notification - Table Update - eIV table update (non payer &amp; non X12)'/>
+   <Enumerate position='257' value='K11' description='RSP - Standard Diagnosis Response or Patient Problems Response - MHVSM'/>
+   <Enumerate position='258' value='X11' description='RSP_K11 - Patient Eligibility Response - MHVSM'/>
+   <Enumerate position='259' value='Q11' description='QBP - Diagnosis, Patient Problems and Patient EClass Queries - MHVSM'/>
+   <Enumerate position='260' value='Q13' description='QBP - ECS Procedures and DSS Units Queries - MHVSM'/>
+   <Enumerate position='261' value='K13' description='RTB - ECS Procedures and DSS Units Responses - MHVSM'/>
+   <Enumerate position='262' value='O22' description='ORL - General Laboratory Order Acknowledgment'/>
+   <Enumerate position='263' value='Z11' description='ESR ORU_Z11 Unsolicited transmission of an observation message (2.3.1)'/>
+   <Enumerate position='264' value='Z07' description='ESR ORU_Z07 based on ORU_R01 (2.3.1)'/>
+   <Enumerate position='265' value='Y11' description='ESR ORU_Z11 with BHS segment (2.3.1)'/>
+   <Enumerate position='266' value='Z06' description='ORU_Z06 Means Test IVM Converted Tests with BHS segment (2.3.1)'/>
+   <Enumerate position='267' value='Z04' description='ORF_Z07 ES Message based on ORF_R04 Response to query for results of observation (2.3.1)'/>
+   <Enumerate position='268' value='ZY1' description='ORF_Z11 ESR Message based on ORF_R04 Response to query for results of observation (2.3.1)'/>
+   <Enumerate position='269' value='Z10' description='ORU_Z10 Means Test IVM Converted Tests with BHS segment (2.3.1)'/>
+   <Enumerate position='270' value='Y10' description='ORF_Y10 Income Test Transmission with BHS segment  (2.3.1)'/>
+   <Enumerate position='271' value='P11' description='DFT_P11 Post detail financial transaction (2.5) '/>
+   <Enumerate position='272' value='X03' description='DFT_P03 Post detail financial transaction - (2.5 Compliant) - CPRS_IFCAP'/>
+   <Enumerate position='273' value='D11' description='RSP_K11 Query by parameter response - NIF Response NIF Found and/or NIF Unsolicited Broadcast (2.5.1) - HIPD'/>
+   <Enumerate position='274' value='F11' description='RSP_K11 Query by parameter Response Problem NIF and/or NIF Response Reject and/or NIF Response Exception Report (2.5.1) - HPID'/>
+   <Enumerate position='275' value='RX1' description='ORU_R01 Unsolicited transmission of an observation message - LABUI VISTALAB AUTORELEASE (2.5.1)'/>
+</CodeTable>
+<CodeTable name='Z354' tabletype='3' description='Message structure'>
+   <Enumerate position='1' value='ACK' description='Varies'/>
+   <Enumerate position='2' value='ADT_A01' description='A01, A04, A08, A13'/>
+   <Enumerate position='3' value='ADT_A02' description='A02'/>
+   <Enumerate position='4' value='ADT_A03' description='A03'/>
+   <Enumerate position='5' value='ADT_A05' description='A05, A14, A28, A31'/>
+   <Enumerate position='6' value='ADT_A06' description='A06, A07'/>
+   <Enumerate position='7' value='ADT_A09' description='A09, A10, A11, A12'/>
+   <Enumerate position='8' value='ADT_A15' description='A15'/>
+   <Enumerate position='9' value='ADT_A16' description='A16'/>
+   <Enumerate position='10' value='ADT_A17' description='A17'/>
+   <Enumerate position='11' value='ADT_A18' description='A18'/>
+   <Enumerate position='12' value='ADT_A20' description='A20'/>
+   <Enumerate position='13' value='ADT_A24' description='A24'/>
+   <Enumerate position='14' value='ADT_A30' description='A30, A34, A35, A36, A46, A47, A48, A49'/>
+   <Enumerate position='15' value='ADT_A37' description='A37'/>
+   <Enumerate position='16' value='ADT_A38' description='A38'/>
+   <Enumerate position='17' value='ADT_A39' description='A39, A40, A41, A42'/>
+   <Enumerate position='18' value='ADT_A43' description='A43, A44'/>
+   <Enumerate position='19' value='ADT_A45' description='A45'/>
+   <Enumerate position='20' value='ADT_A50' description='A50, A51'/>
+   <Enumerate position='21' value='ADT_A52' description='A52, A53, A55'/>
+   <Enumerate position='22' value='ADT_A54' description='A54'/>
+   <Enumerate position='23' value='ADT_A60' description='A60'/>
+   <Enumerate position='24' value='ADT_A61' description='A61, A62'/>
+   <Enumerate position='25' value='ADR_A19' description='A19'/>
+   <Enumerate position='26' value='BAR_P01' description='P01'/>
+   <Enumerate position='27' value='BAR_P02' description='P02'/>
+   <Enumerate position='28' value='BAR_P05' description='P05'/>
+   <Enumerate position='29' value='BAR_P06' description='P06'/>
+   <Enumerate position='30' value='BAR_P10' description='P10'/>
+   <Enumerate position='31' value='CRM_C01' description='C01, C02, C03, C04, C05, C06, C07, C08'/>
+   <Enumerate position='32' value='CSU_C09' description='C09, C10, C11, C12'/>
+   <Enumerate position='33' value='DFT_P03' description='P03'/>
+   <Enumerate position='34' value='DOC_T12' description='T12'/>
+   <Enumerate position='35' value='DSR_Q01' description='Q01'/>
+   <Enumerate position='36' value='DSR_Q03' description='Q03'/>
+   <Enumerate position='37' value='EAC_U07' description='U07'/>
+   <Enumerate position='38' value='EAN_U09' description='U09'/>
+   <Enumerate position='39' value='EAR_U08' description='U08'/>
+   <Enumerate position='40' value='EDR_R07' description='R07'/>
+   <Enumerate position='41' value='EQQ_Q04' description='Q04'/>
+   <Enumerate position='42' value='ERP_R09' description='R09'/>
+   <Enumerate position='43' value='ESR_U02' description='U02'/>
+   <Enumerate position='44' value='ESU_U01' description='U01'/>
+   <Enumerate position='45' value='INR_U06' description='U06'/>
+   <Enumerate position='46' value='INU_U05' description='U05'/>
+   <Enumerate position='47' value='LSU_U12' description='U12, U13'/>
+   <Enumerate position='48' value='MDM_T01' description='T01, T03, T05, T07, T09, T11'/>
+   <Enumerate position='49' value='MDM_T02' description='T02, T04, T06, T08, T10'/>
+   <Enumerate position='50' value='MFD_MFA' description='MFA'/>
+   <Enumerate position='51' value='MFK_M01' description='M01, M02, M03, M04, M05, M06, M07, M08, M09, M10, M11'/>
+   <Enumerate position='52' value='MFN_M01' description='M01'/>
+   <Enumerate position='53' value='MFN_M02' description='M02'/>
+   <Enumerate position='54' value='MFN_M03' description='M03'/>
+   <Enumerate position='55' value='MFN_M04' description='M04'/>
+   <Enumerate position='56' value='MFN_M05' description='M05'/>
+   <Enumerate position='57' value='MFN_M06' description='M06'/>
+   <Enumerate position='58' value='MFN_M07' description='M07'/>
+   <Enumerate position='59' value='MFN_M08' description='M08'/>
+   <Enumerate position='60' value='MFN_M09' description='M09'/>
+   <Enumerate position='61' value='MFN_M10' description='M10'/>
+   <Enumerate position='62' value='MFN_M11' description='M11'/>
+   <Enumerate position='63' value='MFN_M12' description='M12'/>
+   <Enumerate position='64' value='MFQ_M01' description='M01-M06'/>
+   <Enumerate position='65' value='MFR_M01' description='M01-M06'/>
+   <Enumerate position='66' value='NMD_N02' description='N02'/>
+   <Enumerate position='67' value='NMQ_N01' description='N01'/>
+   <Enumerate position='68' value='NMR_N01' description='N01'/>
+   <Enumerate position='69' value='OMD_O03' description='O03'/>
+   <Enumerate position='70' value='OMG_O19' description='O19'/>
+   <Enumerate position='71' value='OML_O21' description='O21'/>
+   <Enumerate position='72' value='OMN_O07' description='O07'/>
+   <Enumerate position='73' value='OMP_O09' description='O09'/>
+   <Enumerate position='74' value='OMS_O05' description='O05'/>
+   <Enumerate position='75' value='ORD_O04' description='O04'/>
+   <Enumerate position='76' value='ORF_R04' description='R04'/>
+   <Enumerate position='77' value='ORG_O20' description='O20'/>
+   <Enumerate position='78' value='ORM_O01' description='O01'/>
+   <Enumerate position='79' value='ORP_O10' description='O10'/>
+   <Enumerate position='80' value='ORR_O02' description='O02'/>
+   <Enumerate position='81' value='ORS_O06' description='O06'/>
+   <Enumerate position='82' value='ORU_R01' description='R01'/>
+   <Enumerate position='83' value='ORU_W01' description='W01'/>
+   <Enumerate position='84' value='OSQ_Q06' description='Q06'/>
+   <Enumerate position='85' value='OSR_Q06' description='Q06'/>
+   <Enumerate position='86' value='PEX_P07' description='P07, P08'/>
+   <Enumerate position='87' value='PGL_PC6' description='PC6, PC7, PC8'/>
+   <Enumerate position='88' value='PMU_B01' description='B01, B02'/>
+   <Enumerate position='89' value='PMU_B03' description='B03'/>
+   <Enumerate position='90' value='PMU_B04' description='B04, B05'/>
+   <Enumerate position='91' value='PPG_PCG' description='PCG, PCH, PCJ'/>
+   <Enumerate position='92' value='PPP_PCB' description='PCB, PCC, PCD'/>
+   <Enumerate position='93' value='PPR_PC1' description='PC1, PC2, PC3'/>
+   <Enumerate position='94' value='PPT_PCL' description='PCL'/>
+   <Enumerate position='95' value='PPV_PCA' description='PCA'/>
+   <Enumerate position='96' value='PRR_PC5' description='PC5'/>
+   <Enumerate position='97' value='PTR_PCF' description='PCF'/>
+   <Enumerate position='98' value='QCK_Q02' description='Q02'/>
+   <Enumerate position='99' value='QCN_J01' description='J01, J02'/>
+   <Enumerate position='100' value='QRY_A19' description='A19'/>
+   <Enumerate position='101' value='QRY_PC4' description='PC4, PC9, PCE, PCK'/>
+   <Enumerate position='102' value='QRY_Q01' description='Q01'/>
+   <Enumerate position='103' value='QRY_Q02' description='Q02'/>
+   <Enumerate position='104' value='QBP_Q21' description='Q21, Q22, Q23, Q24, Q25'/>
+   <Enumerate position='105' value='QRY_R02' description='R02'/>
+   <Enumerate position='106' value='QRY_T12' description='T12'/>
+   <Enumerate position='107' value='QSB_Q16' description='Q16'/>
+   <Enumerate position='108' value='QVR_Q17' description='Q17'/>
+   <Enumerate position='109' value='RAR_RAR' description='RAR'/>
+   <Enumerate position='110' value='RAS_O17' description='O17'/>
+   <Enumerate position='111' value='RCI_I05' description='I05'/>
+   <Enumerate position='112' value='RCL_I06' description='I06'/>
+   <Enumerate position='113' value='RDE_O11' description='O11'/>
+   <Enumerate position='114' value='RDR_RDR' description='RDR'/>
+   <Enumerate position='115' value='RDS_O13' description='O13'/>
+   <Enumerate position='116' value='REF_I12' description='I12, I13, I14, I15'/>
+   <Enumerate position='117' value='RER_RER' description='RER'/>
+   <Enumerate position='118' value='RGR_RGR' description='RGR'/>
+   <Enumerate position='119' value='RGV_O15' description='O15'/>
+   <Enumerate position='120' value='ROR_ROR' description='ROR'/>
+   <Enumerate position='121' value='RPA_I08' description='I08, I09. I10, 1II'/>
+   <Enumerate position='122' value='RPI_I01' description='I01, I04'/>
+   <Enumerate position='123' value='RPL_I02' description='I02'/>
+   <Enumerate position='124' value='RPR_I03' description='I03'/>
+   <Enumerate position='125' value='RQA_I08' description='I08, I09, I10, I11'/>
+   <Enumerate position='126' value='RQC_I05' description='I05, I06'/>
+   <Enumerate position='127' value='RQI_I01' description='I01, I02, I03, I07'/>
+   <Enumerate position='128' value='RQP_I04' description='I04'/>
+   <Enumerate position='129' value='RQQ_Q09' description='Q09'/>
+   <Enumerate position='130' value='RRA_O18' description='O18'/>
+   <Enumerate position='131' value='RRD_O14' description='O14'/>
+   <Enumerate position='132' value='RRE_O12' description='O12'/>
+   <Enumerate position='133' value='RRG_O16' description='O16'/>
+   <Enumerate position='134' value='RRI_I12' description='I12, I13, I14, I15'/>
+   <Enumerate position='135' value='RSP_K21' description='K21'/>
+   <Enumerate position='136' value='RSP_K22' description='K22'/>
+   <Enumerate position='137' value='RSP_K23' description='K23, K24'/>
+   <Enumerate position='138' value='SIU_S12' description='S12, S13, S14, S15, S16, S17, S18, S19, S20, S21, S22, S23, S24, S26'/>
+   <Enumerate position='139' value='SPQ_Q08' description='Q08'/>
+   <Enumerate position='140' value='SQM_S25' description='S25'/>
+   <Enumerate position='141' value='SQR_S25' description='S25'/>
+   <Enumerate position='142' value='SRM_S01' description='S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11'/>
+   <Enumerate position='143' value='SRR_S01' description='S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11'/>
+   <Enumerate position='144' value='SSR_U04' description='U04'/>
+   <Enumerate position='145' value='SSU_U03' description='U03'/>
+   <Enumerate position='146' value='SUR_P09' description='P09'/>
+   <Enumerate position='147' value='TCU_U10' description='U10, U11'/>
+   <Enumerate position='148' value='UDM_Q05' description='Q05'/>
+   <Enumerate position='149' value='VQQ_Q07' description='Q07'/>
+   <Enumerate position='150' value='VXQ_V01' description='V01'/>
+   <Enumerate position='151' value='VXR_V03' description='V03'/>
+   <Enumerate position='152' value='VXU_V04' description='V04'/>
+   <Enumerate position='153' value='VXX_V02' description='V02'/>
+   <Enumerate position='154' value='ADT_A21' description='A21, A22, A23, A25, A26, A27, A29, A32, A33'/>
+   <Enumerate position='155' value='QBP_Q11' description='Q11'/>
+   <Enumerate position='156' value='QBP_Q13' description='Q13'/>
+   <Enumerate position='157' value='QBP_Q15' description='Q15'/>
+   <Enumerate position='158' value='RTB_K13' description='K13'/>
+   <Enumerate position='159' value='RDY_K15' description='K15'/>
+   <Enumerate position='160' value='TBR_R08' description='R08'/>
+   <Enumerate position='161' value='RPI_I04' description='I04'/>
+   <Enumerate position='162' value='RSP_K24' description='K24'/>
+   <Enumerate position='163' value='RSP_K25' description='K25'/>
+   <Enumerate position='164' value='DSR_P04' description='P04'/>
+   <Enumerate position='165' value='OUL_R21' description='R21'/>
+   <Enumerate position='166' value='ORN_O08' description='O08'/>
+   <Enumerate position='167' value='ORL_O22' description='O22'/>
+   <Enumerate position='168' value='ADT_Z60' description='Z60'/>
+   <Enumerate position='169' value='ORU_Z01' description='Z01'/>
+   <Enumerate position='170' value='MFN_X01' description='X01'/>
+   <Enumerate position='171' value='MFN_Y01' description='Y01'/>
+   <Enumerate position='172' value='RSP_K11' description='K11'/>
+   <Enumerate position='173' value='RSP_X11' description='X11'/>
+   <Enumerate position='174' value='ORU_Z11' description='Z11'/>
+   <Enumerate position='175' value='ORU_Z07' description='Z07'/>
+   <Enumerate position='176' value='ORU_Y11' description='Y11'/>
+   <Enumerate position='177' value='ORU_Z06' description='Z06'/>
+   <Enumerate position='178' value='ORF_Z04' description='Z04'/>
+   <Enumerate position='179' value='ORF_ZY1' description='ZY1'/>
+   <Enumerate position='180' value='ORU_Z10' description='Z10'/>
+   <Enumerate position='181' value='ORF_Y10' description='Y10'/>
+   <Enumerate position='182' value='DFT_P11' description='P11'/>
+   <Enumerate position='183' value='DFT_X03' description='X03'/>
+   <Enumerate position='184' value='RSP_D11' description='D11'/>
+   <Enumerate position='185' value='RSP_F11' description='F11'/>
+   <Enumerate position='186' value='ORU_RX1' description='RX1'/>
+</CodeTable>
+<CodeTable name='Z532' tabletype='1' description='Expanded Yes/No indicator'>
+   <Enumerate position='1' value='NA' description='Not Applicable'/>
+</CodeTable>
+<CodeTable name='Z559' tabletype='1' description='Product/Service Status'>
+   <Enumerate position='1' value='1' description='Identifier '/>
+</CodeTable>
+<CodeTable name='Z562' tabletype='1' description='Processing Consideration Codes'>
+   <Enumerate position='1' value='AA' description='Available on request at provider site'/>
+   <Enumerate position='2' value='BM' description='By mail'/>
+   <Enumerate position='3' value='EL' description='Electronically only'/>
+   <Enumerate position='4' value='EM' description='E-mail'/>
+   <Enumerate position='5' value='FX' description='By fax'/>
+   <Enumerate position='6' value='VO' description='Voice'/>
+</CodeTable>
+<CodeTable name='Z879' tabletype='1' description='Product/Service Code'>
+   <Enumerate position='1' value='1' description='Identifier'/>
+</CodeTable>
 </Category>
 </Document></Export>

@@ -36,8 +36,8 @@ angular.module("app").config(function($routeProvider, $httpProvider) {
         templateUrl : 'templates/generate.html',
         controller : 'MainController',
         resolve: {
-            'cachedItems': function (service) {
-                return service.lookup;
+            'cachedItems': function (lookup_service) {
+                return lookup_service.lookup;
             }
         }
     }).otherwise('views/index.html');

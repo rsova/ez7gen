@@ -34,12 +34,12 @@ class AddedShemaTest < Test::Unit::TestCase
     # to set up fixture information.
   end
 
-  def test_xml1
+  def test_build_added_tables_xml
     # file = File.expand_path('codes.txt', __FILE__).to_s
     arr = []
 
-    # File.readlines('codes.txt').map do |line|
-    File.readlines('codes1.txt').map do |line|
+    File.readlines('Additional Tables with values_v1.1.txt').map do |line|
+    # File.readlines('codes1.txt').map do |line|
       arr<<line.chomp
       # puts line
     end
@@ -50,7 +50,8 @@ class AddedShemaTest < Test::Unit::TestCase
     row = []
     idx = 0
     z.each{|pair|
-      if(pair[0].strip.empty?)
+      # if(pair[0].strip.empty?)
+      if(pair[0].gsub(/[[:space:]]/,'').empty?)
         x << row
         idx= idx + 1
         row = []
