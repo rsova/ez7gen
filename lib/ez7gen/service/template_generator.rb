@@ -69,6 +69,11 @@ class TemplateGenerator
     # elements[@@SET_ID_PIECE] = handle_set_id(segmentName, attributes, idx) || elements[@@SET_ID_PIECE]
 
     #generate segment using elements
+    if(segmentName == 'MSH')
+      attributes.slice!(1)
+      # one = two.first + two.last
+      # attributes.insert(1,one)
+    end
     return HL7::Message::Segment::Default.new(attributes)
   end
 

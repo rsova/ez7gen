@@ -12,6 +12,7 @@
 
 require "ez7gen/version"
 require "ez7gen/message_factory"
+require "ez7gen/msg_error_handler"
 #
 # module Ez7gen
 #   class Generator

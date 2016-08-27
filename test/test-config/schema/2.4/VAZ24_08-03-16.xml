@@ -195,6 +195,7 @@
     <SegmentSubStructure piece='14' description='DATE VETERAN REQUESTED CD EVALUATION' datatype='base:DT' max_length='8' required='O' ifrepeating='0'/>
     <SegmentSubStructure piece='15' description='DATE FACILITY INITIATED REVIEW' datatype='base:DT' max_length='8' required='O' ifrepeating='0'/>
     <SegmentSubStructure piece='16' description='DATE VETERAN WAS NOTIFIED' datatype='base:DT' max_length='8' required='O' ifrepeating='0'/>
+</SegmentStructure>
 <SegmentStructure name='ZCL' description='Outpatient Classification Type'>
     <SegmentSubStructure piece='1' description='Set ID' datatype='base:SI' max_length='4' required='X' ifrepeating='0'/>
     <SegmentSubStructure piece='2' description='Outpatient Classification Type' datatype='base:ID' max_length='2' required='O' ifrepeating='0' codetable='SD008'/>

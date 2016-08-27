@@ -55,6 +55,12 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
         //return filtered;
     };
 
+    //$scope.clearEvent = function ($select) {
+    //    // clear search text
+    //    //$select.search = $select.selected.name;
+    //    $scope.event.selected = $select.selected.name
+    //};
+
     //$scope.groupFilterFn = function (item){
     //    if (item.name[0] >= 'A' && item.name[0] <= 'M')
     //        return 'From A - M';

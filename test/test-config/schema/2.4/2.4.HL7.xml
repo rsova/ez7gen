@@ -8393,12 +8393,10 @@
 				<Enumerate position='14' value='V' description='vorstationär' />
 			</CodeTable>
 			<CodeTable name='5' tabletype='1' description='Race'>
-				<Enumerate position='1' value='1002-5'
-					description='American Indian or Alaska Native' />
+				<Enumerate position='1' value='1002-5' description='American Indian or Alaska Native' />
 				<Enumerate position='2' value='2028-9' description='Asian' />
 				<Enumerate position='3' value='2054-5' description='Black or African American' />
-				<Enumerate position='4' value='2076-8'
-					description='Native Hawaiian or Other Pacific Islander' />
+				<Enumerate position='4' value='2076-8' description='Native Hawaiian or Other Pacific Islander' />
 				<Enumerate position='5' value='2106-3' description='White' />
 				<Enumerate position='6' value='2131-1' description='Other Race' />
 			</CodeTable>
@@ -9769,8 +9767,7 @@
 				<Enumerate position='1' value='DA' description='Drug allergy' />
 				<Enumerate position='2' value='FA' description='Food allergy' />
 				<Enumerate position='3' value='MA' description='Miscellaneous allergy' />
-				<Enumerate position='4' value='MC'
-					description='Miscellaneous contraindication' />
+				<Enumerate position='4' value='MC' description='Miscellaneous contraindication' />
 				<Enumerate position='5' value='EA' description='Environmental Allergy' />
 				<Enumerate position='6' value='AA' description='Animal Allergy' />
 				<Enumerate position='7' value='PA' description='Plant Allergy' />
@@ -11856,13 +11853,10 @@
 					description='No suggested values defined' />
 			</CodeTable>
 			<CodeTable name='301' tabletype='2' description='Universal ID type'>
-				<Enumerate position='1' value='DNS'
-					description='An Internet dotted name. Either in ASCII or as integers' />
+				<Enumerate position='1' value='DNS' description='An Internet dotted name. Either in ASCII or as integers' />
 				<Enumerate position='2' value='GUID' description='Same as UUID.' />
-				<Enumerate position='3' value='HCD'
-					description='The CEN Healthcare Coding Scheme Designator. (Identifiers used in DICOM follow this assignment scheme.)' />
-				<Enumerate position='4' value='HL7'
-					description='Reserved for future HL7 registration schemes' />
+				<Enumerate position='3' value='HCD' description='The CEN Healthcare Coding Scheme Designator. (Identifiers used in DICOM follow this assignment scheme.)' />
+				<Enumerate position='4' value='HL7' description='Reserved for future HL7 registration schemes' />
 				<Enumerate position='5' value='ISO'
 					description='An International Standards Organization Object Identifier' />
 				<Enumerate position='6' value='L,M,N'

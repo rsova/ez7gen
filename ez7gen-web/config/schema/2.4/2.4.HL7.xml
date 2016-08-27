@@ -8393,12 +8393,10 @@
 				<Enumerate position='14' value='V' description='vorstationär' />
 			</CodeTable>
 			<CodeTable name='5' tabletype='1' description='Race'>
-				<Enumerate position='1' value='1002-5'
-					description='American Indian or Alaska Native' />
+				<Enumerate position='1' value='1002-5' description='American Indian or Alaska Native' />
 				<Enumerate position='2' value='2028-9' description='Asian' />
 				<Enumerate position='3' value='2054-5' description='Black or African American' />
-				<Enumerate position='4' value='2076-8'
-					description='Native Hawaiian or Other Pacific Islander' />
+				<Enumerate position='4' value='2076-8' description='Native Hawaiian or Other Pacific Islander' />
 				<Enumerate position='5' value='2106-3' description='White' />
 				<Enumerate position='6' value='2131-1' description='Other Race' />
 			</CodeTable>
@@ -9768,8 +9766,7 @@
 				<Enumerate position='1' value='DA' description='Drug allergy' />
 				<Enumerate position='2' value='FA' description='Food allergy' />
 				<Enumerate position='3' value='MA' description='Miscellaneous allergy' />
-				<Enumerate position='4' value='MC'
-					description='Miscellaneous contraindication' />
+				<Enumerate position='4' value='MC' description='Miscellaneous contraindication' />
 				<Enumerate position='5' value='EA' description='Environmental Allergy' />
 				<Enumerate position='6' value='AA' description='Animal Allergy' />
 				<Enumerate position='7' value='PA' description='Plant Allergy' />
@@ -12875,23 +12872,18 @@
 				<Enumerate position='2' value='M' description='Modified Subscription' />
 			</CodeTable>
 			<CodeTable name='396' tabletype='1' description='Coding System'>
-				<Enumerate position='1' value='99zzz or L'
-					description='Local general code (where z is an alphanumeric character)' />
-				<Enumerate position='2' value='ACR'
-					description='American College of Radiology finding codes' />
+				<Enumerate position='1' value='99zzz or L' description='Local general code (where z is an alphanumeric character)' />
+				<Enumerate position='2' value='ACR' description='American College of Radiology finding codes' />
 				<Enumerate position='3' value='ART' description='WHO Adverse Reaction Terms' />
-				<Enumerate position='4' value='AS4'
-					description='ASTM E1238/ E1467 Universal' />
+				<Enumerate position='4' value='AS4' description='ASTM E1238/ E1467 Universal' />
 				<Enumerate position='5' value='AS4E' description='AS4 Neurophysiology Codes' />
-				<Enumerate position='6' value='ATC'
-					description='American Type Culture Collection' />
+				<Enumerate position='6' value='ATC' description='American Type Culture Collection' />
 				<Enumerate position='7' value='C4' description='CPT-4' />
 				<Enumerate position='8' value='C5' description='CPT-5' />
 				<Enumerate position='9' value='CAS' description='Chemical abstract codes' />
 				<Enumerate position='10' value='CD2' description='CDT-2 Codes' />
 				<Enumerate position='11' value='CDCA' description='CDC Analyte Codes' />
-				<Enumerate position='12' value='CDCM'
-					description='CDC Methods/Instruments Codes' />
+				<Enumerate position='12' value='CDCM' description='CDC Methods/Instruments Codes' />
 				<Enumerate position='13' value='CDS' description='CDC Surveillance' />
 				<Enumerate position='14' value='CE' description='CEN ECG diagnostic codes' />
 				<Enumerate position='15' value='CLP' description='CLIP' />
@@ -12904,81 +12896,59 @@
 				<Enumerate position='22' value='E' description='EUCLIDES' />
 				<Enumerate position='23' value='E5' description='Euclides quantity codes' />
 				<Enumerate position='24' value='E6' description='Euclides Lab method codes' />
-				<Enumerate position='25' value='E7'
-					description='Euclides Lab equipment codes' />
+				<Enumerate position='25' value='E7' description='Euclides Lab equipment codes' />
 				<Enumerate position='26' value='ENZC' description='Enzyme Codes' />
 				<Enumerate position='27' value='FDDC' description='First DataBank Drug Codes' />
-				<Enumerate position='28' value='FDDX'
-					description='First DataBank Diagnostic Codes' />
+				<Enumerate position='28' value='FDDX' description='First DataBank Diagnostic Codes' />
 				<Enumerate position='29' value='FDK' description='FDA K10' />
 				<Enumerate position='30' value='HB' description='HIBCC' />
-				<Enumerate position='31' value='HCPCS'
-					description='HCFA Common Procedure Coding System' />
+				<Enumerate position='31' value='HCPCS' description='HCFA Common Procedure Coding System' />
 				<Enumerate position='32' value='HHC' description='Home Health Care' />
 				<Enumerate position='33' value='HI' description='Health Outcomes' />
-				<Enumerate position='34' value='HL7nnnn'
-					description='HL7 Defined Codes where nnnn is the HL7 table number' />
-				<Enumerate position='35' value='HPC'
-					description='HCFA Procedure Codes (HCPCS)' />
+				<Enumerate position='34' value='HL7nnnn' description='HL7 Defined Codes where nnnn is the HL7 table number' />
+				<Enumerate position='35' value='HPC' description='HCFA Procedure Codes (HCPCS)' />
 				<Enumerate position='36' value='I10' description='ICD-10' />
 				<Enumerate position='37' value='I10P' description='ICD-10 Procedure Codes' />
 				<Enumerate position='38' value='I9' description='ICD9' />
 				<Enumerate position='39' value='I9C' description='ICD-9CM' />
 				<Enumerate position='40' value='IBT' description='ISBT' />
 				<Enumerate position='41' value='IC2' description='ICHPPC-2' />
-				<Enumerate position='42' value='ICDO'
-					description='International Classification of Diseases for Oncology' />
+				<Enumerate position='42' value='ICDO' description='International Classification of Diseases for Oncology' />
 				<Enumerate position='43' value='ICS' description='ICCS' />
-				<Enumerate position='44' value='ICSD'
-					description='International Classification of Sleep Disorders' />
-				<Enumerate position='45' value='ISOnnnn'
-					description='ISO Defined Codes where nnnn is the ISO table number' />
+				<Enumerate position='44' value='ICSD' description='International Classification of Sleep Disorders' />
+				<Enumerate position='45' value='ISOnnnn' description='ISO Defined Codes where nnnn is the ISO table number' />
 				<Enumerate position='46' value='IUPP' description='IUPAC/IFCC Property Codes' />
-				<Enumerate position='47' value='IUPC'
-					description='IUPAC/IFCC Component Codes' />
+				<Enumerate position='47' value='IUPC' description='IUPAC/IFCC Component Codes' />
 				<Enumerate position='48' value='JC8' description='Japanese Chemistry' />
 				<Enumerate position='49' value='LB' description='Local billing code' />
-				<Enumerate position='50' value='LN'
-					description='Logical Observation Identifier Names and Codes (LOINC(r))' />
+				<Enumerate position='50' value='LN' description='Logical Observation Identifier Names and Codes (LOINC(r))' />
 				<Enumerate position='51' value='MCD' description='Medicaid' />
 				<Enumerate position='52' value='MCR' description='Medicare' />
 				<Enumerate position='53' value='MDDX' description='Medispan Diagnostic Codes' />
-				<Enumerate position='54' value='MEDC'
-					description='Medical Economics Drug Codes' />
-				<Enumerate position='55' value='MEDR'
-					description='Medical Dictionary for Drug Regulatory Affairs (MEDDRA)' />
-				<Enumerate position='56' value='MEDX'
-					description='Medical Economics Diagnostic Codes' />
+				<Enumerate position='54' value='MEDC' description='Medical Economics Drug Codes' />
+				<Enumerate position='55' value='MEDR' description='Medical Dictionary for Drug Regulatory Affairs (MEDDRA)' />
+				<Enumerate position='56' value='MEDX' description='Medical Economics Diagnostic Codes' />
 				<Enumerate position='57' value='MGPI' description='Medispan GPI' />
-				<Enumerate position='58' value='MVX'
-					description='CDC Vaccine Manufacturer Codes' />
+				<Enumerate position='58' value='MVX' description='CDC Vaccine Manufacturer Codes' />
 				<Enumerate position='59' value='NDA' description='NANDA' />
 				<Enumerate position='60' value='NDC' description='National drug codes' />
-				<Enumerate position='61' value='NIC'
-					description='Nursing Interventions Classification' />
-				<Enumerate position='62' value='NPI'
-					description='National Provider Identifier' />
+				<Enumerate position='61' value='NIC' description='Nursing Interventions Classification' />
+				<Enumerate position='62' value='NPI' description='National Provider Identifier' />
 				<Enumerate position='63' value='OHA' description='Omaha System' />
 				<Enumerate position='64' value='POS' description='POS Codes' />
 				<Enumerate position='65' value='RC' description='Read Classification' />
-				<Enumerate position='66' value='SDM'
-					description='SNOMED- DICOM Microglossary' />
-				<Enumerate position='67' value='SNM'
-					description='Systemized Nomenclature of Medicine (SNOMED)' />
+				<Enumerate position='66' value='SDM' description='SNOMED- DICOM Microglossary' />
+				<Enumerate position='67' value='SNM' description='Systemized Nomenclature of Medicine (SNOMED)' />
 				<Enumerate position='68' value='SNM3' description='SNOMED International' />
-				<Enumerate position='69' value='SNT'
-					description='SNOMED topology codes (anatomic sites)' />
+				<Enumerate position='69' value='SNT' description='SNOMED topology codes (anatomic sites)' />
 				<Enumerate position='70' value='UC' description='UCDS' />
 				<Enumerate position='71' value='UMD' description='MDNS' />
 				<Enumerate position='72' value='UML' description='Unified Medical Language' />
 				<Enumerate position='73' value='UPC' description='Universal Product Code' />
 				<Enumerate position='74' value='UPIN' description='UPIN' />
-				<Enumerate position='75' value='W1'
-					description='WHO record # drug codes (6 digit)' />
-				<Enumerate position='76' value='W2'
-					description='WHO record # drug codes (8 digit)' />
-				<Enumerate position='77' value='W4'
-					description='WHO record # code with ASTM extension' />
+				<Enumerate position='75' value='W1' description='WHO record # drug codes (6 digit)' />
+				<Enumerate position='76' value='W2' description='WHO record # drug codes (8 digit)' />
+				<Enumerate position='77' value='W4' description='WHO record # code with ASTM extension' />
 				<Enumerate position='78' value='WC' description='WHO ATC' />
 			</CodeTable>
 			<CodeTable name='397' tabletype='2' description='Sequencing'>

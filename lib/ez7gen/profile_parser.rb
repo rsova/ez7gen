@@ -16,7 +16,7 @@ class ProfileParser
   FILTER_FM =   {filter: 'DFT_P03|DFT_P11|DFT_X03', group: 'Financial Management'}
   FILTER_GEN =  {filter: 'OSR_Q06|OSQ_Q06|ORG_O20|OMG_O19', group: 'General'}
   FILTER_LAB =  {filter: 'ORL_O22|OML_O21|QRY_R02|OUL_R21|ORU_R01', group: 'Laboratory'}
-  FILTER_MSR =  {filter: 'MFN_X01|MFN_X01|MFN_Y01', group: 'Master Files'}
+  FILTER_MSR =  {filter: 'MFN_M01|MFN_X01|MFN_Y01', group: 'Master Files'}
   FILTER_OBS =  {filter: 'OMS_O05', group: 'Order'}
   FILTER_PH =   {filter: 'OMP_|ORP_|RDE_|RRE_|RDS_|RRD_|RGV_|RRG_|RAS_|RRA_', group: 'Pharmacy'}
   # Laboratory:
