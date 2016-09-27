@@ -5,9 +5,9 @@ require 'json'
 require 'rest_client'
 require 'diskcached'
 require 'ez7gen'
-require_relative '../lib/ez7gen/message_factory' # local testing
-require_relative '../lib/ez7gen/profile_parser' # local testing
-require_relative '../lib/ez7gen/msg_error_handler' # local testing
+# require_relative '../lib/ez7gen/message_factory' # local testing
+# require_relative '../lib/ez7gen/profile_parser' # local testing
+# require_relative '../lib/ez7gen/msg_error_handler' # local testing
 
 class MyApp < Sinatra::Application
 
@@ -44,12 +44,6 @@ class MyApp < Sinatra::Application
     content_type :json
     { version: Ez7gen::VERSION}.to_json
   end
-
-
-
- get '/pulse' do
-    # vs = cache_lookup('version_store')
- end
 
   post '/generate/' do
     begin
@@ -88,7 +82,7 @@ class MyApp < Sinatra::Application
       payload = params['hl7']['message']
       puts payload
       @url = @@URLS[version]
-      # @resp = RestClient.post(@url, payload.gsub!("\n","\r")).chomp()
+      @resp = RestClient.post(@url, payload.gsub!("\n","\r")).chomp()
         # { message: resp}.to_json
 #       @resp = "MSH|^~\&|EnsembleHL7|ISC|404|808|201607162206||ACK^A05|218|P|2.4|936
 # MSA|AE|218
@@ -135,26 +129,12 @@ class MyApp < Sinatra::Application
       }
 
       versions_to_client = {standards: std_arr}
-      # pth = File.join(File.dirname(__FILE__), "v_items_mock.json")
-      # txt = File.read(pth)
-      # versions_to_client = JSON.parse(txt)
-      # versions_to_client.to_json
-
       # p event_list
       p 'in lookup'
     rescue => e
         puts e
     end
     versions_to_client.to_json
-     # items = {standards:[
-     #     {std:'2.4',
-     #      versions:[{'name'=> '2.4', 'code'=> '2.4', 'desc'=>'Base'},{'name' =>'VAZ 2.4', 'code'=> 'vaz2.4', 'desc'=>'2.4 schema with VA defined tables and Z segments'}],
-     #      events: {'2.4' => event_list['2.4'], 'vaz2.4' => event_list['vaz2.4']}
-     #     },
-     #     {std:'2.5', versions:[], events:[]}
-     # ]}
-     # items.to_json
-
   end
 
   # error do

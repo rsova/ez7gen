@@ -30,9 +30,10 @@
         </div>
 
         <div class="col-md-6">
-            <ui-select ng-model="event.selected" theme="selectize">
+            <ui-select ng-model="event.selected" ng-disabled="disabled" on-select="clearEvent($select)">
             <!--<ui-select ng-model="event.selected" on-select="clearEvent($select)">-->
-                <ui-select-match placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>
+                <!--<ui-select-match allow-clear="true" placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>-->
+                <ui-select-match allow-clear="true" placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>
                 <ui-select-choices group-by="'group'" group-filter="groupFilterFn" repeat="event in events | filter: $select.search">
                 <!--<ui-select-choices group-by="'group'"  repeat="event in events | filter: $select.search">-->
                     <span ng-bind-html="event.name | highlight: $select.search"></span>

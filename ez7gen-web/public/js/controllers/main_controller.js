@@ -55,11 +55,11 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
         //return filtered;
     };
 
-    //$scope.clearEvent = function ($select) {
-    //    // clear search text
-    //    //$select.search = $select.selected.name;
-    //    $scope.event.selected = $select.selected.name
-    //};
+    $scope.clearEvent = function ($select) {
+        // clear search text
+        //$select.search = $select.selected.name;
+        $scope.event.selected = $select.selected
+    };
 
     //$scope.groupFilterFn = function (item){
     //    if (item.name[0] >= 'A' && item.name[0] <= 'M')
@@ -74,6 +74,8 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
         //this is a quick way of making change that model 'dirty'
         //forces select control for message types to see the change in the model and fire the filter function
         $scope.events[0] = cloneObject($scope.events[0])
+        //return $scope.events
+        $scope.picked = undefined;
     }
 
     //method call to the server to generate hl7

@@ -1,16 +1,24 @@
 #rvm gemset create ez7gen -- (rvm gemset list)
 # bundle install -- (run from api direcory, after adding/changing gems)
 # gem list -- (to list gems in current gemset)
-source 'http://rubygems.org'
+# source 'http://rubygems.org'
+# gem 'json', '1.7.7'
+# gem 'rest-client', '1.6.7'
+# gem 'sinatra', '1.4.5'
+# gem 'ruby-hl7', '1.1.0'
+# gem 'ez7gen'
+#
+# group :development do
+#   gem 'rerun','0.10.0'
+#   gem 'thin', '1.6.2'
+# end
 
+source 'https://rubygems.org'
 gem 'json', '1.7.7'
 gem 'rest-client', '1.6.7'
-gem 'sinatra', '1.4.5'
-gem 'ruby-hl7', '1.1.0'
-gem 'ez7gen'
-
-group :development do
-  gem 'rerun','0.10.0'
-  gem 'thin', '1.6.2'
-end
-
+gem 'sinatra',  '1.4.5'
+gem 'ruby-hl7', '~> 1.1.1'
+gem 'nokogiri', '~>1.6.6.0'
+gem 'ox', '~>2.2.0'
+gem 'test-unit', '~>3.1.5'
+gem 'diskcached'

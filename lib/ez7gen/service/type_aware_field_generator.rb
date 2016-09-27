@@ -973,11 +973,23 @@ class TypeAwareFieldGenerator
     return '' if(!generate?(map, force))
 
     # <segment field name (ST)>
+    ST(reset_map_attr(map,:codetable, '440'),true)
     # <HL7 data type (ID)>
     # <maximum column width (NM)>
     # Example: |@PID.5.1^ST^20|"
     #TBD
-    ''
+    # ''
+  end
+
+  # RDF	Table row definition
+  def RDT(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!generate?(map, force))
+    val = []
+    # <parameter class (IS)>
+    # randomly generated 3-digit number
+    # v << generate_length_bound_id(@@REQ_LEN_3_DGTS)
+    ID({},true)
   end
 
   # Reference range
@@ -1000,7 +1012,8 @@ class TypeAwareFieldGenerator
     #check if the field is optional and randomly generate it of skip
     return '' if(!generate?(map, force))
     # <repeat pattern (IS)>
-    IS(map,true)
+    # IS(map,true)
+    IS(reset_map_attr(map, :codetable, '335'), true)
     # <explicit time interval (ST)>
   end
 
@@ -1048,7 +1061,8 @@ class TypeAwareFieldGenerator
     # <parameter class (IS)>
     val<<''
     # <parameter value (ST)>
-    val<<ST(map,true)
+    # val<<ST(map,true)
+    val<<ST(reset_map_attr(map,:codetable, '294'),true)
     val.join(@@HAT)
   end
 

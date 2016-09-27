@@ -4,7 +4,7 @@ app.config(function(uiSelectConfig, toastrConfig) {
     //editableOptions.theme = 'bs3';
 
     uiSelectConfig.theme = 'selectize';
-    uiSelectConfig.resetSearchInput = false;
+    uiSelectConfig.resetSearchInput = true;
     uiSelectConfig.appendToBody = true;
 
     angular.extend(toastrConfig, {
@@ -21,7 +21,7 @@ app.config(function(uiSelectConfig, toastrConfig) {
         showEasing: 'swing',
         hideEasing: 'linear',
         showMethod: 'fadeIn',
-        hideMethod: 'fadeOut'
+        hideMethod: 'fadeOut',
     });
 });
 
