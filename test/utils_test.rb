@@ -83,14 +83,15 @@ class UtilsTest < Test::Unit::TestCase
 		assert_equal(0, actual)
 	end
 
-	def test_hasSpecialCh
+	def test_has_html_encoded_ch
 		str = 'Degeneration & necrosis'
-		assert has_special_ch?(str)
+		assert has_html_encoded_ch?(str)
     str = 'Approved by the PSRO/UR as billed'
-    assert_false has_special_ch?(str)
+    assert_false has_html_encoded_ch?(str)
     str = 'Degeneration &amp; necrosis'
-    assert has_special_ch?(str)
-
+    assert has_html_encoded_ch?(str)
+		str = 'L&amp;I'
+		assert has_html_encoded_ch?(str)
   end
 
 end

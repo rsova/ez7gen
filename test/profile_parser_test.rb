@@ -164,6 +164,17 @@ class ProfileParserTest < Test::Unit::TestCase
     assert actual.include?("Carcinoma-unspecified type")
     assert_false actual.include?('Degeneration &amp; necrosise')
 		assert_equal 12, attributes.size
+  end
+
+	def test_codeTable_special_ch_2
+    parser = ProfileParser.new(@attrs)
+    # now look in val and description - no 'L&amp;I'
+		attributes = parser.get_code_table("338")
+		# p attributes.*[:description]
+    actual = attributes.collect{|a| a[:value]}
+    # p actual
+    assert_false actual.include?('L&I')#('L&amp;I')
+		assert_equal 10, attributes.size
 	end
 
   # def test_getSegments

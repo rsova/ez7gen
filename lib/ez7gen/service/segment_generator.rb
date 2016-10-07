@@ -179,10 +179,15 @@ class SegmentGenerator
   def add_field(attributes)
 
     type = get_type_by_name(attributes[:datatype])
+
+    if(blank?(type)) #safe handle missing data typetype
+      attributes[:datatype] = 'ID'
+      type = get_type_by_name(attributes[:datatype])
+    end
+
     fieldGenerator= @fieldGenerators[type]
     dt = get_name_without_base(attributes[:datatype])
 
-    # dt = attributes[:datatype]
     # puts Utils.blank?(dt)?'~~~~~~~~~> data type is missing': dt
     if(['CK'].include?(dt))
       return nil

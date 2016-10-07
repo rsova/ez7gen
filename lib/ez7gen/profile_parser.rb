@@ -19,25 +19,6 @@ class ProfileParser
   FILTER_MSR =  {filter: 'MFN_M01|MFN_X01|MFN_Y01', group: 'Master Files'}
   FILTER_OBS =  {filter: 'OMS_O05', group: 'Order'}
   FILTER_PH =   {filter: 'OMP_|ORP_|RDE_|RRE_|RDS_|RRD_|RGV_|RRG_|RAS_|RRA_', group: 'Pharmacy'}
-  # Laboratory:
-  #     1.    ORL_O22
-  # Observation Reporting:
-  #                 2.    ORF_Z07
-  # 3.    ORF_Z10
-  # 4.    ORF_Z11
-  # Order:
-  #     5.    OMS_O05
-  # Financial Management:
-  #               6.    DFT_P03
-  # 7.    DFT_P11
-  # 8.    DFT_X03
-  # Patient Administration:
-  #             9.    ADT_A60
-  # Master Files:
-  #            10.                    MFN_M01
-  # 11.                    MFN_X01
-  # 12.                    MFN_Y01
-
 
   # attr_accessor :std; :version; :event; :xml; :version_store;
   # @@HL7_VERSIONS = {'2.4'=>'2.4/2.4-schema.xml', 'vaz2.4'=>'vaz2.4/vaz2.4-schema.xml'}
@@ -162,9 +143,10 @@ class ProfileParser
       attributes = lookup_code_table(tableName, @added)
     end
 
-    # Per Galina, code table values with special characters.
-    # Ensemble validation fails.
-    attributes.select!{|a| !has_special_ch?(a[:description])}
+    # Per Galina, code table values with special characters. Ensemble validation fails.
+    # Filter out codes which have html encoded characters - Ensemble has problem handling it.
+    # a bit of awkward logic - if either description or value has html encoded chars, remove the item
+    attributes.select!{|a| (has_html_encoded_ch?(a[:description]) || has_html_encoded_ch?(a[:value]))?false:true }
 
     return attributes
   end

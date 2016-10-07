@@ -69,7 +69,8 @@ class MessageFactory
 
     # msh segment configured by hand, due to many requirements that only apply for this segment
     hl7Msg = HL7::Message.new
-    hl7Msg << segmentGenerator.init_msh()
+    hl7Msg << segmentGenerator.init_msh
+    # hl7Msg << segmentGenerator.init_msh(is_base?(@version))
 
     #iterate over selected segments and build the entire message
     segments.each{ |segment|

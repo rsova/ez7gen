@@ -7,8 +7,9 @@ module Utils
   DATA_LOOKUP_MIS = {:position => '1', :value => '...', :description => 'No suggested values defined'}
 
   #special = "?<>',?[]}{=-)(*&^%$#`~{}"
-  @@special = "?<>[]}{)(&^%$#`~{}" # subset to use for now
-  @@regex = /[#{@@special.gsub(/./){|char| "\\#{char}"}}]/
+  #@@special = "?<>[]}{)(&^%$#`~{}" # subset to use for now
+  @@special = "&" # it looks like only html encoded characters are problem, ex: Pathology (gross &amp; histopath, not surgical) tbl 74
+  @@html_encoded_regex = /[#{@@special.gsub(/./){|char| "\\#{char}"}}]/
 
 
 
@@ -58,8 +59,8 @@ module Utils
   end
 
   # check if string has special characters
-  def has_special_ch?(str)
-    (str =~ @@regex)?true:false
+  def has_html_encoded_ch?(str)
+    (str =~ @@html_encoded_regex)?true:false
   end
 end
 

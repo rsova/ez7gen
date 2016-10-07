@@ -111,6 +111,11 @@ class TypeAwareFieldGenerator
     #check if the field is optional and randomly generate it of skip
     return '' if(!generate?(map, force))
 
+    if(map[:max_length] && map[:max_length].to_i <3)
+      # if CE Element has lenght of 2 or less use only value
+      return ID(map, true)
+    end
+
     #TODO: Refactor this method
     if (map[:description] == 'Role Action Reason' || map[:description] == 'Species Code' || map[:description] == 'Breed Code' || map[:description] == 'Production Class Code')
       return '' #Per requirement, PID.35 – PID.38
@@ -1074,6 +1079,8 @@ class TypeAwareFieldGenerator
 		#SI pt = (SI) map.fld
 		#pt.setValue(generate_length_bound_id((map.max_length)?map.max_length.toInteger():1))
     len = (!blank?(map[:max_length]))?map[:max_length].to_i : 1
+    # per Galina: - the set IDs should be max 4 digits, please remove all the zeros.
+    len = (len >4 )? 4 :len
     generate_length_bound_id(len)
   end
 
@@ -1239,7 +1246,7 @@ class TypeAwareFieldGenerator
     # <start day range (ID)>
     val << ID(map,true)
     # <end day range (ID)>
-    val << ID({},true)
+    val << ID(map,true)
     # <start hour range (TM)>
     # <end hour range (TM)>
     val.join(@@HAT)
