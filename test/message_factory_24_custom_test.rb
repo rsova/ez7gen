@@ -17,7 +17,7 @@ class MessageFactoryTemplate24CusotmTest < Test::Unit::TestCase
       [
           # {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4.HL7.xml.bkp"}]},
           # {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ24CustomMSH062216.xml"}]},
-          {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ24_08-03-16.xml"}]},
+          {:std=>"2.4", :path=>"../test/test-config/schema/2.4", :profiles=>[{:doc=>"2.4.HL7", :name=>"2.4", :std=>"1", :path=>"../test/test-config/schema/2.4/2.4.HL7.xml"}, {:doc=>"VAZ2.4.HL7", :name=>"VAZ2.4", :description=>"2.4 schema with VA defined tables and Z segments", :base=>"2.4", :path=>"../test/test-config/schema/2.4/VAZ2.4_10-12-16.xml"}]},
          # {:std=>"2.5", :path=>"../test/test-config/schema/2.5", :profiles=>[{:doc=>"2.5.HL7", :name=>"2.5", :std=>"1", :path=>"../test/test-config/schema/2.5/2.5.HL7.xml"}, {:doc=>"TEST2.5.HL7", :name=>"TEST2.5", :description=>"2.5 mockup schema for testing", :base=>"2.4", :path=>"../test/test-config/schema/2.5/VAZ2.5.HL7.xml"}]}
       ]
 
@@ -594,5 +594,33 @@ class MessageFactoryTemplate24CusotmTest < Test::Unit::TestCase
     #   # assert_equal 'IAM', hl7[3].e0
     # end
 
+  #
+  def test_problem
+
+      hl7 = MessageFactory.new({std: '2.4', version: ver, event:e, version_store: @@VS, loadfactor: 1}).generate
+      puts hl7
+    end
+
+  def test_all
+    all = ['ADT_A60', 'DFT_P03', 'DFT_P11', 'DFT_X03', 'MFN_M01', 'MFN_X01', 'MFN_Y01', 'OMS_O05', 'ORF_Z07', 'ORF_Z10', 'ORF_Z11', 'ORM_O01', 'ORU_R01', 'ORU_RX1', 'ORU_Y07', 'ORU_Y11', 'ORU_Z01', 'ORU_Z06', 'ORU_Z07', 'ORU_Z10', 'ORU_Z11', 'QBP_G11', 'QBP_Q11', 'QBP_Q13', 'REF_I12', 'REF_I13', 'REF_I14', 'RPA_I08', 'RQA_I08', 'RRI_I12', 'RRI_I13', 'RRI_I14', 'RSP_D11', 'RSP_F11', 'RSP_K11', 'RSP_X11', 'RTB_K13']
+    ver='VAZ2.4.HL7'
+    errors = []
+    #["ORU_Y07", "ORU_Z06", "QBP_G11"]
+
+    all.each{|e|
+      begin
+        puts "\n------------------#{e}------------------\n"
+        hl7 = MessageFactory.new({std: '2.4', version: ver, event:e, version_store: @@VS, loadfactor: 1}).generate
+        puts hl7
+        saveMsg(e+'-'+Ez7gen::VERSION, hl7, ver)
+      rescue Exception =>z
+        errors << e
+      end
+    }
+    p errors
+    puts "errors size: #{errors.size}"
+
+
+  end
 
   end
