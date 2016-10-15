@@ -485,7 +485,7 @@ class SegmentGeneratorTest < Test::Unit::TestCase
   def test_ZMH
 
     vs_alt = @@VS.clone()
-    vs_alt[0][:profiles][1][:path] = "../test/test-config/schema/2.4/VAZ2.4HL7_N.xml"
+    vs_alt[0][:profiles][1][:path] = "../test/test-config/schema/2.4/VAZ2.4.HL7.xml"
     @attrs = {std: '2.4', version: 'VAZ2.4.HL7', event: 'ADT_A01', version_store: vs_alt}
     bp = ProfileParser.new(@attrs)
 

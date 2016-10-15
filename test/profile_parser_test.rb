@@ -205,11 +205,11 @@ class ProfileParserTest < Test::Unit::TestCase
     # parser = ProfileParser.new({version: 'vaz2.4', event: 'ADT_A01'})
 		results =  parser.lookup_message_types()
 		puts results
-		assert_equal 2, results.size
+		assert_equal 48, results.size
 
     results =  parser.lookup_message_types({filter: 'ADT_|QBP_|RSP_', group:'Admission'})
     puts results
-    assert_equal 1, results.size
+    assert_equal 10, results.size
   end
 
   def test_lookupMessageTypes_24_all
@@ -340,14 +340,6 @@ class ProfileParserTest < Test::Unit::TestCase
   # use test configurations for lookup methods to run throug different scenarios
   class ProfileParserStub < ProfileParser
 
-    # def initialize(args)
-    # #   args.each do |k,v|
-    # #     instance_variable_set("@#{k}", v) unless v.nil?
-    # # end
-    # #
-    #   super.initialize(args)
-    # end
-
     def self.get_schema_location
       '../test/test-config/schema/'
     end
@@ -387,7 +379,61 @@ class ProfileParserTest < Test::Unit::TestCase
 
     versions_to_client = {standards: coll}
     puts versions_to_client
-	end
+  end
+
+  def test_lookup_versions_using_rules
+
+    versions = ProfileParserStub.lookup_versions()
+    assert_equal 2, versions.size
+
+    coll=[]
+    versions.each{ |version|
+      ver_attrs={}
+      # standard
+      ver_attrs[:std] = version[:std]
+      #versions
+      ver_attrs[:versions] = version[:profiles].inject([]){|col,p| col << {name: p[:doc], code: p[:name], desc: (p[:std])? 'Base': p[:description]}}
+
+
+        evn_attrs = version[:profiles].inject({}){|h,p|
+          filter_map = nil
+          exclusions = ProfileParserStub.getExclusionFilter(p[:name], p[:doc])
+          h.merge({p[:name] => ProfileParserStub.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)})
+        }
+
+      # filter = ProfileParserStub.getExclusionFilter(p[:name], p[:doc]);
+      # if(p[:name]=='2.4' &&  p[:doc]=='2.4.HL7')
+      #   assert_equal 137, filter.size
+      # elsif
+      # assert_equal 0, filter.size
+      # end
+
+      ver_attrs[:events] = evn_attrs
+
+      # add map with versions and events for each standard to the array
+      coll << ver_attrs
+    }
+
+    versions_to_client = {standards: coll}
+    puts versions_to_client
+  end
+
+
+  def test_getExclusionFilter
+    std = '2.4'
+    version = "2.4.HL7"
+    filter = ProfileParserStub.getExclusionFilter(std, version);
+    puts filter
+    assert_equal 137, filter.size
+  end
+
+  def test_getExclusionFilter_no_rules_file
+    std = '2.4'
+    version = "Bla-bla"
+    filter = ProfileParserStub.getExclusionFilter(std, version);
+    puts filter
+    assert_equal 0, filter.size
+  end
 
   def test_lookup_message_types_24_Pharm
     @attrs.delete(:event)# no events passed to lookup all event types
@@ -436,6 +482,7 @@ class ProfileParserTest < Test::Unit::TestCase
     assert_equal({:name=>"RSP_K24", :code=>"RSP - Allocate identifiers response", :group=>"Admissions"}, results[75])
 
   end
+
 
   # def test_processSegments_pharm
   #   # first pass

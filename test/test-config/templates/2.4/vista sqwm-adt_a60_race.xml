@@ -602,12 +602,12 @@ ZZZZ]
 <Field Name="Race" Usage="RE" Min="0" Max="1" Datatype="CE" Length="250" Table="0005" ItemNo="00113">
 <Reference>15.4.6.27</Reference>
 <Component Name="identifier" Usage="RE" Datatype="ST" Length="10" Table="0005">
-<!--<DataValues ExValue="2054-5-SLF" />-->
+<DataValues ExValue="2054-5-SLF" />
 </Component>
 <Component Name="text" Usage="X" Datatype="ST">
 </Component>
 <Component Name="name of coding system" Usage="RE" Datatype="IS" Length="6" Table="0396">
-<!--<DataValues ExValue="UPC" />-->
+<DataValues ExValue="UPC" />
 </Component>
 <Component Name="alternate identifier" Usage="RE" Datatype="ST" Length="6">
 <DataValues ExValue="2054-5" />

@@ -91,6 +91,21 @@ class ProfileParser
     }
   end
 
+  def self.getExclusionFilter(std, version)
+    path = self.get_schema_location
+    rules_file = "#{path}#{std}/rules/#{version}.yml"
+
+    if File.exists? (rules_file)
+      yml = YAML.load_file rules_file
+      all = []
+      all += (yml['exclusion.errors'])?yml['exclusion.errors']:[]
+      all += (yml['exclusion.blacklist'])?yml['exclusion.blacklist']:[]
+    else
+      []
+    end
+
+  end
+
   # find message structure by event type
   def get_message_definition
     msg_type = get_message_structure(@event)
@@ -165,12 +180,15 @@ class ProfileParser
     #values.each {|it| puts it}
   end
 
-  def lookup_message_types(map=nil)
+  def lookup_message_types(map=nil, exclusion=nil)
     # match everything if no filter defined
     map ||= @@FILTER_ALL
 
     filter = map[:filter]
     messageTypeColl = @xml.Export.Document.Category.locate('MessageType').select{|it| it.attributes[:name] =~/#{filter}/}.map!{|it| it.attributes[:name]}
+    if(!blank?(exclusion))
+      messageTypeColl = messageTypeColl - exclusion
+    end
     messages = messageTypeColl.map{ |el|
       event = (el.split('_')).last
        {
