@@ -10,9 +10,9 @@
             <!--<p>Selected: {{event.selected.name}}</p>-->
             <!--<ui-select ng-model="std.selected" theme="select2" ng-disabled="disabled" style="width: 150px;" on-select="setVersions(std.selected)">-->
             <!--<ui-select ng-model="std.selected" theme="selectize"  on-select="setVersions(std.selected)"  style="color: #555">-->
-            <ui-select ng-model="std.selected"  on-select="setVersions(std.selected)"  style="color: #555">
+            <ui-select ng-model="std.selected"  on-select="setVersions(std.selected)">
                 <ui-select-match placeholder="HL7 Standards">{{$select.selected.std}}</ui-select-match>
-                <ui-select-choices repeat="std in standards | filter: $select.search" refresh="setVersions($select.search)" refresh-delay="0">
+                <ui-select-choices repeat="std in standards | filter: $select.search" refresh="setVersios($select.search)" refresh-delay="0">
                     <span ng-bind-html="std.std | highlight: $select.search"></span>
                 </ui-select-choices>
             </ui-select>
@@ -30,12 +30,15 @@
         </div>
 
         <div class="col-md-6">
-            <ui-select ng-model="event.selected" ng-disabled="disabled" on-select="clearEvent($select)">
+            <!--<ui-select ng-model="event.selected" ng-disabled="disabled" on-select="clearEvent($select)">-->
+            <!--<ui-select ng-model="event.selected" ng-disabled="disabled">-->
+            <ui-select ng-model="event.selected">
             <!--<ui-select ng-model="event.selected" on-select="clearEvent($select)">-->
                 <!--<ui-select-match allow-clear="true" placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>-->
-                <ui-select-match allow-clear="true" placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices group-by="'group'" group-filter="groupFilterFn" repeat="event in events | filter: $select.search">
-                <!--<ui-select-choices group-by="'group'"  repeat="event in events | filter: $select.search">-->
+                <ui-select-match placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>
+                <!--<ui-select-choices group-by="'group'" group-filter="groupFilterFn" repeat="event in events | filter: $select.search | limitTo: ($select.search.length <= 2) ? 0 : undefined">-->
+                <!--<ui-select-choices group-by="'group'" group-filter="groupFilterFn" repeat="event in events | filter: $select.search"> | limitTo: ($select.search.length <= 2) ? 0 : undefined-->
+                <ui-select-choices group-by="'group'"  repeat="event in events | filter: $select.search">
                     <span ng-bind-html="event.name | highlight: $select.search"></span>
                     <small ng-bind-html="event.code"></small>
                 </ui-select-choices>
@@ -48,7 +51,7 @@
             <!--<ui-select ng-model="subGroup.selected" theme="selectize" on-select="setSubGroup(subGroup.selected)">-->
             <ui-select ng-model="subGroup.selected" on-select="setSubGroup(subGroup.selected)">
             <ui-select-match placeholder="Event Types">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices repeat="subGroup in subGroups | filter: $select.search">
+                <ui-select-choices repeat="subGroup in subGroups | filter: $select.search ">
                     <span ng-bind-html="subGroup.name | highlight: $select.search"></span>
                     <small ng-bind-html="subGroup.code"></small>
                 </ui-select-choices>

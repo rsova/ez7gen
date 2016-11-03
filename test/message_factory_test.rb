@@ -77,7 +77,8 @@ class MessageFactoryTest < Test::Unit::TestCase
     # MFN_M07, MFN_M09 and MFN_M12
     # e = "MFN_M09" # OM1 missing field 18 /, ()
     # e = 'RRA_O18'
-    e = 'TBR_R08' # RDT
+    # e = 'TBR_R08' # RDT
+    e = "QBP_Q11"
     ver= '2.4.HL7'
     hl7 = MessageFactory.new({std: '2.4', version: ver, event:e, version_store: @@VS, loadfactor: 1}).generate
     puts hl7

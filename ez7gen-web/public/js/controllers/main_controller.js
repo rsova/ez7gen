@@ -104,7 +104,7 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
             method: 'post',
             url: 'http://localhost:4567/validate/',
             //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            data: { version: $scope.version.selected,  hl7: lookup_service.data}
+            data: { std : $scope.std.selected.std, version: $scope.version.selected,  hl7: lookup_service.data}
         }).success(function(data) {
             $scope.response = data;
             $scope.visible = true;

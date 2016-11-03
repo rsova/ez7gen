@@ -1,52 +1,323 @@
-web.install.dir: "/Users/romansova/RubymineProjects/ez7gen/ez7gen-web/"
-person.names.first: [Odysseus,Xander,Jameson,Brian,Yoshio,Connor,Kasper,Macon,Mannix,Cyrus,Jeremy,Channing,Raja,Daniel,Roth,Ezekiel,Martin,Cameron,Elmo,Omar,Holmes,Ulric,Nissim,Colton,Herman,Luke,Thaddeus,Leroy,Baxter,Tanner,Caleb,Salvador,Adrian,Reuben,Ronan,Burton,Kermit,Kareem,Tobias,Cedric,Flynn,Uriel,Barry,Amal,Orson,Arsenio,Vladimir,Thane,Nissim,Alden,Stewart,Plato,Prescott,Xenos,David,Castor,Carson,Brian,Jarrod,Stuart,Herman,Tobias,Lucius,Fitzgerald,Malachi,Theodore,Eaton,Arsenio,Gannon,Burton,Zahir,Caleb,Preston,Ivor,Martin,Aidan,Octavius,Ali,Aristotle,Ivor,Chadwick,Hilel,Octavius,Victor,Noah,Leo,Cameron,Ross,Lionel,Howard,Armand,Solomon,Darius,Edan,Tad,Forrest,Allen,Macon,Kasimir,Brian]
-person.names.last: [Daugherty,Small,Webster,Reilly,Key,Velazquez,Holder,Larson,Watkins,Holden,Davenport,Kirkland,Decker,Pate,Shepherd,Love,Robles,Strong,Mitchell,Burgess,Hewitt,Rush,Watkins,Merritt,Howell,Munoz,Zimmerman,Hammond,Hickman,Wilkinson,Lane,Koch,Hoover,Stevens,Stephens,Woodward,Blanchard,Vinson,Rodriquez,Oneal,Blake,Pennington,Pittman,Mills,Byers,Gilliam,Browning,Thompson,Patrick,Potts,Zimmerman,Larson,Bullock,Rocha,Prince,Kaufman,Obrien,Bauer,Calderon,Vance,Castillo,Flores,Ford,Mcgee,Leon,Mckee,Carver,Hardy,Mcmillan,Strong,Franks,Cooke,Boyer,Meyer,Gates,Madden,William,Riggs,Walker,Rosa,Simmons,Dunlap,Acosta,Espinoza,Beasley,Ramirez,Farrell,Ratliff,Caldwell,Harper,Wiley,Mendoza,Cain,Blankenship,Buck,Marquez,Stevenson,Gates,Carpenter,Fletcher]
-person.suffix : [JR,SR,RET,ESQ]
-person.prefix: [DR,PROF,HON,ATTY]
-dmgr.gender: [M,F]
-address.streetNames: [504 Honey Elk Wynd,7608 Silent Glen,7741 Foggy Pond Jetty,7061 Iron Blossom Ridge,5777 Fallen Panda Expressway]
-address.cities: [Oatmeal,Owl,Dollar Settlement,Saint-Quentin,Ragtown]
-address.states: [TN,MS,TN,MS,GA]
-address.states.all: [AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY]
-address.zips: [37166-9572,38889-6760,37326-6978,39377-7406,39833-8563]
-address.countries: [USA,USA,USA,USA,USA]
-address.phones: [(931)872-7634,(601)110-8688,(731)538-7434,(662)120-6474,(470)446-7282]
-
-
-#job Titles []Accountant, Application Developer, Attorney, Engineer, Dentist,Nurse Practitioner, Paramedic, Pharmacist, Physician] CT1.49 Job Title
-#Person Class Codes 193200000X Multi-specialty,193400000X Single specialty,208D00000X General practice,207R00000X Internal medicine,208600000X Surgery #ROL.9 Provider Type (both the code and the description need to be populated)
-
-#ICD 10 Observation Codes
-#R71.8 Other abnormality of red blood cells,
-#R82.8 Abnormal findings on cytological and histological examination of urine,
-#R81 Glycosuria,
-#R82.99 Other abnormal findings in urine,
-#R79.0 Abnormal level of blood mineral,
-#R03.1 Nonspecific low blood-pressure reading,
-#R78.79 Finding of abnormal level of heavy metals in blood
-
-
-#OBX.3 Observation Identifier (both the code and the description need to be populated)
-#ICD 10 Allergen Codes
+---
+web.install.dir: "/Users/romansova/RubymineProjects/ez7gen/ez7gen-web"
+person.names.first:
+- Odysseus
+- Xander
+- Jameson
+- Brian
+- Yoshio
+- Connor
+- Kasper
+- Macon
+- Mannix
+- Cyrus
+- Jeremy
+- Channing
+- Raja
+- Daniel
+- Roth
+- Ezekiel
+- Martin
+- Cameron
+- Elmo
+- Omar
+- Holmes
+- Ulric
+- Nissim
+- Colton
+- Herman
+- Luke
+- Thaddeus
+- Leroy
+- Baxter
+- Tanner
+- Caleb
+- Salvador
+- Adrian
+- Reuben
+- Ronan
+- Burton
+- Kermit
+- Kareem
+- Tobias
+- Cedric
+- Flynn
+- Uriel
+- Barry
+- Amal
+- Orson
+- Arsenio
+- Vladimir
+- Thane
+- Nissim
+- Alden
+- Stewart
+- Plato
+- Prescott
+- Xenos
+- David
+- Castor
+- Carson
+- Brian
+- Jarrod
+- Stuart
+- Herman
+- Tobias
+- Lucius
+- Fitzgerald
+- Malachi
+- Theodore
+- Eaton
+- Arsenio
+- Gannon
+- Burton
+- Zahir
+- Caleb
+- Preston
+- Ivor
+- Martin
+- Aidan
+- Octavius
+- Ali
+- Aristotle
+- Ivor
+- Chadwick
+- Hilel
+- Octavius
+- Victor
+- Noah
+- Leo
+- Cameron
+- Ross
+- Lionel
+- Howard
+- Armand
+- Solomon
+- Darius
+- Edan
+- Tad
+- Forrest
+- Allen
+- Macon
+- Kasimir
+- Brian
+person.names.last:
+- Daugherty
+- Small
+- Webster
+- Reilly
+- Key
+- Velazquez
+- Holder
+- Larson
+- Watkins
+- Holden
+- Davenport
+- Kirkland
+- Decker
+- Pate
+- Shepherd
+- Love
+- Robles
+- Strong
+- Mitchell
+- Burgess
+- Hewitt
+- Rush
+- Watkins
+- Merritt
+- Howell
+- Munoz
+- Zimmerman
+- Hammond
+- Hickman
+- Wilkinson
+- Lane
+- Koch
+- Hoover
+- Stevens
+- Stephens
+- Woodward
+- Blanchard
+- Vinson
+- Rodriquez
+- Oneal
+- Blake
+- Pennington
+- Pittman
+- Mills
+- Byers
+- Gilliam
+- Browning
+- Thompson
+- Patrick
+- Potts
+- Zimmerman
+- Larson
+- Bullock
+- Rocha
+- Prince
+- Kaufman
+- Obrien
+- Bauer
+- Calderon
+- Vance
+- Castillo
+- Flores
+- Ford
+- Mcgee
+- Leon
+- Mckee
+- Carver
+- Hardy
+- Mcmillan
+- Strong
+- Franks
+- Cooke
+- Boyer
+- Meyer
+- Gates
+- Madden
+- William
+- Riggs
+- Walker
+- Rosa
+- Simmons
+- Dunlap
+- Acosta
+- Espinoza
+- Beasley
+- Ramirez
+- Farrell
+- Ratliff
+- Caldwell
+- Harper
+- Wiley
+- Mendoza
+- Cain
+- Blankenship
+- Buck
+- Marquez
+- Stevenson
+- Gates
+- Carpenter
+- Fletcher
+person.suffix:
+- JR
+- SR
+- RET
+- ESQ
+person.prefix:
+- DR
+- PROF
+- HON
+- ATTY
+dmgr.gender:
+- M
+- F
+address.streetNames:
+- 504 Honey Elk Wynd
+- 7608 Silent Glen
+- 7741 Foggy Pond Jetty
+- 7061 Iron Blossom Ridge
+- 5777 Fallen Panda Expressway
+address.cities:
+- Oatmeal
+- Owl
+- Dollar Settlement
+- Saint-Quentin
+- Ragtown
+address.states:
+- TN
+- MS
+- TN
+- MS
+- GA
+address.states.all:
+- AL
+- AK
+- AZ
+- AR
+- CA
+- CO
+- CT
+- DE
+- FL
+- GA
+- HI
+- ID
+- IL
+- IN
+- IA
+- KS
+- KY
+- LA
+- ME
+- MD
+- MA
+- MI
+- MN
+- MS
+- MO
+- MT
+- NE
+- NV
+- NH
+- NJ
+- NM
+- NY
+- NC
+- ND
+- OH
+- OK
+- OR
+- PA
+- RI
+- SC
+- SD
+- TN
+- TX
+- UT
+- VT
+- VA
+- WA
+- WV
+- WI
+- WY
+address.zips:
+- 37166-9572
+- 38889-6760
+- 37326-6978
+- 39377-7406
+- 39833-8563
+address.countries:
+- USA
+- USA
+- USA
+- USA
+- USA
+address.phones:
+- "(931)872-7634"
+- "(601)110-8688"
+- "(731)538-7434"
+- "(662)120-6474"
+- "(470)446-7282"
 codes.allergens.icd10:
- T78.40XA: Allergy unspecified initial encounter
- T78.40XD: Allergy unspecified subsequent encounter
- Z91.048: Other nonmedicinal substance allergy status
- Z91.09: Other allergy status, other than to drugs and biological substances
- Z91.013:  Allergy to seafood
- Z91.010: Allergy to peanuts
- Z88.0:  Allergy status to penicillin
- Z91.038: Other insect allergy status
- Z91.030: Bee Allergy status
-
-#AL1.3 Allergen Code/Mnemonic/ Description (both the code and the description need to be populated)
+  T78.40XA: Allergy unspecified initial encounter
+  T78.40XD: Allergy unspecified subsequent encounter
+  Z91.048: Other nonmedicinal substance allergy status
+  Z91.09: Other allergy status, other than to drugs and biological substances
+  Z91.013: Allergy to seafood
+  Z91.010: Allergy to peanuts
+  Z88.0: Allergy status to penicillin
+  Z91.038: Other insect allergy status
+  Z91.030: Bee Allergy status
 codes.allergens:
- #ICD 10: Allergy Reaction Codes
- L50.0: Hives
- R11.2: Nausea with vomiting
- R68.2: Dry mouth
- K52.2: Diarrhea
- J30.9: Itching
-#AL1.5 Allergy Reaction Code #(just the code)
-allergens.yn: [Y,N]
-
+  L50.0: Hives
+  R11.2: Nausea with vomiting
+  R68.2: Dry mouth
+  K52.2: Diarrhea
+  J30.9: Itching
+allergens.yn:
+- Y
+- N

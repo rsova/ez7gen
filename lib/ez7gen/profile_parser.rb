@@ -91,7 +91,7 @@ class ProfileParser
     }
   end
 
-  def self.getExclusionFilter(std, version)
+  def self.getExclusionFilterRule(std, version)
     path = self.get_schema_location
     rules_file = "#{path}#{std}/rules/#{version}.yml"
 
@@ -102,6 +102,18 @@ class ProfileParser
       all += (yml['exclusion.blacklist'])?yml['exclusion.blacklist']:[]
     else
       []
+    end
+
+  end
+  def self.getVersionUrlRule(std, version)
+    path = self.get_schema_location
+    rules_file = "#{path}#{std}/rules/#{version}.yml"
+
+    if File.exists? (rules_file)
+      yml = YAML.load_file rules_file
+      (yml['version.url'])?yml['version.url']:nil
+    else
+      nil
     end
 
   end

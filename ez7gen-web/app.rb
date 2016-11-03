@@ -3,11 +3,15 @@ require 'sinatra/base'
 
 require 'json'
 require 'rest_client'
-require 'diskcached'
-require 'ez7gen'
-# require_relative '../lib/ez7gen/message_factory' # local testing
-# require_relative '../lib/ez7gen/profile_parser' # local testing
-# require_relative '../lib/ez7gen/msg_error_handler' # local testing
+# require 'diskcached'
+
+# to specify version
+#gem 'ez7gen', '>= 4.0.0'
+# require 'ez7gen'
+
+require_relative '../lib/ez7gen/message_factory' # local testing
+require_relative '../lib/ez7gen/profile_parser' # local testing
+require_relative '../lib/ez7gen/msg_error_handler' # local testing
 
 class MyApp < Sinatra::Application
 
@@ -77,11 +81,14 @@ class MyApp < Sinatra::Application
     begin
       params = JSON.parse(request.env["rack.input"].read)
       puts params
-      version =  params['version']['code']
-      puts version
+      std =  params['std']
+      schemaName =  params['version']['name']
+      puts schemaName
       payload = params['hl7']['message']
       puts payload
-      @url = @@URLS[version]
+      # @url = @@URLS[version]
+      @url = ProfileParser.getVersionUrlRule(std,schemaName)
+      puts @url
       @resp = RestClient.post(@url, payload.gsub!("\n","\r")).chomp()
 #       @resp = "MSH|^~\&|EnsembleHL7|ISC|404|808|201607162206||ACK^A05|218|P|2.4|936
 # MSA|AE|218
@@ -110,12 +117,17 @@ class MyApp < Sinatra::Application
       versions.each{ |version|
         std_attrs={}
         # standard
-        std_attrs[:std] = version[:std]
+        std = version[:std] # base standard like 2.4 or 2.5
+        std_attrs[:std] = std
         #versions
         std_attrs[:versions] = version[:profiles].inject([]){|col,p| col << {name: p[:doc], code: p[:name], desc: (p[:std])? 'Base': p[:description]}}
         #events
         evn_attrs = version[:profiles].inject({}){|h,p|
-          h.merge({p[:name] => ProfileParser.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_groups(@@FILTERS)})
+          # h.merge({p[:name] => ProfileParser.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_groups(@@FILTERS)})
+          filter_map = nil
+          # ver = (p[:base])||(p[:name])
+          exclusions = ProfileParser.getExclusionFilterRule(std, p[:doc])
+          h.merge({p[:name] => ProfileParser.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)})
         }
         std_attrs[:events] = evn_attrs
         # add map with versions and events for each standard to the array

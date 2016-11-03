@@ -1,0 +1,6 @@
+#errors size: 0
+#exclusion.errors: [ACK_P03]
+#black list size: 0
+exclusion.blacklist: [RQA_I08]
+# version url mapping to Ensemble validation endpoint
+version.url: localhost:9981/
