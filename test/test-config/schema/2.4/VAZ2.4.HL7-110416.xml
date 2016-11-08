@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2014.1.3 (Build 775U)" ts="2016-11-03 16:10:16">
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2014.1.3 (Build 775U)" ts="2016-10-11 12:25:23">
 <Document name="VAZ2.4.HL7">
-<Category name="VAZ2.4" base="2.4" description="(MARM Team)">
+<Category name="VAZ2.4" base="2.4">
 
 <MessageType name='ACK_P03' structure='ACK' description='MHVSM ECS Filer Response'/>
 <MessageType name='ADT_A01' structure='ADT_A01' returntype='base:ACK_A01'/>
@@ -17,7 +17,7 @@
 <MessageType name='ORF_Z07' structure='ORF_Z04' description='ORF_Z04 ES Message based on ORF_R04 Response to query, transmission of requested observation (2.3.1)'/>
 <MessageType name='ORF_Z10' structure='ORF_Y10' description='ORF_Y10 ORF_Z10 Income Test Transmission (2.3.1)'/>
 <MessageType name='ORF_Z11' structure='ORF_ZY1' description='ORF_ZY1 ESR ORF_Z11 Message based on ORF_R04 Response to query, transmission of requested observation (2.3.1)'/>
-<MessageType name='ORL_O22' structure='ORL_O22' description='Laboratory acknowledgment message (unsolicited) - General Laboratory Order Acknowledgment Message - standard 2.4 message'/>
+<MessageType name='ORL_O22' structure='ORL_O22'/>
 <MessageType name='ORM_O01' structure='ORM_O01' description='Pharmacy/treatment order message - Order message - LABUI VISTALAB AUTORELEASE (2.5.1)'/>
 <MessageType name='ORU_R01' structure='ORU_R01' returntype='base:ACK_R01' description='Unsolicited transmission of an observation message - SQWM VITALS'/>
 <MessageType name='ORU_RX1' structure='ORU_RX1' returntype='base:ACK' description='ORU_R01 Unsolicited transmission of an observation message - LABUI VISTALAB AUTORELEASE (2.5.1)'/>
@@ -29,8 +29,7 @@
 <MessageType name='ORU_Z10' structure='ORU_Z10' description='ORU_Z10 Means Test IVM Converted Tests(2.3.1)'/>
 <MessageType name='ORU_Z11' structure='ORU_Z11' description='ORU_Z11 Unsolicited transmission of an observation message (2.3.1)'/>
 <MessageType name='QBP_G11' structure='QBP_G11' returntype='RSP_D11' description='QBP_Q11 Query by Parameter NIF (2.5.1)'/>
-<MessageType name='QBP_H11' structure='QBP_H11' description='QBP_Q11 Query by parameter - query by parameter/segment pattern response - Diagnosis, Patient Problems and Patient EClass Queries - MHVSM'/>
-<MessageType name='QBP_Q11' structure='QBP_Q11' description='Query by parameter - query by parameter/segment pattern response - standard 2.4 message'/>
+<MessageType name='QBP_Q11' structure='QBP_Q11' description='Query by parameter - query by parameter/segment pattern response - Diagnosis, Patient Problems and Patient EClass Queries - MHVSM'/>
 <MessageType name='QBP_Q13' structure='QBP_Q13' description='Query by parameter - quey by parameter/tabluar response - ECS Procedures and DSS Units Queries - MHVSM'/>
 <MessageType name='QRY_P04' structure='QRY_P04' returntype='base:DSR_P04'/>
 <MessageType name='QRY_Q26' structure='QRY_Q01'/>
@@ -38,7 +37,7 @@
 <MessageType name='QRY_Q28' structure='QRY_Q01'/>
 <MessageType name='QRY_Q29' structure='QRY_Q01'/>
 <MessageType name='QRY_Q30' structure='QRY_Q01'/>
-<MessageType name='RDY_K15' structure='RDY_K15' description='Display based response - query by parameter/display response - standard 2.4 message'/>
+<MessageType name='RDY_K15' structure='RDY_K15'/>
 <MessageType name='REF_I12' structure='REF_I12' returntype='RRI_I12' description='Patient Referral GMRC (2.5 Min Compliant)'/>
 <MessageType name='REF_I13' structure='REF_I12' returntype='RRI_I13' description='Send Update patient referral GMRC (2.5 Min Compliant)'/>
 <MessageType name='REF_I14' structure='REF_I12' returntype='RRI_I14' description='Send Cancel or Discontinue patient referral GMRC (2.5 Min Compliant)'/>
@@ -51,8 +50,7 @@
 <MessageType name='RSP_F11' structure='RSP_F11' description='RSP_K11 Query by parameter Response Problem NIF and/or NIF Response Reject and/or NIF Response Exception Report (2.5.1) - HPID'/>
 <MessageType name='RSP_K11' structure='RSP_K11' description='Segment pattern response - Query by parameter/segment pattern response - Standard Diagnosis Response or Patient Problems Response - MHVSM '/>
 <MessageType name='RSP_X11' structure='RSP_X11' description='RSP_K11 Query by parameter/segment pattern response - Patient Eligibility Response - MHVSM'/>
-<MessageType name='RTB_H13' structure='RTB_H13' description='RTB_K13 Segment pattern response - query by parameter/tabular response - ECS Procedures and DSS Units Responses - MHVSM'/>
-<MessageType name='RTB_K13' structure='RTB_K13' description='Tabular response - query by parameter/tabular response - standard 2.4 message'/>
+<MessageType name='RTB_K13' structure='RTB_K13' description='Segment pattern response - query by parameter/tabular response - ECS Procedures and DSS Units Responses - MHVSM '/>
 
 <MessageStructure name='ACK' definition='MSH~base:MSA~base:ERR' description='MHVSM ECS Filer Response'/>
 <MessageStructure name='ADT_A01' definition='MSH~EVN~base:PID~[~base:PD1~]~[~{~base:NK1~}~]~base:PV1~[~base:PV2~]~[~{~base:DB1~}~]~[~{~base:OBX~}~]~[~{~base:AL1~}~]~[~{~base:DG1~}~]~[~base:DRG~]~[~{~base:PR1~[~{~base:ROL~}~]~}~]~[~{~base:GT1~}~]~[~{~base:IN1~[~base:IN2~]~[~base:IN3~]~}~]~[~base:ACC~]~[~base:UB1~]~[~base:UB2~]~[~ZEL~]~[~ZEM~]~[~ZEN~]~[~ZMH~]'/>
@@ -80,12 +78,11 @@
 <MessageStructure name='ORU_Z10' definition='MSH~base:PID~[~ZIC~]~[~ZIR~]~{~[~ZDP~]~[~ZIC~]~[~ZIR~]~}~[~{~ZMT~}~]~[~ZBT~]' description='ORU_Z10 Means Test IVM Converted Tests (2.3.1)'/>
 <MessageStructure name='ORU_Z11' definition='MSH~[~base:PID~]~[~ZPD~]~[~ZIE~]~[~ZIO~]~[~ZEL~]~[~ZEN~]~[~ZMT~]~[~ZCD~]' description='ORU_Z11 Unsolicited transmission of an observation message (2.3.1)'/>
 <MessageStructure name='QBP_G11' definition='MSH~base:QPD~base:RCP~base:IN1' description='QBP_Q11 Query by Parameter NIF (2.5.1)'/>
-<MessageStructure name='QBP_H11' definition='MSH~base:QPD~base:RCP' description='QBP_Q11 Query by parameter - query by parameter/segment pattern response - Diagnosis, Patient Problems and Patient EClass Queries - MHVSM'/>
-<MessageStructure name='QBP_Q11' definition='MSH~base:QPD~base:RCP~[~base:DSC~]' description='Query by parameter - query by parameter/segment pattern response - standard 2.4 message'/>
+<MessageStructure name='QBP_Q11' definition='MSH~base:QPD~base:RCP' description='Query by parameter - query by parameter/segment pattern response - Diagnosis, Patient Problems and Patient EClass Queries - MHVSM'/>
 <MessageStructure name='QBP_Q13' definition='MSH~base:QPD~base:RDF~base:RCP' description='Query by parameter - quey by parameter/tabluar response - ECS Procedures and DSS Units Queries - MHVSM'/>
 <MessageStructure name='QRY_P04' definition='MSH~base:QRD~[~base:QRF~]~[~base:DSC~]'/>
 <MessageStructure name='QRY_Q01' definition='MSH~base:QRD~[~base:QRF~]~[~base:DSC~]'/>
-<MessageStructure name='RDY_K15' definition='MSH~base:MSA~[~base:ERR~]~base:QAK~base:QPD~[~{~base:DSP~}~]~[~base:DSC~]' description='Display based response - query by parameter/display response - standard 2.4 message'/>
+<MessageStructure name='RDY_K15' definition='MSH~base:MSA~[~base:ERR~]~base:QAK~base:QPD~[~{~base:DSP~}~]~[~base:DSC~]'/>
 <MessageStructure name='REF_I12' definition='MSH~base:RF1~base:PRD~base:PID~base:DG1~base:OBR~base:PV1~{~base:NTE~}'/>
 <MessageStructure name='RPA_I08' definition='MSH~EVN~[~{~base:MSA~}~]~base:IN1~[~{~base:MSA~}~]~base:PRD~[~{~base:MSA~}~]~[~base:PRD~]~base:GT1~[~{~base:MSA~}~]~[~base:PID~]~[~{~base:MSA~}~]~[~base:PRB~[~base:PV1~]~]~[~{~base:AUT~}~]~[~{~ZTP~}~]~[~{~base:DG1~}~]~[~ZHS~]~[~base:PV1~]~[~base:OBR~]~[~base:RXA~]~[~base:RXE~]~[~base:PRB~]~[~{~PSL~}~]~[~base:NTE~]~[~{~base:PRD~[~{~base:MSA~}~]~[~base:NK1~]~[~base:CTD~]~[~{~base:PRD~}~]~[~{~base:MSA~}~]~}~]~[~{~{~base:MSA~}~[~base:PRB~]~[~{~base:AUT~}~]~[~{~ZTP~}~]~[~{~base:DG1~}~]~[~{~PSL~}~]~[~ZHS~]~[~{~PSL~}~]~[~base:NTE~]~[~{~base:PRD~}~]~[~{~base:MSA~}~]~[~{~base:PRD~}~]~[~base:CTD~]~}~]'/>
 <MessageStructure name='RQA_I08' definition='MSH~EVN~base:IN1~base:PRD~[~base:CTD~]~[~base:PRD~]~base:GT1~base:PID~[~base:PRB~[~base:PV1~]~]~[~base:AUT~]~[~{~ZTP~}~]~[~{~base:DG1~}~]~[~ZHS~]~[~{~base:PV1~}~]~[~base:OBR~]~[~[~base:RXA~]~[~{~base:NTE~}~]~]~[~base:RXE~]~[~base:PRB~]~[~{~PSL~}~]~[~base:NTE~]~[~{~[~base:PRD~]~[~base:AUT~]~[~ZTP~]~}~]~[~{~[~base:PRB~]~[~base:AUT~]~[~ZTP~]~[~{~PSL~}~]~[~ZHS~]~[~{~PSL~}~]~[~base:NTE~]~[~{~base:PRD~}~]~}~]' description='Request patient authorization - Request for treatment authorization information - VistA X12 278 Request (2.6)'/>
@@ -94,8 +91,7 @@
 <MessageStructure name='RSP_F11' definition='MSH~base:MSA~base:ERR~base:QAK~base:QPD' description='RSP_K11 Query by parameter Response Problem NIF and/or NIF Response Reject and/or NIF Response Exception Report (2.5.1) - HPID'/>
 <MessageStructure name='RSP_K11' definition='MSH~base:MSA~base:QAK~base:QPD~{~base:DG1~}' description='Segment pattern response - Query by parameter/segment pattern response - Standard Diagnosis Response or Patient Problems Response - MHVSM '/>
 <MessageStructure name='RSP_X11' definition='MSH~base:MSA~base:QAK~[~{~ZEL~}~]' description='RSP_K11 Query by parameter/segment pattern response - Patient Eligibility Response - MHVSM'/>
-<MessageStructure name='RTB_H13' definition='MSH~base:MSA~base:QAK~base:QPD~base:RDF~{~base:RDT~}' description='RTB_K13 Segment pattern response - query by parameter/tabular response - ECS Procedures and DSS Units Responses - MHVSM'/>
-<MessageStructure name='RTB_K13' definition='MSH~base:MSA~[~base:ERR~]~base:QAK~base:QPD~[~base:RDF~[~{~base:RDT~}~]~]~[~base:DSC~]'/>
+<MessageStructure name='RTB_K13' definition='MSH~base:MSA~base:QAK~base:QPD~base:RDF~{~base:RDT~}' description='Segment pattern response - query by parameter/tabular response - ECS Procedures and DSS Units Responses - MHVSM '/>
 
 <SegmentStructure name='EVN' description='Event Type'>
     <SegmentSubStructure piece='1' description='Event Type Code' datatype='base:ID' max_length='3' required='B' ifrepeating='0' codetable='Z3'/>
@@ -2881,34 +2877,31 @@
    <Enumerate position='256' value='Y01' description='MFN_M01 - Master file notification - Table Update - eIV table update (non payer &amp; non X12)'/>
    <Enumerate position='257' value='K11' description='RSP - Standard Diagnosis Response or Patient Problems Response - MHVSM'/>
    <Enumerate position='258' value='X11' description='RSP_K11 - Patient Eligibility Response - MHVSM'/>
-   <Enumerate position='259' value='Q13' description='QBP - ECS Procedures and DSS Units Queries - MHVSM'/>
-   <Enumerate position='260' value='Q13a' description='test'/>
-   <Enumerate position='261' value='O22' description='ORL_O22 - General Laboratory Order Acknowledgment - standard 2.4 message'/>
-   <Enumerate position='262' value='Z11' description='ESR ORU_Z11 Unsolicited transmission of an observation message (2.3.1)'/>
-   <Enumerate position='263' value='Z07' description='ESR ORU_Z07 based on ORU_R01 (2.3.1)'/>
-   <Enumerate position='264' value='Y11' description='ESR ORU_Z11 with BHS segment (2.3.1)'/>
-   <Enumerate position='265' value='Z06' description='ORU_Z06 Means Test IVM Converted Tests with BHS segment (2.3.1)'/>
-   <Enumerate position='266' value='Z04' description='ORF_Z07 ES Message based on ORF_R04 Response to query for results of observation (2.3.1)'/>
-   <Enumerate position='267' value='ZY1' description='ORF_Z11 ESR Message based on ORF_R04 Response to query for results of observation (2.3.1)'/>
-   <Enumerate position='268' value='Z10' description='ORU_Z10 Means Test IVM Converted Tests with BHS segment (2.3.1)'/>
-   <Enumerate position='269' value='Y10' description='ORF_Y10 Income Test Transmission with BHS segment  (2.3.1)'/>
-   <Enumerate position='270' value='P11' description='DFT_P11 Post detail financial transaction (2.5) '/>
-   <Enumerate position='271' value='X03' description='DFT_P03 Post detail financial transaction - (2.5 Compliant) - CPRS_IFCAP'/>
-   <Enumerate position='272' value='D11' description='RSP_K11 Query by parameter response - NIF Response NIF Found and/or NIF Unsolicited Broadcast (2.5.1) - HIPD'/>
-   <Enumerate position='273' value='F11' description='RSP_K11 Query by parameter Response Problem NIF and/or NIF Response Reject and/or NIF Response Exception Report (2.5.1) - HPID'/>
-   <Enumerate position='274' value='RX1' description='ORU_R01 Unsolicited transmission of an observation message - LABUI VISTALAB AUTORELEASE (2.5.1)'/>
-   <Enumerate position='275' value='Y07' description='ORU_Z07 ECE ESE and CLV INC3 (2.3.1)'/>
-   <Enumerate position='276' value='G11' description='QBP_Q11 Query by Parameter NIF (2.5.1)'/>
-   <Enumerate position='277' value='Q26' description='QRY_Q26 - Query, original mode - pharmacy/treatment order query'/>
-   <Enumerate position='278' value='Q27' description='QRY_Q27 Query, original mode - pharmacy/treatment administration information query'/>
-   <Enumerate position='279' value='Q28' description='QRY_Q28 Query, original mode - pharmacy/treatment dispense information query'/>
-   <Enumerate position='280' value='Q29' description='QRY_Q29 Query, original mode - pharmacy/treatment encoded order information query'/>
-   <Enumerate position='281' value='Q30' description='QRY_Q30 Query, original mode - pharmacy/treatment dose information query'/>
-   <Enumerate position='282' value='K15' description='RDY_K15 Query by parameter/display response - standard 2.4 message'/>
-   <Enumerate position='283' value='K13' description='RTB_K13 Query by parameter/tabular response - standard 2.4 message'/>
-   <Enumerate position='284' value='H13' description='RTB_K13 Segment pattern response- query by parameter/tabular response - ECS Procedures and DSS Units Responses - MHVSM'/>
-   <Enumerate position='285' value='Q11' description='QBP_Q11 Query by parameter - query by parameter/segment pattern response - standard 2.4 message'/>
-   <Enumerate position='286' value='H11' description='QBP_Q11 Query by parameter - query by parameter/segment pattern response - Diagnosis, Patient Problems and Patient EClass Queries - MHVSM'/>
+   <Enumerate position='259' value='Q11' description='QBP - Diagnosis, Patient Problems and Patient EClass Queries - MHVSM'/>
+   <Enumerate position='260' value='Q13' description='QBP - ECS Procedures and DSS Units Queries - MHVSM'/>
+   <Enumerate position='262' value='O22' description='ORL - General Laboratory Order Acknowledgment'/>
+   <Enumerate position='263' value='Z11' description='ESR ORU_Z11 Unsolicited transmission of an observation message (2.3.1)'/>
+   <Enumerate position='264' value='Z07' description='ESR ORU_Z07 based on ORU_R01 (2.3.1)'/>
+   <Enumerate position='265' value='Y11' description='ESR ORU_Z11 with BHS segment (2.3.1)'/>
+   <Enumerate position='266' value='Z06' description='ORU_Z06 Means Test IVM Converted Tests with BHS segment (2.3.1)'/>
+   <Enumerate position='267' value='Z04' description='ORF_Z07 ES Message based on ORF_R04 Response to query for results of observation (2.3.1)'/>
+   <Enumerate position='268' value='ZY1' description='ORF_Z11 ESR Message based on ORF_R04 Response to query for results of observation (2.3.1)'/>
+   <Enumerate position='269' value='Z10' description='ORU_Z10 Means Test IVM Converted Tests with BHS segment (2.3.1)'/>
+   <Enumerate position='270' value='Y10' description='ORF_Y10 Income Test Transmission with BHS segment  (2.3.1)'/>
+   <Enumerate position='271' value='P11' description='DFT_P11 Post detail financial transaction (2.5) '/>
+   <Enumerate position='272' value='X03' description='DFT_P03 Post detail financial transaction - (2.5 Compliant) - CPRS_IFCAP'/>
+   <Enumerate position='273' value='D11' description='RSP_K11 Query by parameter response - NIF Response NIF Found and/or NIF Unsolicited Broadcast (2.5.1) - HIPD'/>
+   <Enumerate position='274' value='F11' description='RSP_K11 Query by parameter Response Problem NIF and/or NIF Response Reject and/or NIF Response Exception Report (2.5.1) - HPID'/>
+   <Enumerate position='275' value='RX1' description='ORU_R01 Unsolicited transmission of an observation message - LABUI VISTALAB AUTORELEASE (2.5.1)'/>
+   <Enumerate position='276' value='Y07' description='ORU_Z07 ECE ESE and CLV INC3 (2.3.1)'/>
+   <Enumerate position='277' value='G11' description='QBP_Q11 Query by Parameter NIF (2.5.1)'/>
+   <Enumerate position='278' value='Q26' description='QRY_Q26 - Query, original mode - pharmacy/treatment order query'/>
+   <Enumerate position='279' value='Q27' description='QRY_Q27 Query, original mode - pharmacy/treatment administration information query'/>
+   <Enumerate position='280' value='Q28' description='QRY_Q28 Query, original mode - pharmacy/treatment dispense information query'/>
+   <Enumerate position='281' value='Q29' description='QRY_Q29 Query, original mode - pharmacy/treatment encoded order information query'/>
+   <Enumerate position='282' value='Q30' description='QRY_Q30 Query, original mode - pharmacy/treatment dose information query'/>
+   <Enumerate position='283' value='K15' description='Query by parameter/display response'/>
+   <Enumerate position='284' value='K13' description='Query by parameter/tabular response'/>
 </CodeTable>
 <CodeTable name='Z354' tabletype='3' description='Message structure'>
    <Enumerate position='1' value='ACK' description='Varies'/>
@@ -3069,39 +3062,37 @@
    <Enumerate position='156' value='QBP_Q13' description='Q13'/>
    <Enumerate position='157' value='QBP_Q15' description='Q15'/>
    <Enumerate position='158' value='RTB_K13' description='K13'/>
-   <Enumerate position='159' value='TBR_R08' description='R08'/>
-   <Enumerate position='160' value='RPI_I04' description='I04'/>
-   <Enumerate position='161' value='RSP_K24' description='K24'/>
-   <Enumerate position='162' value='RSP_K25' description='K25'/>
-   <Enumerate position='163' value='DSR_P04' description='P04'/>
-   <Enumerate position='164' value='OUL_R21' description='R21'/>
-   <Enumerate position='165' value='ORN_O08' description='O08'/>
-   <Enumerate position='166' value='ORL_O22' description='O22'/>
-   <Enumerate position='167' value='ADT_Z60' description='Z60'/>
-   <Enumerate position='168' value='ORU_Z01' description='Z01'/>
-   <Enumerate position='169' value='MFN_X01' description='X01'/>
-   <Enumerate position='170' value='MFN_Y01' description='Y01'/>
-   <Enumerate position='171' value='RSP_K11' description='K11'/>
-   <Enumerate position='172' value='RSP_X11' description='X11'/>
-   <Enumerate position='173' value='ORU_Z11' description='Z11'/>
-   <Enumerate position='174' value='ORU_Z07' description='Z07'/>
-   <Enumerate position='175' value='ORU_Y11' description='Y11'/>
-   <Enumerate position='176' value='ORU_Z06' description='Z06'/>
-   <Enumerate position='177' value='ORF_Z04' description='Z04'/>
-   <Enumerate position='178' value='ORF_ZY1' description='ZY1'/>
-   <Enumerate position='179' value='ORU_Z10' description='Z10'/>
-   <Enumerate position='180' value='ORF_Y10' description='Y10'/>
-   <Enumerate position='181' value='DFT_P11' description='P11'/>
-   <Enumerate position='182' value='DFT_X03' description='X03'/>
-   <Enumerate position='183' value='RSP_D11' description='D11'/>
-   <Enumerate position='184' value='RSP_F11' description='F11'/>
-   <Enumerate position='185' value='ORU_RX1' description='RX1'/>
-   <Enumerate position='186' value='ORU_Y07' description='Y07'/>
-   <Enumerate position='187' value='QBP_G11' description='G11'/>
-   <Enumerate position='188' value='QRY_P04' description='P04'/>
-   <Enumerate position='189' value='RDY_K15' description='K15'/>
-   <Enumerate position='190' value='QBP_H11' description='H11'/>
-   <Enumerate position='191' value='RTB_H13' description='H13'/>
+   <Enumerate position='160' value='TBR_R08' description='R08'/>
+   <Enumerate position='161' value='RPI_I04' description='I04'/>
+   <Enumerate position='162' value='RSP_K24' description='K24'/>
+   <Enumerate position='163' value='RSP_K25' description='K25'/>
+   <Enumerate position='164' value='DSR_P04' description='P04'/>
+   <Enumerate position='165' value='OUL_R21' description='R21'/>
+   <Enumerate position='166' value='ORN_O08' description='O08'/>
+   <Enumerate position='167' value='ORL_O22' description='O22'/>
+   <Enumerate position='168' value='ADT_Z60' description='Z60'/>
+   <Enumerate position='169' value='ORU_Z01' description='Z01'/>
+   <Enumerate position='170' value='MFN_X01' description='X01'/>
+   <Enumerate position='171' value='MFN_Y01' description='Y01'/>
+   <Enumerate position='172' value='RSP_K11' description='K11'/>
+   <Enumerate position='173' value='RSP_X11' description='X11'/>
+   <Enumerate position='174' value='ORU_Z11' description='Z11'/>
+   <Enumerate position='175' value='ORU_Z07' description='Z07'/>
+   <Enumerate position='176' value='ORU_Y11' description='Y11'/>
+   <Enumerate position='177' value='ORU_Z06' description='Z06'/>
+   <Enumerate position='178' value='ORF_Z04' description='Z04'/>
+   <Enumerate position='179' value='ORF_ZY1' description='ZY1'/>
+   <Enumerate position='180' value='ORU_Z10' description='Z10'/>
+   <Enumerate position='181' value='ORF_Y10' description='Y10'/>
+   <Enumerate position='182' value='DFT_P11' description='P11'/>
+   <Enumerate position='183' value='DFT_X03' description='X03'/>
+   <Enumerate position='184' value='RSP_D11' description='D11'/>
+   <Enumerate position='185' value='RSP_F11' description='F11'/>
+   <Enumerate position='186' value='ORU_RX1' description='RX1'/>
+   <Enumerate position='187' value='ORU_Y07' description='Y07'/>
+   <Enumerate position='188' value='QBP_G11' description='G11'/>
+   <Enumerate position='189' value='QRY_P04' description='P04'/>
+   <Enumerate position='190' value='RDY_K15' description='K15'/>
 </CodeTable>
 <CodeTable name='Z532' tabletype='1' description='Expanded Yes/No indicator'>
    <Enumerate position='1' value='NA' description='Not Applicable'/>

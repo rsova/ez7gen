@@ -30,10 +30,10 @@ class TemplateGeneratorTest < Test::Unit::TestCase
 
   def test_read_template_ADT_A60
     templatePath = 'test-config/templates/ADT_A60.xml'
-    usages = ['R','RE']
 
     useExVal = false
     map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(useExVal)
+
     p map
     map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
     p map
@@ -46,10 +46,9 @@ class TemplateGeneratorTest < Test::Unit::TestCase
   def test_read_template_EVN
 
     templatePath = 'test-config/templates/ADT_A60_EVN.xml'
-    usages = ['R','RE']
-    # map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata( usages)
-    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
-
+    useExVal = false
+    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(useExVal)
+    #map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
     puts map
     assert_equal(4, map.size)
     assert_equal 'Recorded Date/Time', map['EVN'].first[:Name]
@@ -59,13 +58,16 @@ class TemplateGeneratorTest < Test::Unit::TestCase
   def test_read_template_PID
 
     templatePath = 'test-config/templates/ADT_A60_PID.xml'
-    usages = ['R','RE']
     useExVal = false
-    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(useExVal)
+    tg = TemplateGenerator.new(templatePath,{'primary' => @@pp })
+    # tg.class.const_set('USAGES_REQ', [])
+    map = tg.build_metadata(useExVal)
+
+    # TemplateGenerator.USAGES_REQ = ['R','RE']
     # map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
     # p map
     assert_equal 1, map.size
-    assert_equal 9, map['PID'].size
+    assert_equal 9, map['PID'][0].size
 
     # puts map
     puts map['PID']
@@ -82,13 +84,12 @@ class TemplateGeneratorTest < Test::Unit::TestCase
   def test_read_template_PID_1
 
     templatePath = 'test-config/templates/ADT_A60_PID.xml'
-    usages = ['R','RE']
     useExVal = false
     map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(useExVal)
 
     puts map
     assert_equal 1, map.size
-    assert_equal 9, map['PID'].size
+    assert_equal 9, map['PID'][0].size
 
     # puts map
     puts map['PID']
@@ -144,6 +145,18 @@ class TemplateGeneratorTest < Test::Unit::TestCase
 
     # "PID"=>[{:Name=>"PID", :LongName=>"Patient identification", :Usage=>"R", :Min=>"1", :Max=>"1"}], "IAM"=>[{:Name=>"IAM", :LongName=>"Patient adverse reaction information - unique iden", :Usage=>"R", :Min=>"1", :Max=>"*"}]}
 
+  end
+
+  def test_use
+    templatePath = 'test-config/templates/ADT_A60_EVN.xml'
+    tg = TemplateGenerator.new(templatePath,{'primary' => @@pp })
+    assert_true  tg.use?('R')
+    assert_true [true, false].include? tg.use?('RE') # could be either
+
+    tg.class.const_set('USAGES_REQ', ['R','RE']) # force to build both for testing
+    assert_true tg.use?('RE')
+
+    assert_false tg.use?('X')
 
   end
 

@@ -30,6 +30,18 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     end
   end
 
+  # Message Factory Stub to set usage to required and optional elements
+  class MessageFactoryStub < MessageFactory
+    def generate_message_from_template(parsers, templatePath, useExVal)
+
+      hl7Msg = HL7::Message.new
+      templateGenerator = TemplateGenerator.new(templatePath, parsers)
+      templateGenerator.class.const_set('USAGES_REQ', ['R','RE']) # force to build both for testing
+      return templateGenerator.generate(hl7Msg, useExVal)
+
+    end
+  end
+
   #  ADT_A60, QBP_Q11(3), RTB_K13 (2), DFT_P03, ACK_P03, ORU_R01(2)
   def test_ADT_A60_no_ExValue
     # ver='vaz2.4'
@@ -267,7 +279,8 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='ACK_P03'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    # use message factory stub to generate all required adn optional elements: R and RE
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
     # switch template path to test dir
     factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_ecs_filer_response_ack_p03-ack_p03.xml"
 

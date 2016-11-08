@@ -397,7 +397,7 @@ class ProfileParserTest < Test::Unit::TestCase
 
         evn_attrs = version[:profiles].inject({}){|h,p|
           filter_map = nil
-          exclusions = ProfileParserStub.getExclusionFilter(p[:name], p[:doc])
+          exclusions = ProfileParserStub.getExclusionFilterRule(p[:name], p[:doc])
           h.merge({p[:name] => ProfileParserStub.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)})
         }
 
@@ -422,7 +422,7 @@ class ProfileParserTest < Test::Unit::TestCase
   def test_getExclusionFilter
     std = '2.4'
     version = "2.4.HL7"
-    filter = ProfileParserStub.getExclusionFilter(std, version);
+    filter = ProfileParserStub.getExclusionFilterRule(std, version);
     puts filter
     assert_equal 137, filter.size
   end
@@ -430,7 +430,7 @@ class ProfileParserTest < Test::Unit::TestCase
   def test_getExclusionFilter_no_rules_file
     std = '2.4'
     version = "Bla-bla"
-    filter = ProfileParserStub.getExclusionFilter(std, version);
+    filter = ProfileParserStub.getExclusionFilterRule(std, version);
     puts filter
     assert_equal 0, filter.size
   end

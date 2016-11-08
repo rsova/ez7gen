@@ -1,4 +1,4 @@
-require_relative '2.4/dynamic_field_generator'
+require_relative 'type_aware_field_generator.rb'
 require_relative 'utils'
 
 class TemplateGenerator
@@ -17,7 +17,9 @@ class TemplateGenerator
   SUB = SUBCOMPONENT.downcase.intern
 
   # list of usages to be picked up, other ignored
-  @@USAGES = ['R','RE']
+  # @@USAGES = ['R','RE']
+  USAGES_REQ = ['R']
+  USAGES_OPT = ['RE']
 
   # initialise template generator with the path to template xml (MWB) and parcers
   def initialize(tempalte_path, pp)
@@ -28,16 +30,18 @@ class TemplateGenerator
 
     #If there are multiple profile parsers, instantiate a generators for each
     @fieldGenerators = {}
+    # helper parser for lookup in the other schema
+    # when generating segments for custom (not base) ex VAZ2.4 the field generator will have to look in both schemas
+    # to resolve types and coded tables value.
+    # we will assign the other schema parser as a helper parser
+
     pp.each{|profileName, parser|
-      # helper parser for lookup in the other schema
-      # when generating segments for custom (not base) ex VAZ2.4 the field generator will have to look in both schemas
-      # to resolve types and coded tables value.
-      # we will assign the other schema parser as a helper parser
-      helper_parser = pp.select{|key, value| key != profileName}
+      helper_parser = pp.select{|key, value| key != profileName }
       helper_parser = (helper_parser.empty?) ? nil: helper_parser.values.first
+      # a = TypeAwareFieldGenerator.new( parser, helper_parser)
+      #@fieldGenerators[profileName] = a
       @fieldGenerators[profileName] = TypeAwareFieldGenerator.new( parser, helper_parser)
     }
-
 
   end
 
@@ -133,7 +137,8 @@ class TemplateGenerator
 
       fields = []
       seg.locate('Field').each_with_index { |f,idx |
-        if (@@USAGES.include?(f.Usage))
+        # if (@@USAGES.include?(f.Usage))
+        if use?(f.Usage)
           f.attributes.merge!(:Pos => idx)
           fields << get_metadata(f,useExVal)
         end
@@ -157,16 +162,15 @@ class TemplateGenerator
         return partial.attributes
     end
 
-    # continue lookinf for subcomponents
+    # continue looking for subcomponents
     element = (element.empty?) ? partial.locate(SUBCOMPONENT) : element
     if(!element.empty?)
         sub = []
 
         element.each_with_index { |el, idx|
 
-          if (@@USAGES.include?(el[:Usage]))
+          if (use?(el[:Usage])) # required or optional
             el.attributes.merge!(:Pos => idx)
-            # sub[idx.to_i] = get_metadata(el,usages)
             sub << get_metadata(el, useExVal)
           end
 
@@ -181,6 +185,12 @@ class TemplateGenerator
 
     return partial.attributes
 
+  end
+
+  def use?(usage)
+    # check for required field/compnent/subcomponent: R
+    # if not toss a coin for optional (required or empty): RE (required or empty)
+    return (USAGES_REQ.include?(usage)) ? true : (USAGES_OPT.include?(usage) && [true,false].sample)
   end
 
   # def add_field()
@@ -207,58 +217,58 @@ class TemplateGenerator
 
   # parse template xml file into collection
   # Obsolete
-  def build_template_metadata(usages=@@USAGES)
-    # list of segments
-    segs = @xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
-
-    map = {}
-    for seg in segs
-
-      puts seg.attributes[:Name]
-      meta = []
-      # list of fields
-      seg.locate('Field').each_with_index { |fld, fld_idx|
-        if (usages.include?(fld.Usage)) #Usage="R"
-          fld.attributes.merge!(:Pos => fld_idx)
-
-          cmps = []
-          fld.locate(COMPONENT).each_with_index { |cmp, cmp_idx|
-
-            if (usages.include?(cmp.Usage))
-
-              cmp.attributes.merge!(:Pos => cmp_idx)
-
-              sub_comps = []
-              cmp.locate(SUBCOMPONENT).each_with_index { |sub, sub_idx|
-                if (usages.include?(sub.Usage))
-                  sub_comps << sub.attributes.merge(:Pos => sub_idx)
-                end
-              }# end locate SubComponent
-
-              if (!sub_comps.empty?) then
-                # cmp.attributes.merge!(:subComponents => sub_comps)
-                cmp.attributes.merge!(SUB => sub_comps)
-              end
-              if (cmp.attributes) then
-                cmps << cmp.attributes
-              end
-
-            end
-          }# end locate Component
-
-          if (!cmps.empty?) then
-            # fld.attributes.merge!(:components => cmps)
-            fld.attributes.merge!(COMP => cmps)
-          end
-
-          meta << fld.attributes
-        end
-
-      }# end locate Field
-
-      map[seg.attributes[:Name]] = meta
-    end
-
-    return map
-  end
+  # def build_template_metadata(usages=@@USAGES)
+  #   # list of segments
+  #   segs = @xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
+  #
+  #   map = {}
+  #   for seg in segs
+  #
+  #     puts seg.attributes[:Name]
+  #     meta = []
+  #     # list of fields
+  #     seg.locate('Field').each_with_index { |fld, fld_idx|
+  #       if (usages.include?(fld.Usage)) #Usage="R"
+  #         fld.attributes.merge!(:Pos => fld_idx)
+  #
+  #         cmps = []
+  #         fld.locate(COMPONENT).each_with_index { |cmp, cmp_idx|
+  #
+  #           if (usages.include?(cmp.Usage))
+  #
+  #             cmp.attributes.merge!(:Pos => cmp_idx)
+  #
+  #             sub_comps = []
+  #             cmp.locate(SUBCOMPONENT).each_with_index { |sub, sub_idx|
+  #               if (usages.include?(sub.Usage))
+  #                 sub_comps << sub.attributes.merge(:Pos => sub_idx)
+  #               end
+  #             }# end locate SubComponent
+  #
+  #             if (!sub_comps.empty?) then
+  #               # cmp.attributes.merge!(:subComponents => sub_comps)
+  #               cmp.attributes.merge!(SUB => sub_comps)
+  #             end
+  #             if (cmp.attributes) then
+  #               cmps << cmp.attributes
+  #             end
+  #
+  #           end
+  #         }# end locate Component
+  #
+  #         if (!cmps.empty?) then
+  #           # fld.attributes.merge!(:components => cmps)
+  #           fld.attributes.merge!(COMP => cmps)
+  #         end
+  #
+  #         meta << fld.attributes
+  #       end
+  #
+  #     }# end locate Field
+  #
+  #     map[seg.attributes[:Name]] = meta
+  #   end
+  #
+  #   return map
+  # end
 end
