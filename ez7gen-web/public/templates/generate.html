@@ -32,7 +32,7 @@
         <div class="col-md-6">
             <!--<ui-select ng-model="event.selected" ng-disabled="disabled" on-select="clearEvent($select)">-->
             <!--<ui-select ng-model="event.selected" ng-disabled="disabled">-->
-            <ui-select ng-model="event.selected">
+            <ui-select ng-model="event.selected" on-select="checkForTemplates(event.selected)">
             <!--<ui-select ng-model="event.selected" on-select="clearEvent($select)">-->
                 <!--<ui-select-match allow-clear="true" placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>-->
                 <ui-select-match placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>
@@ -111,9 +111,9 @@
 
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-6" ng-show="hasTemplates">
 
-        <div class="checkbox-inline" ng-show="false">
+        <div class="checkbox-inline">
             <label>
                 <input type="checkbox" name="useTemplate"  ng-click="betaToggle()">
                 Templates (Beta)

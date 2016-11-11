@@ -616,7 +616,33 @@ class MessageFactoryTemplate24CusotmTest < Test::Unit::TestCase
     p errors
     puts "errors size: #{errors.size}"
 
+  end
+
+
+  def test_custom_templates
+    # all = ['ADT_A60', 'DFT_P03', 'DFT_P11', 'DFT_X03', 'MFN_M01', 'MFN_X01', 'MFN_Y01', 'OMS_O05', 'ORF_Z07', 'ORF_Z10', 'ORF_Z11', 'ORM_O01', 'ORU_R01', 'ORU_RX1', 'ORU_Y07', 'ORU_Y11', 'ORU_Z01', 'ORU_Z06', 'ORU_Z07', 'ORU_Z10', 'ORU_Z11', 'QBP_G11', 'QBP_Q11', 'QBP_Q13', 'REF_I12', 'REF_I13', 'REF_I14', 'RPA_I08', 'RQA_I08', 'RRI_I12', 'RRI_I13', 'RRI_I14', 'RSP_D11', 'RSP_F11', 'RSP_K11', 'RSP_X11', 'RTB_K13']
+    ver='VAZ2.4.HL7'
+    errors = []
+    # error
+    #  ADT_A60, QBP_Q11(3), RTB_K13 (2), DFT_P03, ACK_P03, ORU_R01(2)
+    # black list
+    # MFN_M01, QBP_Q13(dss units,ecs procedures), RSP_K11 (patient eligibility,diagnosis,problems)
+    all = ['ADT_A60', 'QBP_Q11', 'RTB_K13', 'DFT_P03', 'ACK_P03', 'ORU_R01'] # errors in 2.4 bass
+    all +=['MFN_M01', 'QBP_Q13', 'RSP_K11']
+
+    all.each{|e|
+      begin
+        puts "\n------------------#{e}------------------\n"
+        hl7 = MessageFactory.new({std: '2.4', version: ver, event:e, version_store: @@VS, loadfactor: 1}).generate
+        puts hl7
+        saveMsg(e+'-'+Ez7gen::VERSION, hl7, ver)
+      rescue Exception =>z
+        errors << e
+      end
+    }
+    p errors
+    puts "errors size: #{errors.size}"
 
   end
 
-  end
+end

@@ -113,55 +113,47 @@ class MyApp < Sinatra::Application
       versions = ProfileParser.lookup_versions()
       # puts cache_lookup('hW')
 
-      std_arr =[]
+      standards =[]
+
       versions.each{ |version|
-        std_attrs={}
+        standard_attrs={}
+
         # standard
-        std = version[:std] # base standard like 2.4 or 2.5
-        std_attrs[:std] = std
+        standard_attrs[:std] =  version[:std] # base standard like 2.4 or 2.5
+
         #versions
-        std_attrs[:versions] = version[:profiles].inject([]){|col,p| col << {name: p[:doc], code: p[:name], desc: (p[:std])? 'Base': p[:description]}}
-        #events
-        evn_attrs = version[:profiles].inject({}){|h,p|
-          # h.merge({p[:name] => ProfileParser.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_groups(@@FILTERS)})
+        standard_attrs[:versions] = version[:profiles].inject([]){|col, profile| col << {name: profile[:doc], code: profile[:name], desc: (profile[:std])? 'Base': profile[:description]}}
+
+        #events for each version
+        version_events = version[:profiles].inject({}){|events, profile|
           filter_map = nil
-          # ver = (p[:base])||(p[:name])
-          exclusions = ProfileParser.getExclusionFilterRule(std, p[:doc])
-          h.merge({p[:name] => ProfileParser.new({std: version[:std], version: p[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)})
+          exclusions = ProfileParser.getExclusionFilterRule(version[:std], profile[:doc])
+
+          if(version[:std] == 'Base')
+            #events.merge({profile[:name] => ProfileParser.new({std: version[:std], version: profile[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)})
+            events[profile[:name]] = ProfileParser.new({std: version[:std], version: profile[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)
+            #lookup_message_types = lookup_message_types_with_filters
+          else
+            events[profile[:name]] =  ProfileParser.new({std: version[:std], version: profile[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)
+            #lookup_message_types_with_templates(standard, version)?
+          end
+
         }
-        std_attrs[:events] = evn_attrs
-        # add map with versions and events for each standard to the array
-        std_arr << std_attrs
+        # add events to the standard attributes
+        standard_attrs[:events] = version_events
+
+        # add collection of standards with attributes of each version
+        standards << standard_attrs
       }
 
-      versions_to_client = {standards: std_arr}
+      versions_to_client = {standards: standards}
       # p event_list
       p 'in lookup'
     rescue => e
-        puts e
+      puts e
     end
     versions_to_client.to_json
   end
-
-  # error do
-  #   puts 'inside error'
-  #   # 'Sorry there was a nasty error - ' + env['sinatra.error'].message
-  # end
-
-  # def cache_lookup(key)
-  #   begin
-  #     value = $diskcache.get(key)
-  #   rescue Diskcached::NotFound => e # prevents easy replacement, but is safer.
-  #     case key
-  #       when 'version_store'
-  #         value = ProfileParser.lookup_versions()
-  #       else
-  #         value  = 'Hello World'
-  #     end
-  #     if(value) then $diskcache.set(key, value) end
-  #   end
-  #   return value
-  # end
 
 
   # $0 is the executed file

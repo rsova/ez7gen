@@ -26,6 +26,7 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
     //set an appropriate list of message types for a selected version
     $scope.setEvents = function(version){
         $scope.events = (version.code)? lookup_service.cachedItems.standard.events[version.code] : [{name: 'Version Required', code: ''}];
+        $scope.hasTemplates = false;
 
         if($scope.events[0].name != 'Version Required'){
             $scope.subGroups = [];
@@ -77,6 +78,14 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
         //return $scope.events
         $scope.picked = undefined;
     }
+
+    $scope.checkForTemplates = function(event){
+
+        isCustom =  $scope.version.selected.desc != 'Base';
+        isTemplateEnabled = event.name == 'ADT_A01';
+        $scope.hasTemplates = isCustom && isTemplateEnabled;
+    }
+
 
     //method call to the server to generate hl7
     $scope.generate = function() {
@@ -131,7 +140,9 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
         $scope.visible = !$scope.visible;
     };
 
-    $scope.beta = false;
+    $scope.hasTemplates = false;
+
+    $scope.beta = true;
     $scope.betaToggle = function() {
         $scope.beta = !$scope.beta;
         if(!$scope.beta){
