@@ -134,6 +134,7 @@ class MyApp < Sinatra::Application
             events[profile[:name]] = ProfileParser.new({std: version[:std], version: profile[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)
             #lookup_message_types = lookup_message_types_with_filters
           else
+            params = {exclusions: exclusions, templates: getTemplates(version[:std], profile[:doc])}
             events[profile[:name]] =  ProfileParser.new({std: version[:std], version: profile[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)
             #lookup_message_types_with_templates(standard, version)?
           end
@@ -161,4 +162,17 @@ class MyApp < Sinatra::Application
   run! if __FILE__ == $0
 end
  # HELPER METHODS
+
+def getTemplates(std, version)
+  # look up for message template file for an event and standard: 2.4, ADT_A60
+  #   properties_file = File.expand_path('../resources/properties.yml', __FILE__)
+  #   yml = YAML.load_file properties_file
+  #   path = yml['web.install.dir']
+  path = File.expand_path('../config/templates/#{std}/', __FILE__)
+
+  # path = File.join(path, "config/templates/#{std}/*#{event}*")
+  #   Dir.glob(path, File::FNM_CASEFOLD).sort.last
+  return []
+end
+
  # cache lookup method

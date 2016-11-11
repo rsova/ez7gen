@@ -213,6 +213,53 @@ class ProfileParser
     return messages
   end
 
+  def lookup_events(params)
+
+    #all events for version
+    events = @xml.Export.Document.Category.locate('MessageType').map!{|it| it.attributes[:name]}
+
+    #if there are exclusion rule, remove the exclusions
+    if(!blank?(params[:exclusion]))
+      events =- params[:exclusion]
+    end
+
+    # go over the events and build attributes of the array
+    events_with_attr = events.map{ |el|
+      build_event_attributes(el, params)
+    }
+
+    return events_with_attr
+  end
+
+  # build all the details for event type including template information
+  def build_event_attributes(el, params)
+    # ???
+    event = (el.split('_')).last
+
+    attr = {}
+    attr[:name] = el
+    #chek if there is a match otherwise use the segment name
+    attr[:code] = ((e = @xml.Export.Document.Category.locate('MessageEvent').select { |it| it.attributes[:name] == event }); e!=[]) ? (e.first().attributes[:description]) : el,
+    # group: map[:group]    # group is obsolete now
+
+    # check if this event has matching template files
+    if (blank?(params[:templates]))
+      templates = params[:templates].collect { |template| template =~/#{el}/ }
+      attr[:templates] = templates
+    end
+
+   return attr
+  end
+
+  # # look up for message template file for an event and standard: 2.4, ADT_A60
+  # def lookup_templates_for_event(std, event)
+  #   properties_file = File.expand_path('../resources/properties.yml', __FILE__)
+  #   yml = YAML.load_file properties_file
+  #   path = yml['web.install.dir']
+  #   path = File.join(path, "config/templates/#{std}/*#{event}*")
+  #   Dir.glob(path, File::FNM_CASEFOLD).sort.last
+  # end
+
   # helper method to look up messages for specific groups of messages
   def lookup_message_groups (groups)
     messages = []
