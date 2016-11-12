@@ -483,6 +483,18 @@ class ProfileParserTest < Test::Unit::TestCase
 
   end
 
+  def test_get_templates
+    parser = ProfileParser.new(@attrs)
+    path = "../test/test-config/templates/2.4/"
+    # path =  '/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4'
+    #templates = Dir.entries(path).select {|f| f =~/.xml/}.sort
+    # templates = Dir.glob("#{path}/*")
+    #templates =  Dir[path + '/*.xml'].
+    # templates = Dir.glob(path + '/*.xml').select{|f| File(f)}
+     templates = parser.get_templates(path)
+    puts templates
+  end
+
 
   # def test_processSegments_pharm
   #   # first pass

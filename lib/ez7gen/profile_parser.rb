@@ -219,46 +219,56 @@ class ProfileParser
     events = @xml.Export.Document.Category.locate('MessageType').map!{|it| it.attributes[:name]}
 
     #if there are exclusion rule, remove the exclusions
-    if(!blank?(params[:exclusion]))
-      events =- params[:exclusion]
+    if(!blank?(params[:exclusions]))
+      events -= params[:exclusions]
     end
+
+    templates = (!blank?(params[:templates_path]))? get_templates(params[:templates_path]) : []
 
     # go over the events and build attributes of the array
     events_with_attr = events.map{ |el|
-      build_event_attributes(el, params)
+      build_event_attributes(el, templates)
     }
 
-    return events_with_attr
+    #events_with_attr
   end
 
   # build all the details for event type including template information
-  def build_event_attributes(el, params)
-    # ???
-    event = (el.split('_')).last
+  def build_event_attributes(event, templates)
+    # get event/message name ex: NO2 for ACK_NO2
+    event_name = (event.split('_')).last
 
     attr = {}
-    attr[:name] = el
+    attr[:name] = event
     #chek if there is a match otherwise use the segment name
-    attr[:code] = ((e = @xml.Export.Document.Category.locate('MessageEvent').select { |it| it.attributes[:name] == event }); e!=[]) ? (e.first().attributes[:description]) : el,
+    attr[:code] = ((e = @xml.Export.Document.Category.locate('MessageEvent').select { |it| it.attributes[:name] == event_name }); e!=[]) ? (e.first().attributes[:description]) : event
     # group: map[:group]    # group is obsolete now
 
     # check if this event has matching template files
-    if (blank?(params[:templates]))
-      templates = params[:templates].collect { |template| template =~/#{el}/ }
-      attr[:templates] = templates
+    # event_templates = templates.collect { |template| template =~/#{event}/ } unless blank?(templates)
+    # attr[:templates] = templates unless blank?(event_templates)
+    if (!blank?(templates))
+      # try to match templates to an event by name
+      event_templates = templates.select { |template| template =~/#{event}/i }
+      # if found set event attribute with template names
+      if(!blank?(event_templates))
+         attr[:templates] = event_templates
+      end
     end
+
 
    return attr
   end
 
-  # # look up for message template file for an event and standard: 2.4, ADT_A60
-  # def lookup_templates_for_event(std, event)
-  #   properties_file = File.expand_path('../resources/properties.yml', __FILE__)
-  #   yml = YAML.load_file properties_file
-  #   path = yml['web.install.dir']
-  #   path = File.join(path, "config/templates/#{std}/*#{event}*")
-  #   Dir.glob(path, File::FNM_CASEFOLD).sort.last
-  # end
+  # # look up for message template files in a specified directory
+  def get_templates(path)
+    begin
+      Dir.entries(path).select {|f| f =~/.xml/i}.sort
+    # rescue => e
+    rescue
+      [] # handle case when dir is missing
+    end
+  end
 
   # helper method to look up messages for specific groups of messages
   def lookup_message_groups (groups)

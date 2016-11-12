@@ -21,9 +21,9 @@ class MyApp < Sinatra::Application
 #   disable :raise_errors
 #end
 
-@@URLS={'2.4'=>'localhost:9980/','VAZ2.4'=>'localhost:9981/'}
+# @@URLS={'2.4'=>'localhost:9980/','VAZ2.4'=>'localhost:9981/'}
 # admisson messages match pattern
-@@FILTERS = [ProfileParser::FILTER_ADM, ProfileParser::FILTER_FM, ProfileParser::FILTER_GEN,  ProfileParser::FILTER_LAB, ProfileParser::FILTER_MSR, ProfileParser::FILTER_OBS, ProfileParser::FILTER_PH]
+# @@FILTERS = [ProfileParser::FILTER_ADM, ProfileParser::FILTER_FM, ProfileParser::FILTER_GEN,  ProfileParser::FILTER_LAB, ProfileParser::FILTER_MSR, ProfileParser::FILTER_OBS, ProfileParser::FILTER_PH]
 
   # configure do
   #   $diskcache = Diskcached.new(File.join(settings.root, 'cache'))
@@ -122,21 +122,25 @@ class MyApp < Sinatra::Application
         standard_attrs[:std] =  version[:std] # base standard like 2.4 or 2.5
 
         #versions
-        standard_attrs[:versions] = version[:profiles].inject([]){|col, profile| col << {name: profile[:doc], code: profile[:name], desc: (profile[:std])? 'Base': profile[:description]}}
+        standard_attrs[:versions] = version[:profiles].inject([]){|col, profile|
+          col << {name: profile[:doc],
+                  code: profile[:name],
+                  base: profile.key?(:std), # set base flag true
+                  desc: (profile[:std]) ? 'Base': profile[:description]}} # base profile don't have description as a rule
 
         #events for each version
         version_events = version[:profiles].inject({}){|events, profile|
-          filter_map = nil
-          exclusions = ProfileParser.getExclusionFilterRule(version[:std], profile[:doc])
 
-          if(version[:std] == 'Base')
+          exclusions = ProfileParser.getExclusionFilterRule(version[:std], profile[:doc])
+          lookup_params = (exclusions.any?) ? {:exclusions => exclusions} : {}
+
+          # if(!profile[:std].nil?) # Base profile has set flag for std
+          if(profile.key?(:std)) # Base profile has set flag for std
             #events.merge({profile[:name] => ProfileParser.new({std: version[:std], version: profile[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)})
-            events[profile[:name]] = ProfileParser.new({std: version[:std], version: profile[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)
-            #lookup_message_types = lookup_message_types_with_filters
+            events.merge({profile[:name] =>  ProfileParser.new({std: version[:std], version: profile[:doc], version_store: versions}).lookup_events(lookup_params)})
           else
-            params = {exclusions: exclusions, templates: getTemplates(version[:std], profile[:doc])}
-            events[profile[:name]] =  ProfileParser.new({std: version[:std], version: profile[:doc], version_store: versions}).lookup_message_types(filter_map, exclusions)
-            #lookup_message_types_with_templates(standard, version)?
+            lookup_params[:templates_path] =  File.expand_path("../config/templates/#{version[:std]}/", __FILE__)
+            events.merge({profile[:name] =>  ProfileParser.new({std: version[:std], version: profile[:doc], version_store: versions}).lookup_events(lookup_params)})
           end
 
         }
@@ -161,18 +165,3 @@ class MyApp < Sinatra::Application
   # __FILE__ is the current file
   run! if __FILE__ == $0
 end
- # HELPER METHODS
-
-def getTemplates(std, version)
-  # look up for message template file for an event and standard: 2.4, ADT_A60
-  #   properties_file = File.expand_path('../resources/properties.yml', __FILE__)
-  #   yml = YAML.load_file properties_file
-  #   path = yml['web.install.dir']
-  path = File.expand_path('../config/templates/#{std}/', __FILE__)
-
-  # path = File.join(path, "config/templates/#{std}/*#{event}*")
-  #   Dir.glob(path, File::FNM_CASEFOLD).sort.last
-  return []
-end
-
- # cache lookup method

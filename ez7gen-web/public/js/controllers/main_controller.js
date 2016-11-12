@@ -81,8 +81,8 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
 
     $scope.checkForTemplates = function(event){
 
-        isCustom =  $scope.version.selected.desc != 'Base';
-        isTemplateEnabled = event.name == 'ADT_A01';
+        isCustom =  !$scope.version.selected.base;
+        isTemplateEnabled = event.templates
         $scope.hasTemplates = isCustom && isTemplateEnabled;
     }
 
