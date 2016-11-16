@@ -33,6 +33,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   # Message Factory Stub to set usage to required and optional elements
   class MessageFactoryStub < MessageFactory
     def generate_message_from_template(parsers, templatePath, useExVal)
+      templatePath.sub!('ez7gen-web/config', '/test/test-config')
 
       hl7Msg = HL7::Message.new
       templateGenerator = TemplateGenerator.new(templatePath, parsers)
@@ -43,14 +44,27 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   end
 
   #  ADT_A60, QBP_Q11(3), RTB_K13 (2), DFT_P03, ACK_P03, ORU_R01(2)
-  def test_ADT_A60_no_ExValue
+  def test_ADT_A60_no_ExValue  # Error SAD as type
+    # Testing started at 10:33 AM ...
+    #     MSH|173|CANNF|^969^ISO|CANBC|^463^DNS|625||OML^U07^OUL_R21|979|T|2.0|||AL|AL
+    # EVN||749
+    # PID|||834^^NPI^CANAB&&^AM^477||419^305^742||547|F|||^^616^982||||||CNF^Confucian|||||H^^ATC^^^FDDC
+    # IAM|7784|MA|650|SV||D|944
+    # ---- ADT_A60 using tables ---
+    #
+    # NameError: undefined method `SAD' for class `TypeAwareFieldGenerator'
+    # /Users/romansova/RubymineProjects/ez7gen/lib/ez7gen/service/template_generator.rb:126:in `method'
+    # /Users/romansova/RubymineProjects/ez7gen/lib/ez7gen/service/template_generator.rb:126:in `build_partial_field_data'
+    # /Users/romansova/RubymineProjects/ez7gen/lib/ez7gen/service/template_generator.rb:104:in `process_partials'
+
     # ver='vaz2.4'
     # view xml as grid http://xmlgrid.net/
     ver='VAZ2.4.HL7'
     event='ADT_A60'
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60.xml'})
+    # factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista sqwm-adt_a60.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista sqwm-adt_a60.xml"
     hl7 = factory.generate() #     useExValue = false by default
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
 
@@ -72,9 +86,10 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='ADT_A60'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista sqwm-adt_a60.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista sqwm-adt_a60.xml"
+
     # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista+sqwm-adt_a60 (1).xml"
     # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista+sqwm-adt_a60 (2).xml"
     #factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS})
@@ -100,7 +115,8 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='ADT_A60'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60_race.xml'})
+    # factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60_race.xml'})
     # switch template path to test dir
     factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista sqwm-adt_a60_race.xml"
     #factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS})
@@ -125,9 +141,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='QBP_Q11'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_diagnosis_query_qbp_q11-qbp_q11.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_diagnosis_query_qbp_q11-qbp_q11.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_diagnosis_query_qbp_q11-qbp_q11.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -148,9 +164,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='QBP_Q11'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_eclass_query_qbp_q11-qbp_q11.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_patient_eclass_query_qbp_q11-qbp_q11.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_patient_eclass_query_qbp_q11-qbp_q11.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -172,7 +188,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='QBP_Q11'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_problems_query_qbp_q11-qbp_q11.xml'})
     # switch template path to test dir
     factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_patient_problems_query_qbp_q11-qbp_q11.xml"
 
@@ -197,7 +213,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   ver='VAZ2.4.HL7'
   event='QBP_Q11'
   useExValue = true
-  factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+  factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_dss_units_response_rtb_k13-rtb_k13-rtb_k13.xml'})
   # switch template path to test dir
   factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_dss_units_response_rtb_k13-rtb_k13-rtb_k13.xml"
 
@@ -225,7 +241,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   ver='VAZ2.4.HL7'
   event='QBP_Q11'
   useExValue = true
-  factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+  factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_ecs_procedures_response_rtb_k13-rtb_k13-rtb_k13.xml'})
   # switch template path to test dir
   factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_ecs_procedures_response_rtb_k13-rtb_k13-rtb_k13.xml"
 

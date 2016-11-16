@@ -2,102 +2,72 @@
 angular.module("app").controller('MainController', ['$scope', '$http', 'toastr', 'lookup_service', 'cachedItems',function($scope, $http, toastr, lookup_service, cachedItems){
     //panels.close();
 
-    //fire when controller loaded
+    // when controller loaded, the service has already fired and fetched app data
     lookup_service.cachedItems = null || cachedItems;
     $scope.hl7 = lookup_service.data;
-    //$scope.versions = lookup_service.cachedItems.versions;
+
     //init select controls
     $scope.std = {};
     $scope.version = {};
     $scope.event = {};
     $scope.subGroup = {};
-    $scope.subGroupVisible = false;
+    $scope.template = {};
+
+
     $scope.useTemplate = false;
     $scope.useExVal = false;
+    $scope.hasTemplates = false;
+    $scope.showUseExVal = false;
+    $scope.visible = false;
+
+    $scope.showUseExVal = true;
+    $scope.subGroupVisible = false;
 
     //set standards select
     $scope.standards = lookup_service.cachedItems.standards;
 
+    // Methods
+
+    // Set versions drop-down for selected standard
     $scope.setVersions = function(standard){
         lookup_service.cachedItems.standard = standard;
         $scope.versions = standard.versions
     };
 
-    //set an appropriate list of message types for a selected version
+    //Set an appropriate list of message types for a selected version
     $scope.setEvents = function(version){
         $scope.events = (version.code)? lookup_service.cachedItems.standard.events[version.code] : [{name: 'Version Required', code: ''}];
         $scope.hasTemplates = false;
-
-        if($scope.events[0].name != 'Version Required'){
-            $scope.subGroups = [];
-            var unique = {};
-            for( var i in $scope.events ){
-                if( typeof(unique[$scope.events[i].group]) == "undefined"){
-                    $scope.subGroups.push({name: $scope.events[i].group, code: ''});
-                }
-                unique[$scope.events[i].group] = 0;
-            }
-        }
-
-        $scope.subGroupVisible = ($scope.subGroups && $scope.subGroups.length >1)?true : false;
-        $scope.subGroup = {};
         $scope.event = {};
     };
 
-    $scope.groupFilterFn = function (groups){
-        //return groups.reverse();
-        if( typeof($scope.subGroup.selected) == "undefined"){
-            return groups;
-        }else{
-            filtered = groups.filter(function(g) { return g.name == $scope.subGroup.selected.name; });
-            $scope.event = {};
-            return filtered;
-        }
-        //return filtered;
-    };
-
-    $scope.clearEvent = function ($select) {
-        // clear search text
-        //$select.search = $select.selected.name;
-        $scope.event.selected = $select.selected
-    };
-
-    //$scope.groupFilterFn = function (item){
-    //    if (item.name[0] >= 'A' && item.name[0] <= 'M')
-    //        return 'From A - M';
-    //
-    //    if (item.name[0] >= 'N' && item.name[0] <= 'Z')
-    //        return 'From N - Z';
-    //};
-
-    //function to apply filter change that happened via another control selection
-    $scope.setSubGroup = function(group){
-        //this is a quick way of making change that model 'dirty'
-        //forces select control for message types to see the change in the model and fire the filter function
-        $scope.events[0] = cloneObject($scope.events[0])
-        //return $scope.events
-        $scope.picked = undefined;
-    }
-
-    $scope.checkForTemplates = function(event){
-
+    // Check if event has templates
+    $scope.onEventSelect = function(event){
+        $scope.showUseExVal = false;
+        $scope.useExVal = false;
+        $scope.template = {};
         isCustom =  !$scope.version.selected.base;
         isTemplateEnabled = event.templates
         $scope.hasTemplates = isCustom && isTemplateEnabled;
     }
 
 
-    //method call to the server to generate hl7
+    // Method call to the server to generate hl7
     $scope.generate = function() {
         lookup_service.cachedItems.current = {event: $scope.event, version: $scope.version};
+
+        //handle case when template file is not set
+        var templateFile = false;
+        try {templateFile = $scope.template.selected.file} catch(e){} //do noting
 
         //var url = $location.url();
         //console.log(url)
         $http({
             //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
             method: 'post',
-            url: 'http://localhost:4567/generate/',
-            data: { 'std': $scope.std.selected.std, 'version': $scope.version.selected, 'event': $scope.event.selected , 'useTemplate': $scope.useTemplate, 'useExVal': $scope.useExVal}
+            //url: 'http://localhost:4567/generate/',
+            url: 'generate/',
+            data: { 'std': $scope.std.selected.std, 'version': $scope.version.selected, 'event': $scope.event.selected , 'useTemplate': templateFile, 'useExVal': $scope.useExVal}
 
         }).success(function(data) {
             $scope.hl7 = data;
@@ -105,13 +75,15 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
         });
     };
 
+    // Method call to the server to validate hl7
     $scope.validate = function() {
 
         $http({
             //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
             //use call async as a promise
             method: 'post',
-            url: 'http://localhost:4567/validate/',
+            //url: 'http://localhost:4567/validate/',
+            url: 'validate/',
             //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data: { std : $scope.std.selected.std, version: $scope.version.selected,  hl7: lookup_service.data}
         }).success(function(data) {
@@ -135,35 +107,14 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
         })
     };
 
-    $scope.visible = false;
+    // Method to hide and show responce from Ensemble
     $scope.toggle = function() {
         $scope.visible = !$scope.visible;
     };
 
-    $scope.hasTemplates = false;
-
-    $scope.beta = true;
-    $scope.betaToggle = function() {
-        $scope.beta = !$scope.beta;
-        if(!$scope.beta){
-            $scope.useTemplate = false;
-            $scope.useExVal = false;
-        }
-
-    }
-    // recursive function to clone an object. If a non object parameter
-    // is passed in, that parameter is returned and no recursion occurs.
-    function cloneObject(obj) {
-        if (obj === null || typeof obj !== 'object') {
-            return obj;
-        }
-
-        var temp = obj.constructor(); // give temp the original obj's constructor
-        for (var key in obj) {
-            temp[key] = cloneObject(obj[key]);
-        }
-
-        return temp;
+    //Method to set handle clean up when template selected
+    $scope.onTemplateSelected = function(){
+        $scope.showUseExVal = true;
     }
 
 }]);

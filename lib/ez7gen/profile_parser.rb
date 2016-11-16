@@ -223,18 +223,20 @@ class ProfileParser
       events -= params[:exclusions]
     end
 
-    templates = (!blank?(params[:templates_path]))? get_templates(params[:templates_path]) : []
+    path = params[:templates_path]
+
+    templates = (!blank?(path))? get_templates(path) : []
 
     # go over the events and build attributes of the array
     events_with_attr = events.map{ |el|
-      build_event_attributes(el, templates)
+      build_event_attributes(el, templates, path)
     }
 
     #events_with_attr
   end
 
   # build all the details for event type including template information
-  def build_event_attributes(event, templates)
+  def build_event_attributes(event, templates, path)
     # get event/message name ex: NO2 for ACK_NO2
     event_name = (event.split('_')).last
 
@@ -252,8 +254,16 @@ class ProfileParser
       event_templates = templates.select { |template| template =~/#{event}/i }
       # if found set event attribute with template names
       if(!blank?(event_templates))
-         attr[:templates] = event_templates
+         # attr[:templates] = []
+
+         attr[:templates] = event_templates.collect{ |tmpl|
+           desc = Ox.parse(IO.read("#{path}/#{tmpl}")).HL7v2xConformanceProfile.HL7v2xStaticDef.attributes[:EventDesc]
+           # desc = (!blank?(desc)) ? desc : "Custom #{event}"
+           desc = (!blank?(desc)) ? desc : tmpl.gsub('_',' ').sub('.xml','')
+           {:desc => desc.upcase , :file => tmpl}
+         }
       end
+
     end
 
 

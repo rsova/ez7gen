@@ -18,18 +18,19 @@ class MessageFactory
     end
     @loadFactor ||= nil
     # lookup for a template by name if client speified using a template
-    @templatePath = (args[:use_template])? self.class.lookup_template_for_event(@std, @event):nil
+    @templatePath = (args[:use_template])? self.class.lookup_template_for_event(@std, @use_template):nil
     # @templatePath = self.class.lookup_template_for_event(@std, @event)
 
   end
 
   # look up for message template file for an event and standard: 2.4, ADT_A60
-  def self.lookup_template_for_event(std, event)
+  def self.lookup_template_for_event(std, template)
     properties_file = File.expand_path('../resources/properties.yml', __FILE__)
     yml = YAML.load_file properties_file
     path = yml['web.install.dir']
-    path = File.join(path, "config/templates/#{std}/*#{event}*")
-    Dir.glob(path, File::FNM_CASEFOLD).sort.last
+    path = File.join(path, "config/templates/#{std}/#{template}")
+    # path = File.join(path, "config/templates/#{std}/*#{event}*")
+    # Dir.glob(path, File::FNM_CASEFOLD).sort.last
   end
 
   # main factory method
