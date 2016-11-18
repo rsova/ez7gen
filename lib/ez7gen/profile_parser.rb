@@ -237,13 +237,11 @@ class ProfileParser
 
   # build all the details for event type including template information
   def build_event_attributes(event, templates, path)
-    # get event/message name ex: NO2 for ACK_NO2
-    event_name = (event.split('_')).last
 
     attr = {}
     attr[:name] = event
     #chek if there is a match otherwise use the segment name
-    attr[:code] = ((e = @xml.Export.Document.Category.locate('MessageEvent').select { |it| it.attributes[:name] == event_name }); e!=[]) ? (e.first().attributes[:description]) : event
+    attr[:code] = get_message_event_desc(event)
     # group: map[:group]    # group is obsolete now
 
     # check if this event has matching template files
@@ -254,7 +252,12 @@ class ProfileParser
       event_templates = templates.select { |template| template =~/#{event}/i }
       # if found set event attribute with template names
       if(!blank?(event_templates))
+
          # attr[:templates] = []
+         #update event code with template count
+        attr[:code] += " +#{event_templates.size} templates"
+
+        if (event_templates.size == 1) then attr[:code].chop! end
 
          attr[:templates] = event_templates.collect{ |tmpl|
            desc = Ox.parse(IO.read("#{path}/#{tmpl}")).HL7v2xConformanceProfile.HL7v2xStaticDef.attributes[:EventDesc]
@@ -280,12 +283,27 @@ class ProfileParser
     end
   end
 
+  #look up for event description
+  def get_message_event_desc(event)
+    desc = nil
+    tbl = @xml.Export.Document.Category.locate('CodeTable').select { |it| (it.attributes[:description] == 'Event type') }
+
+    if(!blank?(tbl))
+      # get event/message name ex: NO2 for ACK_NO2
+      event_name = (event.split('_')).last
+      for t in tbl # could be multiple tables, iterate
+        desc = (( e = t.locate('Enumerate').select{ |it| it.attributes[:value] == event_name }); e!=[])? (e.first().attributes[:description]) : nil
+        if(desc)then break end # brake after first match
+      end # for
+    end # if
+
+    return desc || event
+  end
+
   # helper method to look up messages for specific groups of messages
   def lookup_message_groups (groups)
     messages = []
-    groups.each{|group|
-     messages += lookup_message_types(group)
-    }
+    groups.each{ |group| messages += lookup_message_types(group) }
     return messages
   end
 
