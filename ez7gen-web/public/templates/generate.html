@@ -12,8 +12,7 @@
             <!--<ui-select ng-model="std.selected" theme="selectize"  on-select="setVersions(std.selected)"  style="color: #555">-->
             <ui-select ng-model="std.selected" on-select="setVersions(std.selected)">
                 <ui-select-match placeholder="HL7 Standards">{{$select.selected.std}}</ui-select-match>
-                <ui-select-choices repeat="std in standards | filter: $select.search"
-                                   refresh="setVersios($select.search)" refresh-delay="0">
+                <ui-select-choices repeat="std in standards | filter: $select.search" refresh="setVersios($select.search)" refresh-delay="0">
                     <span ng-bind-html="std.std | highlight: $select.search"></span>
                 </ui-select-choices>
             </ui-select>
@@ -25,8 +24,8 @@
                 <ui-select-match placeholder="HL7 Version">{{$select.selected.name}}</ui-select-match>
                 <ui-select-choices repeat="version in versions | filter: $select.search"
                                    refresh="setEvents($select.search)" refresh-delay="0">
-                    <span ng-bind-html="version.name | highlight: $select.search"></span>
-                    <small ng-bind-html="version.desc | highlight: $select.search"></small>
+                    <div ng-bind-html="version.name | highlight: $select.search"></div>
+                    <b ng-bind-html="version.desc | highlight: $select.search"></b>
                 </ui-select-choices>
             </ui-select>
         </div>
@@ -40,9 +39,12 @@
                 <ui-select-match placeholder="HL7 Event">{{$select.selected.name}}</ui-select-match>
                 <!--<ui-select-choices group-by="'group'" group-filter="groupFilterFn" repeat="event in events | filter: $select.search | limitTo: ($select.search.length <= 2) ? 0 : undefined">-->
                 <!--<ui-select-choices group-by="'group'" group-filter="groupFilterFn" repeat="event in events | filter: $select.search"> | limitTo: ($select.search.length <= 2) ? 0 : undefined-->
-                <ui-select-choices group-by="'group'" repeat="event in events | filter: $select.search">
-                    <span ng-bind-html="event.name | highlight: $select.search"></span>
-                    <small ng-bind-html="event.code"></small>
+                <ui-select-choices repeat="event in events | filter: $select.search">
+                    <div><span ng-bind-html="event.name | highlight: $select.search"></span></div>
+                    <!--<small ng-bind-html="event.code"></small>-->
+                    <span ng-bind-html="''+event.code | highlight: $select.search"></span>
+
+
                 </ui-select-choices>
             </ui-select>
 
@@ -96,8 +98,8 @@
                 <!--<ui-select ng-model="subGroup.selected" theme="selectize" on-select="setSubGroup(subGroup.selected)">-->
                 <!--<div class="col-md-7 col-mid-offset-1">-->
                 <div class="col-md-7">
-                    <ui-select ng-model="template.selected" on-select="onTemplateSelected()">
-                        <ui-select-match placeholder="Select Template">{{$select.selected.desc}}</ui-select-match>
+                    <ui-select ng-model="template.selected" on-select="onTemplateSelected()" style="min-width: 500px;">
+                        <ui-select-match allow-clear="true" placeholder="Select Template">{{$select.selected.desc}}</ui-select-match>
                         <ui-select-choices repeat="tmp in event.selected.templates | filter: $select.search ">
                             <span ng-bind-html="tmp.desc | highlight: $select.search"></span>
                         </ui-select-choices>

@@ -255,9 +255,13 @@ class ProfileParser
 
          # attr[:templates] = []
          #update event code with template count
-        attr[:code] += " +#{event_templates.size} templates"
+        #code = "<b> +#{event_templates.size}" << (event_templates.size == 1) ? "TEMPLATE" : "TEMPLATES" << "</b>"
+        # attr[:code] += "<div><b><font color=#337ab7>#{event_templates.size} #{(event_templates.size == 1) ? 'TEMPLATE' : 'TEMPLATES'}</font></b></div>"
+        attr[:code] += "<small><b><font color=#337ab7> (#{event_templates.size}#{(event_templates.size == 1) ? 'TEMPLATE' : 'TEMPLATES'})</font></b></small>"
+        # if (event_templates.size == 1) then code.chop! end
+        # attr[:code] += "#{code}"
 
-        if (event_templates.size == 1) then attr[:code].chop! end
+        # if (event_templates.size == 1) then attr[:code].chop! end
 
          attr[:templates] = event_templates.collect{ |tmpl|
            desc = Ox.parse(IO.read("#{path}/#{tmpl}")).HL7v2xConformanceProfile.HL7v2xStaticDef.attributes[:EventDesc]

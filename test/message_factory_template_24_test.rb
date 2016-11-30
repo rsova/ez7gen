@@ -75,6 +75,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     assert_equal 'IAM', hl7[3].e0
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60.xml'})
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -86,14 +87,13 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='ADT_A60'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60.xml'})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60.xml'})
     # switch template path to test dir
     # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista sqwm-adt_a60.xml"
 
     # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista+sqwm-adt_a60 (1).xml"
     # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista+sqwm-adt_a60 (2).xml"
     #factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS})
-
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
 
@@ -104,6 +104,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     assert_equal 'IAM|2|F|GLUTENS|MO|DROWSY|U|168;GMRD(120.82,', hl7[3].to_s
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60.xml'})
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -115,10 +116,10 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='ADT_A60'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60_race.xml'})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60_race.xml'})
     # factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60_race.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista sqwm-adt_a60_race.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista sqwm-adt_a60_race.xml"
     #factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS})
 
     hl7 = factory.generate(useExValue)
@@ -130,6 +131,8 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     assert_equal 'IAM|2|F|GLUTENS|MO|DROWSY|U|168;GMRD(120.82,', hl7[3].to_s
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60_race.xml'})
+    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/vista sqwm-adt_a60_race.xml"
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -141,7 +144,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='QBP_Q11'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_diagnosis_query_qbp_q11-qbp_q11.xml'})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_diagnosis_query_qbp_q11-qbp_q11.xml'})
     # switch template path to test dir
     # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_diagnosis_query_qbp_q11-qbp_q11.xml"
 
@@ -153,6 +156,10 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     assert_equal hl7[2].to_s, 'RCP|I'
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_diagnosis_query_qbp_q11-qbp_q11.xml'})
+    # switch template path to test dir
+    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_diagnosis_query_qbp_q11-qbp_q11.xml"
+
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -164,7 +171,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='QBP_Q11'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_eclass_query_qbp_q11-qbp_q11.xml'})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_eclass_query_qbp_q11-qbp_q11.xml'})
     # switch template path to test dir
     # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_patient_eclass_query_qbp_q11-qbp_q11.xml"
 
@@ -176,6 +183,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     assert_equal hl7[2].to_s, 'RCP|I'
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_eclass_query_qbp_q11-qbp_q11.xml'})
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -188,9 +196,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='QBP_Q11'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_problems_query_qbp_q11-qbp_q11.xml'})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_problems_query_qbp_q11-qbp_q11.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_patient_problems_query_qbp_q11-qbp_q11.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_patient_problems_query_qbp_q11-qbp_q11.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -200,6 +208,10 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     assert_equal hl7[2].to_s, 'RCP|I'
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_problems_query_qbp_q11-qbp_q11.xml'})
+    # switch template path to test dir
+    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_patient_problems_query_qbp_q11-qbp_q11.xml"
+
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -215,7 +227,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   useExValue = true
   factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_dss_units_response_rtb_k13-rtb_k13-rtb_k13.xml'})
   # switch template path to test dir
-  factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_dss_units_response_rtb_k13-rtb_k13-rtb_k13.xml"
+  # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_dss_units_response_rtb_k13-rtb_k13-rtb_k13.xml"
 
   hl7 = factory.generate(useExValue)
   saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -229,6 +241,10 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   assert_equal hl7[5].to_s, 'RDT|10936|SLC4 TEST LAB|67|SM DENTAL HISTORICAL SLC4|0|N'
 
   puts "---- #{event} using tables ---"
+  factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_dss_units_response_rtb_k13-rtb_k13-rtb_k13.xml'})
+  # switch template path to test dir
+  factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_dss_units_response_rtb_k13-rtb_k13-rtb_k13.xml"
+
   hl7 = factory.generate(false)
   puts hl7
   saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -241,9 +257,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   ver='VAZ2.4.HL7'
   event='QBP_Q11'
   useExValue = true
-  factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_ecs_procedures_response_rtb_k13-rtb_k13-rtb_k13.xml'})
+  factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_ecs_procedures_response_rtb_k13-rtb_k13-rtb_k13.xml'})
   # switch template path to test dir
-  factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_ecs_procedures_response_rtb_k13-rtb_k13-rtb_k13.xml"
+  # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_ecs_procedures_response_rtb_k13-rtb_k13-rtb_k13.xml"
 
   hl7 = factory.generate(useExValue)
   saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -256,6 +272,10 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
   assert_equal hl7[5].to_s, 'RDT|3708;EC(725,|SECURE MSGEVAL NONMD|SECURE MSGEVAL MD|MD USE ONLY'
 
   puts "---- #{event} using tables ---"
+  factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_ecs_procedures_response_rtb_k13-rtb_k13-rtb_k13.xml'})
+  # switch template path to test dir
+  #factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_ecs_procedures_response_rtb_k13-rtb_k13-rtb_k13.xml"
+
   hl7 = factory.generate(false)
   puts hl7
   saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -268,9 +288,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='DFT_P03'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_ecs_filer_request_dft_p03-dft_p03-080714.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_ecs_filer_request_dft_p03-dft_p03-080714.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_ecs_filer_request_dft_p03-dft_p03-080714.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -283,6 +303,10 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     assert_equal hl7[4].to_s, 'ZEL|0001|1|||||||ALLIED VETERAN|V||||||||E|E|E|||Y||||||||||||500|||||E||E||Y'
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_ecs_filer_request_dft_p03-dft_p03-080714.xml'})
+    # switch template path to test dir
+    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_ecs_filer_request_dft_p03-dft_p03-080714.xml"
+
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -296,9 +320,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     event='ACK_P03'
     useExValue = true
     # use message factory stub to generate all required adn optional elements: R and RE
-    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_ecs_filer_response_ack_p03-ack_p03.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_ecs_filer_response_ack_p03-ack_p03.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_ecs_filer_response_ack_p03-ack_p03.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -309,6 +333,8 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     #assert_equal hl7[2].to_s, 'ERR|6^5^8^0&Record Filed|69621|6658665'
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_ecs_filer_response_ack_p03-ack_p03.xml'})
+
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -321,9 +347,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='ORU_R01'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'sqwm vitals-oru_r01.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/sqwm vitals-oru_r01.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/sqwm vitals-oru_r01.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -336,6 +362,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     assert_equal hl7[4].to_s, 'OBX|1|ST|BP||71|KG|||||F|||20040328134602.1234+0600||12345679^NURSELASTNM^NURSEFIRSTNM^^III^MS.'
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'sqwm vitals-oru_r01.xml'})
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -347,9 +374,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='ORU_R01'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'orur01rvbecv2.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/orur01rvbecv2.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/orur01rvbecv2.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -362,6 +389,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
 
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'orur01rvbecv2.xml'})
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -375,9 +403,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='MFN_M01'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'eiv table update-mfn_m01 20151201.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/eiv table update-mfn_m01 20151201.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/eiv table update-mfn_m01 20151201.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -389,6 +417,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     assert_equal hl7[2].to_s, 'MFE|MAD|653|20130715114123-0006^D|180^51.01|CE'
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'eiv table update-mfn_m01 20151201.xml'})
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -401,9 +430,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='QBP_Q13'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_dss_units_query_qbp_q13-qbp_q13.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_dss_units_query_qbp_q13-qbp_q13.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_dss_units_query_qbp_q13-qbp_q13.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -416,6 +445,8 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     # assert_equal hl7[2].to_s, 'RCP|I'
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_dss_units_query_qbp_q13-qbp_q13.xml'})
+
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -427,9 +458,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='QBP_Q13'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_ecs_procedures_query_qbp_q13-qbp_q13.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_ecs_procedures_query_qbp_q13-qbp_q13.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_ecs_procedures_query_qbp_q13-qbp_q13.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -442,6 +473,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     assert_equal hl7[3].to_s, 'RCP|I'
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_ecs_procedures_query_qbp_q13-qbp_q13.xml'})
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -454,9 +486,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='RSP_K11'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_patient eligibility_response-rsp_k11-080714.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_patient eligibility_response-rsp_k11-080714.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_patient eligibility_response-rsp_k11-080714.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -470,6 +502,8 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
 
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_patient eligibility_response-rsp_k11-080714.xml'})
+
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -481,9 +515,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='RSP_K11'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_diagnosis_response_rsp_k11-rsp_k11-rsp_k11.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_diagnosis_response_rsp_k11-rsp_k11-rsp_k11.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_diagnosis_response_rsp_k11-rsp_k11-rsp_k11.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -497,6 +531,7 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
 
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_diagnosis_response_rsp_k11-rsp_k11-rsp_k11.xml'})
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -508,9 +543,9 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='RSP_K11'
     useExValue = true
-    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: true})
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_problems_response_rsp_k11-rsp_k11-rsp_k11.xml'})
     # switch template path to test dir
-    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_patient_problems_response_rsp_k11-rsp_k11-rsp_k11.xml"
+    # factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/mhvsm_standardhl7lib_patient_problems_response_rsp_k11-rsp_k11-rsp_k11.xml"
 
     hl7 = factory.generate(useExValue)
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
@@ -524,6 +559,133 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     assert_equal hl7[4].to_s, 'DG1|3||799.9^Other specified disorders of stomach and duodenum (ICD-9-CM 537.89)^I9^5570^^L||20040328134602.1234+0600|F'
 
     puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_problems_response_rsp_k11-rsp_k11-rsp_k11.xml'})
+
+    hl7 = factory.generate(false)
+    puts hl7
+    saveMsg(Ez7gen::VERSION+event, hl7, ver)
+  end
+
+  # Templates from other schemas then 2.4
+  def test_ORF_Z11 # 2.3.1 ? - change template to validate against 2.4
+    # ver='vaz2.4'
+    # view xml as grid http://xmlgrid.net/
+    ver='VAZ2.4.HL7'
+    event='ORF_Z11'
+    useExValue = true
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'ORF_Z11_2_3_1.xml'})
+    # switch template path to test dir
+    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.3.1/ORF_Z11_2_3_1.xml"
+
+    hl7 = factory.generate(useExValue)
+    saveMsg(Ez7gen::VERSION+event, hl7, ver)
+    puts hl7
+
+    # template has variations
+    # assert_equal hl7[0].to_s, 'MSH|161|||||472||ORF^Z11|552492821|T|2.2'
+    assert_equal hl7[1].to_s, 'MSA|AA|55294822'
+    # assert_equal hl7[2].to_s, 'QRD|20141015092714|R|I|46370291||813|1||OTH|IVM'
+    # assert_equal hl7[3].to_s, 'QRF|IVM|216|147||||||^^^860^554'
+    assert_equal hl7[4].to_s, 'PID|1||545254||ABCDEFG^ABCDEFG||20070601145007|F||W^WHITE^a^a^a^est|123 Lane^abc^Harrisville^ny^60150^USA^abc^abc^dav||(888)999-9999^^^^123^123^1112222|||Married|LDS|851851851|851851851'
+    assert_equal hl7[5].to_s, 'ZPD|0001|None|LAKELAND|FL|E|HL7ZFATHERRNAME|HL7ZMOTHERNAME|0|20021225|HL7PFSSZPDSRNAME^HL7PFSSZPDGVNNAME^J^MD|1|1|20010123|||1|Y|0|0|WORLD WAR II - PACIFIC|WC|1|100000|20040323|500|20040101|500|20010128|20011003|1|1|20040101|PP||AUSTRALIA|||||1|1'
+    assert_equal hl7[6].to_s, 'ZIE|0001|20001231|DISHONORABLE DISCHARGE|DUE TO Dishonerable discharge|MEMPHIS|1|TN|19480113|BOSSIER CITY|1|LA'
+    assert_equal hl7[7].to_s, 'ZIO|1|2|2|20030117|Y|20050415|1'
+    assert_equal hl7[8].to_s, 'ZEL|0001|1|||0|1212134|541CLEVELAND-RO|0|ALLIED VETERAN|P|20041203|20041103|Interview|0|0|0|1|0|0|0|1000.00||N|||19890908|19890908|12345||19780405|19780405|19780405|20041203|20061203|500|ESR|1||1|1|1|20140221|660|CLEAR'
+    # assert_equal hl7[9].to_s, 'ZE2|20040101^480|31'
+    #assert_equal hl7[10].to_s, 'ZHP|123|352||POSTMASTER|123'
+    assert_equal hl7[11].to_s, 'ZEN|0001|19991228|1|2|1|CANCELED REMARKS TEST||512 9AC|1|19951230|19940223|20070101|1'
+    assert_equal hl7[12].to_s, 'ZMT|0001||E'
+    assert_equal hl7[13].to_s, 'ZCD|1|20140312|LAST,FIRST M.D.|512 9AC|20140315|2^Medical Record Review^VA0041|369.4|25900|4|2|2|Y|1|20050916|20050916|20050916|1^123^ABC^XYZ'
+    assert_equal hl7[14].to_s, 'ZSP|0001|1|75|2|0|0|0|19931201|20001231|20030506'
+    #assert_equal hl7[15].to_s, 'ZMH|1|SL|NAVY|989^645|R'
+    assert_equal hl7[16].to_s, 'ZRD|0001|5018^HYDRARTHROSIS|10|1|BAD FOOT|20|Y|N|20011030|AVERAGE|20001023'
+    #assert_equal hl7[17].to_s, 'OBX||CE|38|VISTA|||||||R|668||616'
+
+    puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_problems_response_rsp_k11-rsp_k11-rsp_k11.xml'})
+
+    hl7 = factory.generate(false)
+    puts hl7
+    saveMsg(Ez7gen::VERSION+event, hl7, ver)
+  end
+
+  # Templates from other schemas then 2.4
+  def test_DFT_P11_AJ # 2.5 ? - change template to validate against 2.4
+    # ver='vaz2.4'
+    # view xml as grid http://xmlgrid.net/
+    ver='VAZ2.4.HL7'
+    event='DFT_P03'
+    useExValue = true
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'DFT_P11_AJ_2_5.xml'})
+    # switch template path to test dir
+    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.5/DFT_P11_AJ_2_5.xml"
+
+    hl7 = factory.generate(useExValue)
+    saveMsg(Ez7gen::VERSION+event, hl7, ver)
+    puts hl7
+
+    # template has variations
+    assert_equal hl7[0].to_s, 'MSH|^~\&|^PRCHCPS|^200|^PRCHCPR|^500|||DFT^P03|20018202|P|2.5|||AL|AL|USA'
+    assert_equal hl7[1].to_s, 'EVN|P03|20040328134623.1234'
+    assert_equal hl7[2].to_s, 'PID|||1234^5004400231V123112||^PATIENTFIRST'
+
+      puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_problems_response_rsp_k11-rsp_k11-rsp_k11.xml'})
+
+    hl7 = factory.generate(false)
+    puts hl7
+    saveMsg(Ez7gen::VERSION+event, hl7, ver)
+  end
+
+  def test_DFT_P11_PY # 2.5 ? - change template to validate against 2.4
+    # ver='vaz2.4'
+    # view xml as grid http://xmlgrid.net/
+    ver='VAZ2.4.HL7'
+    event='DFT_P03'
+    useExValue = true
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'DFT_P11_PY_2_5.xml'})
+    # switch template path to test dir
+    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.5/DFT_P11_PY_2_5.xml"
+
+    hl7 = factory.generate(useExValue)
+    saveMsg(Ez7gen::VERSION+event, hl7, ver)
+    puts hl7
+
+    # template has variations
+    assert_equal hl7[0].to_s, 'MSH|^~\&|^PRC HCP SEND|^500|^PRC HCP RECEIVE|^200|20040328134623||DFT^P03|20018202|P|2.5|||NE|AL|USA'
+    assert_equal hl7[1].to_s, 'EVN|P03|20120203120912-0500'
+    assert_equal hl7[2].to_s, 'PID|1||1234^5004400231V123112||TESTONE^PATFIRST'
+
+    puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_problems_response_rsp_k11-rsp_k11-rsp_k11.xml'})
+
+    hl7 = factory.generate(false)
+    puts hl7
+    saveMsg(Ez7gen::VERSION+event, hl7, ver)
+  end
+
+  def test_DFT_P11_VAAQ # 2.5 ? - change template to validate against 2.4
+    # ver='vaz2.4'
+    # view xml as grid http://xmlgrid.net/
+    ver='VAZ2.4.HL7'
+    event='DFT_P03'
+    useExValue = true
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'DFT_P11_VAAQ_2_5.xml'})
+    # switch template path to test dir
+    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.5/DFT_P11_VAAQ_2_5.xml"
+
+    hl7 = factory.generate(useExValue)
+    saveMsg(Ez7gen::VERSION+event, hl7, ver)
+    puts hl7
+
+    # template has variations
+    assert_equal hl7[0].to_s, 'MSH|^~\&|^PRCCHPS|^500|^PRCHCPR|^200|20040328134623||DFT^P11|123456789|P|2.5|||AL|AL|USA'
+    assert_equal hl7[1].to_s, 'EVN|P11|20120203120912-0500'
+    # assert_equal hl7[2].to_s, 'PID|5273||9999^5004400231V123112||^PATIENTFIRST'
+
+    puts "---- #{event} using tables ---"
+    factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_problems_response_rsp_k11-rsp_k11-rsp_k11.xml'})
+
     hl7 = factory.generate(false)
     puts hl7
     saveMsg(Ez7gen::VERSION+event, hl7, ver)

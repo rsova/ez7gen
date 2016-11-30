@@ -123,7 +123,8 @@ class TemplateGenerator
     if (item[:Datatype]) then attrs[:datatype] = item[:Datatype] end
 
     # return genereated field
-    @fieldGenerators[PRIMARY].method(attrs[:datatype]).call(attrs, true)#TODO: fix this use proper field generator
+    # use primary field generator, as templates only work for custom schema.
+    @fieldGenerators[PRIMARY].method(attrs[:datatype]).call(attrs, true)
   end
 
   # using MWB profiles build collection of message metadata, to use for building a message
