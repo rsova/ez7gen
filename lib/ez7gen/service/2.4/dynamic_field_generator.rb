@@ -49,6 +49,7 @@ class DynamicFieldGenerator < BaseFieldGenerator
     @pp.xml.Export.Document.Category.locate('DataType').select{|it| it.attributes[:name] == name}.first.locate('DataSubType').each{ |it| sub_types << it.attributes}
 
     sub_types.each{ |sub_type|
+      # check if field is required
      begin
       # value << method(sub_type[:datatype]).call(sub_type,[true, false].sample)
       value << method(sub_type[:datatype]).call(sub_type,true)
@@ -66,6 +67,8 @@ class DynamicFieldGenerator < BaseFieldGenerator
 
     return value.join(@@HAT)
   end
+
+  #
 
 
 end

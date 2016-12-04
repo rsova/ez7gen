@@ -37,6 +37,49 @@ class DataTypesExploration < Test::Unit::TestCase
     assert_equal ["ST", "NM", "ST", "NM"], values
   end
 
+  def test_base_types_no_subtypes_dt
+    templatePath = File.path('test-config/schema/2.5/2.5.HL7.xml')
+    xml = Ox.parse(IO.read(templatePath))
+    assert_not_nil (xml)
+
+    # dt = xml.Export.Document.Category.DataType.locate('DataSubType').select{|it| it.nodes.size == 1}
+    dt = xml.Export.Document.Category.locate('DataType').select{|it| it.nodes.size == 1}
+    data_types = []
+    dt.each{ |it|
+      data_types << it.attributes[:name]
+      # p it
+    }
+    assert_equal 11, dt.size
+    # base_dt = ["DT", "FT", "ID", "IS", "NM", "SI", "ST", "TM", "TN", "TX"]
+    base_dt =  ["DT", "DTM", "FT", "GTS", "ID", "IS", "NM", "SI", "ST", "TM", "TX"]
+
+    assert_equal base_dt, data_types
+
+    dt = xml.Export.Document.Category.locate('DataType')
+    # dt
+    # p dt.locate('DataSubType/@description')
+    # p dt.locate('DataSubType/@datatype').size
+
+    # data_types = []
+    dt.each{ |it|
+     if (it.locate('DataSubType/@description').size != it.locate('DataSubType/@datatype').size) then p it[:name] end
+    }
+    # "AD"
+    # "DT"
+    # "DTM"
+    # "FT"
+    # "GTS"
+    # "ID"
+    # "IS"
+    # "NM"
+    # "SI"
+    # "ST"
+    # "TM"
+    # "TX"
+
+  end
+
+
   def test_base_types
     templatePath = File.path('test-config/schema/2.4/2.4.HL7.xml')
     xml = Ox.parse(IO.read(templatePath))

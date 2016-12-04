@@ -26,7 +26,89 @@ class BaseFieldGenerator
     @yml = YAML.load_file propertiesFile
   end
 
-  # base data types ["DT", "FT", "ID", "IS", "NM", "SI", "ST", "TM", "TN", "TX"]
+  # base_dt =  ["AD", "DT", "DTM", "FT", "GTS", "ID", "IS", "NM", "SI", "ST", "TM", "TX"]
+  #Generate HL7 AD (address) data type.
+  def AD(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!generate?(map, force))
+
+    # match cities, states and zips
+    sample  = @yml['address.states'].sample
+    idx = @yml['address.states'].index(sample) #index of random element
+
+    val=[]
+    #street address (ST) (ST)
+    val << @yml['address.streetNames'].sample
+    #other designation (ST)
+    val <<''
+    #city (ST)
+    val << @yml['address.cities'].at(idx)
+    #state or province (ST)
+    val << @yml['address.states'].at(idx)
+    #zip or postal code (ST)
+    val << @yml['address.zips'].at(idx)
+    #country (ID)
+    val << @yml['address.countries'].at(idx)
+    # address type (ID)
+    # ot5 her geographic designation (ST)
+
+    val.join(@@HAT)
+  end
+
+
+  # Generate HL7 CE (coded element) data type
+  def CE(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!generate?(map, force))
+
+    if(map[:max_length] && map[:max_length].to_i <3)
+      # if CE Element has lenght of 2 or less use only value
+      return ID(map, true)
+    end
+
+    #TODO: Refactor this method
+    if (map[:description] == 'Role Action Reason' || map[:description] == 'Species Code' || map[:description] == 'Breed Code' || map[:description] == 'Production Class Code')
+      return '' #Per requirement, PID.35 – PID.38
+    end
+
+    val = []
+    # CE ce = (CE) map?.fld
+    codes = get_coded_map(map)
+    if(blank?(codes))
+      case map[:description]
+        when 'Allergen Code/Mnemonic/Description'
+          pair = yml['codes.allergens.icd10'].to_a.sample(1).to_h.first # randomly pick a pair
+          val<<pair.first
+          val<<pair.last
+
+        else
+          # TODO: only for elements that don't have look up table set the id randomly
+          # if codetable is empty
+          val << ((blank?(map[:codetable])) ? ID(map, true) : '')
+      end
+    else
+      #identifier (ST) (ST)
+      val<<codes[:value]
+      #text (ST)
+      val<<codes[:description]
+      #name of coding system (IS)
+      #alternate identifier (ST) (ST)
+      #alternate text (ST)
+      #name of alternate coding system (IS)
+    end
+    return val.join(@@HAT)
+  end
+
+  #Generates an HL7 DT (date) datatype.
+  def DTM(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!generate?(map, force))
+
+    is_year_only = (map[:max_length]) ? map[:max_length].to_i == 4 : false
+    # #time of an event (TSComponentOne)
+    (is_year_only)?  to_datetime(map).strftime('%Y') : to_datetime(map).strftime('%Y%m%d') #format('YYYYMMdd.SSS')Date.iso8601
+  end
+
   #Generates an HL7 DT (date) datatype.
   def DT(map, force=false)
     #check if the field is optional and randomly generate it of skip
@@ -34,7 +116,19 @@ class BaseFieldGenerator
 
     # #time of an event (TSComponentOne)
     to_datetime(map).strftime('%Y%m%d') #format('YYYYMMdd.SSS')Date.iso8601
+  end
 
+  #Generates an HL7 FN (familiy name) data type.
+  def FN(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!generate?(map, force))
+
+    #surname (ST)
+    @yml['person.names.last'].sample
+    #own surname prefix (ST)
+    #own surname (ST)
+    #surname prefix from partner/spouse (ST)
+    #surname from partner/spouse (ST)
   end
 
   # Formatted text data.
@@ -44,6 +138,14 @@ class BaseFieldGenerator
     return '' if(!generate?(map, force))
 
     ID(map, true)
+  end
+
+  #Generates an HL7 General Timing Specification.
+  def GTS(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!generate?(map, force))
+
+    DT(map, true)
   end
 
   # Generate HL7 ID, usually using value from code table
@@ -150,6 +252,22 @@ class BaseFieldGenerator
     @yml['address.phones'].sample # pick a phone
   end
 
+  #Generate HL7 TS (time stamp), within number of weeks in the future or past
+  def TS(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!generate?(map, force))
+
+    #time of an event (TSComponentOne)
+    ts = to_datetime(map).strftime('%Y%m%d%H%M%S.%L') #format('YYYYMMDDHHSS.SSS')Date.iso8601
+    # TS is lenght sensetive, check max_len and trim appropriate
+    if (ts.size > (maxlen = (map[:max_length]) ? map[:max_length].to_i : ts.size))
+      # puts ts
+      # ts = ts[0,maxlen]
+      ts = ts.slice(0...maxlen)
+    end
+    return ts
+  end
+
   #Generate HL7 TX (text data) data type. A TX contains a single String value.
   def TX(map, force=false)
     #check if the field is optional and randomly generate it of skip
@@ -157,26 +275,6 @@ class BaseFieldGenerator
     # @@GENERAL_TEXT
     ID(map,true)
   end
-
-  # end of base data types
-  # implement missing method
-
-  # data types using properties
-  #Generates an HL7 FN (familiy name) data type.
-  def FN(map, force=false)
-    #check if the field is optional and randomly generate it of skip
-    return '' if(!generate?(map, force))
-
-    #surname (ST)
-    @yml['person.names.last'].sample
-    #own surname prefix (ST)
-    #own surname (ST)
-    #surname prefix from partner/spouse (ST)
-    #surname from partner/spouse (ST)
-  end
-
-
-  #end of data types using properties
 
   # End of Data Types #
 

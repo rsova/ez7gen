@@ -95,12 +95,21 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
 
 
   def test_dynamic_SN
+    #2.4
    # <DataType name='SN' description='structured numeric'>
    #  <DataSubType piece='1' description='comparator'datatype='ST' />
    #  <DataSubType piece='2' description='num1' datatype='NM' />
    #  <DataSubType piece='3' description='separator/suffix' datatype='ST' />
    #  <DataSubType piece='4' description='num2' datatype='NM' />
    # </DataType>
+
+    #2.5
+    # <DataType name='SN' description='Structured Numeric'>
+    # <DataSubType piece='1' description='Comparator' datatype='ST' max_length='2' required='O'/>
+    # <DataSubType piece='2' description='Num1' datatype='NM' max_length='15' required='O'/>
+    # <DataSubType piece='3' description='Separator/Suffix' datatype='ST' max_length='1' required='O'/>
+    # <DataSubType piece='4' description='Num2' datatype='NM' max_length='15' required='O'/>
+    # </DataType>
     dt =  @fldGenerator.dynamic('SN',{},true)
     p dt
   end
