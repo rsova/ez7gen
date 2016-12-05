@@ -219,13 +219,13 @@ class BaseFieldGenerator
       when 'AGENT ORANGE EXPOSURE LOCATION'
         #ZEL.29 should be 1 digit integer.
         generate_length_bound_id(1)
-      when /family name|surname/
+      when /family name|surname/i
         @yml['person.names.last'].sample
-      when /given name/
+      when /given name/i
         @yml['person.names.first'].sample
-      when /suffix/
+      when /suffix/i
         @yml['person.suffix'].sample
-      when /prefix/
+      when /prefix/i
         @yml['person.prefix'].sample
       else
         #Case when max_len overrides requirements

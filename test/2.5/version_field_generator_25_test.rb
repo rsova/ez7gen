@@ -149,7 +149,7 @@ class VersioFieldGeneratorTest < Test::Unit::TestCase
     # <DataSubType piece='14' description='Professional Suffix' datatype='ST' max_length='199' required='O'/>
     # </DataType>
 
-    dt =  @fldGenerator.generate_dt('XPN',{},true)
+    dt =  @fldGenerator.dt('XPN',{:required => 'R'})
     p dt
   end
 
@@ -166,8 +166,12 @@ class VersioFieldGeneratorTest < Test::Unit::TestCase
     # <DataSubType piece='8' description='Other Geographic Designation' datatype='ST' max_length='50' required='O'/>
     # </DataType>
 
-    dt =  @fldGenerator.generate_dt('AD',{},true)
+    dt =  @fldGenerator.dt('AD',{:required => 'R'})
     p dt
+  end
+
+  def test_TS
+    p  @fldGenerator.dt('TS',{:required => 'R', :max_length=> 50})
   end
 
   def test_all
@@ -176,14 +180,14 @@ class VersioFieldGeneratorTest < Test::Unit::TestCase
     xml = Ox.parse(IO.read(templatePath))
     assert_not_nil (xml)
     data_types = []
-    dt = xml.Export.Document.Category.locate('DataType')
+    dts = xml.Export.Document.Category.locate('DataType')
 
-    dt.each{ |it|
+    dts.each{ |it|
       name =it.attributes[:name]
       all << name
-      p name
-      dt =  @fldGenerator.generate_dt(name,{},true)
-       p dt
+      # p "DataType: #{name}"
+      dt =  @fldGenerator.dt(name,{:required => 'R'})
+      p "DataType #{name} :" + dt
     }
     p all
     p all.size

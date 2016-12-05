@@ -3456,7 +3456,7 @@
 </SegmentStructure>
 
 <DataType name='AD' description='Address'>
-    <DataSubType piece='1' description='Street Address'  max_length='120' required='O'/>
+    <DataSubType piece='1' description='Street Address' datatype='ST' max_length='120' required='O'/>
     <DataSubType piece='2' description='Other Designation' datatype='ST' max_length='120' required='O'/>
     <DataSubType piece='3' description='City' datatype='ST' max_length='50' required='O'/>
     <DataSubType piece='4' description='State or Province' datatype='ST' max_length='50' required='O'/>
