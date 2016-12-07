@@ -3,7 +3,7 @@ require 'test/unit'
 require_relative "../lib/ez7gen/message_factory"
 require_relative "../lib/ez7gen/version"
 
-class MessageFactoryTemplate24CusotmTest < Test::Unit::TestCase
+class MessageFactoryTemplate24CustomTest < Test::Unit::TestCase
 
   # alias :orig_run :run
   # def run(*args,&blk)

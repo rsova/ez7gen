@@ -2,12 +2,16 @@
 require_relative '../../profile_parser'
 require_relative '../base_field_generator'
 
-class VersionFieldGenerator < BaseFieldGenerator
+class FieldGenerator < BaseFieldGenerator
     include Utils
   # constructor
-  def initialize(pp)
-      super pp
-  end
+  # def initialize(pp)
+  #     super pp
+  # end
+  # constructor
+    def initialize(parser, helper_parser=nil)
+      super(parser, helper_parser)
+    end
 
   # base data types ["DT", "FT", "ID", "IS", "NM", "SI", "ST", "TM", "TN", "TX"]
   # def method_missing(method_name, *arguments, &block)
@@ -60,7 +64,7 @@ class VersionFieldGenerator < BaseFieldGenerator
 
   # Method to generate field using schema description
   def generate_dt_by_name(name)
-    # p "generate_dt_by_name: #{name}, not a basic type"
+    p "generate_dt_by_name: #{name}, not a basic type"
 
     dt = []
     types = []

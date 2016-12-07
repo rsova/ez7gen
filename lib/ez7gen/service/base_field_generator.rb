@@ -18,9 +18,15 @@ class BaseFieldGenerator
 
   @@random = Random.new
 
+
   # constructor
-  def initialize(pp)#/Users/romansova/RubymineProjects/ez7gen-staged/lib/ez7gen/resources/properties.yml
-    @pp = pp
+  def initialize(parser, helper_parser=nil)
+    @pp = parser
+    # Coded table value lookup profiler. Only set for custom schemas.
+    # Custom schema has types which coming from the base schema but using coded tables from primary schema.
+    # Also primary schemas use base type coded tables.
+    @hp = helper_parser
+
     # dirname =  File.join(File.dirname(File.expand_path(__FILE__)),'../../resources/properties.yml')
     propertiesFile = File.expand_path('../../resources/properties.yml', __FILE__)
     @yml = YAML.load_file propertiesFile

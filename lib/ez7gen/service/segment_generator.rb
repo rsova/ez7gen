@@ -2,7 +2,7 @@ require 'ruby-hl7'
 require 'date'
 require 'benchmark'
 
-require_relative 'type_aware_field_generator'
+# require_relative 'type_aware_field_generator'
 require_relative '../../../lib/ez7gen/structure_parser'
 require_relative 'utils'
 
@@ -32,9 +32,15 @@ class SegmentGenerator
       # we will assign the other schema parser as a helper parser
       helper_parser = pp.select{|key, value| key != profileName}
       helper_parser = (helper_parser.empty?) ? nil: helper_parser.values.first
-      @fieldGenerators[profileName] = TypeAwareFieldGenerator.new( parser, helper_parser)
+      begin
+          require_relative "../../ez7gen/service/#{version}/field_generator"
+          @fieldGenerators[profileName] = FieldGenerator.new( parser, helper_parser)
+        rescue => e
+          p e
+          # @fieldGenerators[profileName] = TypeAwareFieldGenerator.new( parser, helper_parser)
+      end
     }
-
+    p @fieldGenerators
   end
 
   # initialize msh segment
@@ -46,15 +52,17 @@ class SegmentGenerator
     fieldGenerator = @fieldGenerators['primary']
 
     msh.enc_chars ='^~\&'
-    msh.sending_app = fieldGenerator.HD({:codetable =>'361', :required =>'R'})
-    msh.sending_facility = fieldGenerator.HD({:codetable => '362', :required =>'R'})
-    msh.recv_app = fieldGenerator.HD({:codetable => '361', :required =>'R'})
-    msh.recv_facility = fieldGenerator.HD({:codetable => '362', :required =>'R'})
+    # msh.sending_app = fieldGenerator.HD({:codetable =>'361', :required =>'R'})
+    msh.sending_app = fieldGenerator.dt('HD',{:codetable =>'361', :required =>'R'})
+    # msh.sending_facility = fieldGenerator.HD({:codetable => '362', :required =>'R'})
+    msh.sending_facility = fieldGenerator.dt('HD',{:codetable => '362', :required =>'R'})
+    msh.recv_app = fieldGenerator.dt('HD',{:codetable => '361', :required =>'R'})
+    msh.recv_facility = fieldGenerator.dt('HD',{:codetable => '362', :required =>'R'})
     msh.processing_id = 'P'#@fieldGenerators['primary'].ID({},true)
     #Per Galina, set version to 2.4 for all of vaz
     # msh.version_id = @@BASE_VER[@version]
     msh.version_id = @version
-    msh.security = fieldGenerator.ID({:required =>'O'})
+    msh.security = fieldGenerator.dt('ID',{:required =>'O'})
 
     # Per Galina's requirement, fix for validation failure.
     # MSH.9.3 needs to be populated with the correct Message Structure values for those messages
@@ -63,19 +71,19 @@ class SegmentGenerator
     msh.message_type = @event.sub('_','^')<<'^'<<structType
 
     msh.time =  DateTime.now.strftime('%Y%m%d%H%M%S.%L')
-    msh.message_control_id = fieldGenerator.ID({}, true)
-    msh.seq = fieldGenerator.ID({:required=>'O'})
-    msh.continue_ptr = fieldGenerator.ID({:required=>'O'})
-    msh.accept_ack_type = fieldGenerator.ID({:required=>'R', :codetable=>'155'})
-    msh.app_ack_type = fieldGenerator.ID({:required=>'R', :codetable=>'155'})
-    msh.country_code = fieldGenerator.ID({:required=>'R', :codetable=>'399'})
+    msh.message_control_id = fieldGenerator.dt('ID',{:required =>'R'})
+    msh.seq = fieldGenerator.dt('ID',{:required=>'O'})
+    msh.continue_ptr = fieldGenerator.dt('ID',{:required=>'O'})
+    msh.accept_ack_type = fieldGenerator.dt('ID',{:required=>'R', :codetable=>'155'})
+    msh.app_ack_type = fieldGenerator.dt('ID',{:required=>'R', :codetable=>'155'})
+    msh.country_code = fieldGenerator.dt('ID',{:required=>'R', :codetable=>'399'})
     # msh.charset = @fieldGenerators['primary'].ID({:required=>'R', :codetable=>'211'})
     msh.charset = 'ASCII' # default value from codetable, change causes problems in validating messages in Ensemble
     #Table 296 Primary Language has no suggested values.  The field will be populated with values from the Primary Language table in the properties file. Example value: EN^English
     msh.principal_language_of_message ='EN^English'
-    msh.alternate_character_set_handling_scheme = fieldGenerator.ID({:required=>'O', :codetable=>'356'})
+    msh.alternate_character_set_handling_scheme = fieldGenerator.dt('ID',{:required=>'O', :codetable=>'356'})
     # 21	Conformance Statement ID
-    msh.e20 =  fieldGenerator.ID({:required=>'O', :codetable=>'449'})
+    msh.e20 =  fieldGenerator.dt('ID',{:required=>'O', :codetable=>'449'})
 
     return msh
   end
@@ -186,14 +194,16 @@ class SegmentGenerator
     end
 
     fieldGenerator= @fieldGenerators[type]
-    dt = get_name_without_base(attributes[:datatype])
+    data_type = get_name_without_base(attributes[:datatype])
 
     # puts Utils.blank?(dt)?'~~~~~~~~~> data type is missing': dt
-    if(['CK'].include?(dt))
+    if(['CK'].include?(data_type))
       return nil
     else
-      fld = blank?(dt)?nil :fieldGenerator.method(dt).call(attributes)
+      # fld = blank?(dt)?nil :fieldGenerator.method(dt).call(attributes)
+      fld = blank?(data_type)?nil :fieldGenerator.dt(data_type, attributes)
     end
+
   end
 
 end

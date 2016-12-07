@@ -1,9 +1,9 @@
 require 'test/unit'
 require 'ox'
 require 'set'
-require_relative '../../lib/ez7gen/service/2.5/version_field_generator'
+require_relative '../../lib/ez7gen/service/2.5/field_generator'
 
-class VersioFieldGeneratorTest < Test::Unit::TestCase
+class FieldGenerator25Test < Test::Unit::TestCase
 
   # 27
   vs =
@@ -25,7 +25,7 @@ class VersioFieldGeneratorTest < Test::Unit::TestCase
   end
 
   def setup
-    @fldGenerator = VersionFieldGenerator.new(@@pp)
+    @fldGenerator = FieldGenerator.new(@@pp)
 
   end
 
