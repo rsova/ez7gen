@@ -2,7 +2,7 @@ require 'yaml'
 
 module Ez7gen
 
-  VERSION = "0.4.0"
+  VERSION = "0.5.0"
 
   # Move the Configurator into main module
   class Configurator

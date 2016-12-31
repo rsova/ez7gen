@@ -14,6 +14,7 @@ require_relative '../lib/ez7gen/profile_parser' # local testing
 require_relative '../lib/ez7gen/msg_error_handler' # local testing
 
 class MyApp < Sinatra::Application
+  VERSON_IN_DEV = "Oops, versions above 2.4 are still in development ..."
 
 #configure do
 #   set :port, 9494
@@ -56,6 +57,8 @@ class MyApp < Sinatra::Application
       puts  params
 
       std = params['std']
+      if(std > '2.4') then raise ArgumentError, VERSON_IN_DEV end
+
       event =  params['event']['name']
       version =  params['version']['name']
       puts  "std: #{std}, event: #{event}, version: #{version}"
@@ -68,7 +71,7 @@ class MyApp < Sinatra::Application
     rescue => e
       # puts 'inside rescue'
       puts 'Error: processing generate/' << e.inspect
-      @resp ='Oops, somenthing went wrong...'
+      @resp = (e.message == VERSON_IN_DEV)? VERSON_IN_DEV: 'Oops, somenthing went wrong...'
       #  raise e
       # ensure
     end
