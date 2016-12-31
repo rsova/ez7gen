@@ -44,7 +44,7 @@ class MessageFactoryTest < Test::Unit::TestCase
     ver='VAZ2.4.HL7'
     event='ADT_A60'
 
-    factory = MessageFactory.new({std: std, version: ver, event:event, version_store: @@VS, use_template:true})
+    factory = MessageFactory.new({std: std, version: ver, event:event, version_store: @@VS, use_template: 'vista sqwm-adt_a60.xml'})
     expected = "/Users/romansova/RubymineProjects/ez7gen/ez7gen-web/config/templates/2.4/vista sqwm-adt_a60.xml"
     assert_equal expected, factory.templatePath
 

@@ -1,10 +1,9 @@
 require 'yaml'
 require_relative '../lib/ez7gen/service/utils'
+require 'json'
 include Utils
 # require 'pathname'
 require 'ruby-hl7'
-
-
 
 
 
@@ -767,3 +766,115 @@ range.each {|it| puts it}
 
 ends = '...'.delete(' ').split('...').map{|it| it}
 puts ends.length
+
+@random = Random.new
+json = '{
+    "APPL_MD_PATH": "",
+    "APPL_PHYSICAL_PATH": "",
+    "AUTH_PASSWORD": "",
+    "AUTH_TYPE": "",
+    "AUTH_USER": "",
+    "CERT_COOKIE": "",
+    "CERT_FLAGS": "",
+    "CERT_ISSUER": "",
+    "CERT_KEYSIZE": "",
+    "CERT_SECRETKEYSIZE": "",
+    "CERT_SERIALNUMBER": "",
+    "CERT_SERVER_ISSUER": "",
+    "CERT_SERVER_SUBJECT": "",
+    "CERT_SUBJECT": "",
+    "CONTENT_LENGTH": "",
+    "CONTENT_TYPE": "",
+    "GATEWAY_INTERFACE": "",
+    "HTTPS": "",
+    "HTTPS_KEYSIZE": "",
+    "HTTPS_SECRETKEYSIZE": "",
+    "HTTPS_SERVER_ISSUER": "",
+    "HTTPS_SERVER_SUBJECT": "",
+    "INSTANCE_ID": "",
+    "INSTANCE_META_PATH": "",
+    "LOCAL_ADDR": "",
+    "LOGON_USER": "",
+    "PATH_INFO": "",
+    "PATH_TRANSLATED": "",
+    "QUERY_STRING": "",
+    "REMOTE_ADDR": "",
+    "REMOTE_HOST": "",
+    "REMOTE_USER": "",
+    "REQUEST_METHOD": "",
+    "SCRIPT_NAME": "",
+    "SERVER_NAME": "",
+    "SERVER_PORT": "",
+    "SERVER_PORT_SECURE": "",
+    "SERVER_PROTOCOL": "",
+    "SERVER_SOFTWARE": "",
+    "URL": "",
+    "HTTP_CONNECTION": "",
+    "HTTP_ACCEPT": "",
+    "HTTP_ACCEPT_LANGUAGE": "",
+    "HTTP_COOKIE": "",
+    "HTTP_HOST": "",
+    "HTTP_REFERER": "",
+    "HTTP_USER_AGENT": "",
+    "HTTP_DNT": "",
+    "HTTP_WL_PROXY_SSL": "",
+    "HTTP_SM_LOCATION": "",
+    "HTTP_SM_LOCATION_UNPARSED": "",
+    "HTTP_SERVER_PROTOCOL": "",
+    "HTTP_SM_TRANSACTIONID": "",
+    "HTTP_SERVER_PORT": "",
+    "HTTP_REQUEST_METHOD": "",
+    "HTTP_SM_SDOMAIN": "",
+    "HTTP_SM_REALM": "",
+    "HTTP_SM_REALMOID": "",
+    "HTTP_SM_AUTHTYPE": "",
+    "HTTP_SM_AUTHREASON": "",
+    "HTTP_SM_SESSIONDRIFT": "",
+    "HTTP_SM_UNIVERSALID": "",
+    "HTTP_SM_AUTHDIROID": "",
+    "HTTP_SM_AUTHDIRNAME": "",
+    "HTTP_SM_AUTHDIRSERVER": "",
+    "HTTP_SM_AUTHDIRNAMESPACE": "",
+    "HTTP_SM_USER": "",
+    "HTTP_SM_USERDN": "",
+    "HTTP_SM_SERVERSESSIONID": "",
+    "HTTP_SM_SERVERSESSIONSPEC": "",
+    "HTTP_SM_TIMETOEXPIRE": "",
+    "HTTP_SM_SERVERIDENTITYSPEC": "",
+    "HTTP_SESSIONSCOPE": "",
+    "HTTP_ADSAMACCOUNTNAME": "",
+    "HTTP_VAUID": "",
+    "HTTP_DODEDIPNID": "",
+    "HTTP_FIRSTNAME": "",
+    "HTTP_ADEMAIL": "",
+    "HTTP_ORGANIZATIONID": "",
+    "HTTP_ASSURLEVEL": "",
+    "HTTP_ORGANIZATION": "",
+    "HTTP_PROOFINGAUTH": "",
+    "HTTP_SSOI_LOGOUT": "",
+    "HTTP_ROLE": "",
+    "HTTP_VISTAID": "",
+    "HTTP_MVIICN": "",
+    "HTTP_ISSUEINSTANT": "",
+    "HTTP_VISTAIDRAW": "",
+    "HTTP_AUTHNTYPE": "",
+    "HTTP_ADUPN": "",
+    "HTTP_TRANSACTIONID": "",
+    "HTTP_LASTNAME": "",
+    "HTTP_ADDOMAIN": "",
+    "HTTP_SECID": ""
+}'
+
+50.times{
+  parsed = JSON.parse(json)
+  a = []
+  parsed.each{|it|
+    # p  @random.rand(100000000).to_s
+    a << {it[0] => @random.rand(100000000000000).to_s}
+  }
+# p parsed
+  str = a.to_json
+  puts str
+}
+
+exit;

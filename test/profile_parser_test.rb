@@ -205,11 +205,11 @@ class ProfileParserTest < Test::Unit::TestCase
     # parser = ProfileParser.new({version: 'vaz2.4', event: 'ADT_A01'})
 		results =  parser.lookup_message_types()
 		puts results
-		assert_equal 48, results.size
+		assert_equal 50, results.size
 
     results =  parser.lookup_message_types({filter: 'ADT_|QBP_|RSP_', group:'Admission'})
     puts results
-    assert_equal 10, results.size
+    assert_equal 11, results.size
   end
 
   def test_lookupMessageTypes_24_all

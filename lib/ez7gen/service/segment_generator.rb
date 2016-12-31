@@ -32,15 +32,23 @@ class SegmentGenerator
       # we will assign the other schema parser as a helper parser
       helper_parser = pp.select{|key, value| key != profileName}
       helper_parser = (helper_parser.empty?) ? nil: helper_parser.values.first
-      begin
-          require_relative "../../ez7gen/service/#{version}/field_generator"
-          @fieldGenerators[profileName] = FieldGenerator.new( parser, helper_parser)
-        rescue => e
-          p e
-          # @fieldGenerators[profileName] = TypeAwareFieldGenerator.new( parser, helper_parser)
-      end
+
+      # starting with 2.5 use schema and version specific type generator.
+      @fieldGenerators[profileName] = get_field_generator(parser, helper_parser)
     }
-    p @fieldGenerators
+    # p @fieldGenerators
+  end
+
+  def get_field_generator(parser, helper_parser)
+    gen = nil
+    begin
+      require_relative "../../ez7gen/service/#{version}/field_generator"
+      gen = FieldGenerator.new( parser, helper_parser)
+    rescue => e
+      p e
+      # @fieldGenerators[profileName] = TypeAwareFieldGenerator.new( parser, helper_parser)
+    end
+    return gen
   end
 
   # initialize msh segment

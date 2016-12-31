@@ -34,8 +34,8 @@ class TemplateGeneratorTest < Test::Unit::TestCase
     useExVal = false
     map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_metadata(useExVal)
 
-    p map
-    map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
+    # p map
+    # map = TemplateGenerator.new(templatePath,{'primary' => @@pp }).build_template_metadata( usages)
     p map
     assert_equal(4, map.size)
     assert_equal 'Recorded Date/Time', map['EVN'].first[:Name]

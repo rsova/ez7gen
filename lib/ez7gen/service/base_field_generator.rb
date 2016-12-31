@@ -427,13 +427,13 @@ class BaseFieldGenerator
 
 # Value of coded table returned as as single value
   def get_coded_value(attributes)
-    codes = get_code_table(attributes)
-
+    # codes = get_code_table(attributes)
     # puts codes
     #Apply rules to find a value and description
-    map = apply_rules(codes, attributes)
+    # map = apply_rules(codes, attributes)
     #Return value only
-    return map[:value]
+    # return map[:value]
+    get_coded_map(attributes)[:value]
   end
 
 end
