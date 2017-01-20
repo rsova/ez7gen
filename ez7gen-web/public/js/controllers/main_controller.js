@@ -15,12 +15,11 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
 
 
     $scope.useTemplate = false;
-    $scope.useExVal = false;
+    $scope.useExVal = true;
     $scope.hasTemplates = false;
-    $scope.showUseExVal = false;
     $scope.visible = false;
 
-    $scope.showUseExVal = true;
+    $scope.showUseExVal = false;
     $scope.subGroupVisible = false;
 
     //set standards select
@@ -44,7 +43,7 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
     // Check if event has templates
     $scope.onEventSelect = function(event){
         $scope.showUseExVal = false;
-        $scope.useExVal = false;
+        $scope.useExVal = true;
         $scope.template = {};
         isCustom =  !$scope.version.selected.base;
         isTemplateEnabled = event.templates
@@ -82,7 +81,6 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
             //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
             //use call async as a promise
             method: 'post',
-            //url: 'http://localhost:4567/validate/',
             url: 'validate/',
             //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data: { std : $scope.std.selected.std, version: $scope.version.selected,  hl7: lookup_service.data}

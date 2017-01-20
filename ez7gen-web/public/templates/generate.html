@@ -6,10 +6,6 @@
 
     <div class="row">
         <div class="col-md-2">
-            <!--<h3>HL7 Version</h3>-->
-            <!--<p>Selected: {{event.selected.name}}</p>-->
-            <!--<ui-select ng-model="std.selected" theme="select2" ng-disabled="disabled" style="width: 150px;" on-select="setVersions(std.selected)">-->
-            <!--<ui-select ng-model="std.selected" theme="selectize"  on-select="setVersions(std.selected)"  style="color: #555">-->
             <ui-select ng-model="std.selected" on-select="setVersions(std.selected)">
                 <ui-select-match placeholder="HL7 Standards">{{$select.selected.std}}</ui-select-match>
                 <ui-select-choices repeat="std in standards | filter: $select.search" refresh="setVersios($select.search)" refresh-delay="0">
@@ -43,37 +39,10 @@
                     <div><span ng-bind-html="event.name | highlight: $select.search"></span></div>
                     <!--<small ng-bind-html="event.code"></small>-->
                     <span ng-bind-html="''+event.code | highlight: $select.search"></span>
-
-
                 </ui-select-choices>
             </ui-select>
-
         </div>
-
-        <!--<div class="col-md-2" ng-show="subGroupVisible">-->
-        <!--&lt;!&ndash;<div class="col-md-2" ng-show="false">&ndash;&gt;-->
-        <!--&lt;!&ndash;<ui-select ng-model="subGroup.selected" theme="selectize" on-select="setSubGroup(subGroup.selected)">&ndash;&gt;-->
-        <!--<ui-select ng-model="subGroup.selected" on-select="setSubGroup(subGroup.selected)">-->
-        <!--<ui-select-match placeholder="Event Types">{{$select.selected.name}}</ui-select-match>-->
-        <!--<ui-select-choices repeat="subGroup in subGroups | filter: $select.search ">-->
-        <!--<span ng-bind-html="subGroup.name | highlight: $select.search"></span>-->
-        <!--<small ng-bind-html="subGroup.code"></small>-->
-        <!--</ui-select-choices>-->
-        <!--</ui-select>-->
-        <!--</div>-->
-        <!--<div class="col-md-2" ng-show="hasTemplates">-->
-        <!--&lt;!&ndash;<div class="col-md-2" ng-show="false">&ndash;&gt;-->
-        <!--&lt;!&ndash;<ui-select ng-model="subGroup.selected" theme="selectize" on-select="setSubGroup(subGroup.selected)">&ndash;&gt;-->
-        <!--<ui-select ng-model="template.selected">-->
-        <!--<ui-select-match placeholder="Event Templates">{{$select.selected.desc}}</ui-select-match>-->
-        <!--<ui-select-choices repeat="tmp in event.selected.templates | filter: $select.search ">-->
-        <!--<span ng-bind-html="tmp.desc | highlight: $select.search"></span>-->
-        <!--</ui-select-choices>-->
-        <!--</ui-select>-->
-        <!--</div>-->
-
     </div>
-
 </div>
 
 
@@ -90,13 +59,10 @@
         <!--<div class="well" style ="background:whitesmoke; width: 82%" ng-show="hasTemplates">-->
         <div class="col-md-10 well">
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <!--<i>Template</i> : {{template.selected.desc || "Not Selected"}}-->
-                    <h4 style="text-align: right"><i>Template:</i></h4>
+                    <h4><i>Template:</i></h4>
                 </div>
-                <!--<div class="col-md-2" ng-show="false">-->
-                <!--<ui-select ng-model="subGroup.selected" theme="selectize" on-select="setSubGroup(subGroup.selected)">-->
-                <!--<div class="col-md-7 col-mid-offset-1">-->
                 <div class="col-md-7">
                     <ui-select ng-model="template.selected" on-select="onTemplateSelected()" style="min-width: 500px;">
                         <ui-select-match allow-clear="true" placeholder="Select Template">{{$select.selected.desc}}</ui-select-match>
@@ -106,40 +72,21 @@
                     </ui-select>
                 </div>
 
-                <div class="col-md-3">
-                    <div class="checkbox" ng-show="showUseExVal">
-                        <label>
-                            <input type="checkbox" name="useExVal" ng-model="useExVal">
-                            Strict (Use ExValues)
-                        </label>
-                    </div>
-                </div>
-            </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-3">
+                      <div class="checkbox" ng-show="showUseExVal">
+                          <label>
+                              <input type="checkbox" name="useExVal" ng-model="useExVal">
+                              Strict (Use ExValues)
+                          </label>
+                      </div>
+                  </div>
+              </div>
         </div>
     </div>
 </div>
-<!--background-image: url(data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mOMivJRBgADOwElVN79SQAAAABJRU5ErkJggg==);-->
-<!--dynamic hight: http://stackoverflow.com/questions/17772260/textarea-auto-height-->
-<!--<pre  editable-textarea="hl7.message" e-form="hl7Area" e-style="width: 1000px; height: 400px; white-space: pre; word-break:break-word;-->
-<!--font-family: Menlo,Monaco,Consolas,'Courier New',monospace;-->
-<!--background-color: #f5f5f5;-->
-<!--font-size: 13px;-->
-<!--color: SteelBlue;-->
-<!--!important;">{{hl7.message}}</pre>-->
-<!--<style type="text/css">-->
-<!--editable-textarea {-->
-<!--width: 1000px;-->
-<!--height: 400px;-->
-<!--white-space: nowrap;-->
-<!--overflow:auto;-->
-<!--white-space: pre;-->
-<!--word-break: break-word;-->
-<!--background-color: #f5f5f5;-->
-<!--font-size: 13px;-->
-<!--color: SteelBlue;-->
-<!--!important;-->
-<!--}-->
-<!--</style>-->
+
 <pre editable-textarea="hl7.message" e-form="hl7Area" e-style="
     width: 1000px;
     height: 400px;
@@ -163,7 +110,6 @@
     </div>
 </div>
 
-<!--<label class="radio-inline"><input type="radio" value="">Use Template</label>-->
 
 <div>
     <!--<button type="button" ng-click="toggle()" class="btn btn btn-default">+</button>-->
@@ -172,7 +118,6 @@
         <span>ACK Response</span>
     </button>
 </div>
-<!--</p>-->
 <!--<pre ng-show="visible"><h4 ng-style={"color":"green"}>{{response.message}}</h4></pre>-->
 <div ng-show="visible">
     <pre><div class="ack-area">{{response.message}}</div></pre>

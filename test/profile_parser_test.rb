@@ -1,11 +1,11 @@
 # require "minitest/autorun"
 require 'test/unit'
-require "benchmark"
+require 'benchmark'
+require 'logger'
 require_relative '../lib/ez7gen/profile_parser'
 
 class ProfileParserTest < Test::Unit::TestCase
   include Utils
-	
 	def setup
 		vs =
 				[
@@ -16,6 +16,7 @@ class ProfileParserTest < Test::Unit::TestCase
     # @parser = ProfileParser.new(attributes)
 
   end
+
 	def teardown
     @attrs = nil
   end
@@ -378,7 +379,8 @@ class ProfileParserTest < Test::Unit::TestCase
     }
 
     versions_to_client = {standards: coll}
-    puts versions_to_client
+    $log.unknown versions_to_client
+
   end
 
   def test_lookup_versions_using_rules
@@ -496,7 +498,18 @@ class ProfileParserTest < Test::Unit::TestCase
   end
 
 
-  # def test_processSegments_pharm
+  def test_lookup_events
+    @attrs[:version] = 'VAZ2.4.HL7'
+    parser = ProfileParser.new(@attrs)
+    lookup_params ={}
+    lookup_params[:templates_path] =  File.expand_path("../test-config/templates/#{@attrs[:std]}/", __FILE__)
+
+    results = parser.lookup_events(lookup_params);
+
+  end
+
+
+    # def test_processSegments_pharm
   #   # first pass
   #   # 1) look for repeading groups
   #   # 2) brake them into subgroups - arrays

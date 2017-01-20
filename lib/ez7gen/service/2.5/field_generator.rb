@@ -64,7 +64,8 @@ class FieldGenerator < BaseFieldGenerator
 
   # Method to generate field using schema description
   def generate_dt_by_name(name)
-    p "generate_dt_by_name: #{name}, not a basic type"
+    #p "generate_dt_by_name: #{name}, not a basic type"
+    $log.info("#{self.class.to_s}:#{__method__.to_s}") {"generate_dt_by_name: #{name}, not a basic type"}
 
     dt = []
     types = []

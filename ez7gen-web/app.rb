@@ -3,6 +3,7 @@ require 'sinatra/base'
 
 require 'json'
 require 'rest_client'
+require 'logger'
 # require 'diskcached'
 
 # to specify version
@@ -15,6 +16,11 @@ require_relative '../lib/ez7gen/msg_error_handler' # local testing
 
 class MyApp < Sinatra::Application
   VERSON_IN_DEV = "Oops, versions above 2.4 are still in development ..."
+
+  # set logger
+  log = Logger.new STDOUT
+  log.datetime_format = '%Y-%m-%d %H:%M:%S%z '
+  log.level = Logger::ERROR
 
 #configure do
 #   set :port, 9494
@@ -54,14 +60,17 @@ class MyApp < Sinatra::Application
     begin
       # no additional configuration needed for angularjs,
       params = JSON.parse(request.env["rack.input"].read)
-      puts  params
+      $log.info ("#{self.class.to_s}:#{__method__.to_s}") { params }
+      # puts  params
+
 
       std = params['std']
       if(std > '2.4') then raise ArgumentError, VERSON_IN_DEV end
 
       event =  params['event']['name']
       version =  params['version']['name']
-      puts  "std: #{std}, event: #{event}, version: #{version}"
+      $log.info ("#{self.class.to_s}:#{__method__.to_s}") { "std: #{std}, event: #{event}, version: #{version}" }
+      # puts  "std: #{std}, event: #{event}, version: #{version}"
       useExVal = params['useExVal']
       useTemplate = params['useTemplate']
 
@@ -83,15 +92,20 @@ class MyApp < Sinatra::Application
   post '/validate/' do
     begin
       params = JSON.parse(request.env["rack.input"].read)
-      puts params
+      # puts params
+      log.info ("#{self.class.to_s}:#{__method__.to_s}") { params }
       std =  params['std']
       schemaName =  params['version']['name']
-      puts schemaName
+      # puts schemaName
+      log.info ("#{self.class.to_s}:#{__method__.to_s}") { schemaName }
+
       payload = params['hl7']['message']
-      puts payload
-      # @url = @@URLS[version]
+      # puts payload
+      log.info ("#{self.class.to_s}:#{__method__.to_s}") { payload }
+
       @url = ProfileParser.getVersionUrlRule(std,schemaName)
-      puts @url
+      # puts @url
+      log.info ("#{self.class.to_s}:#{__method__.to_s}") { @url }
       @resp = RestClient.post(@url, payload.gsub!("\n","\r")).chomp()
 #       @resp = "MSH|^~\&|EnsembleHL7|ISC|404|808|201607162206||ACK^A05|218|P|2.4|936
 # MSA|AE|218
@@ -100,7 +114,8 @@ class MyApp < Sinatra::Application
       @errors = MsgErrorHandler.new().handle(@resp)
     rescue => e
       @resp = 'Error connecting to ' + @url
-      puts e
+      # puts e
+      log.error ("#{self.class.to_s}:#{__method__.to_s}") { e.message }
       # raise e
     end
 
@@ -156,9 +171,11 @@ class MyApp < Sinatra::Application
 
       versions_to_client = {standards: standards}
       # p event_list
-      p 'in lookup'
+      log.info ("#{self.class.to_s}:#{__method__.to_s}") { 'in lookup' }
+      # p 'in lookup'
     rescue => e
-      puts e
+      log.info ("#{self.class.to_s}:#{__method__.to_s}") { e.message }
+      # puts e
     end
     versions_to_client.to_json
   end

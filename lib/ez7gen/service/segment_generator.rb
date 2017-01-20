@@ -45,7 +45,8 @@ class SegmentGenerator
       require_relative "../../ez7gen/service/#{version}/field_generator"
       gen = FieldGenerator.new( parser, helper_parser)
     rescue => e
-      p e
+      # p e
+      $log.error("#{self.class.to_s}:#{__method__.to_s}") { e.message }
       # @fieldGenerators[profileName] = TypeAwareFieldGenerator.new( parser, helper_parser)
     end
     return gen

@@ -6,7 +6,6 @@ angular.module("app").factory('lookup_service',[ '$http', function($http) {
        return $http({
             //http://stackoverflow.com/questions/12505760/processing-http-response-in-service
             method: 'get',
-            //url: 'http://localhost:4567/lookup/',
            url: 'lookup/'
         }).then(function(response) {
            return response.data;

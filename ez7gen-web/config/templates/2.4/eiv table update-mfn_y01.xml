@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HL7v2xConformanceProfile HL7Version="2.4" ProfileType="Implementation">
+<MetaData Name="eIV table update (non payer &amp; non X12)" OrgName="FSC" Version="2.4" Status="A" Topics="confsig-FSC-2.4-profile-accNE_accAL-Deferred" />
+<Encodings>
+<Encoding>ER7</Encoding>
+</Encodings>
+<DynamicDef AccAck="NE" AppAck="AL" MsgAckMode="Deferred" />
+<HL7v2xStaticDef MsgType="MFN" EventType="Y01" MsgStructID="MFN_Y01" OrderControl="NW" EventDesc="Messages from FSC to update VistA tables other than file #365.12 or X12 related via eIV interface" Role="Receiver">
+<MetaData Name="eIV table update (non payer &amp; non X12)" OrgName="FSC" Version="2.4" Status="A" Topics="confsig-FSC-2.4-static-MFN-M01-null-MFN_M01-2.4-A-Receiver" />
+<Segment Name="MSH" LongName="Message Header" Usage="R" Min="1" Max="1">
+<Field Name="Field Separator" Usage="R" Min="1" Max="1" Datatype="ST" Length="1" ItemNo="00001">
+<Reference>2.16.9.1</Reference>
+<DataValues ExValue="|" />
+</Field>
+<Field Name="Encoding Characters" Usage="R" Min="1" Max="1" Datatype="ST" Length="4" ItemNo="00002">
+<Reference>2.16.9.2</Reference>
+<DataValues ExValue="^~\&amp;" />
+</Field>
+<Field Name="Sending Application" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0361" ItemNo="00003">
+<Reference>2.16.9.3</Reference>
+<Component Name="namespace ID" Usage="R" Datatype="IS" Length="6" Table="0363">
+<ImpNote>"IIV EC"   hardcoded value
+</ImpNote>
+</Component>
+<Component Name="universal ID" Usage="X" Datatype="ST">
+</Component>
+<Component Name="universal ID type" Usage="X" Datatype="ID" Table="0301">
+</Component>
+</Field>
+<Field Name="Sending Facility" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0362" ItemNo="00004">
+<Reference>2.16.9.4</Reference>
+<Component Name="namespace ID" Usage="X" Datatype="IS" Table="0363">
+</Component>
+<Component Name="universal ID" Usage="R" Datatype="ST" Length="30">
+<ImpNote>EC's Domain Name System
+</ImpNote>
+<DataValues ExValue="IIV.VITRIA-EDI-TEST.AAC.VA.GOV" />
+</Component>
+<Component Name="universal ID type" Usage="R" Datatype="ID" Length="3" Table="0301">
+<ImpNote>"DNS"
+</ImpNote>
+<DataValues ExValue="DNS" />
+</Component>
+</Field>
+<Field Name="Receiving Application" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0361" ItemNo="00005">
+<Reference>2.16.9.5</Reference>
+<Component Name="namespace ID" Usage="R" Datatype="IS" Length="9" Table="0363">
+<ImpNote>"IIV VISTA" hardcoded value
+</ImpNote>
+</Component>
+<Component Name="universal ID" Usage="X" Datatype="ST">
+</Component>
+<Component Name="universal ID type" Usage="X" Datatype="ID" Table="0301">
+</Component>
+</Field>
+<Field Name="Receiving Facility" Usage="R" Min="1" Max="1" Datatype="HD" Length="180" Table="0362" ItemNo="00006">
+<Reference>2.16.9.6</Reference>
+<Component Name="namespace ID" Usage="R" Datatype="IS" Length="3" Table="0363">
+<ImpNote>VistA Site Number (example would be
+"653" without the quotes)
+</ImpNote>
+</Component>
+<Component Name="universal ID" Usage="R" Datatype="ST" Length="29">
+<ImpNote>VistA site domain name
+</ImpNote>
+<DataValues ExValue="ISPA07.FO-BAYPINES.MED.VA.GOV" />
+</Component>
+<Component Name="universal ID type" Usage="R" Datatype="ID" Length="3" Table="0301">
+<ImpNote>"DNS"
+</ImpNote>
+<DataValues ExValue="DNS" />
+</Component>
+</Field>
+<Field Name="Date/Time Of Message" Usage="R" Min="1" Max="1" Datatype="TS" Length="21" ItemNo="00007">
+<Reference>2.16.9.7</Reference>
+<Component Name="Date/Time" Usage="RE" Datatype="NM" Length="19">
+<ImpNote>YYYYMMDD[HHHMM[SS[.SSSS]]][+-
+ZZZZ]
+ 
+Date/Time message was created.
+</ImpNote>
+<DataValues ExValue="20130715114123-0006" />
+</Component>
+<Component Name="degree of precision" Usage="RE" Datatype="ST" Length="1">
+<ImpNote>Retained for backward compatibility only
+</ImpNote>
+<DataValues ExValue="D" />
+</Component>
+</Field>
+<Field Name="Security" Usage="X" Min="0" Max="*" Datatype="ST" Length="40" ItemNo="00008">
+<Reference>2.16.9.8</Reference>
+</Field>
+<Field Name="Message Type" Usage="R" Min="1" Max="1" Datatype="CM_MSG" Length="15" Table="0076" ItemNo="00009">
+<Reference>2.16.9.9</Reference>
+<Component Name="message type" Usage="R" Datatype="ID" Length="3" Table="0076">
+<ImpNote>"MFN"
+</ImpNote>
+<DataValues ExValue="MFN" />
+</Component>
+<Component Name="trigger event" Usage="R" Datatype="ID" Length="3" Table="0003">
+<ImpNote>"M01"
+</ImpNote>
+<DataValues ExValue="M01" />
+</Component>
+<Component Name="message structure" Usage="X" Datatype="ID" Table="0354">
+</Component>
+</Field>
+<Field Name="Message Control ID" Usage="R" Min="1" Max="1" Datatype="ST" Length="20" ItemNo="00010">
+<ImpNote>Unique number assigned by Eligibility
+Communicator
+</ImpNote>
+<Reference>2.16.9.10</Reference>
+<DataValues ExValue="137390648330947" />
+</Field>
+<Field Name="Processing ID" Usage="R" Min="1" Max="1" Datatype="PT" Length="7" ItemNo="00011">
+<Reference>2.16.9.11</Reference>
+<Component Name="processing ID" Usage="R" Datatype="ID" Length="3" Table="0103">
+<ImpNote>"P" = Production
+"T" = Test
+</ImpNote>
+<DataValues ExValue="T" />
+</Component>
+<Component Name="processing mode" Usage="X" Datatype="ID" Table="0207">
+</Component>
+</Field>
+<Field Name="Version ID" Usage="R" Min="1" Max="1" Datatype="VID" Length="60" Table="0104" ItemNo="00012">
+<Reference>2.16.9.12</Reference>
+<Component Name="version ID" Usage="R" Datatype="ID" Length="3" Table="0104">
+<ImpNote>"2.4"
+</ImpNote>
+<DataValues ExValue="2.4" />
+</Component>
+<Component Name="internationalization code" Usage="X" Datatype="CE" Table="0399">
+<SubComponent Name="identifier" Usage="X" Datatype="ST" Table="0399">
+</SubComponent>
+<SubComponent Name="text" Usage="X" Datatype="ST">
+</SubComponent>
+<SubComponent Name="name of coding system" Usage="X" Datatype="IS" Table="0396">
+</SubComponent>
+<SubComponent Name="alternate identifier" Usage="X" Datatype="ST">
+</SubComponent>
+<SubComponent Name="alternate text" Usage="X" Datatype="ST">
+</SubComponent>
+<SubComponent Name="name of alternate coding system" Usage="X" Datatype="IS" Table="0396">
+</SubComponent>
+</Component>
+<Component Name="international version ID" Usage="X" Datatype="CE">
+<SubComponent Name="identifier" Usage="X" Datatype="ST">
+</SubComponent>
+<SubComponent Name="text" Usage="X" Datatype="ST">
+</SubComponent>
+<SubComponent Name="name of coding system" Usage="X" Datatype="IS" Table="0396">
+</SubComponent>
+<SubComponent Name="alternate identifier" Usage="X" Datatype="ST">
+</SubComponent>
+<SubComponent Name="alternate text" Usage="X" Datatype="ST">
+</SubComponent>
+<SubComponent Name="name of alternate coding system" Usage="X" Datatype="IS" Table="0396">
+</SubComponent>
+</Component>
+</Field>
+<Field Name="Sequence Number" Usage="X" Min="0" Max="*" Datatype="NM" Length="15" ItemNo="00013">
+<Reference>2.16.9.13</Reference>
+</Field>
+<Field Name="Continuation Pointer" Usage="X" Min="0" Max="*" Datatype="ST" Length="180" ItemNo="00014">
+<Reference>2.16.9.14</Reference>
+</Field>
+<Field Name="Accept Acknowledgment Type" Usage="R" Min="1" Max="1" Datatype="ID" Length="2" Table="0155" ItemNo="00015">
+<ImpNote>"AL" = Always
+</ImpNote>
+<Reference>2.16.9.15</Reference>
+<DataValues ExValue="AL" />
+</Field>
+<Field Name="Application Acknowledgment Type" Usage="R" Min="1" Max="1" Datatype="ID" Length="2" Table="0155" ItemNo="00016">
+<ImpNote>"NE" = Never
+</ImpNote>
+<Reference>2.16.9.16</Reference>
+<DataValues ExValue="NE" />
+</Field>
+<Field Name="Country Code" Usage="R" Min="1" Max="1" Datatype="ID" Length="3" Table="0399" ItemNo="00017">
+<ImpNote>"USA"
+</ImpNote>
+<Reference>2.16.9.17</Reference>
+<DataValues ExValue="USA" />
+</Field>
+<Field Name="Character Set" Usage="X" Min="0" Max="*" Datatype="ID" Length="16" Table="0211" ItemNo="00692">
+<Reference>2.16.9.18</Reference>
+</Field>
+<Field Name="Principal Language Of Message" Usage="X" Min="0" Max="*" Datatype="CE" Length="250" ItemNo="00693">
+<Reference>2.16.9.19</Reference>
+<Component Name="identifier" Usage="X" Datatype="ST">
+</Component>
+<Component Name="text" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="name of coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</Component>
+<Component Name="alternate identifier" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="alternate text" Usage="O" Datatype="ST" Length="3">
+</Component>
+<Component Name="name of alternate coding system" Usage="O" Datatype="IS" Length="3" Table="0396">
+</Component>
+</Field>
+<Field Name="Alternate Character Set Handling Scheme" Usage="X" Min="0" Max="*" Datatype="ID" Length="20" Table="0301" ItemNo="01317">
+<Reference>2.16.9.20</Reference>
+</Field>
+<Field Name="Conformance Statement ID" Usage="X" Min="0" Max="*" Datatype="ID" Length="10" Table="0449" ItemNo="01598">
+<Reference>2.16.9.21</Reference>
+</Field>
+</Segment>
+<Segment Name="MFI" LongName="Master File Identification" Usage="R" Min="1" Max="1">
+<Field Name="Master File Identifier" Usage="R" Min="1" Max="1" Datatype="CE" Length="250" Table="0175" ItemNo="00658">
+<Reference>8.5.1.1</Reference>
+<Component Name="identifier" Usage="R" Datatype="ST" Length="7" Table="0175">
+<ImpNote>Send the number of the file in this field:
+"350.9" for "IB SITE PARAMETERS"
+"350.9002" for "BATCH EXTRACTS"
+ 
+but not limited to these VistA files
+</ImpNote>
+<DataValues ExValue="350.9" />
+</Component>
+<Component Name="text" Usage="R" Datatype="ST" Length="25">
+<ImpNote>Send the name of the file in this field:
+ 
+"IB SITE PARAMETERS" for 350.9
+ "BATCH EXTRACTS" for 350.9002
+ 
+but not limited to these VistA files
+</ImpNote>
+<DataValues ExValue="IB SITE PARAMETERS" />
+</Component>
+<Component Name="name of coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+<Component Name="alternate identifier" Usage="X" Datatype="ST">
+</Component>
+<Component Name="alternate text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of alternate coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+</Field>
+<Field Name="Master File Application Identifier" Usage="X" Min="0" Max="*" Datatype="HD" Length="180" ItemNo="00659">
+<Reference>8.5.1.2</Reference>
+<Component Name="namespace ID" Usage="X" Datatype="IS" Table="0363">
+</Component>
+<Component Name="universal ID" Usage="X" Datatype="ST">
+</Component>
+<Component Name="universal ID type" Usage="X" Datatype="ID" Table="0301">
+</Component>
+</Field>
+<Field Name="File-Level Event Code" Usage="R" Min="1" Max="1" Datatype="ID" Length="3" Table="0178" ItemNo="00660">
+<ImpNote>"UPD"=Change file records as defined
+in
+the record-level event codes for each
+record that follows
+</ImpNote>
+<Reference>8.5.1.3</Reference>
+<DataValues ExValue="UPD" />
+</Field>
+<Field Name="Entered Date/Time" Usage="X" Min="0" Max="*" Datatype="TS" Length="26" ItemNo="00661">
+<Reference>8.5.1.4</Reference>
+<Component Name="Date/Time" Usage="X" Datatype="NM">
+<ImpNote>YYYYMMDD[HHHMM[SS[.SSSS]]][+-ZZZZ]
+</ImpNote>
+</Component>
+<Component Name="degree of precision" Usage="X" Datatype="ST">
+<ImpNote>Retained for backward compatibility only
+</ImpNote>
+<DataValues ExValue="D" />
+</Component>
+</Field>
+<Field Name="Effective Date/Time" Usage="X" Min="0" Max="*" Datatype="TS" Length="26" ItemNo="00662">
+<Reference>8.5.2.3</Reference>
+<Component Name="Date/Time" Usage="X" Datatype="NM">
+<ImpNote>YYYYMMDD[HHHMM[SS[.SSSS]]][+-ZZZZ]
+</ImpNote>
+</Component>
+<Component Name="degree of precision" Usage="X" Datatype="ST">
+<ImpNote>Retained for backward compatibility only
+</ImpNote>
+<DataValues ExValue="D" />
+</Component>
+</Field>
+<Field Name="Response Level Code" Usage="R" Min="1" Max="1" Datatype="ID" Length="2" Table="0179" ItemNo="00663">
+<ImpNote>"NE"=Never. No application-level
+response needed
+</ImpNote>
+<Reference>8.5.1.6</Reference>
+<DataValues ExValue="NE" />
+</Field>
+</Segment>
+<Segment Name="MFE" LongName="Master File Entry" Usage="R" Min="1" Max="1">
+<Field Name="Record-Level Event Code" Usage="R" Min="1" Max="1" Datatype="ID" Length="3" Table="0180" ItemNo="00664">
+<ImpNote>"MAD"=Add record to master file; or
+"MUP"=Update record for master file
+</ImpNote>
+<Reference>8.5.3.1</Reference>
+<DataValues ExValue="MAD" />
+</Field>
+<Field Name="MFN Control ID" Usage="R" Min="1" Max="1" Datatype="ST" Length="20" ItemNo="00665">
+<ImpNote>VistA Site Number
+</ImpNote>
+<Reference>8.5.3.2</Reference>
+<DataValues ExValue="653" />
+</Field>
+<Field Name="Effective Date/Time" Usage="R" Min="1" Max="1" Datatype="TS" Length="26" ItemNo="00662">
+<Reference>8.5.2.3</Reference>
+<Component Name="Date/Time" Usage="R" Datatype="NM" Length="19">
+<ImpNote>YYYYMMDD[HHHMM[SS[.SSSS]]][+-
+ZZZZ]
+ 
+Effective Date/Time
+</ImpNote>
+<DataValues ExValue="20130715114123-0006" />
+</Component>
+<Component Name="degree of precision" Usage="RE" Datatype="ST" Length="1">
+<ImpNote>Retained for backward compatibility only
+</ImpNote>
+<DataValues ExValue="D" />
+</Component>
+</Field>
+<Field Name="Primary Key Value - MFE" Usage="R" Min="1" Max="1" Datatype="CE" Length="200">
+<Reference>8.5.2.4</Reference>
+<Component Name="identifier" Usage="R" Datatype="ST" Length="80">
+<ImpNote>VistA value that is to be stored in the
+VistA field which is defined in MFE4.2
+of this message.  * Note that the VistA
+file is defined in MFI.1 of this message.
+ 
+For some examples:
+With VistA (#350.9, 51.01)  use
+numeric value between 7 -180, all
+inclusive
+ 
+With VistA (#350.9, 51.05) use numeric
+value between 1-7, all inclusive
+ 
+With VistA (#350.9, 51.26), (#350.9,
+51.27), (#350.9, 51.28) use "N" or "Y"
+ 
+With VistA (#350.9, 51.15) use numeric
+value between 1-99999, all inclusive
+ 
+With VistA (#350.9002, .05) use
+numeric value between 10-99999, all
+inclusive
+</ImpNote>
+<Reference>8.5.2.4</Reference>
+<DataValues ExValue="180" />
+</Component>
+<Component Name="text" Usage="R" Datatype="ST" Length="9">
+<ImpNote>The actual VistA field that is to be
+updated.
+ 
+Some examples are:
+ 
+VistA field #:
+51.01 "FRESHNESS DAYS"
+(Example 51.01)
+ 
+VistA field #:
+51.05 "TIMEOUT DAYS"
+(Example 51,05)
+ 
+VistA field #:
+51.26 "RETRY FLAG"
+(Example 51.26)
+ 
+VistA field #:
+51.15 "HL7 MAXIMUM NUMBER"
+(Example 51.15)
+ 
+VistA field #:
+51.27 "270 MASTER SWITCH
+REALTIME"
+(Example 51.27)
+ 
+VistA field #:
+51.28 "270 MASTER SWITCH
+NIGHTLY"
+(Example 51.28)
+ 
+VistA field #:
+"Buff.05" to indicate the .05 field
+"MAXIMUM EXTRACT NUMBER" for
+the buffer extract for VistA file
+#350.9002
+ 
+VistA field #:
+"Appt.05" to indicate the .05 field
+"MAXIMUM EXTRACT NUMBER" for
+the appointment extract for VistA file
+#350.9002
+</ImpNote>
+<Reference>8.5.2.4</Reference>
+<DataValues ExValue="51.01" />
+</Component>
+<Component Name="name of coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+<Component Name="alternate identifier" Usage="X" Datatype="ST">
+</Component>
+<Component Name="alternate text" Usage="X" Datatype="ST">
+</Component>
+<Component Name="name of alternate coding system" Usage="X" Datatype="IS" Table="0396">
+</Component>
+</Field>
+<Field Name="Primary Key Value Type" Usage="R" Min="1" Max="1" Datatype="ID" Length="3" Table="0355" ItemNo="01319">
+<ImpNote>CE" Coded Element
+</ImpNote>
+<Reference>8.5.2.5</Reference>
+<DataValues ExValue="CE" />
+</Field>
+</Segment>
+</HL7v2xStaticDef>
+</HL7v2xConformanceProfile>
+

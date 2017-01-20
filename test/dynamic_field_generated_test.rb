@@ -66,6 +66,9 @@ class DynamicFieldGeneratorTest < Test::Unit::TestCase
    p dt
    assert_not_nil dt
 
+   dt =  @fldGenerator.SAD({},true)
+   assert_not_nil dt
+
    dt =  @fldGenerator.TM({},true)
    p dt
    assert_not_nil dt

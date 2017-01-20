@@ -1,4 +1,14 @@
+require 'logger'
 module Utils
+
+  $log = Logger.new STDOUT
+  $log.datetime_format = '%Y-%m-%d %H:%M:%S%z '
+  begin
+    $log.level = (YAML.load_file File.expand_path('../../resources/properties.yml', __FILE__))['logger.level']
+  rescue => e
+    $log.level = Logger::DEBUG
+  end
+
   @@random = Random.new
 
   BASE_INDICATOR = 'base:'
@@ -10,8 +20,6 @@ module Utils
   #@@special = "?<>[]}{)(&^%$#`~{}" # subset to use for now
   @@special = "&" # it looks like only html encoded characters are problem, ex: Pathology (gross &amp; histopath, not surgical) tbl 74
   @@html_encoded_regex = /[#{@@special.gsub(/./){|char| "\\#{char}"}}]/
-
-
 
   def get_segment_name(segment)
     return segment.gsub(/~|\[|\]|\{|\}/,"")

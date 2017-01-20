@@ -54,7 +54,8 @@ class DynamicFieldGenerator < BaseFieldGenerator
       # value << method(sub_type[:datatype]).call(sub_type,[true, false].sample)
       value << method(sub_type[:datatype]).call(sub_type,true)
      rescue NameError => e
-       puts e
+       # puts e
+       $log.error("#{self.class.to_s}:#{__method__.to_s}") { e.message }
        # sub_values = dynamic(sub_type[:datatype], sub_type, [true, false].sample)
        sub_values = dynamic(sub_type[:datatype], sub_type, true)
 

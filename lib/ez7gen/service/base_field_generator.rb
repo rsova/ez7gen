@@ -198,6 +198,18 @@ class BaseFieldGenerator
     return val
   end
 
+  # Street address
+  # Appears in the XAD data type, and found in templates
+  def SAD(map, force=false)
+    #check if the field is optional and randomly generate it of skip
+    return '' if(!generate?(map, force))
+
+    # <street or mailing address (ST)>
+    @yml['address.streetNames'].sample
+    # <street name (ST)>
+    # <dwelling number (ST)>
+  end
+
   #Generate HL7 SI (sequence ID) data type. A SI contains a single String value.
   def SI(map, force=false)
     #check if the field is optional and randomly generate it of skip

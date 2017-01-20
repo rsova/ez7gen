@@ -51,7 +51,10 @@ class ProfileParser
       added = File.path(path+'/added/coded-tables.xml')
       @added = Ox.parse(IO.read(added))
     rescue => e
-      puts e.message
+      # puts e.message
+      $log.error ("#{self.class.to_s}:#{__method__.to_s}") { e.message }
+
+
     end
 
     # set flag if this is base or custom schema
@@ -121,7 +124,8 @@ class ProfileParser
   # find message structure by event type
   def get_message_definition
     msg_type = get_message_structure(@event)
-    p msg_type
+    # p msg_type
+    $log.info("#{self.class.to_s}:#{__method__.to_s}") { msg_type }
     definition = @xml.Export.Document.Category.locate('MessageStructure').select{|it| it.attributes[:name] == msg_type }.first.attributes[:definition]
     post_process(definition)
   end
@@ -185,7 +189,8 @@ class ProfileParser
 
   def get_segment_structure(segment)
     segmentName = get_segment_name(segment)
-    puts segmentName
+    # $log.info (segment)
+    $log.info("#{self.class.to_s}:#{__method__.to_s}") { segment }
     # node = export.Document.Category.SegmentStructure.find{ it.@name == segmentName}
     # values = @xml.elements.collect("Export/Document/Category/SegmentStructure[@name ='#{segmentName}']/SegmentSubStructure"){|x| x.attributes}
     @xml.Export.Document.Category.locate('SegmentStructure').select{|it| it.attributes[:name] == segmentName }.first.locate('SegmentSubStructure').map{|it| it.attributes}
@@ -242,7 +247,6 @@ class ProfileParser
     attr[:name] = event
     #chek if there is a match otherwise use the segment name
     attr[:code] = get_message_event_desc(event)
-    # group: map[:group]    # group is obsolete now
 
     # check if this event has matching template files
     # event_templates = templates.collect { |template| template =~/#{event}/ } unless blank?(templates)

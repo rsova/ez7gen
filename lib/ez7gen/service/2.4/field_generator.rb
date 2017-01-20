@@ -33,7 +33,7 @@ class FieldGenerator
     @yml = YAML.load_file propertiesFile
   end
 
-  # This method comon for all field generators
+  # This method common for all field generators
   def dt (dt, attrs)
     self.method(dt).call(attrs)
   end
@@ -702,7 +702,6 @@ class FieldGenerator
     # <floor (IS)>
   end
 
-
   #Generates an HL7 NM (numeric) data type. A NM contains a single String value.
   def NM(map, force=false)
 		#check if the field is optional and randomly generate it of skip
@@ -865,7 +864,6 @@ class FieldGenerator
     # <state/other qualifying info (ST)>
     # <expiration date (DT)>
   end
-
 
   # Person name
   def PN(map, force=false)
