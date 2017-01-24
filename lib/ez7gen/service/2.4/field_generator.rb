@@ -353,7 +353,6 @@ class FieldGenerator
 		#is(['fld'=>dln.getIssuingStateProvinceCountry(), 'required'=>'R','codetable'=>map.codetable])
 		#dln.getIssuingStateProvinceCountry().setValue(allStates.get(Math.abs(random.nextInt()%allStates.size())))
     # val << @yml['address.states'].sample # pick a state
-    # val << @yml['address.states'].sample # pick a state
     val << IS({:codetable =>'333'},true) # pick a state
 		#expiration date (DT)
 		val << DT(reset_map_attr(map, :description, 'End'), true)

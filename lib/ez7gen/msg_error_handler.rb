@@ -28,16 +28,6 @@ class MsgErrorHandler
 
     return errors
 
-    # puts msg[:ERR].error_location
-    # puts msg[:ERR].hl7_error_code
-    # puts msg[:ERR].severity
-    # puts msg[:ERR].application_error_code
-    # puts msg[:ERR].application_error_parameter
-    # puts msg[:ERR].diagnostic_information
-   # errors = msg[:ERR].user_message
-    # puts msg[:ERR].help_desk_contact_point
-    # lines = errors.split("ERROR <Ens>ErrGeneral:")
-    # errors.split("ERROR #{msg[:ERR].application_error_code}:").reject {|e| e.empty?}
   end
 
 end

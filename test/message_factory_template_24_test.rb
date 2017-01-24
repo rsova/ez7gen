@@ -691,4 +691,35 @@ class MessageFactoryTemplate24Test < Test::Unit::TestCase
     saveMsg(Ez7gen::VERSION+event, hl7, ver)
   end
 
+
+  def test_MFN_X01_with_group # with segment group
+    # ver='vaz2.4'
+    # view xml as grid http://xmlgrid.net/
+    ver='VAZ2.4.HL7'
+    event='MFN_X01'
+    useExValue = true
+    factory = MessageFactoryStub.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'eiv-ec-MFN_X01_reg_request_w_group.xml'})
+    # switch template path to test dir
+    factory.templatePath = "/Users/romansova/RubymineProjects/ez7gen/test/test-config/templates/2.4/eiv-ec-MFN_X01_reg_request_w_group.xml"
+
+    hl7 = factory.generate(useExValue)
+    saveMsg(Ez7gen::VERSION+event, hl7, ver)
+    puts hl7
+
+    # template has variations
+    assert_true hl7[0].to_s.start_with?('MSH')
+    assert_equal hl7[1].to_s, 'MFI|Facility Table||UPD|20030620|20030620|NE'
+    assert_equal hl7[2].to_s, 'MFE|MUP||20030620|509|CE'
+    assert_equal hl7[3].to_s, 'ZRR|1|101100001||||180|I||N|7'
+    assert_equal hl7[4].to_s, 'NTE|1||N\R\0'
+
+    # assert_equal hl7[2].to_s, 'PID|5273||9999^5004400231V123112||^PATIENTFIRST'
+
+    puts "---- #{event} using tables ---"
+    # factory = MessageFactory.new({std: '2.4', version: ver, event:event, version_store: @@VS, use_template: 'mhvsm_standardhl7lib_patient_problems_response_rsp_k11-rsp_k11-rsp_k11.xml'})
+    #
+    # hl7 = factory.generate(false)
+    # puts hl7
+    # saveMsg(Ez7gen::VERSION+event, hl7, ver)
+  end
 end

@@ -130,9 +130,24 @@ class TemplateGenerator
   # using MWB profiles build collection of message metadata, to use for building a message
   def build_metadata(useExVal)
     meta = {}
-
+    segments = []
     # list of segments
+    # In the event of Subgroups of Segments defined in the template, find them and allow
+    # groups only once for simplicity.
+   if( @xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('SegGroup')) then
+      nodes = @xml.HL7v2xConformanceProfile.HL7v2xStaticDef.nodes
+
+      nodes.each{|node|
+        if (node.value == "Segment") then
+          segments << node
+        elsif (node.value == "SegGroup")then
+          segments << node.locate('Segment')
+        end
+      }
+     segments.flatten!
+   else
     segments = @xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
+   end
 
     segments.each{|seg|
 
@@ -188,88 +203,10 @@ class TemplateGenerator
 
   end
 
+  # check for required field/compnent/subcomponent: R
+  # if not toss a coin for optional (required or empty): RE (required or empty)
+  return (USAGES_REQ.include?(usage)) ? true : (USAGES_OPT.include?(usage) && [true,false].sample)
   def use?(usage)
-    # check for required field/compnent/subcomponent: R
-    # if not toss a coin for optional (required or empty): RE (required or empty)
-    return (USAGES_REQ.include?(usage)) ? true : (USAGES_OPT.include?(usage) && [true,false].sample)
   end
 
-  # def add_field()
-  #   # f = template[s]
-  #   #
-  #   # dt_partials = []
-  #   #
-  #   # dt_partials << break_to_partial(f)
-  #   #
-  #   type = get_type_by_name(attributes[:datatype])
-  #   fieldGenerator= @fieldGenerators[type].
-  #   dt = get_name_without_base(attributes[:datatype])
-  #
-  #
-  #   # dt = attributes[:datatype]
-  #   # puts Utils.blank?(dt)?'~~~~~~~~~> data type is missing': dt
-  #   if(['CK'].include?(dt))
-  #     return nil
-  #   else
-  #     fld = blank?(dt)?nil :fieldGenerator.method(dt).call(attributes)
-  #   end
-  #
-  # end
-
-  # parse template xml file into collection
-  # Obsolete
-  # def build_template_metadata(usages=@@USAGES)
-  #   # list of segments
-  #   segs = @xml.HL7v2xConformanceProfile.HL7v2xStaticDef.locate('Segment')
-  #
-  #   map = {}
-  #   for seg in segs
-  #
-  #     puts seg.attributes[:Name]
-  #     meta = []
-  #     # list of fields
-  #     seg.locate('Field').each_with_index { |fld, fld_idx|
-  #       if (usages.include?(fld.Usage)) #Usage="R"
-  #         fld.attributes.merge!(:Pos => fld_idx)
-  #
-  #         cmps = []
-  #         fld.locate(COMPONENT).each_with_index { |cmp, cmp_idx|
-  #
-  #           if (usages.include?(cmp.Usage))
-  #
-  #             cmp.attributes.merge!(:Pos => cmp_idx)
-  #
-  #             sub_comps = []
-  #             cmp.locate(SUBCOMPONENT).each_with_index { |sub, sub_idx|
-  #               if (usages.include?(sub.Usage))
-  #                 sub_comps << sub.attributes.merge(:Pos => sub_idx)
-  #               end
-  #             }# end locate SubComponent
-  #
-  #             if (!sub_comps.empty?) then
-  #               # cmp.attributes.merge!(:subComponents => sub_comps)
-  #               cmp.attributes.merge!(SUB => sub_comps)
-  #             end
-  #             if (cmp.attributes) then
-  #               cmps << cmp.attributes
-  #             end
-  #
-  #           end
-  #         }# end locate Component
-  #
-  #         if (!cmps.empty?) then
-  #           # fld.attributes.merge!(:components => cmps)
-  #           fld.attributes.merge!(COMP => cmps)
-  #         end
-  #
-  #         meta << fld.attributes
-  #       end
-  #
-  #     }# end locate Field
-  #
-  #     map[seg.attributes[:Name]] = meta
-  #   end
-  #
-  #   return map
-  # end
 end

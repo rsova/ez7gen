@@ -45,8 +45,9 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
         $scope.showUseExVal = false;
         $scope.useExVal = true;
         $scope.template = {};
-        isCustom =  !$scope.version.selected.base;
-        isTemplateEnabled = event.templates
+        //Checks for undefined needed when user resets the control by CTL + Delete
+        isTemplateEnabled = (typeof event === "undefined")? false : event.templates
+        isCustom =  (typeof $scope.version.selected === "undefined")? false : !$scope.version.selected.base;
         $scope.hasTemplates = isCustom && isTemplateEnabled;
     }
 
@@ -100,7 +101,7 @@ angular.module("app").controller('MainController', ['$scope', '$http', 'toastr',
             }
 
         }).error(function(data) {
-            //this should never happen, the back end id running on the same server
+            //this should never happen, the back end is running on the same server
             toastr.error('Error!', "Oops something went wrong...");
         })
     };

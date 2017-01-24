@@ -4,27 +4,13 @@ require_relative '../base_field_generator'
 
 class FieldGenerator < BaseFieldGenerator
     include Utils
-  # constructor
-  # def initialize(pp)
-  #     super pp
-  # end
+
   # constructor
     def initialize(parser, helper_parser=nil)
       super(parser, helper_parser)
     end
 
   # base data types ["DT", "FT", "ID", "IS", "NM", "SI", "ST", "TM", "TN", "TX"]
-  # def method_missing(method_name, *arguments, &block)
-  #   if( method_name.to_s == method_name.upcase) # method name is all uppercase
-  #     dynamic...
-  #   else
-  #     super
-  #   end
-  # end
-  #
-  # def respond_to_missing?(method_name, include_private = false)
-  #   method_name.to_s.start_with?('user_') || super
-  # end
 
   def dt (name, attrs)
     dt = generate_dt(name, attrs)
@@ -76,8 +62,6 @@ class FieldGenerator < BaseFieldGenerator
     for type in types
       # check if field is required
       dt << ((generate?(type)) ? generate_dt(type[:datatype], type) : '')
-      # dt << generate_dt(type[:datatype], type)
-      # dt << value
     end
 
     # remove trailing empty elements
@@ -87,25 +71,5 @@ class FieldGenerator < BaseFieldGenerator
 
     return dt
   end
-
-  # Method to generate field using schema description
-  # def generate_dt_from_schema_org(type)
-  #   value = []
-  #   begin
-  #     # value << method(sub_type[:datatype]).call(sub_type,[true, false].sample)
-  #     value << method(type[:datatype]).call(type,true)
-  #   rescue NameError => e
-  #     puts e
-  #     # sub_values = dynamic(sub_type[:datatype], sub_type, [true, false].sample)
-  #     values = generate_dt(type[:datatype], type, true)
-  #     p values
-  #     # TODO :remove trailing empty fields
-  #     # TODO: handle fields and subfields if it deeper then 3 levels in DR : "761&663^753&799"
-  #     value << values.gsub(@@HAT,@@SUB)
-  #
-  #   end
-  #     p value
-  #     return value
-  # end
 
 end
